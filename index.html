@@ -3,87 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fermin Lasarte | Portfolio</title>
-    <meta name="description" content="Portfolio de Fermin Lasarte. Ingeniero de Sistemas especializado en desarrollo de aplicaciones móbiles.">
-    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <title>Fermin | Desarrollador de Software</title>
+    
+    <meta name="description" content="Portfolio de Fermin. Desarrollador Freelance y Estudiante avanzado de Ingeniería de Sistemas especializado en desarrollo móvil nativo y multiplataforma.">
+    <meta property="og:title" content="Fermin | Desarrollador de Software">
+    <meta property="og:description" content="Portfolio profesional. Especialista en Flutter, Swift, Java y Arquitectura de Sistemas.">
+    <meta property="og:type" content="website">
+    
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
     <nav>
         <ul class="nav-links">
             <li><a href="#sobre-mi">Sobre mí</a></li>
+            <li><a href="#experiencia">Trayectoria</a></li>
             <li><a href="#habilidades">Habilidades</a></li>
             <li><a href="#proyectos">Proyectos</a></li>
             <li><a href="#contacto">Contacto</a></li>
         </ul>
         <div class="nav-controls">
             <button id="lang-toggle" title="Cambiar idioma">ES</button>
-            <button id="theme-toggle" title="Cambiar tema">🌙</button>
-            <a href="https://github.com/tu-usuario" target="_blank" title="Mi GitHub">GitHub</a>
-            <a href="https://linkedin.com/in/tu-usuario" target="_blank" title="Mi LinkedIn">LinkedIn</a>
+            <button id="theme-toggle" title="Cambiar tema"><i class="fas fa-moon"></i></button>
+            <a href="https://github.com/tu-usuario" target="_blank" title="Mi GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://linkedin.com/in/tu-usuario" target="_blank" title="Mi LinkedIn"><i class="fab fa-linkedin"></i></a>
         </div>
     </nav>
 
     <header id="sobre-mi">
         <div class="hero-content">
             <h1>Hola, soy Fermin</h1>
-            <h2>Desarrollador de Software</h2>
-            <p>Estudiante avanzado de Ingeniería de Sistemas y desarrollador freelance. Me apasiona crear soluciones eficientes, desde aplicaciones móviles multiplataforma hasta desarrollo nativo.</p>
-            <a href="#contacto" class="btn">Contactame</a>
+            <h2><i class="fas fa-code"></i> Desarrollador de Software</h2>
+            <p>Estudiante de 5to año de Ingeniería de Sistemas y desarrollador freelance. Me apasiona crear soluciones eficientes, desde aplicaciones móviles multiplataforma y nativas hasta desarrollo web end-to-end.</p>
+            
+            <div class="hero-buttons">
+                <a href="#contacto" class="btn">Contactame</a>
+                <div class="dropdown">
+                    <button class="btn btn-outline"><i class="fas fa-download"></i> Descargar CV</button>
+                    <div class="dropdown-content">
+                        <a href="assets/CV - FL - ES copy.pdf" download><i class="fas fa-file-pdf"></i> Español</a>
+                        <a href="assets/CV - FL - EN copy.pdf" download><i class="fas fa-file-pdf"></i> Inglés</a>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="hero-image">
-            <img src="perfil.jpg" alt="Foto de Fermin">
+            <img src="assets/foto_perfil.jpeg" alt="Foto CV">
         </div>
     </header>
 
+    <section id="experiencia">
+        <h2 class="animate-on-scroll"><i class="fas fa-briefcase"></i> Trayectoria</h2>
+        
+        <div class="timeline animate-on-scroll">
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <h3>Desarrollador Freelance</h3>
+                    <span class="timeline-period">2024 - Presente</span>
+                    <p>Desarrollo integral de plataformas web y aplicaciones móviles para clientes. Gestión completa del ciclo de vida del software, desde la toma de requerimientos hasta el despliegue en producción y cumplimiento de plazos estrictos (ej. plataformas para el sector gastronómico).</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <h3>Ingeniería de Sistemas (5to Año)</h3>
+                    <span class="timeline-period">Actualidad</span>
+                    <p><strong>UNICEN (Universidad Nacional del Centro)</strong>. Formación sólida en arquitectura de computadoras, diseño de compiladores, programación orientada a objetos, y estructuras de datos complejas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="habilidades">
-        <h2 class="animate-on-scroll">Mis Habilidades</h2>
+        <h2 class="animate-on-scroll"><i class="fas fa-laptop-code"></i> Mis Habilidades</h2>
         <div class="skills-grid">
             <div class="card animate-on-scroll">
                 <h3>Flutter / Dart</h3>
-                <p>Desarrollo de aplicaciones móviles multiplataforma con interfaces fluidas y consumo de APIs.</p>
+                <p>Desarrollo de aplicaciones móviles multiplataforma (iOS/Android) con interfaces fluidas, manejo de estado y consumo de APIs.</p>
             </div>
             <div class="card animate-on-scroll">
                 <h3>iOS Nativo / Swift</h3>
-                <p>Creación de aplicaciones y juegos nativos para el ecosistema de Apple, aprovechando al máximo el hardware.</p>
+                <p>Creación de aplicaciones y juegos nativos para el ecosistema de Apple, aprovechando al máximo el hardware y herramientas como Xcode.</p>
             </div>
             <div class="card animate-on-scroll">
                 <h3>Java & Arquitectura</h3>
-                <p>Sólidos conocimientos en programación orientada a objetos, estructuras de datos y diseño de software complejo.</p>
+                <p>Sólidos conocimientos en OOP y diseño de software. Experiencia en desarrollos académicos complejos como diseño léxico y sintáctico.</p>
             </div>
             <div class="card animate-on-scroll">
                 <h3>Desarrollo Web</h3>
-                <p>Creación de sitios web estáticos y dinámicos enfocados en el rendimiento y la experiencia de usuario.</p>
+                <p>Creación de interfaces limpias y responsivas usando HTML, CSS, JavaScript y frameworks modernos, con foco en el cliente final.</p>
             </div>
         </div>
     </section>
 
     <section id="proyectos">
-        <h2 class="animate-on-scroll">Proyectos Destacados</h2>
+        <h2 class="animate-on-scroll"><i class="fas fa-server"></i> Proyectos Destacados</h2>
         <div class="projects-grid">
-            <div class="card animate-on-scroll">
-                <h3>Compilador en Java</h3>
-                <p>Diseño y desarrollo completo de un compilador. Implementación de análisis léxico, sintáctico y generación de código.</p>
+            
+            <div class="card project-card animate-on-scroll">
+                <div class="project-image" style="background-image: url('https://via.placeholder.com/400x200?text=App+Flutter');"></div>
+                <div class="project-info">
+                    <h3>Ecosistema Móvil: DeporTurnos & TravelPic</h3>
+                    <p>Aplicaciones móviles desarrolladas desde cero. Gestión de datos, consumo de servicios en la nube, optimización de experiencia de usuario y manejo de credenciales de seguridad.</p>
+                    <div class="project-tags">
+                        <span class="tag">Flutter</span>
+                        <span class="tag">Dart</span>
+                        <span class="tag">Mobile</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" target="_blank" class="btn btn-sm btn-outline"><i class="fab fa-github"></i> Código</a>
+                    </div>
+                </div>
             </div>
-            <div class="card animate-on-scroll">
-                <h3>DeporTurnos & TravelPic</h3>
-                <p>Aplicaciones móviles desarrolladas con el framework Flutter, enfocadas en la gestión de datos y experiencia de usuario.</p>
+
+            <div class="card project-card animate-on-scroll">
+                <div class="project-image" style="background-image: url('https://via.placeholder.com/400x200?text=Juego+iOS');"></div>
+                <div class="project-info">
+                    <h3>Impostor (Juego iOS)</h3>
+                    <p>Videojuego desarrollado de forma completamente nativa para iOS. Implementación de lógicas de estado, colisiones y renderizado aprovechando las librerías de Apple.</p>
+                    <div class="project-tags">
+                        <span class="tag">Swift</span>
+                        <span class="tag">Xcode</span>
+                        <span class="tag">iOS Native</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" target="_blank" class="btn btn-sm btn-outline"><i class="fab fa-github"></i> Código</a>
+                    </div>
+                </div>
             </div>
-            <div class="card animate-on-scroll">
-                <h3>Impostor (Juego iOS)</h3>
-                <p>Videojuego desarrollado de forma nativa para iOS utilizando Swift, manejando lógicas de estado y renderizado nativo.</p>
+
+            <div class="card project-card animate-on-scroll">
+                <div class="project-image" style="background-image: url('https://via.placeholder.com/400x200?text=Compilador+Java');"></div>
+                <div class="project-info">
+                    <h3>Compilador en Java</h3>
+                    <p>Diseño y desarrollo end-to-end de un compilador en el marco académico. Implementación profunda de análisis léxico, sintáctico y generación de código.</p>
+                    <div class="project-tags">
+                        <span class="tag">Java</span>
+                        <span class="tag">OOP</span>
+                        <span class="tag">Arquitectura</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" target="_blank" class="btn btn-sm btn-outline"><i class="fab fa-github"></i> Código</a>
+                    </div>
+                </div>
             </div>
-            <div class="card animate-on-scroll">
-                <h3>Web Gastronómica</h3>
-                <p>Desarrollo freelance (end-to-end) de una plataforma web para un cliente del sector gastronómico, cumpliendo plazos estrictos de entrega.</p>
+
+            <div class="card project-card animate-on-scroll">
+                <div class="project-image" style="background-image: url('https://via.placeholder.com/400x200?text=Web+Freelance');"></div>
+                <div class="project-info">
+                    <h3>Web Sector Gastronómico</h3>
+                    <p>Desarrollo web freelance para un cliente real (hamburguesería). Diseño responsivo, optimización de rendimiento y entrega bajo plazos estrictos de marzo.</p>
+                    <div class="project-tags">
+                        <span class="tag">HTML/CSS/JS</span>
+                        <span class="tag">Freelance</span>
+                        <span class="tag">UI/UX</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" target="_blank" class="btn btn-sm"><i class="fas fa-external-link-alt"></i> Ver Demo</a>
+                    </div>
+                </div>
             </div>
+
         </div>
     </section>
 
     <section id="contacto">
-        <h2>Trabajemos juntos</h2>
-        <p>¿Tenés un proyecto en mente? Escribime.</p>
+        <h2 class="animate-on-scroll"><i class="fas fa-envelope"></i> Trabajemos juntos</h2>
+        <div class="contact-grid animate-on-scroll">
+            <div class="contact-method">
+                <i class="fas fa-paper-plane contact-icon"></i>
+                <h3>Email</h3>
+                <p>fermin.lasarte@icloud.com</p>
+                <a href="mailto:fermin.lasarte@icloud.com" class="btn btn-sm btn-outline">Escribir</a>
+            </div>
+            <div class="contact-method">
+                <i class="fab fa-linkedin contact-icon"></i>
+                <h3>LinkedIn</h3>
+                <p>Conectá conmigo</p>
+                <a href="https://www.linkedin.com/in/ferminlasarte/" target="_blank" class="btn btn-sm btn-outline">Ver Perfil</a>
+            </div>
+        </div>
     </section>
 
     <footer>
