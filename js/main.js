@@ -24,3 +24,53 @@ document.addEventListener("DOMContentLoaded", () => {
         observer.observe(elem);
     });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. Lógica del Intersection Observer (Animaciones al scroll)
+    const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    const elementsToAnimate = document.querySelectorAll('.animate-on-scroll');
+    elementsToAnimate.forEach((elem) => observer.observe(elem));
+
+    // 2. Lógica del Modo Oscuro
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    
+    // Revisar si el usuario ya tenía el modo oscuro guardado
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeToggleBtn.textContent = '☀️';
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        
+        // Guardar preferencia y cambiar el icono
+        if (document.body.classList.contains('dark-mode')) {
+            localStorage.setItem('theme', 'dark');
+            themeToggleBtn.textContent = '☀️';
+        } else {
+            localStorage.setItem('theme', 'light');
+            themeToggleBtn.textContent = '🌙';
+        }
+    });
+
+    // 3. Lógica del Idioma (Base para que en el futuro la expandas)
+    const langToggleBtn = document.getElementById('lang-toggle');
+    langToggleBtn.addEventListener('click', () => {
+        // Acá a futuro podés agregar la lógica para cambiar los textos
+        // Por ahora solo alterna visualmente el texto del botón
+        if (langToggleBtn.textContent === 'ES') {
+            langToggleBtn.textContent = 'EN';
+        } else {
+            langToggleBtn.textContent = 'ES';
+        }
+    });
+});

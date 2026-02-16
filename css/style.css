@@ -1,91 +1,115 @@
 /* =========================================
-   VARIABLES (Acá podés cambiar tu paleta)
+   VARIABLES 
    ========================================= */
 :root {
-    --color-primario: #007AFF; /* Un azul tecnológico estilo iOS */
+    --color-primario: #5C2A9D; /* Violeta oscuro */
     --color-fondo: #f4f4f9;
     --color-texto: #333333;
     --color-tarjeta: #ffffff;
+    --color-nav: #ffffff;
+}
+
+/* Variables para el Modo Oscuro */
+body.dark-mode {
+    --color-fondo: #121212;
+    --color-texto: #e0e0e0;
+    --color-tarjeta: #1e1e1e;
+    --color-nav: #1e1e1e;
+    --color-primario: #8A4FFF; /* Un violeta un poco más claro para que resalte en oscuro */
 }
 
 /* =========================================
    RESET BÁSICO
    ========================================= */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-
-html {
-    scroll-behavior: smooth; /* Para que el menú navegue suavemente */
-}
-
-body {
-    background-color: var(--color-fondo);
-    color: var(--color-texto);
-    line-height: 1.6;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+html { scroll-behavior: smooth; }
+body { background-color: var(--color-fondo); color: var(--color-texto); line-height: 1.6; transition: background-color 0.3s, color 0.3s; }
 
 /* =========================================
    BARRA DE NAVEGACIÓN
    ========================================= */
 nav {
-    background-color: #ffffff;
-    padding: 1rem;
+    background-color: var(--color-nav);
+    padding: 1rem 2rem;
     position: sticky;
     top: 0;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s;
 }
 
-nav ul {
+.nav-links {
     list-style: none;
     display: flex;
-    justify-content: center;
     gap: 2rem;
 }
 
-nav a {
+.nav-links a {
     text-decoration: none;
     color: var(--color-texto);
     font-weight: 600;
     transition: color 0.3s;
 }
 
-nav a:hover {
+.nav-controls {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.nav-controls a, .nav-controls button {
+    text-decoration: none;
+    background: none;
+    border: none;
+    color: var(--color-texto);
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover, .nav-controls a:hover, .nav-controls button:hover {
     color: var(--color-primario);
 }
 
 /* =========================================
-   SECCIÓN PRINCIPAL (HERO)
+   SECCIÓN PRINCIPAL (HERO) CON FOTO
    ========================================= */
 header {
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-    text-align: center;
+    justify-content: space-between;
     padding: 0 20px;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
-header h1 {
-    font-size: 3.5rem;
-    margin-bottom: 10px;
+.hero-content {
+    flex: 1;
+    padding-right: 40px;
 }
 
-header h2 {
-    font-size: 1.5rem;
-    color: var(--color-primario);
-    margin-bottom: 20px;
+.hero-content h1 { font-size: 3.5rem; margin-bottom: 10px; }
+.hero-content h2 { font-size: 1.5rem; color: var(--color-primario); margin-bottom: 20px; }
+.hero-content p { max-width: 600px; margin-bottom: 30px; font-size: 1.1rem; }
+
+.hero-image {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
 }
 
-header p {
-    max-width: 600px;
-    margin-bottom: 30px;
-    font-size: 1.1rem;
+.hero-image img {
+    width: 320px;
+    height: 320px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    border: 4px solid var(--color-primario);
 }
 
 /* Botones */
@@ -99,21 +123,16 @@ header p {
     font-weight: bold;
     transition: transform 0.2s, background-color 0.3s;
 }
-
-.btn:hover {
-    background-color: #0056b3;
-    transform: translateY(-3px);
-    box-shadow: 0 4px 10px rgba(0, 122, 255, 0.3);
-}
+.btn:hover { background-color: #451b7a; transform: translateY(-3px); }
 
 /* =========================================
-   ESTRUCTURA DE LAS SECCIONES
+   ESTRUCTURA DE LAS SECCIONES (IZQUIERDA)
    ========================================= */
 section {
     padding: 100px 20px;
     max-width: 1000px;
     margin: 0 auto;
-    text-align: center;
+    text-align: left; /* Todo alineado a la izquierda */
 }
 
 section h2 {
@@ -128,12 +147,12 @@ section h2::after {
     width: 60px;
     height: 4px;
     background-color: var(--color-primario);
-    margin: 10px auto 0;
+    margin: 10px 0 0 0; /* Subrayado a la izquierda */
     border-radius: 2px;
 }
 
 /* =========================================
-   GRILLAS (Para Habilidades y Proyectos)
+   GRILLAS Y TARJETAS
    ========================================= */
 .skills-grid, .projects-grid {
     display: grid;
@@ -141,51 +160,36 @@ section h2::after {
     gap: 30px;
 }
 
-/* Diseño de las tarjetas que meteremos después */
 .card {
     background-color: var(--color-tarjeta);
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    transition: transform 0.3s, box-shadow 0.3s;
-    text-align: left;
+    transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
 }
 
-.card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-}
+.card:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+.card h3 { margin-bottom: 10px; color: var(--color-primario); }
 
-.card h3 {
-    margin-bottom: 10px;
-    color: var(--color-primario);
+/* =========================================
+   FOOTER
+   ========================================= */
+footer {
+    text-align: center;
+    padding: 30px;
+    background-color: var(--color-tarjeta);
+    margin-top: 80px;
+    font-size: 0.9rem;
+    color: var(--color-texto);
+    transition: background-color 0.3s;
 }
 
 /* =========================================
-   ANIMACIONES MINIMALISTAS (JS)
+   ANIMACIONES MINIMALISTAS
    ========================================= */
-
-/* Estado inicial: invisible y un poco más abajo */
-.animate-on-scroll {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
-                transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-/* Estado final: visible y en su posición original */
-.animate-on-scroll.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* Retraso escalonado (stagger) para que las tarjetas no aparezcan todas de golpe */
-.skills-grid .card:nth-child(1) { transition-delay: 0.1s; }
-.skills-grid .card:nth-child(2) { transition-delay: 0.2s; }
-.skills-grid .card:nth-child(3) { transition-delay: 0.3s; }
-.skills-grid .card:nth-child(4) { transition-delay: 0.4s; }
-
-.projects-grid .card:nth-child(1) { transition-delay: 0.1s; }
-.projects-grid .card:nth-child(2) { transition-delay: 0.2s; }
-.projects-grid .card:nth-child(3) { transition-delay: 0.3s; }
-.projects-grid .card:nth-child(4) { transition-delay: 0.4s; }
+.animate-on-scroll { opacity: 0; transform: translateY(30px); transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+.animate-on-scroll.visible { opacity: 1; transform: translateY(0); }
+.skills-grid .card:nth-child(1), .projects-grid .card:nth-child(1) { transition-delay: 0.1s; }
+.skills-grid .card:nth-child(2), .projects-grid .card:nth-child(2) { transition-delay: 0.2s; }
+.skills-grid .card:nth-child(3), .projects-grid .card:nth-child(3) { transition-delay: 0.3s; }
+.skills-grid .card:nth-child(4), .projects-grid .card:nth-child(4) { transition-delay: 0.4s; }

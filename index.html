@@ -3,25 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fermin - Portfolio</title>
+    <title>Fermin Lasarte | Portfolio</title>
+    <meta name="description" content="Portfolio de Fermin Lasarte. Ingeniero de Sistemas especializado en desarrollo de aplicaciones móbiles.">
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
     <nav>
-        <ul>
+        <ul class="nav-links">
             <li><a href="#sobre-mi">Sobre mí</a></li>
             <li><a href="#habilidades">Habilidades</a></li>
             <li><a href="#proyectos">Proyectos</a></li>
             <li><a href="#contacto">Contacto</a></li>
         </ul>
+        <div class="nav-controls">
+            <button id="lang-toggle" title="Cambiar idioma">ES</button>
+            <button id="theme-toggle" title="Cambiar tema">🌙</button>
+            <a href="https://github.com/tu-usuario" target="_blank" title="Mi GitHub">GitHub</a>
+            <a href="https://linkedin.com/in/tu-usuario" target="_blank" title="Mi LinkedIn">LinkedIn</a>
+        </div>
     </nav>
 
     <header id="sobre-mi">
-        <h1>Hola, soy Fermin</h1>
-        <h2>Desarrollador de Software</h2>
-        <p>Estudiante avanzado de Ingeniería de Sistemas y desarrollador freelance. Me apasiona crear soluciones eficientes, desde aplicaciones móviles multiplataforma hasta desarrollo nativo.</p>
-        <a href="#contacto" class="btn">Contactame</a>
+        <div class="hero-content">
+            <h1>Hola, soy Fermin</h1>
+            <h2>Desarrollador de Software</h2>
+            <p>Estudiante avanzado de Ingeniería de Sistemas y desarrollador freelance. Me apasiona crear soluciones eficientes, desde aplicaciones móviles multiplataforma hasta desarrollo nativo.</p>
+            <a href="#contacto" class="btn">Contactame</a>
+        </div>
+        <div class="hero-image">
+            <img src="perfil.jpg" alt="Foto de Fermin">
+        </div>
     </header>
 
     <section id="habilidades">
@@ -71,7 +84,11 @@
     <section id="contacto">
         <h2>Trabajemos juntos</h2>
         <p>¿Tenés un proyecto en mente? Escribime.</p>
-        </section>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Fermin. Todos los derechos reservados.</p>
+    </footer>
 
     <script src="js/main.js"></script>
 </body>
