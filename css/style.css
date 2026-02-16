@@ -1,0 +1,191 @@
+/* =========================================
+   VARIABLES (Acá podés cambiar tu paleta)
+   ========================================= */
+:root {
+    --color-primario: #007AFF; /* Un azul tecnológico estilo iOS */
+    --color-fondo: #f4f4f9;
+    --color-texto: #333333;
+    --color-tarjeta: #ffffff;
+}
+
+/* =========================================
+   RESET BÁSICO
+   ========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+html {
+    scroll-behavior: smooth; /* Para que el menú navegue suavemente */
+}
+
+body {
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    line-height: 1.6;
+}
+
+/* =========================================
+   BARRA DE NAVEGACIÓN
+   ========================================= */
+nav {
+    background-color: #ffffff;
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 100;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--color-texto);
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: var(--color-primario);
+}
+
+/* =========================================
+   SECCIÓN PRINCIPAL (HERO)
+   ========================================= */
+header {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+}
+
+header h1 {
+    font-size: 3.5rem;
+    margin-bottom: 10px;
+}
+
+header h2 {
+    font-size: 1.5rem;
+    color: var(--color-primario);
+    margin-bottom: 20px;
+}
+
+header p {
+    max-width: 600px;
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+}
+
+/* Botones */
+.btn {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: var(--color-primario);
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: transform 0.2s, background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0, 122, 255, 0.3);
+}
+
+/* =========================================
+   ESTRUCTURA DE LAS SECCIONES
+   ========================================= */
+section {
+    padding: 100px 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+    color: var(--color-texto);
+}
+
+section h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background-color: var(--color-primario);
+    margin: 10px auto 0;
+    border-radius: 2px;
+}
+
+/* =========================================
+   GRILLAS (Para Habilidades y Proyectos)
+   ========================================= */
+.skills-grid, .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+/* Diseño de las tarjetas que meteremos después */
+.card {
+    background-color: var(--color-tarjeta);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-align: left;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+    margin-bottom: 10px;
+    color: var(--color-primario);
+}
+
+/* =========================================
+   ANIMACIONES MINIMALISTAS (JS)
+   ========================================= */
+
+/* Estado inicial: invisible y un poco más abajo */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Estado final: visible y en su posición original */
+.animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Retraso escalonado (stagger) para que las tarjetas no aparezcan todas de golpe */
+.skills-grid .card:nth-child(1) { transition-delay: 0.1s; }
+.skills-grid .card:nth-child(2) { transition-delay: 0.2s; }
+.skills-grid .card:nth-child(3) { transition-delay: 0.3s; }
+.skills-grid .card:nth-child(4) { transition-delay: 0.4s; }
+
+.projects-grid .card:nth-child(1) { transition-delay: 0.1s; }
+.projects-grid .card:nth-child(2) { transition-delay: 0.2s; }
+.projects-grid .card:nth-child(3) { transition-delay: 0.3s; }
+.projects-grid .card:nth-child(4) { transition-delay: 0.4s; }
