@@ -94,4 +94,10 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+
+    // Actualizar año del footer automáticamente
+    const yearSpan = document.getElementById("current-year");
+    if (yearSpan) {
+        yearSpan.textContent = new Date().getFullYear();
+    }
 });
