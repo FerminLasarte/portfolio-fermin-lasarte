@@ -40,25 +40,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const elementsToAnimate = document.querySelectorAll('.animate-on-scroll');
     elementsToAnimate.forEach((elem) => observer.observe(elem));
 
-    // 2. Lógica del Modo Oscuro
+    // 2. Lógica del Modo Oscuro (Actualizada a Iconos FontAwesome)
     const themeToggleBtn = document.getElementById('theme-toggle');
     
     // Revisar si el usuario ya tenía el modo oscuro guardado
     if (localStorage.getItem('theme') === 'dark') {
         document.body.classList.add('dark-mode');
-        themeToggleBtn.textContent = '☀️';
     }
 
     themeToggleBtn.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
         
-        // Guardar preferencia y cambiar el icono
+        // Guardar preferencia en la memoria del navegador. 
+        // El CSS se encarga automáticamente de alternar entre <i class="fa-sun"> y <i class="fa-moon">
         if (document.body.classList.contains('dark-mode')) {
             localStorage.setItem('theme', 'dark');
-            themeToggleBtn.textContent = '☀️';
         } else {
             localStorage.setItem('theme', 'light');
-            themeToggleBtn.textContent = '🌙';
         }
     });
 
