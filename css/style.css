@@ -15,15 +15,25 @@ body.dark-mode {
     --color-texto: #e0e0e0;
     --color-tarjeta: #1e1e1e;
     --color-nav: #1e1e1e;
-    --color-primario: #8A4FFF; /* Un violeta un poco más claro para que resalte en oscuro */
+    --color-primario: #8A4FFF; /* Violeta más claro para contraste en oscuro */
 }
 
 /* =========================================
    RESET BÁSICO
    ========================================= */
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+}
 html { scroll-behavior: smooth; }
-body { background-color: var(--color-fondo); color: var(--color-texto); line-height: 1.6; transition: background-color 0.3s, color 0.3s; }
+body { 
+    background-color: var(--color-fondo); 
+    color: var(--color-texto); 
+    line-height: 1.6; 
+    transition: background-color 0.3s, color 0.3s; 
+}
 
 /* =========================================
    BARRA DE NAVEGACIÓN
@@ -49,9 +59,13 @@ nav {
 
 .nav-links a {
     text-decoration: none;
-    color: var(--color-texto);
-    font-weight: 600;
+    color: #888888; /* Letra gris y fina */
+    font-weight: 400; 
     transition: color 0.3s;
+}
+
+body.dark-mode .nav-links a {
+    color: #aaaaaa;
 }
 
 .nav-controls {
@@ -76,7 +90,33 @@ nav {
 }
 
 /* =========================================
-   SECCIÓN PRINCIPAL (HERO) CON FOTO
+   ESTRUCTURA GENERAL Y SECCIONES
+   ========================================= */
+section {
+    padding: 100px 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: left; /* Alineado a la izquierda */
+}
+
+section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+    color: var(--color-texto);
+}
+
+section h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background-color: var(--color-primario);
+    margin: 10px 0 0 0; 
+    border-radius: 2px;
+}
+
+/* =========================================
+   SECCIÓN PRINCIPAL (HERO) Y FOTO
    ========================================= */
 header {
     min-height: 100vh;
@@ -112,102 +152,41 @@ header {
     border: 4px solid var(--color-primario);
 }
 
-/* Botones */
-.btn {
-    display: inline-block;
-    padding: 12px 30px;
-    background-color: var(--color-primario);
-    color: #ffffff;
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: bold;
-    transition: transform 0.2s, background-color 0.3s;
-}
-.btn:hover { background-color: #451b7a; transform: translateY(-3px); }
-
 /* =========================================
-   ESTRUCTURA DE LAS SECCIONES (IZQUIERDA)
+   BOTONES E INTERFAZ (Dropdown CV)
    ========================================= */
-section {
-    padding: 100px 20px;
-    max-width: 1000px;
-    margin: 0 auto;
-    text-align: left; /* Todo alineado a la izquierda */
-}
-
-section h2 {
-    font-size: 2.5rem;
-    margin-bottom: 50px;
-    color: var(--color-texto);
-}
-
-section h2::after {
-    content: '';
-    display: block;
-    width: 60px;
-    height: 4px;
-    background-color: var(--color-primario);
-    margin: 10px 0 0 0; /* Subrayado a la izquierda */
-    border-radius: 2px;
-}
-
-/* =========================================
-   GRILLAS Y TARJETAS
-   ========================================= */
-.skills-grid, .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-}
-
-.card {
-    background-color: var(--color-tarjeta);
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
-}
-
-.card:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-.card h3 { margin-bottom: 10px; color: var(--color-primario); }
-
-/* =========================================
-   FOOTER
-   ========================================= */
-footer {
-    text-align: center;
-    padding: 30px;
-    background-color: var(--color-tarjeta);
-    margin-top: 80px;
-    font-size: 0.9rem;
-    color: var(--color-texto);
-    transition: background-color 0.3s;
-}
-
-/* =========================================
-   ANIMACIONES MINIMALISTAS
-   ========================================= */
-.animate-on-scroll { opacity: 0; transform: translateY(30px); transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-.animate-on-scroll.visible { opacity: 1; transform: translateY(0); }
-.skills-grid .card:nth-child(1), .projects-grid .card:nth-child(1) { transition-delay: 0.1s; }
-.skills-grid .card:nth-child(2), .projects-grid .card:nth-child(2) { transition-delay: 0.2s; }
-.skills-grid .card:nth-child(3), .projects-grid .card:nth-child(3) { transition-delay: 0.3s; }
-.skills-grid .card:nth-child(4), .projects-grid .card:nth-child(4) { transition-delay: 0.4s; }
-
-/* =========================================
-   NUEVOS COMPONENTES (Portfolio Avanzado)
-   ========================================= */
-
-/* --- Botones Extra y Dropdown de CV --- */
 .hero-buttons {
     display: flex;
     gap: 15px;
     align-items: center;
 }
 
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 30px;
+    height: 50px; /* Tamaño unificado */
+    background-color: var(--color-primario);
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.3s;
+    border: 2px solid var(--color-primario);
+}
+
+.btn:hover { 
+    background-color: #451b7a; 
+    border-color: #451b7a;
+    transform: translateY(-3px); 
+    color: #ffffff;
+}
+
 .btn-outline {
     background-color: transparent;
-    border: 2px solid var(--color-primario);
     color: var(--color-primario);
 }
 
@@ -225,41 +204,52 @@ body.dark-mode .btn-outline:hover {
     color: #ffffff;
 }
 
+.btn i { margin-right: 8px; }
+
 .btn-sm {
     padding: 8px 16px;
     font-size: 0.9rem;
+    height: auto;
 }
 
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
+/* Dropdown para CV (Activado por JS) */
+.dropdown { position: relative; display: inline-block; }
 
 .dropdown-content {
-    display: none;
+    visibility: hidden;
+    opacity: 0;
     position: absolute;
     background-color: var(--color-tarjeta);
-    min-width: 160px;
-    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
-    z-index: 1;
+    min-width: 180px;
+    box-shadow: 0px 10px 25px rgba(0,0,0,0.1);
+    z-index: 10;
     border-radius: 8px;
     overflow: hidden;
-    margin-top: 5px;
+    margin-top: 10px;
     border: 1px solid rgba(0,0,0,0.05);
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+}
+
+.dropdown-content.show {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .dropdown-content a {
     color: var(--color-texto);
-    padding: 12px 16px;
+    padding: 12px 20px;
     text-decoration: none;
-    display: block;
+    display: flex;
+    align-items: center;
     transition: background 0.3s;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
 }
 
 .dropdown-content a i {
     margin-right: 8px;
-    color: #e2574c; /* Color rojizo para el PDF */
+    color: #e2574c; 
 }
 
 .dropdown-content a:hover {
@@ -267,11 +257,9 @@ body.dark-mode .btn-outline:hover {
     color: var(--color-primario);
 }
 
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
-/* --- Línea de Tiempo (Experiencia/Educación) --- */
+/* =========================================
+   LÍNEA DE TIEMPO (TRAYECTORIA)
+   ========================================= */
 .timeline {
     border-left: 3px solid var(--color-primario);
     padding-left: 30px;
@@ -284,9 +272,7 @@ body.dark-mode .btn-outline:hover {
     margin-bottom: 40px;
 }
 
-.timeline-item:last-child {
-    margin-bottom: 0;
-}
+.timeline-item:last-child { margin-bottom: 0; }
 
 .timeline-dot {
     position: absolute;
@@ -313,7 +299,31 @@ body.dark-mode .btn-outline:hover {
     font-weight: 600;
 }
 
-/* --- Tarjetas de Proyectos Mejoradas --- */
+/* =========================================
+   GRILLAS Y TARJETAS (HABILIDADES Y PROYECTOS)
+   ========================================= */
+.skills-grid, .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.card {
+    background-color: var(--color-tarjeta);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+}
+
+.card:hover { 
+    transform: translateY(-8px); 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+}
+
+.card h3 { margin-bottom: 10px; color: var(--color-primario); }
+
+/* Componentes específicos de proyectos */
 .project-card {
     padding: 0;
     overflow: hidden;
@@ -336,12 +346,10 @@ body.dark-mode .btn-outline:hover {
     flex-direction: column;
 }
 
-.project-tags {
-    margin: 15px 0;
-}
+.project-tags { margin: 15px 0; }
 
 .tag {
-    background: rgba(92, 42, 157, 0.1); /* Violeta muy transparente */
+    background: rgba(92, 42, 157, 0.1); 
     color: var(--color-primario);
     padding: 4px 12px;
     border-radius: 20px;
@@ -356,11 +364,42 @@ body.dark-mode .tag {
 }
 
 .project-links {
-    margin-top: auto; /* Empuja los botones hacia abajo */
+    margin-top: auto; 
     padding-top: 15px;
 }
 
-/* --- Grilla de Contacto --- */
+/* =========================================
+   BANNER DE DISPONIBILIDAD
+   ========================================= */
+.availability-banner {
+    background-color: var(--color-tarjeta);
+    padding: 40px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1px solid rgba(92, 42, 157, 0.2);
+}
+
+.status-dot {
+    width: 14px;
+    height: 14px;
+    background-color: #4CAF50; 
+    border-radius: 50%;
+    display: inline-block;
+    margin-bottom: 15px;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
+    70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(76, 175, 80, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+}
+
+/* =========================================
+   GRILLA DE CONTACTO
+   ========================================= */
 .contact-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -382,15 +421,177 @@ body.dark-mode .tag {
     margin-bottom: 15px;
 }
 
-.contact-method h3 {
-    margin-bottom: 10px;
-}
+.contact-method h3 { margin-bottom: 10px; }
 
 .contact-method p {
     margin-bottom: 20px;
     color: #666;
 }
 
-body.dark-mode .contact-method p {
-    color: #aaa;
+body.dark-mode .contact-method p { color: #aaa; }
+
+/* =========================================
+   FOOTER
+   ========================================= */
+/* Footer */
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 1.5rem 0;
+  margin-top: 2rem;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .footer-content {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+}
+
+.copyright {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}
+
+.social-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.social-link {
+  color: var(--muted-foreground);
+  font-size: 1.25rem;
+  transition: color 0.3s;
+}
+
+.social-link:hover {
+  color: var(--primary);
+}
+
+/* =========================================
+   ANIMACIONES MINIMALISTAS
+   ========================================= */
+.animate-on-scroll { 
+    opacity: 0; 
+    transform: translateY(30px); 
+    transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+}
+
+.animate-on-scroll.visible { 
+    opacity: 1; 
+    transform: translateY(0); 
+}
+
+.skills-grid .card:nth-child(1), .projects-grid .card:nth-child(1) { transition-delay: 0.1s; }
+.skills-grid .card:nth-child(2), .projects-grid .card:nth-child(2) { transition-delay: 0.2s; }
+.skills-grid .card:nth-child(3), .projects-grid .card:nth-child(3) { transition-delay: 0.3s; }
+.skills-grid .card:nth-child(4), .projects-grid .card:nth-child(4) { transition-delay: 0.4s; }
+
+/* =========================================
+   DISEÑO RESPONSIVO (MÓVILES Y TABLETS)
+   ========================================= */
+@media screen and (max-width: 768px) {
+    
+    /* 1. Barra de Navegación */
+    nav {
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1rem;
+    }
+    
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+    }
+    
+    .nav-links a {
+        font-size: 0.9rem;
+    }
+
+    /* 2. Sección Principal (Hero) */
+    header {
+        flex-direction: column-reverse; /* Pone la foto arriba y el texto abajo */
+        text-align: center;
+        padding-top: 40px;
+        padding-bottom: 40px;
+        gap: 30px;
+    }
+
+    .hero-content {
+        padding-right: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Centra los elementos */
+    }
+
+    .hero-content h1 {
+        font-size: 2.5rem; /* Achicamos el título */
+    }
+
+    .hero-content h2 {
+        font-size: 1.2rem;
+    }
+
+    .hero-image {
+        justify-content: center;
+    }
+
+    .hero-image img {
+        width: 220px; /* Achicamos la foto */
+        height: 220px;
+    }
+
+    /* 3. Botones Principales (Ocupan todo el ancho) */
+    .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .btn, .dropdown, .dropdown .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .dropdown-content {
+        width: 100%;
+        text-align: center;
+        /* En móviles, que el menú baje recto en lugar de hacia la derecha */
+        left: 0; 
+    }
+
+    /* 4. Espaciado General de las Secciones */
+    section {
+        padding: 60px 20px; /* Menos espacio en blanco vertical */
+        text-align: center; /* En móviles queda más prolijo todo centrado */
+    }
+
+    section h2 {
+        font-size: 2rem;
+    }
+
+    /* Centramos la rayita violeta debajo de los títulos */
+    section h2::after {
+        margin: 10px auto 0 auto; 
+    }
+
+    /* La línea de tiempo la mantenemos a la izquierda para que no se rompa */
+    .timeline {
+        text-align: left;
+    }
+
+    /* 5. Footer */
+    footer {
+        text-align: center; /* Centramos el texto del footer en móviles */
+        margin-top: 40px;
+        padding: 20px;
+    }
 }

@@ -73,4 +73,25 @@ document.addEventListener("DOMContentLoaded", () => {
             langToggleBtn.textContent = 'ES';
         }
     });
+
+    // 4. Lógica del Botón Descargar CV
+    const cvBtn = document.getElementById('cv-btn');
+    const cvContent = document.getElementById('cv-content');
+
+    if (cvBtn && cvContent) {
+        cvBtn.addEventListener('click', (e) => {
+            e.preventDefault(); // Evita que salte hacia arriba si es un <a>
+            e.stopPropagation(); // Evita que el clic llegue al window
+            cvContent.classList.toggle('show');
+        });
+
+        // Cerrar el menú si se hace clic afuera
+        window.addEventListener('click', (event) => {
+            if (!event.target.matches('#cv-btn') && !event.target.closest('#cv-btn')) {
+                if (cvContent.classList.contains('show')) {
+                    cvContent.classList.remove('show');
+                }
+            }
+        });
+    }
 });

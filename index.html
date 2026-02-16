@@ -26,8 +26,8 @@
         <div class="nav-controls">
             <button id="lang-toggle" title="Cambiar idioma">ES</button>
             <button id="theme-toggle" title="Cambiar tema"><i class="fas fa-moon"></i></button>
-            <a href="https://github.com/tu-usuario" target="_blank" title="Mi GitHub"><i class="fab fa-github"></i></a>
-            <a href="https://linkedin.com/in/tu-usuario" target="_blank" title="Mi LinkedIn"><i class="fab fa-linkedin"></i></a>
+            <a href="https://github.com/FerminLasarte" target="_blank" title="Mi GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://linkedin.com/in/ferminlasarte/" target="_blank" title="Mi LinkedIn"><i class="fab fa-linkedin"></i></a>
         </div>
     </nav>
 
@@ -39,11 +39,11 @@
             
             <div class="hero-buttons">
                 <a href="#contacto" class="btn">Contactame</a>
-                <div class="dropdown">
-                    <button class="btn btn-outline"><i class="fas fa-download"></i> Descargar CV</button>
-                    <div class="dropdown-content">
-                        <a href="assets/CV - FL - ES copy.pdf" download><i class="fas fa-file-pdf"></i> Español</a>
-                        <a href="assets/CV - FL - EN copy.pdf" download><i class="fas fa-file-pdf"></i> Inglés</a>
+                <div class="dropdown" id="cv-dropdown">
+                    <a class="btn btn-outline" id="cv-btn"><i class="fas fa-download"></i> Descargar CV</a>
+                    <div class="dropdown-content" id="cv-content">
+                        <a href="assets/CV - FL - ES copy.pdf" download="CV_Fermin_ES.pdf"><i class="fas fa-file-pdf"></i> Español</a>
+                        <a href="assets/CV - FL - EN copy.pdf" download="CV_Fermin_EN.pdf"><i class="fas fa-file-pdf"></i> Inglés</a>
                     </div>
                 </div>
             </div>
@@ -104,14 +104,30 @@
         <div class="projects-grid">
             
             <div class="card project-card animate-on-scroll">
-                <div class="project-image" style="background-image: url('https://via.placeholder.com/400x200?text=App+Flutter');"></div>
+                <div class="project-image" style="background-image: url('https://via.placeholder.com/400x200?text=DeporTurnos');"></div>
                 <div class="project-info">
-                    <h3>Ecosistema Móvil: DeporTurnos & TravelPic</h3>
-                    <p>Aplicaciones móviles desarrolladas desde cero. Gestión de datos, consumo de servicios en la nube, optimización de experiencia de usuario y manejo de credenciales de seguridad.</p>
+                    <h3>DeporTurnos</h3>
+                    <p>Aplicación móvil para la gestión y reserva de espacios deportivos. Desarrollada con arquitectura escalable, integrando servicios de Google Cloud (APIs), manejo de estados eficiente y una interfaz optimizada para facilitar la experiencia tanto de usuarios como de administradores.</p>
+                    <div class="project-tags">
+                        <span class="tag">Flutter</span>
+                        <span class="tag">Google Cloud</span>
+                        <span class="tag">UI/UX</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" target="_blank" class="btn btn-sm btn-outline"><i class="fab fa-github"></i> Código</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card project-card animate-on-scroll">
+                <div class="project-image" style="background-image: url('https://via.placeholder.com/400x200?text=TravelPic');"></div>
+                <div class="project-info">
+                    <h3>TravelPic</h3>
+                    <p>Plataforma móvil multiplataforma diseñada para capturar, organizar y compartir experiencias de viaje. Implementación de flujos de autenticación segura, almacenamiento remoto de recursos multimedia y optimización de rendimiento en el manejo de imágenes.</p>
                     <div class="project-tags">
                         <span class="tag">Flutter</span>
                         <span class="tag">Dart</span>
-                        <span class="tag">Mobile</span>
+                        <span class="tag">Backend as a Service</span>
                     </div>
                     <div class="project-links">
                         <a href="#" target="_blank" class="btn btn-sm btn-outline"><i class="fab fa-github"></i> Código</a>
@@ -170,6 +186,14 @@
         </div>
     </section>
 
+    <section id="disponibilidad">
+        <div class="availability-banner animate-on-scroll">
+            <div class="status-dot"></div>
+            <h2>Disponibilidad Laboral</h2>
+            <p>Actualmente me encuentro abierto a nuevas oportunidades, ya sea para roles a tiempo completo o proyectos freelance. Si buscás sumar a tu equipo a un desarrollador proactivo y orientado al producto, ¡no dudes en escribirme!</p>
+        </div>
+    </section>
+
     <section id="contacto">
         <h2 class="animate-on-scroll"><i class="fas fa-envelope"></i> Trabajemos juntos</h2>
         <div class="contact-grid animate-on-scroll">
@@ -188,8 +212,25 @@
         </div>
     </section>
 
-    <footer>
-        <p>&copy; 2026 Fermin. Todos los derechos reservados.</p>
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="copyright">
+            © <span id="current-year"></span> Fermin Lasarte. Todos los derechos reservados.
+          </div>
+          <div class="social-links">
+            <a href="https://github.com/ferminlasarte" target="_blank" class="social-link" aria-label="GitHub">
+              <i class="fab fa-github"></i>
+            </a>
+            <a href="https://linkedin.com/in/ferminlasarte/" target="_blank" class="social-link" aria-label="LinkedIn">
+              <i class="fab fa-linkedin"></i>
+            </a>
+            <a href="mailto:fermin.lasarte@icloud.com" target="_blank" class="social-link" aria-label="Email">
+              <i class="fas fa-envelope"></i>
+            </a>
+          </div>
+        </div>
+      </div>
     </footer>
 
     <script src="js/main.js"></script>
