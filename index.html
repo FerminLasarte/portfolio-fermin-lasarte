@@ -38,9 +38,14 @@
 
     <header id="sobre-mi">
         <div class="hero-content">
+            <div class="availability-badge">
+                <div class="status-dot"></div>
+                Disponible para nuevos desafíos
+            </div>
+            
             <h1>Hola, soy Fermin</h1>
-            <h2><i class="fas fa-code"></i> Desarrollador de Software</h2>
-            <p>Estudiante de 5to año de Ingeniería de Sistemas y desarrollador freelance. Me apasiona crear soluciones eficientes, desde aplicaciones móviles multiplataforma y nativas hasta desarrollo web end-to-end.</p>
+            <h2><i class="fas fa-code"></i> Ingeniero de Sistemas</h2>
+            <p>Estudiante avanzado de Ingeniería de Sistemas (UNICEN) con un sólido enfoque en desarrollo backend (Java, Python) y móvil (Flutter). Cuento con experiencia práctica en la creación de soluciones integrales, desde la arquitectura del sistema hasta la interfaz de usuario. Busco aportar mis habilidades técnicas y una mentalidad orientada al producto en entornos de alto crecimiento.</p>
             
             <div class="hero-buttons">
                 <a href="#contacto" class="btn">Contactame</a>
@@ -54,7 +59,7 @@
             </div>
         </div>
         <div class="hero-image">
-            <img src="assets/foto_perfil.jpeg" alt="Foto CV">
+            <img src="assets/foto_perfil.jpeg" alt="Foto de Fermin">
         </div>
     </header>
 
@@ -65,18 +70,27 @@
             <div class="timeline-item">
                 <div class="timeline-dot"></div>
                 <div class="timeline-content">
-                    <h3>Desarrollador Freelance</h3>
-                    <span class="timeline-period">2024 - Presente</span>
-                    <p>Desarrollo integral de plataformas web y aplicaciones móviles para clientes. Gestión completa del ciclo de vida del software, desde la toma de requerimientos hasta el despliegue en producción y cumplimiento de plazos estrictos (ej. plataformas para el sector gastronómico).</p>
+                    <h3>Desarrollador Mobile Freelance</h3>
+                    <span class="timeline-period">2024 - 2025 | Argentina</span>
+                    <p>Diseñé la arquitectura y desarrollé <strong>TravelPic</strong>, una plataforma estilo "Uber para fotógrafos" utilizando Flutter. Integré la pasarela de pagos Stripe, implementé mapas en tiempo real con rutas (Google Maps) y optimicé el rendimiento general para asegurar una alta disponibilidad en tiendas.</p>
                 </div>
             </div>
             
             <div class="timeline-item">
                 <div class="timeline-dot"></div>
                 <div class="timeline-content">
-                    <h3>Ingeniería de Sistemas (5to Año)</h3>
-                    <span class="timeline-period">Actualidad</span>
-                    <p><strong>UNICEN (Universidad Nacional del Centro)</strong>. Formación sólida en arquitectura de computadoras, diseño de compiladores, programación orientada a objetos, y estructuras de datos complejas.</p>
+                    <h3>Desarrollador Mobile Independiente</h3>
+                    <span class="timeline-period">2021 - 2023 | Argentina</span>
+                    <p>Creador de <strong>DeporTurnos</strong>, una plataforma basada en Flutter para la gestión de reservas deportivas en tiempo real. Diseñé una arquitectura backend serverless con Firebase (Firestore, Cloud Messaging), integré pagos con Mercado Pago y desarrollé un chat nativo desde cero.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <h3>Ingeniería de Sistemas</h3>
+                    <span class="timeline-period">2020 - 2026 | UNICEN</span>
+                    <p>Formación sólida en algoritmos, diseño de compiladores, inteligencia artificial y arquitectura de software. Nivel de inglés B2 (Intermedio-Avanzado), capacitado para colaborar en equipos internacionales.</p>
                 </div>
             </div>
         </div>
@@ -86,20 +100,28 @@
         <h2 class="animate-on-scroll"><i class="fas fa-laptop-code"></i> Mis Habilidades</h2>
         <div class="skills-grid">
             <div class="card animate-on-scroll">
-                <h3>Flutter / Dart</h3>
-                <p>Desarrollo de aplicaciones móviles multiplataforma (iOS/Android) con interfaces fluidas, manejo de estado y consumo de APIs.</p>
+                <h3>Mobile & Frontend</h3>
+                <p>Flutter, Dart, Swift, SwiftUI, HTML, CSS. Creación de interfaces fluidas y multiplataforma.</p>
             </div>
             <div class="card animate-on-scroll">
-                <h3>iOS Nativo / Swift</h3>
-                <p>Creación de aplicaciones y juegos nativos para el ecosistema de Apple, aprovechando al máximo el hardware y herramientas como Xcode.</p>
+                <h3>Backend & Cloud</h3>
+                <p>Java, Python, C#, .NET. Diseño de APIs RESTful, Docker y arquitecturas serverless con Firebase.</p>
             </div>
             <div class="card animate-on-scroll">
-                <h3>Java & Arquitectura</h3>
-                <p>Sólidos conocimientos en OOP y diseño de software. Experiencia en desarrollos académicos complejos como diseño léxico y sintáctico.</p>
+                <h3>Bases de Datos</h3>
+                <p>Experiencia en modelado y gestión de bases de datos relacionales (PostgreSQL) y NoSQL (MongoDB, Firestore).</p>
             </div>
             <div class="card animate-on-scroll">
-                <h3>Desarrollo Web</h3>
-                <p>Creación de interfaces limpias y responsivas usando HTML, CSS, JavaScript y frameworks modernos, con foco en el cliente final.</p>
+                <h3>AI & Machine Learning</h3>
+                <p>Desarrollo de modelos NLU, creación de chatbots conversacionales utilizando Rasa y Python.</p>
+            </div>
+            <div class="card animate-on-scroll">
+                <h3>Lenguajes Base</h3>
+                <p>Sólidos fundamentos en programación orientada a objetos y estructuras de datos utilizando C y C++.</p>
+            </div>
+            <div class="card animate-on-scroll">
+                <h3>Herramientas & Metodologías</h3>
+                <p>Control de versiones con Git/GitHub, despliegue en Testflight, XCode y metodologías ágiles (Scrum).</p>
             </div>
         </div>
     </section>
@@ -109,30 +131,14 @@
         <div class="projects-grid">
             
             <div class="card project-card animate-on-scroll">
-                <div class="project-image" style="background-image: url('assets/deporturnos.png');"></div>
-                <div class="project-info">
-                    <h3>DeporTurnos</h3>
-                    <p>Aplicación móvil para la gestión y reserva de espacios deportivos. Desarrollada con arquitectura escalable, integrando servicios de Google Cloud (APIs), manejo de estados eficiente y una interfaz optimizada para facilitar la experiencia tanto de usuarios como de administradores.</p>
-                    <div class="project-tags">
-                        <span class="tag">Flutter</span>
-                        <span class="tag">Google Cloud</span>
-                        <span class="tag">UI/UX</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="#" target="_blank" class="btn btn-sm btn-outline"><i class="fab fa-github"></i> Código</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card project-card animate-on-scroll">
                 <div class="project-image" style="background-image: url('assets/travelpic.png');"></div>
                 <div class="project-info">
                     <h3>TravelPic</h3>
-                    <p>Plataforma móvil multiplataforma diseñada para capturar, organizar y compartir experiencias de viaje. Implementación de flujos de autenticación segura, almacenamiento remoto de recursos multimedia y optimización de rendimiento en el manejo de imágenes.</p>
+                    <p>Plataforma para contratar fotógrafos por geolocalización. Integración con Stripe para pagos y Google Maps para indicaciones de ruta en tiempo real.</p>
                     <div class="project-tags">
                         <span class="tag">Flutter</span>
-                        <span class="tag">Dart</span>
-                        <span class="tag">Backend as a Service</span>
+                        <span class="tag">Stripe API</span>
+                        <span class="tag">Google Maps</span>
                     </div>
                     <div class="project-links">
                         <a href="#" target="_blank" class="btn btn-sm btn-outline"><i class="fab fa-github"></i> Código</a>
@@ -141,14 +147,14 @@
             </div>
 
             <div class="card project-card animate-on-scroll">
-                <div class="project-image" style="background-image: url('assets/impostor.png');"></div>
+                <div class="project-image" style="background-image: url('assets/deporturnos.png');"></div>
                 <div class="project-info">
-                    <h3>Impostor (Juego iOS)</h3>
-                    <p>Videojuego desarrollado de forma completamente nativa para iOS. Implementación de lógicas de estado, colisiones y renderizado aprovechando las librerías de Apple.</p>
+                    <h3>DeporTurnos</h3>
+                    <p>App de gestión de complejos deportivos. Incluye un chat nativo en tiempo real, notificaciones push (FCM) e integración con la pasarela de Mercado Pago.</p>
                     <div class="project-tags">
-                        <span class="tag">Swift</span>
-                        <span class="tag">Xcode</span>
-                        <span class="tag">iOS Native</span>
+                        <span class="tag">Flutter</span>
+                        <span class="tag">Firebase</span>
+                        <span class="tag">Mercado Pago</span>
                     </div>
                     <div class="project-links">
                         <a href="#" target="_blank" class="btn btn-sm btn-outline"><i class="fab fa-github"></i> Código</a>
@@ -160,11 +166,11 @@
                 <div class="project-image" style="background-image: url('assets/compilador.png');"></div>
                 <div class="project-info">
                     <h3>Compilador en Java</h3>
-                    <p>Diseño y desarrollo end-to-end de un compilador en el marco académico. Implementación profunda de análisis léxico, sintáctico y generación de código.</p>
+                    <p>Diseño de la arquitectura de un compilador completo. Gestión de todo el proceso desde el análisis léxico hasta la generación de código de máquina.</p>
                     <div class="project-tags">
                         <span class="tag">Java</span>
-                        <span class="tag">OOP</span>
                         <span class="tag">Arquitectura</span>
+                        <span class="tag">Algoritmos</span>
                     </div>
                     <div class="project-links">
                         <a href="#" target="_blank" class="btn btn-sm btn-outline"><i class="fab fa-github"></i> Código</a>
@@ -173,29 +179,21 @@
             </div>
 
             <div class="card project-card animate-on-scroll">
-                <div class="project-image" style="background-image: url('https://via.placeholder.com/400x200?text=Web+Freelance');"></div>
+                <div class="project-image" style="background-image: url('assets/chatbot.png');"></div>
                 <div class="project-info">
-                    <h3>Web Sector Gastronómico</h3>
-                    <p>Desarrollo web freelance para un cliente real (hamburguesería). Diseño responsivo, optimización de rendimiento y entrega bajo plazos estrictos de marzo.</p>
+                    <h3>AI Chatbot</h3>
+                    <p>Chatbot conversacional basado en Inteligencia Artificial. Implementación de modelos NLU (Natural Language Understanding) para gestionar intenciones.</p>
                     <div class="project-tags">
-                        <span class="tag">HTML/CSS/JS</span>
-                        <span class="tag">Freelance</span>
-                        <span class="tag">UI/UX</span>
+                        <span class="tag">Python</span>
+                        <span class="tag">Rasa</span>
+                        <span class="tag">Machine Learning</span>
                     </div>
                     <div class="project-links">
-                        <a href="#" target="_blank" class="btn btn-sm"><i class="fas fa-external-link-alt"></i> Ver Demo</a>
+                        <a href="#" target="_blank" class="btn btn-sm btn-outline"><i class="fab fa-github"></i> Código</a>
                     </div>
                 </div>
             </div>
 
-        </div>
-    </section>
-
-    <section id="disponibilidad">
-        <div class="availability-banner animate-on-scroll">
-            <div class="status-dot"></div>
-            <h2>Disponibilidad Laboral</h2>
-            <p>Actualmente me encuentro abierto a nuevas oportunidades, ya sea para roles a tiempo completo o proyectos freelance. Si buscás sumar a tu equipo a un desarrollador proactivo y orientado al producto, ¡no dudes en escribirme!</p>
         </div>
     </section>
 
@@ -205,14 +203,20 @@
             <div class="contact-method">
                 <i class="fas fa-paper-plane contact-icon"></i>
                 <h3>Email</h3>
-                <p>fermin.lasarte@icloud.com</p>
-                <a href="mailto:fermin.lasarte@icloud.com" class="btn btn-sm btn-outline">Escribir</a>
+                <p>tu-correo@email.com</p>
+                <a href="mailto:tu-correo@email.com" class="btn btn-sm btn-outline">Escribir</a>
+            </div>
+            <div class="contact-method">
+                <i class="fab fa-whatsapp contact-icon"></i>
+                <h3>Teléfono</h3>
+                <p>+54 9 11 1234-5678</p>
+                <a href="https://wa.me/5491112345678" target="_blank" class="btn btn-sm btn-outline">Mensaje</a>
             </div>
             <div class="contact-method">
                 <i class="fab fa-linkedin contact-icon"></i>
                 <h3>LinkedIn</h3>
                 <p>Conectá conmigo</p>
-                <a href="https://www.linkedin.com/in/ferminlasarte/" target="_blank" class="btn btn-sm btn-outline">Ver Perfil</a>
+                <a href="https://linkedin.com/in/tu-usuario" target="_blank" class="btn btn-sm btn-outline">Ver Perfil</a>
             </div>
         </div>
     </section>

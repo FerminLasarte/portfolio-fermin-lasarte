@@ -435,31 +435,41 @@ body.dark-mode .tag {
 }
 
 /* =========================================
-   BANNER DE DISPONIBILIDAD
+   BADGE DE DISPONIBILIDAD (ESTILO APPLE)
    ========================================= */
-.availability-banner {
-    background-color: var(--color-tarjeta);
-    padding: 40px;
-    border-radius: 12px;
-    text-align: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    border: 1px solid rgba(92, 42, 157, 0.2);
+.availability-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(76, 175, 80, 0.1);
+    color: #2e7d32;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    border: 1px solid rgba(76, 175, 80, 0.2);
+    transition: background-color 0.3s, color 0.3s;
 }
 
-.status-dot {
-    width: 14px;
-    height: 14px;
-    background-color: #4CAF50; 
+body.dark-mode .availability-badge {
+    background-color: rgba(129, 199, 132, 0.1);
+    color: #81c784;
+    border-color: rgba(129, 199, 132, 0.2);
+}
+
+.availability-badge .status-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #4CAF50;
     border-radius: 50%;
-    display: inline-block;
-    margin-bottom: 15px;
-    box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
     animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
     0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
-    70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(76, 175, 80, 0); }
+    70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(76, 175, 80, 0); }
     100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
 }
 
