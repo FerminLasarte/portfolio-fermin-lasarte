@@ -452,18 +452,6 @@ body.dark-mode .timeline-period { background-color: rgba(138, 79, 255, 0.15); }
 .project-info h3 { color: var(--color-primario); margin-bottom: var(--spacing-sm); }
 .project-tags, .compact-tags { display: flex; flex-wrap: wrap; gap: var(--spacing-sm); margin: var(--spacing-md) 0; }
 
-.tag, .compact-tags span {
-    background: var(--color-fondo);
-    color: var(--color-texto);
-    border: 1px solid var(--color-borde);
-    padding: var(--spacing-xs) 0.75rem;
-    border-radius: var(--radius-sm);
-    font-size: 0.8rem;
-    font-weight: 500;
-}
-.tag { color: var(--color-primario); background: rgba(92, 42, 157, 0.05); border: none;}
-body.dark-mode .tag { background: rgba(138, 79, 255, 0.15); }
-
 .project-links { margin-top: auto; padding-top: 1.25rem; display: flex; gap: var(--spacing-sm); }
 
 /* Estado Producción Minimalista */
@@ -488,10 +476,45 @@ body.dark-mode .production-status { color: #34d399; }
 }
 
 /* Grilla Contacto */
-.contact-method { text-align: center; }
+.contact-method {
+    background-color: var(--color-tarjeta);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-card);
+    text-align: center;
+    box-shadow: 0 4px 15px var(--color-sombra);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.contact-method:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px var(--color-sombra);
+}
+
 .contact-icon { font-size: 2.5rem; color: var(--color-primario); margin-bottom: 1rem; }
 .contact-method p { margin-bottom: 1.25rem; color: #666; }
 body.dark-mode .contact-method p { color: #aaa; }
+
+/* Títulos e íconos dentro de las tarjetas */
+.card h3, .card h3 i { 
+    color: var(--color-primario); 
+    margin-bottom: var(--spacing-sm); 
+}
+
+/* Rediseño de Habilidades y Etiquetas a color Violeta */
+.tag, .compact-tags span {
+    background: rgba(92, 42, 157, 0.05);
+    color: var(--color-primario);
+    border: none;
+    padding: var(--spacing-xs) 0.75rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+body.dark-mode .tag, body.dark-mode .compact-tags span { 
+    background: rgba(138, 79, 255, 0.15); 
+    color: var(--color-primario);
+}
 
 /* =========================================
    9. FOOTER
