@@ -6,6 +6,7 @@ const translations = {
         "nav.skills": "Habilidades",
         "nav.projects": "Proyectos",
         "nav.contact": "Contacto",
+        
         "hero.availability": "Disponible para nuevos desafíos",
         "hero.location": "Tandil, Argentina",
         "hero.greeting": "Hola, soy Fermin",
@@ -13,8 +14,46 @@ const translations = {
         "hero.description": "Estudiante avanzado de Ingeniería de Sistemas (UNICEN) con un sólido enfoque en desarrollo backend (Java, Python) y móvil (Flutter). Cuento con experiencia práctica en la creación de soluciones integrales, desde la arquitectura del sistema hasta la interfaz de usuario. Busco aportar mis habilidades técnicas y una mentalidad orientada al producto en entornos de alto crecimiento.",
         "hero.contactBtn": "Contactame",
         "hero.cvBtn": "Descargar CV",
+
+        "exp.title": "Trayectoria",
+        "exp.job1.title": "Desarrollador Mobile Freelance",
+        "exp.job1.company": "Creador de TravelPic | Argentina",
+        "exp.job1.desc": "Diseñé la arquitectura y desarrollé una plataforma estilo \"Uber para fotógrafos\" utilizando Flutter. Integré la pasarela de pagos Stripe, implementé mapas en tiempo real con rutas (Google Maps) y optimicé el rendimiento general para asegurar una alta disponibilidad en tiendas.",
+        "exp.job2.title": "Desarrollador Mobile Independiente",
+        "exp.job2.company": "Creador de DeporTurnos | Argentina",
+        "exp.job2.desc": "Desarrollé una plataforma para la gestión de reservas deportivas en tiempo real. Diseñé una arquitectura backend serverless con Firebase (Firestore, Cloud Messaging), integré pagos con Mercado Pago y desarrollé un chat nativo desde cero.",
+
+        "edu.title": "Educación",
+        "edu.item1.title": "Ingeniería de Sistemas",
+        "edu.item1.company": "Universidad Nacional del Centro de la Provincia de Buenos Aires (UNICEN)",
+        "edu.item1.desc": "Formación sólida en algoritmos, diseño de compiladores, inteligencia artificial y arquitectura de software.",
+        "edu.item2.title": "Inglés B2 (Intermedio-Avanzado)",
+        "edu.item2.period": "Actualidad",
+        "edu.item2.desc": "Capacidad fluida para la lectura de documentación técnica, escritura de código y colaboración eficaz en equipos internacionales y multidisciplinarios.",
+
+        "skills.title": "Mis Habilidades",
+        "skills.db": "Bases de Datos",
+        "skills.tools": "Herramientas Base",
+
+        "projects.title": "Proyectos Destacados",
+        "projects.live": "Disponible en tiendas",
         "projects.code": "Código",
-        "projects.download": "Descargar"
+        "projects.download": "Descargar",
+        "projects.p1.desc": "Plataforma multiplataforma estilo \"Uber para fotógrafos\". Desarrollada de principio a fin, integrando Stripe para pagos, geolocalización en tiempo real y mapas con Google Maps.",
+        "projects.p2.desc": "Sistema completo de gestión deportiva. Arquitectura serverless escalable con Firebase, notificaciones push nativas, chat en tiempo real y pagos a través de Mercado Pago.",
+        "projects.p3.title": "Compilador Java (Académico)",
+        "projects.p3.desc": "Diseño de la arquitectura de un compilador completo. Gestión desde el análisis léxico y sintáctico hasta la generación de código ejecutable.",
+        "projects.p3.tag": "Arquitectura",
+        "projects.p4.desc": "Chatbot conversacional avanzado desarrollado con Rasa. Implementa modelos NLU (Natural Language Understanding) para interpretar y gestionar intenciones complejas del usuario.",
+
+        "contact.title": "Trabajemos juntos",
+        "contact.phone": "Teléfono",
+        "contact.write": "Escribir",
+        "contact.msg": "Mensaje",
+        "contact.connect": "Conectá conmigo",
+        "contact.profile": "Ver Perfil",
+
+        "footer.rights": "Todos los derechos reservados."
     },
     en: {
         "nav.about": "About me",
@@ -23,6 +62,7 @@ const translations = {
         "nav.skills": "Skills",
         "nav.projects": "Projects",
         "nav.contact": "Contact",
+        
         "hero.availability": "Available for new challenges",
         "hero.location": "Tandil, Argentina",
         "hero.greeting": "Hi, I'm Fermin",
@@ -30,7 +70,45 @@ const translations = {
         "hero.description": "Advanced Systems Engineering student (UNICEN) with a strong focus on backend (Java, Python) and mobile (Flutter) development. I have practical experience in creating end-to-end solutions, from system architecture to user interfaces. I seek to bring my technical skills and a product-oriented mindset to high-growth environments.",
         "hero.contactBtn": "Contact me",
         "hero.cvBtn": "Download CV",
+
+        "exp.title": "Experience",
+        "exp.job1.title": "Freelance Mobile Developer",
+        "exp.job1.company": "Creator of TravelPic | Argentina",
+        "exp.job1.desc": "Designed the architecture and developed an \"Uber for photographers\" platform using Flutter. Integrated Stripe payment gateway, implemented real-time maps with routing (Google Maps), and optimized overall performance to ensure high availability in stores.",
+        "exp.job2.title": "Independent Mobile Developer",
+        "exp.job2.company": "Creator of DeporTurnos | Argentina",
+        "exp.job2.desc": "Developed a real-time sports reservation management platform. Designed a serverless backend architecture with Firebase (Firestore, Cloud Messaging), integrated Mercado Pago for payments, and built a native real-time chat from scratch.",
+
+        "edu.title": "Education",
+        "edu.item1.title": "Systems Engineering",
+        "edu.item1.company": "National University of the Center of the Province of Buenos Aires (UNICEN)",
+        "edu.item1.desc": "Solid foundation in algorithms, compiler design, artificial intelligence, and software architecture.",
+        "edu.item2.title": "English B2 (Upper-Intermediate)",
+        "edu.item2.period": "Present",
+        "edu.item2.desc": "Fluent ability to read technical documentation, write code, and collaborate effectively in international and multidisciplinary teams.",
+
+        "skills.title": "My Skills",
+        "skills.db": "Databases",
+        "skills.tools": "Core Tools",
+
+        "projects.title": "Featured Projects",
+        "projects.live": "Available in stores",
         "projects.code": "Code",
-        "projects.download": "Download"
+        "projects.download": "Download",
+        "projects.p1.desc": "Cross-platform \"Uber for photographers\" app. Developed end-to-end, integrating Stripe for payments, real-time geolocation, and Google Maps routing.",
+        "projects.p2.desc": "Complete sports management system. Scalable serverless architecture with Firebase, native push notifications, real-time chat, and payments via Mercado Pago.",
+        "projects.p3.title": "Java Compiler (Academic)",
+        "projects.p3.desc": "Designed the architecture of a complete compiler. Managed the entire process from lexical and syntactic analysis to executable code generation.",
+        "projects.p3.tag": "Architecture",
+        "projects.p4.desc": "Advanced conversational chatbot developed with Rasa. Implements NLU (Natural Language Understanding) models to interpret and manage complex user intents.",
+
+        "contact.title": "Let's work together",
+        "contact.phone": "Phone",
+        "contact.write": "Email me",
+        "contact.msg": "Message",
+        "contact.connect": "Connect with me",
+        "contact.profile": "View Profile",
+
+        "footer.rights": "All rights reserved."
     }
 };

@@ -40,23 +40,27 @@ document.addEventListener("DOMContentLoaded", () => {
     const elementsToAnimate = document.querySelectorAll('.animate-on-scroll');
     elementsToAnimate.forEach((elem) => observer.observe(elem));
 
-    // 2. Lógica del Modo Oscuro (Actualizada a Iconos FontAwesome)
+    // 2. Lógica del Modo Oscuro y Color del Navegador
     const themeToggleBtn = document.getElementById('theme-toggle');
+    const metaThemeColor = document.getElementById('meta-theme-color');
     
-    // Revisar si el usuario ya tenía el modo oscuro guardado
+    // Revisar si el usuario ya tenía el modo oscuro guardado al entrar
     if (localStorage.getItem('theme') === 'dark') {
         document.body.classList.add('dark-mode');
+        // Pintamos la barra del navegador de oscuro
+        if (metaThemeColor) metaThemeColor.setAttribute('content', '#1e1e1e');
     }
 
     themeToggleBtn.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
         
-        // Guardar preferencia en la memoria del navegador. 
-        // El CSS se encarga automáticamente de alternar entre <i class="fa-sun"> y <i class="fa-moon">
+        // Guardar preferencia y cambiar color de la barra del navegador
         if (document.body.classList.contains('dark-mode')) {
             localStorage.setItem('theme', 'dark');
+            if (metaThemeColor) metaThemeColor.setAttribute('content', '#1e1e1e');
         } else {
             localStorage.setItem('theme', 'light');
+            if (metaThemeColor) metaThemeColor.setAttribute('content', '#ffffff');
         }
     });
 
@@ -89,26 +93,37 @@ document.addEventListener("DOMContentLoaded", () => {
         applyTranslations(currentLang);
     });
 
-    // 4. Lógica del Botón Descargar CV
-    const cvBtn = document.getElementById('cv-btn');
-    const cvContent = document.getElementById('cv-content');
-
-    if (cvBtn && cvContent) {
-        cvBtn.addEventListener('click', (e) => {
-            e.preventDefault(); // Evita que salte hacia arriba si es un <a>
-            e.stopPropagation(); // Evita que el clic llegue al window
-            cvContent.classList.toggle('show');
-        });
-
-        // Cerrar el menú si se hace clic afuera
-        window.addEventListener('click', (event) => {
-            if (!event.target.matches('#cv-btn') && !event.target.closest('#cv-btn')) {
-                if (cvContent.classList.contains('show')) {
-                    cvContent.classList.remove('show');
+    // 4. Lógica de Menús Desplegables Generales (CV y Tiendas)
+    const dropdownBtns = document.querySelectorAll('.dropdown-btn, #cv-btn');
+    
+    dropdownBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Busca el contenedor con las opciones que está justo abajo del botón en el HTML
+            const dropdownContent = btn.nextElementSibling;
+            
+            // Cierra cualquier otro menú que esté abierto
+            document.querySelectorAll('.dropdown-content').forEach(content => {
+                if (content !== dropdownContent) {
+                    content.classList.remove('show');
                 }
-            }
+            });
+            
+            // Abre o cierra este menú
+            dropdownContent.classList.toggle('show');
         });
-    }
+    });
+
+    // Cierra cualquier menú si se hace clic afuera
+    window.addEventListener('click', (event) => {
+        if (!event.target.closest('.dropdown')) {
+            document.querySelectorAll('.dropdown-content').forEach(content => {
+                content.classList.remove('show');
+            });
+        }
+    });
 
     // Actualizar año del footer automáticamente
     const yearSpan = document.getElementById("current-year");
