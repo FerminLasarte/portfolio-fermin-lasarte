@@ -19,20 +19,19 @@
         <ul class="nav-links">
             <li><a href="#sobre-mi">Sobre mí</a></li>
             <li><a href="#experiencia">Trayectoria</a></li>
+            <li><a href="#educacion">Educación</a></li>
             <li><a href="#habilidades">Habilidades</a></li>
             <li><a href="#proyectos">Proyectos</a></li>
             <li><a href="#contacto">Contacto</a></li>
         </ul>
         <div class="nav-controls">
             <button id="lang-toggle" class="icon-btn" title="Cambiar idioma">ES</button>
-            
             <button id="theme-toggle" class="icon-btn" title="Cambiar tema">
                 <i class="fas fa-moon"></i>
                 <i class="fas fa-sun"></i>
             </button>
-            
-            <a href="https://github.com/FerminLasarte" target="_blank" class="icon-btn" title="Mi GitHub"><i class="fab fa-github"></i></a>
-            <a href="https://linkedin.com/in/ferminlasarte/" target="_blank" class="icon-btn" title="Mi LinkedIn"><i class="fab fa-linkedin"></i></a>
+            <a href="https://github.com/tu-usuario" target="_blank" class="icon-btn" title="Mi GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://linkedin.com/in/tu-usuario" target="_blank" class="icon-btn" title="Mi LinkedIn"><i class="fab fa-linkedin"></i></a>
         </div>
     </nav>
 
@@ -44,7 +43,7 @@
             </div>
             
             <h1>Hola, soy Fermin</h1>
-            <h2><i class="fas fa-code"></i> Ingeniero de Sistemas</h2>
+            <h2><i class="fas fa-code"></i> Desarrollador de Software | <i class="fas fa-map-marker-alt"></i> Tandil, Argentina</h2>
             <p>Estudiante avanzado de Ingeniería de Sistemas (UNICEN) con un sólido enfoque en desarrollo backend (Java, Python) y móvil (Flutter). Cuento con experiencia práctica en la creación de soluciones integrales, desde la arquitectura del sistema hasta la interfaz de usuario. Busco aportar mis habilidades técnicas y una mentalidad orientada al producto en entornos de alto crecimiento.</p>
             
             <div class="hero-buttons">
@@ -70,27 +69,53 @@
             <div class="timeline-item">
                 <div class="timeline-dot"></div>
                 <div class="timeline-content">
-                    <h3>Desarrollador Mobile Freelance</h3>
-                    <span class="timeline-period">2024 - 2025 | Argentina</span>
-                    <p>Diseñé la arquitectura y desarrollé <strong>TravelPic</strong>, una plataforma estilo "Uber para fotógrafos" utilizando Flutter. Integré la pasarela de pagos Stripe, implementé mapas en tiempo real con rutas (Google Maps) y optimicé el rendimiento general para asegurar una alta disponibilidad en tiendas.</p>
+                    <div class="timeline-header">
+                        <h3>Desarrollador Mobile Freelance</h3>
+                        <span class="timeline-period">2024 - 2025</span>
+                    </div>
+                    <span class="timeline-company">Creador de TravelPic | Argentina</span>
+                    <p>Diseñé la arquitectura y desarrollé una plataforma estilo "Uber para fotógrafos" utilizando Flutter. Integré la pasarela de pagos Stripe, implementé mapas en tiempo real con rutas (Google Maps) y optimicé el rendimiento general para asegurar una alta disponibilidad en tiendas.</p>
                 </div>
             </div>
             
             <div class="timeline-item">
                 <div class="timeline-dot"></div>
                 <div class="timeline-content">
-                    <h3>Desarrollador Mobile Independiente</h3>
-                    <span class="timeline-period">2021 - 2023 | Argentina</span>
-                    <p>Creador de <strong>DeporTurnos</strong>, una plataforma basada en Flutter para la gestión de reservas deportivas en tiempo real. Diseñé una arquitectura backend serverless con Firebase (Firestore, Cloud Messaging), integré pagos con Mercado Pago y desarrollé un chat nativo desde cero.</p>
+                    <div class="timeline-header">
+                        <h3>Desarrollador Mobile Independiente</h3>
+                        <span class="timeline-period">2021 - 2023</span>
+                    </div>
+                    <span class="timeline-company">Creador de DeporTurnos | Argentina</span>
+                    <p>Desarrollé una plataforma para la gestión de reservas deportivas en tiempo real. Diseñé una arquitectura backend serverless con Firebase (Firestore, Cloud Messaging), integré pagos con Mercado Pago y desarrollé un chat nativo desde cero.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="educacion">
+        <h2 class="animate-on-scroll"><i class="fas fa-graduation-cap"></i> Educación</h2>
+        
+        <div class="timeline animate-on-scroll">
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <h3>Ingeniería de Sistemas</h3>
+                        <span class="timeline-period">2020 - 2026</span>
+                    </div>
+                    <span class="timeline-company">Universidad Nacional del Centro (UNICEN)</span>
+                    <p>Formación sólida en algoritmos, diseño de compiladores, inteligencia artificial y arquitectura de software.</p>
                 </div>
             </div>
 
             <div class="timeline-item">
                 <div class="timeline-dot"></div>
                 <div class="timeline-content">
-                    <h3>Ingeniería de Sistemas</h3>
-                    <span class="timeline-period">2020 - 2026 | UNICEN</span>
-                    <p>Formación sólida en algoritmos, diseño de compiladores, inteligencia artificial y arquitectura de software. Nivel de inglés B2 (Intermedio-Avanzado), capacitado para colaborar en equipos internacionales.</p>
+                    <div class="timeline-header">
+                        <h3>Inglés B2 (Intermedio-Avanzado)</h3>
+                        <span class="timeline-period">Actualidad</span>
+                    </div>
+                    <p>Capacidad fluida para la lectura de documentación técnica, escritura de código y colaboración eficaz en equipos internacionales y multidisciplinarios.</p>
                 </div>
             </div>
         </div>
@@ -99,30 +124,99 @@
     <section id="habilidades">
         <h2 class="animate-on-scroll"><i class="fas fa-laptop-code"></i> Mis Habilidades</h2>
         <div class="skills-grid">
-            <div class="card animate-on-scroll">
-                <h3>Mobile & Frontend</h3>
-                <p>Flutter, Dart, Swift, SwiftUI, HTML, CSS. Creación de interfaces fluidas y multiplataforma.</p>
+            <div class="card skill-category animate-on-scroll">
+                <h3><i class="fas fa-mobile-alt"></i> Mobile & Frontend</h3>
+                <div class="compact-tags">
+                    <span>Flutter</span><span>Dart</span><span>Swift</span><span>SwiftUI</span><span>HTML/CSS</span>
+                </div>
             </div>
-            <div class="card animate-on-scroll">
-                <h3>Backend & Cloud</h3>
-                <p>Java, Python, C#, .NET. Diseño de APIs RESTful, Docker y arquitecturas serverless con Firebase.</p>
+            <div class="card skill-category animate-on-scroll">
+                <h3><i class="fas fa-server"></i> Backend & Cloud</h3>
+                <div class="compact-tags">
+                    <span>Java</span><span>Python</span><span>C#</span><span>.NET</span><span>API REST</span><span>Firebase</span><span>Docker</span>
+                </div>
             </div>
-            <div class="card animate-on-scroll">
-                <h3>Bases de Datos</h3>
-                <p>Experiencia en modelado y gestión de bases de datos relacionales (PostgreSQL) y NoSQL (MongoDB, Firestore).</p>
+            <div class="card skill-category animate-on-scroll">
+                <h3><i class="fas fa-database"></i> Bases de Datos</h3>
+                <div class="compact-tags">
+                    <span>PostgreSQL</span><span>MongoDB</span><span>Firestore</span>
+                </div>
             </div>
-            <div class="card animate-on-scroll">
-                <h3>AI & Machine Learning</h3>
-                <p>Desarrollo de modelos NLU, creación de chatbots conversacionales utilizando Rasa y Python.</p>
+            <div class="card skill-category animate-on-scroll">
+                <h3><i class="fas fa-brain"></i> AI & Machine Learning</h3>
+                <div class="compact-tags">
+                    <span>Machine Learning</span><span>Rasa (Chatbots)</span><span>Modelos NLU</span>
+                </div>
             </div>
-            <div class="card animate-on-scroll">
-                <h3>Lenguajes Base</h3>
-                <p>Sólidos fundamentos en programación orientada a objetos y estructuras de datos utilizando C y C++.</p>
+            <div class="card skill-category animate-on-scroll">
+                <h3><i class="fas fa-tools"></i> Herramientas Base</h3>
+                <div class="compact-tags">
+                    <span>Git / GitHub</span><span>XCode</span><span>Testflight</span><span>Scrum</span><span>C / C++</span>
+                </div>
             </div>
-            <div class="card animate-on-scroll">
-                <h3>Herramientas & Metodologías</h3>
-                <p>Control de versiones con Git/GitHub, despliegue en Testflight, XCode y metodologías ágiles (Scrum).</p>
+        </div>
+    </section>
+
+    <section id="proyectos">
+        <h2 class="animate-on-scroll"><i class="fas fa-rocket"></i> Proyectos Destacados</h2>
+        <div class="projects-grid">
+            
+            <div class="card project-card animate-on-scroll">
+                <div class="project-image" style="background-image: url('assets/travelpic.png');"></div>
+                <div class="project-info">
+                    <div class="production-badge">
+                        <i class="fab fa-apple"></i> <i class="fab fa-google-play"></i> En Producción
+                    </div>
+                    <h3>TravelPic</h3>
+                    <p><strong>App funcional publicada en App Store y Google Play.</strong> Plataforma multiplataforma estilo "Uber para fotógrafos". Desarrollada de principio a fin, integrando Stripe para pagos, geolocalización en tiempo real y mapas con Google Maps.</p>
+                    <div class="project-tags">
+                        <span class="tag">Flutter</span><span class="tag">Stripe</span><span class="tag">Google Maps</span>
+                    </div>
+                </div>
             </div>
+
+            <div class="card project-card animate-on-scroll">
+                <div class="project-image" style="background-image: url('assets/deporturnos.png');"></div>
+                <div class="project-info">
+                    <div class="production-badge">
+                        <i class="fab fa-apple"></i> <i class="fab fa-google-play"></i> En Producción
+                    </div>
+                    <h3>DeporTurnos</h3>
+                    <p><strong>App funcional publicada en App Store y Google Play.</strong> Sistema completo de gestión deportiva. Arquitectura serverless escalable con Firebase, notificaciones push nativas, chat en tiempo real y pagos a través de Mercado Pago.</p>
+                    <div class="project-tags">
+                        <span class="tag">Flutter</span><span class="tag">Firebase</span><span class="tag">Mercado Pago</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card project-card animate-on-scroll">
+                <div class="project-image" style="background-image: url('assets/compilador.png');"></div>
+                <div class="project-info">
+                    <h3>Compilador Java (Académico)</h3>
+                    <p>Diseño de la arquitectura de un compilador completo. Gestión desde el análisis léxico y sintáctico hasta la generación de código ejecutable.</p>
+                    <div class="project-tags">
+                        <span class="tag">Java</span><span class="tag">Arquitectura</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" target="_blank" class="btn btn-sm btn-outline"><i class="fab fa-github"></i> Código</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card project-card animate-on-scroll">
+                <div class="project-image" style="background-image: url('assets/chatbot.png');"></div>
+                <div class="project-info">
+                    <h3>AI Chatbot NLU</h3>
+                    <p>Chatbot conversacional avanzado desarrollado con Rasa. Implementa modelos NLU (Natural Language Understanding) para interpretar y gestionar intenciones complejas del usuario.</p>
+                    <div class="project-tags">
+                        <span class="tag">Python</span><span class="tag">Rasa / AI</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" target="_blank" class="btn btn-sm btn-outline"><i class="fab fa-github"></i> Código</a>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 

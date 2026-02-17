@@ -699,3 +699,93 @@ body.dark-mode .social-link:hover {
         padding: 20px;
     }
 }
+
+/* =========================================
+   NUEVOS ESTILOS: TIMELINE, HABILIDADES Y PRODUCCIÓN
+   ========================================= */
+
+/* Modificación de la Línea de Tiempo para que parezca a la de Matías */
+.timeline-header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5px;
+}
+
+@media (min-width: 768px) {
+    .timeline-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.timeline-period {
+    display: inline-block;
+    background-color: rgba(92, 42, 157, 0.1);
+    color: var(--color-primario);
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0; /* Reseteamos el margen viejo */
+}
+
+body.dark-mode .timeline-period {
+    background-color: rgba(138, 79, 255, 0.15);
+}
+
+.timeline-company {
+    display: block;
+    font-size: 1rem;
+    color: #888;
+    margin-bottom: 12px;
+    font-weight: 500;
+}
+
+/* Rediseño de Habilidades Compactas */
+.skill-category h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+}
+
+.compact-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.compact-tags span {
+    background-color: var(--color-fondo);
+    border: 1px solid rgba(0,0,0,0.05);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    color: var(--color-texto);
+    font-weight: 500;
+}
+
+body.dark-mode .compact-tags span {
+    border-color: rgba(255,255,255,0.05);
+}
+
+/* Badge de "En Producción" para Proyectos */
+.production-badge {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    font-size: 0.8rem;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+}
+
+.production-badge i {
+    font-size: 0.9rem;
+}
