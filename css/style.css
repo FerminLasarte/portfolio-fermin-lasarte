@@ -495,9 +495,14 @@ body.dark-mode .production-status { color: #34d399; }
 body.dark-mode .contact-method p { color: #aaa; }
 
 /* Títulos e íconos dentro de las tarjetas */
-.card h3, .card h3 i { 
-    color: var(--color-primario); 
+.card h3 { 
+    color: var(--color-texto); /* El texto vuelve a ser normal */
     margin-bottom: var(--spacing-sm); 
+}
+
+.card h3 i { 
+    color: var(--color-primario); /* SOLO el ícono se pinta de violeta */
+    margin-right: 8px; /* Separación entre el ícono y la palabra */
 }
 
 /* Rediseño de Habilidades y Etiquetas a color Violeta */

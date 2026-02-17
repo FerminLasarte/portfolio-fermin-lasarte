@@ -16,39 +16,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 2. Lógica del Modo Oscuro y Color del Navegador
     const themeToggleBtn = document.getElementById('theme-toggle');
+    const metaThemeColor = document.getElementById('meta-theme-color');
     
-    // Función infalible para forzar al navegador a actualizar la barra superior
-    function updateBrowserBarColor(colorHex) {
-        let metaTheme = document.getElementById('meta-theme-color');
-        if (metaTheme) {
-            metaTheme.remove(); // La borramos
+    // Función simple para cambiar el color
+    function updateBrowserBarColor(isDark) {
+        if (metaThemeColor) {
+            // #1e1e1e es el color oscuro de tu nav, #ffffff es el claro
+            metaThemeColor.setAttribute('content', isDark ? '#1e1e1e' : '#ffffff');
         }
-        // La volvemos a crear con el color nuevo para forzar el refresco visual
-        metaTheme = document.createElement('meta');
-        metaTheme.id = 'meta-theme-color';
-        metaTheme.name = 'theme-color';
-        metaTheme.content = colorHex;
-        document.head.appendChild(metaTheme);
     }
 
     // Revisar si el usuario ya tenía el modo oscuro guardado al entrar
     if (localStorage.getItem('theme') === 'dark') {
         document.body.classList.add('dark-mode');
-        updateBrowserBarColor('#1e1e1e');
+        updateBrowserBarColor(true);
     } else {
-        updateBrowserBarColor('#ffffff');
+        updateBrowserBarColor(false);
     }
 
     // Evento al tocar el botón de la luna/sol
     themeToggleBtn.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
         
-        if (document.body.classList.contains('dark-mode')) {
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        
+        if (isDarkMode) {
             localStorage.setItem('theme', 'dark');
-            updateBrowserBarColor('#1e1e1e');
+            updateBrowserBarColor(true);
         } else {
             localStorage.setItem('theme', 'light');
-            updateBrowserBarColor('#ffffff');
+            updateBrowserBarColor(false);
         }
     });
 
