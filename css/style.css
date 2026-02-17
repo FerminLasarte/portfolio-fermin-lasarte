@@ -138,7 +138,7 @@ body.dark-mode #theme-toggle .fa-sun {
    ========================================= */
 section {
     padding: 100px 20px;
-    max-width: 1000px;
+    max-width: 1150px;
     margin: 0 auto;
     text-align: left; /* Alineado a la izquierda */
 }
@@ -168,7 +168,7 @@ header {
     align-items: center;
     justify-content: space-between;
     padding: 0 20px;
-    max-width: 1000px;
+    max-width: 1150px;
     margin: 0 auto;
 }
 
@@ -429,9 +429,19 @@ body.dark-mode .tag {
     background: rgba(138, 79, 255, 0.15);
 }
 
+/* Contenedor de los botones en las tarjetas */
 .project-links {
     margin-top: auto; 
-    padding-top: 15px;
+    padding-top: 20px;
+    display: flex;
+    gap: 10px; /* Separación exacta entre botones */
+}
+
+/* Hace que ambos botones ocupen el mismo ancho (50% y 50%) para que se vea súper simétrico */
+.project-links .btn-sm {
+    flex: 1;
+    padding: 0; /* Resetea el padding para que el flex se encargue del ancho */
+    white-space: nowrap; /* Evita que el texto se parta en dos renglones */
 }
 
 /* =========================================
@@ -523,7 +533,7 @@ body.dark-mode .footer {
 
 .footer .container {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1150px;
   margin: 0 auto;
   padding: 0 20px;
 }

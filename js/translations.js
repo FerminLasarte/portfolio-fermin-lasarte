@@ -12,7 +12,9 @@ const translations = {
         "hero.role": "Desarrollador de Software",
         "hero.description": "Estudiante avanzado de Ingeniería de Sistemas (UNICEN) con un sólido enfoque en desarrollo backend (Java, Python) y móvil (Flutter). Cuento con experiencia práctica en la creación de soluciones integrales, desde la arquitectura del sistema hasta la interfaz de usuario. Busco aportar mis habilidades técnicas y una mentalidad orientada al producto en entornos de alto crecimiento.",
         "hero.contactBtn": "Contactame",
-        "hero.cvBtn": "Descargar CV"
+        "hero.cvBtn": "Descargar CV",
+        "projects.code": "Código",
+        "projects.download": "Descargar"
     },
     en: {
         "nav.about": "About me",
@@ -27,6 +29,8 @@ const translations = {
         "hero.role": "Software Developer",
         "hero.description": "Advanced Systems Engineering student (UNICEN) with a strong focus on backend (Java, Python) and mobile (Flutter) development. I have practical experience in creating end-to-end solutions, from system architecture to user interfaces. I seek to bring my technical skills and a product-oriented mindset to high-growth environments.",
         "hero.contactBtn": "Contact me",
-        "hero.cvBtn": "Download CV"
+        "hero.cvBtn": "Download CV",
+        "projects.code": "Code",
+        "projects.download": "Download"
     }
 };
