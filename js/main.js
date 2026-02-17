@@ -60,16 +60,33 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 3. Lógica del Idioma (Base para que en el futuro la expandas)
+    // 3. Lógica del Idioma (Traductor Funcional)
     const langToggleBtn = document.getElementById('lang-toggle');
+    let currentLang = localStorage.getItem('language') || 'es';
+
+    function applyTranslations(lang) {
+        // Busca todos los elementos que tengan el atributo data-i18n
+        document.querySelectorAll('[data-i18n]').forEach(element => {
+            const key = element.getAttribute('data-i18n');
+            // Si la traducción existe en translations.js, la reemplaza
+            if (translations[lang] && translations[lang][key]) {
+                element.textContent = translations[lang][key];
+            }
+        });
+        
+        // Cambia el texto del botón al idioma contrario
+        langToggleBtn.textContent = lang === 'es' ? 'EN' : 'ES';
+        document.documentElement.lang = lang; // Le avisa al navegador en qué idioma está la web
+    }
+
+    // Aplicar el idioma al entrar a la página
+    applyTranslations(currentLang);
+
+    // Evento al hacer clic en el botón
     langToggleBtn.addEventListener('click', () => {
-        // Acá a futuro podés agregar la lógica para cambiar los textos
-        // Por ahora solo alterna visualmente el texto del botón
-        if (langToggleBtn.textContent === 'ES') {
-            langToggleBtn.textContent = 'EN';
-        } else {
-            langToggleBtn.textContent = 'ES';
-        }
+        currentLang = currentLang === 'es' ? 'en' : 'es';
+        localStorage.setItem('language', currentLang); // Guarda la preferencia del usuario
+        applyTranslations(currentLang);
     });
 
     // 4. Lógica del Botón Descargar CV

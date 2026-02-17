@@ -789,3 +789,44 @@ body.dark-mode .compact-tags span {
 .production-badge i {
     font-size: 0.9rem;
 }
+
+/* =========================================
+   AJUSTES MINIMALISTAS Y COLORES
+   ========================================= */
+/* 1. Todos los íconos de los títulos en color violeta */
+section h2 i, header h2 i {
+    color: var(--color-primario);
+    margin-right: 8px;
+}
+
+/* 2. Contenedor para alinear los Badges (Disponibilidad y Ubicación) */
+.hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+    justify-content: flex-start;
+}
+
+/* Reseteo del margen viejo del badge de disponibilidad */
+.availability-badge { margin-bottom: 0; }
+
+/* 3. Nuevo Badge de Ubicación Minimalista */
+.location-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--color-texto);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+body.dark-mode .location-badge {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.05);
+}

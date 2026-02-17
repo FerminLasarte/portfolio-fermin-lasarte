@@ -17,15 +17,15 @@
 
     <nav>
         <ul class="nav-links">
-            <li><a href="#sobre-mi">Sobre mí</a></li>
-            <li><a href="#experiencia">Trayectoria</a></li>
-            <li><a href="#educacion">Educación</a></li>
-            <li><a href="#habilidades">Habilidades</a></li>
-            <li><a href="#proyectos">Proyectos</a></li>
-            <li><a href="#contacto">Contacto</a></li>
+            <li><a href="#sobre-mi" data-i18n="nav.about">Sobre mí</a></li>
+            <li><a href="#experiencia" data-i18n="nav.experience">Trayectoria</a></li>
+            <li><a href="#educacion" data-i18n="nav.education">Educación</a></li>
+            <li><a href="#habilidades" data-i18n="nav.skills">Habilidades</a></li>
+            <li><a href="#proyectos" data-i18n="nav.projects">Proyectos</a></li>
+            <li><a href="#contacto" data-i18n="nav.contact">Contacto</a></li>
         </ul>
         <div class="nav-controls">
-            <button id="lang-toggle" class="icon-btn" title="Cambiar idioma">ES</button>
+            <button id="lang-toggle" class="icon-btn" title="Cambiar idioma">EN</button>
             <button id="theme-toggle" class="icon-btn" title="Cambiar tema">
                 <i class="fas fa-moon"></i>
                 <i class="fas fa-sun"></i>
@@ -37,19 +37,25 @@
 
     <header id="sobre-mi">
         <div class="hero-content">
-            <div class="availability-badge">
-                <div class="status-dot"></div>
-                Disponible para nuevos desafíos
+            <div class="hero-badges">
+                <div class="availability-badge">
+                    <div class="status-dot"></div>
+                    <span data-i18n="hero.availability">Disponible para nuevos desafíos</span>
+                </div>
+                <div class="location-badge">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span data-i18n="hero.location">Tandil, Argentina</span>
+                </div>
             </div>
             
-            <h1>Hola, soy Fermin</h1>
-            <h2><i class="fas fa-code"></i> Desarrollador de Software | <i class="fas fa-map-marker-alt"></i> Tandil, Argentina</h2>
-            <p>Estudiante avanzado de Ingeniería de Sistemas (UNICEN) con un sólido enfoque en desarrollo backend (Java, Python) y móvil (Flutter). Cuento con experiencia práctica en la creación de soluciones integrales, desde la arquitectura del sistema hasta la interfaz de usuario. Busco aportar mis habilidades técnicas y una mentalidad orientada al producto en entornos de alto crecimiento.</p>
+            <h1 data-i18n="hero.greeting">Hola, soy Fermin</h1>
+            <h2><i class="fas fa-code"></i> <span data-i18n="hero.role">Desarrollador de Software</span></h2>
+            <p data-i18n="hero.description">Estudiante avanzado de Ingeniería de Sistemas (UNICEN) con un sólido enfoque en desarrollo backend (Java, Python) y móvil (Flutter). Cuento con experiencia práctica en la creación de soluciones integrales, desde la arquitectura del sistema hasta la interfaz de usuario. Busco aportar mis habilidades técnicas y una mentalidad orientada al producto en entornos de alto crecimiento.</p>
             
             <div class="hero-buttons">
-                <a href="#contacto" class="btn">Contactame</a>
+                <a href="#contacto" class="btn" data-i18n="hero.contactBtn">Contactame</a>
                 <div class="dropdown" id="cv-dropdown">
-                    <a class="btn btn-outline" id="cv-btn"><i class="fas fa-download"></i> Descargar CV</a>
+                    <a class="btn btn-outline" id="cv-btn"><i class="fas fa-download"></i> <span data-i18n="hero.cvBtn">Descargar CV</span></a>
                     <div class="dropdown-content" id="cv-content">
                         <a href="assets/CV - FL - ES copy.pdf" download="CV_Fermin_ES.pdf"><i class="fas fa-file-pdf"></i> Español</a>
                         <a href="assets/CV - FL - EN copy.pdf" download="CV_Fermin_EN.pdf"><i class="fas fa-file-pdf"></i> Inglés</a>
@@ -173,6 +179,10 @@
                         <span class="tag">Flutter</span><span class="tag">Stripe</span><span class="tag">Google Maps</span>
                     </div>
                 </div>
+                <div class="project-links">
+                        <a href="LINK_A_TU_GITHUB" target="_blank" class="btn btn-sm btn-outline"><i class="fab fa-github"></i> Código</a>
+                        <a href="LINK_A_LA_APP_STORE" target="_blank" class="btn btn-sm"><i class="fas fa-download"></i> Descargar App</a>
+                    </div>
             </div>
 
             <div class="card project-card animate-on-scroll">
@@ -185,6 +195,10 @@
                     <p><strong>App funcional publicada en App Store y Google Play.</strong> Sistema completo de gestión deportiva. Arquitectura serverless escalable con Firebase, notificaciones push nativas, chat en tiempo real y pagos a través de Mercado Pago.</p>
                     <div class="project-tags">
                         <span class="tag">Flutter</span><span class="tag">Firebase</span><span class="tag">Mercado Pago</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="LINK_A_TU_GITHUB" target="_blank" class="btn btn-sm btn-outline"><i class="fab fa-github"></i> Código</a>
+                        <a href="LINK_A_LA_APP_STORE" target="_blank" class="btn btn-sm"><i class="fas fa-download"></i> Descargar App</a>
                     </div>
                 </div>
             </div>
@@ -210,77 +224,6 @@
                     <p>Chatbot conversacional avanzado desarrollado con Rasa. Implementa modelos NLU (Natural Language Understanding) para interpretar y gestionar intenciones complejas del usuario.</p>
                     <div class="project-tags">
                         <span class="tag">Python</span><span class="tag">Rasa / AI</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="#" target="_blank" class="btn btn-sm btn-outline"><i class="fab fa-github"></i> Código</a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <section id="proyectos">
-        <h2 class="animate-on-scroll"><i class="fas fa-server"></i> Proyectos Destacados</h2>
-        <div class="projects-grid">
-            
-            <div class="card project-card animate-on-scroll">
-                <div class="project-image" style="background-image: url('assets/travelpic.png');"></div>
-                <div class="project-info">
-                    <h3>TravelPic</h3>
-                    <p>Plataforma para contratar fotógrafos por geolocalización. Integración con Stripe para pagos y Google Maps para indicaciones de ruta en tiempo real.</p>
-                    <div class="project-tags">
-                        <span class="tag">Flutter</span>
-                        <span class="tag">Stripe API</span>
-                        <span class="tag">Google Maps</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="#" target="_blank" class="btn btn-sm btn-outline"><i class="fab fa-github"></i> Código</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card project-card animate-on-scroll">
-                <div class="project-image" style="background-image: url('assets/deporturnos.png');"></div>
-                <div class="project-info">
-                    <h3>DeporTurnos</h3>
-                    <p>App de gestión de complejos deportivos. Incluye un chat nativo en tiempo real, notificaciones push (FCM) e integración con la pasarela de Mercado Pago.</p>
-                    <div class="project-tags">
-                        <span class="tag">Flutter</span>
-                        <span class="tag">Firebase</span>
-                        <span class="tag">Mercado Pago</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="#" target="_blank" class="btn btn-sm btn-outline"><i class="fab fa-github"></i> Código</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card project-card animate-on-scroll">
-                <div class="project-image" style="background-image: url('assets/compilador.png');"></div>
-                <div class="project-info">
-                    <h3>Compilador en Java</h3>
-                    <p>Diseño de la arquitectura de un compilador completo. Gestión de todo el proceso desde el análisis léxico hasta la generación de código de máquina.</p>
-                    <div class="project-tags">
-                        <span class="tag">Java</span>
-                        <span class="tag">Arquitectura</span>
-                        <span class="tag">Algoritmos</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="#" target="_blank" class="btn btn-sm btn-outline"><i class="fab fa-github"></i> Código</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card project-card animate-on-scroll">
-                <div class="project-image" style="background-image: url('assets/chatbot.png');"></div>
-                <div class="project-info">
-                    <h3>AI Chatbot</h3>
-                    <p>Chatbot conversacional basado en Inteligencia Artificial. Implementación de modelos NLU (Natural Language Understanding) para gestionar intenciones.</p>
-                    <div class="project-tags">
-                        <span class="tag">Python</span>
-                        <span class="tag">Rasa</span>
-                        <span class="tag">Machine Learning</span>
                     </div>
                     <div class="project-links">
                         <a href="#" target="_blank" class="btn btn-sm btn-outline"><i class="fab fa-github"></i> Código</a>
@@ -336,6 +279,8 @@
       </div>
     </footer>
 
+    <script src="js/translations.js"></script>
+    <script src="js/main.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>
