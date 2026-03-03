@@ -11,7 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }, observerOptions);
 
-    const elementsToAnimate = document.querySelectorAll('.animate-on-scroll');
+    // Seleccionamos todas las clases de animaciones
+    const elementsToAnimate = document.querySelectorAll('.animate-on-scroll, .animate-left, .animate-right, .animate-scale');
     elementsToAnimate.forEach((elem) => observer.observe(elem));
 
     // 2. Lógica del Modo Oscuro y Color del Navegador
