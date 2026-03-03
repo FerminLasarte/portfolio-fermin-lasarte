@@ -73,16 +73,31 @@ body {
    3. BARRA DE NAVEGACIÓN
    ========================================= */
 nav {
-    background-color: var(--color-nav);
-    padding: var(--spacing-md) var(--spacing-xl);
-    position: sticky;
-    top: 0;
-    box-shadow: 0 2px 5px var(--color-sombra);
-    z-index: 100;
+    background-color: rgba(255, 255, 255, 0.85); /* Semi-transparente para el efecto cristal */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 0.8rem var(--spacing-xl);
+    position: fixed; /* Cambiado de sticky a fixed */
+    top: 20px; /* Separación superior */
+    left: 50%;
+    transform: translateX(-50%); /* Centrar el nav */
+    width: 95%; /* Ancho relativo */
+    max-width: var(--max-width);
+    border-radius: 50px; /* Bordes redondeados */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); /* Sombra más suave y flotante */
+    z-index: 1000;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Ajuste para el modo oscuro del nav flotante */
+body.dark-mode nav {
+    background-color: rgba(30, 30, 30, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 .nav-links {
@@ -592,21 +607,45 @@ body.dark-mode .copyright { color: #aaaaaa; }
 }
 
 /* =========================================
-   11. ANIMACIONES GLOBALES
+   11. ANIMACIONES GLOBALES (Mejoradas)
    ========================================= */
-@keyframes pulse {
-    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
-    70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(76, 175, 80, 0); }
-    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
-}
-
+/* Movimiento desde abajo (el que ya tenías mejorado) */
 .animate-on-scroll { 
     opacity: 0; 
-    transform: translateY(30px); 
-    transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+    transform: translateY(40px); 
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
 }
-.animate-on-scroll.visible { opacity: 1; transform: translateY(0); }
+
+/* Movimiento desde la izquierda */
+.animate-left {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Movimiento desde la derecha */
+.animate-right {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Zoom (Scale up) para las tarjetas o imágenes */
+.animate-scale {
+    opacity: 0;
+    transform: scale(0.85);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Clase general que se aplica por JS cuando el elemento es visible */
+.visible { 
+    opacity: 1 !important; 
+    transform: translate(0) scale(1) !important; 
+}
+
+/* Retrasos en cascada para grillas */
 .skills-grid .card:nth-child(1), .projects-grid .card:nth-child(1) { transition-delay: 0.1s; }
 .skills-grid .card:nth-child(2), .projects-grid .card:nth-child(2) { transition-delay: 0.2s; }
 .skills-grid .card:nth-child(3), .projects-grid .card:nth-child(3) { transition-delay: 0.3s; }
 .skills-grid .card:nth-child(4), .projects-grid .card:nth-child(4) { transition-delay: 0.4s; }
+.skills-grid .card:nth-child(5), .projects-grid .card:nth-child(5) { transition-delay: 0.5s; }
