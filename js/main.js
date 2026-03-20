@@ -81,31 +81,90 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 4. Lógica de Menús Desplegables Generales (CV y Tiendas)
     const dropdownBtns = document.querySelectorAll('.dropdown-btn, #cv-btn');
-    
+
     dropdownBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            
+
             const dropdownContent = btn.nextElementSibling;
-            
+
             document.querySelectorAll('.dropdown-content').forEach(content => {
                 if (content !== dropdownContent) {
                     content.classList.remove('show');
                 }
             });
-            
+
             dropdownContent.classList.toggle('show');
         });
     });
 
-    // Cierra cualquier menú si se hace clic afuera
+    // Cierra dropdowns si se hace clic afuera
     window.addEventListener('click', (event) => {
         if (!event.target.closest('.dropdown')) {
             document.querySelectorAll('.dropdown-content').forEach(content => {
                 content.classList.remove('show');
             });
         }
+    });
+
+    // 6. Nav colapsable: expand/collapse en dispositivos táctiles
+    const navEl = document.querySelector('nav');
+    const isTouchDevice = () => !window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    navEl.addEventListener('click', (e) => {
+        if (!isTouchDevice()) return; // En desktop lo maneja el CSS :hover
+
+        // Si se tocó un link de navegación → colapsar y hacer scroll
+        if (e.target.closest('.nav-links a')) {
+            navEl.classList.remove('nav-expanded');
+            return;
+        }
+        // Si se tocó el nav (no un dropdown ni su contenido) → toggle
+        if (!e.target.closest('.dropdown-content')) {
+            navEl.classList.toggle('nav-expanded');
+        }
+    });
+
+    // Cerrar nav táctil al tocar fuera
+    document.addEventListener('click', (e) => {
+        if (isTouchDevice() && !e.target.closest('nav')) {
+            navEl.classList.remove('nav-expanded');
+        }
+    });
+
+    // 7. Smooth scroll personalizado para links del nav (con offset de la nav fija)
+    function smoothScrollTo(targetY) {
+        const startY = window.pageYOffset;
+        const distance = targetY - startY;
+        const duration = 750;
+        let startTime = null;
+
+        // Easing: ease-in-out-quart — arranque progresivo, llegada suave
+        function easeInOutQuart(t) {
+            return t < 0.5 ? 8 * t * t * t * t : 1 - 8 * (--t) * t * t * t;
+        }
+
+        function step(currentTime) {
+            if (!startTime) startTime = currentTime;
+            const elapsed = Math.min(currentTime - startTime, duration);
+            window.scrollTo(0, startY + distance * easeInOutQuart(elapsed / duration));
+            if (elapsed < duration) requestAnimationFrame(step);
+        }
+
+        requestAnimationFrame(step);
+    }
+
+    document.querySelectorAll('.nav-links a[href^="#"]').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = document.querySelector(link.getAttribute('href'));
+            if (!target) return;
+
+            const navOffset = navEl.offsetHeight + 24; // altura del nav + breathing room
+            const targetY = target.getBoundingClientRect().top + window.pageYOffset - navOffset;
+            smoothScrollTo(targetY);
+        });
     });
 
     // 5. Actualizar año del footer automáticamente
