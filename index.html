@@ -10,19 +10,23 @@
     <meta property="og:title" content="Fermin | Ingeniero de Sistemas">
     <meta property="og:description" content="Portfolio profesional. Especialista en Flutter, Swift, Java y Arquitectura de Sistemas.">
     <meta property="og:type" content="website">
-    
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+
+    <!-- ======================== NAV ======================== -->
     <nav>
         <ul class="nav-links">
-            <li><a href="#sobre-mi" data-i18n="nav.about">Sobre mí</a></li>
+            <li><a href="#sobre-mi"    data-i18n="nav.about">Sobre mí</a></li>
             <li><a href="#experiencia" data-i18n="nav.experience">Trayectoria</a></li>
-            <li><a href="#educacion" data-i18n="nav.education">Educación</a></li>
+            <li><a href="#educacion"   data-i18n="nav.education">Educación</a></li>
             <li><a href="#habilidades" data-i18n="nav.skills">Habilidades</a></li>
-            <li><a href="#proyectos" data-i18n="nav.projects">Proyectos</a></li>
-            <li><a href="#contacto" data-i18n="nav.contact">Contacto</a></li>
+            <li><a href="#proyectos"   data-i18n="nav.projects">Proyectos</a></li>
+            <li><a href="#contacto"    data-i18n="nav.contact">Contacto</a></li>
         </ul>
         <div class="nav-controls">
             <button id="lang-toggle" class="icon-btn" title="Cambiar idioma">EN</button>
@@ -30,12 +34,13 @@
                 <i class="fas fa-moon"></i>
                 <i class="fas fa-sun"></i>
             </button>
-            <a href="https://github.com/FerminLasarte" target="_blank" class="icon-btn" title="Mi GitHub"><i class="fab fa-github"></i></a>
-            <a href="https://linkedin.com/in/ferminlasarte/" target="_blank" class="icon-btn" title="Mi LinkedIn"><i class="fab fa-linkedin"></i></a>
-            <a href="mailto:fermin.lasarte@icloud.com" target="_blank" class="icon-btn" title="Mi Email"><i class="fas fa-envelope"></i></a>
+            <a href="https://github.com/FerminLasarte"       target="_blank" class="icon-btn" title="Mi GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://linkedin.com/in/ferminlasarte/"  target="_blank" class="icon-btn" title="Mi LinkedIn"><i class="fab fa-linkedin"></i></a>
+            <a href="mailto:fermin.lasarte@icloud.com"        target="_blank" class="icon-btn" title="Mi Email"><i class="fas fa-envelope"></i></a>
         </div>
     </nav>
 
+    <!-- ======================== HERO ======================== -->
     <header id="sobre-mi">
         <div class="hero-content">
             <div class="hero-badges">
@@ -48,15 +53,23 @@
                     <span data-i18n="hero.location">Tandil, Argentina</span>
                 </div>
             </div>
-            
+
             <h1 data-i18n="hero.greeting">Hola, soy Fermin</h1>
-            <h2><i class="fas fa-code"></i> <span data-i18n="hero.role">Ingeniero de Sistemas</span></h2>
+
+            <p class="hero-role">
+                <i class="fas fa-code"></i>
+                <span data-i18n="hero.role">Ingeniero de Sistemas</span>
+            </p>
+
             <p data-i18n="hero.description">Estudiante avanzado de Ingeniería de Sistemas (UNICEN) con un sólido enfoque en desarrollo backend (Java, Python) y móvil (Flutter, Swift). Cuento con experiencia práctica en la creación de soluciones integrales, desde la arquitectura del sistema hasta la interfaz de usuario. Busco aportar mis habilidades técnicas y una mentalidad orientada al producto en entornos de alto crecimiento.</p>
-            
+
             <div class="hero-buttons">
                 <a href="#contacto" class="btn" data-i18n="hero.contactBtn">Contactame</a>
                 <div class="dropdown" id="cv-dropdown">
-                    <a class="btn btn-outline" id="cv-btn"><i class="fas fa-download"></i> <span data-i18n="hero.cvBtn">Descargar CV</span></a>
+                    <a class="btn btn-outline" id="cv-btn">
+                        <i class="fas fa-download"></i>
+                        <span data-i18n="hero.cvBtn">Descargar CV</span>
+                    </a>
                     <div class="dropdown-content" id="cv-content">
                         <a href="assets/CV - FL - ES copy.pdf" download="CV_Fermin_ES.pdf"><i class="far fa-file-pdf"></i> Español</a>
                         <a href="assets/CV - FL - EN copy.pdf" download="CV_Fermin_EN.pdf"><i class="far fa-file-pdf"></i> English</a>
@@ -64,33 +77,39 @@
                 </div>
             </div>
         </div>
+
         <div class="hero-image animate-scale">
             <img src="assets/foto_perfil.jpeg" alt="Foto de Fermin">
         </div>
     </header>
 
+    <!-- ======================== EXPERIENCIA ======================== -->
     <section id="experiencia">
-        <h2 class="animate-on-scroll"><i class="fas fa-briefcase"></i> <span data-i18n="exp.title">Trayectoria</span></h2>
-        
-        <div class="timeline animate-on-scroll">
-            <div class="timeline-item">
+        <p class="section-label animate-on-scroll">
+            <i class="fas fa-briefcase"></i>
+            <span data-i18n="exp.title">Trayectoria</span>
+        </p>
+        <h2 class="animate-on-scroll" data-i18n="exp.title">Trayectoria</h2>
+
+        <div class="timeline">
+            <div class="timeline-item animate-on-scroll">
                 <div class="timeline-dot"></div>
                 <div class="timeline-content">
                     <div class="timeline-header">
                         <h3 data-i18n="exp.job1.title">Desarrollador Mobile Freelance</h3>
-                        <span class="timeline-period">2024 - 2025</span>
+                        <span class="timeline-period">2024 — 2025</span>
                     </div>
                     <span class="timeline-company" data-i18n="exp.job1.company">Creador de TravelPic | Argentina</span>
                     <p data-i18n="exp.job1.desc">Diseñé la arquitectura y desarrollé una plataforma estilo "Uber para fotógrafos" utilizando Flutter. Integré la pasarela de pagos Stripe, implementé mapas en tiempo real con rutas (Google Maps) y optimicé el rendimiento general para asegurar una alta disponibilidad en tiendas.</p>
                 </div>
             </div>
-            
-            <div class="timeline-item">
+
+            <div class="timeline-item animate-on-scroll">
                 <div class="timeline-dot"></div>
                 <div class="timeline-content">
                     <div class="timeline-header">
                         <h3 data-i18n="exp.job2.title">Desarrollador Mobile Independiente</h3>
-                        <span class="timeline-period">2021 - 2023</span>
+                        <span class="timeline-period">2021 — 2023</span>
                     </div>
                     <span class="timeline-company" data-i18n="exp.job2.company">Creador de DeporTurnos | Argentina</span>
                     <p data-i18n="exp.job2.desc">Desarrollé una plataforma para la gestión de reservas deportivas en tiempo real. Diseñé una arquitectura backend serverless con Firebase (Firestore, Cloud Messaging), integré pagos con Mercado Pago y desarrollé un chat nativo desde cero.</p>
@@ -99,23 +118,28 @@
         </div>
     </section>
 
+    <!-- ======================== EDUCACIÓN ======================== -->
     <section id="educacion">
-        <h2 class="animate-on-scroll"><i class="fas fa-graduation-cap"></i> <span data-i18n="edu.title">Educación</span></h2>
-        
-        <div class="timeline animate-on-scroll">
-            <div class="timeline-item">
+        <p class="section-label animate-on-scroll">
+            <i class="fas fa-graduation-cap"></i>
+            <span data-i18n="edu.title">Educación</span>
+        </p>
+        <h2 class="animate-on-scroll" data-i18n="edu.title">Educación</h2>
+
+        <div class="timeline">
+            <div class="timeline-item animate-on-scroll">
                 <div class="timeline-dot"></div>
                 <div class="timeline-content">
                     <div class="timeline-header">
                         <h3 data-i18n="edu.item1.title">Ingeniería de Sistemas</h3>
-                        <span class="timeline-period">2020 - 2026</span>
+                        <span class="timeline-period">2020 — 2026</span>
                     </div>
                     <span class="timeline-company" data-i18n="edu.item1.company">Universidad Nacional del Centro (UNICEN)</span>
                     <p data-i18n="edu.item1.desc">Formación sólida en algoritmos, diseño de compiladores, inteligencia artificial y arquitectura de software.</p>
                 </div>
             </div>
 
-            <div class="timeline-item">
+            <div class="timeline-item animate-on-scroll">
                 <div class="timeline-dot"></div>
                 <div class="timeline-content">
                     <div class="timeline-header">
@@ -128,17 +152,23 @@
         </div>
     </section>
 
+    <!-- ======================== HABILIDADES ======================== -->
     <section id="habilidades">
-        <h2 class="animate-on-scroll"><i class="fas fa-laptop-code"></i> <span data-i18n="skills.title">Mis Habilidades</span></h2>
+        <p class="section-label animate-on-scroll">
+            <i class="fas fa-laptop-code"></i>
+            <span data-i18n="skills.title">Mis Habilidades</span>
+        </p>
+        <h2 class="animate-on-scroll" data-i18n="skills.title">Mis Habilidades</h2>
+
         <div class="skills-grid">
             <div class="card skill-category animate-on-scroll">
-                <h3><i class="fas fa-mobile-alt"></i> Mobile & Frontend</h3>
+                <h3><i class="fas fa-mobile-alt"></i> Mobile &amp; Frontend</h3>
                 <div class="compact-tags">
                     <span>Flutter</span><span>Dart</span><span>Swift</span><span>SwiftUI</span><span>HTML/CSS</span>
                 </div>
             </div>
             <div class="card skill-category animate-on-scroll">
-                <h3><i class="fas fa-server"></i> Backend & Cloud</h3>
+                <h3><i class="fas fa-server"></i> Backend &amp; Cloud</h3>
                 <div class="compact-tags">
                     <span>Java</span><span>Python</span><span>C#</span><span>.NET</span><span>API REST</span><span>Firebase</span><span>Docker</span>
                 </div>
@@ -150,7 +180,7 @@
                 </div>
             </div>
             <div class="card skill-category animate-on-scroll">
-                <h3><i class="fas fa-brain"></i> AI & Machine Learning</h3>
+                <h3><i class="fas fa-brain"></i> AI &amp; Machine Learning</h3>
                 <div class="compact-tags">
                     <span>Machine Learning</span><span>Rasa</span><span>NLU Models</span>
                 </div>
@@ -164,56 +194,73 @@
         </div>
     </section>
 
+    <!-- ======================== PROYECTOS ======================== -->
     <section id="proyectos">
-        <h2 class="animate-on-scroll"><i class="fas fa-rocket"></i> <span data-i18n="projects.title">Proyectos Destacados</span></h2>
+        <p class="section-label animate-on-scroll">
+            <i class="fas fa-rocket"></i>
+            <span data-i18n="projects.title">Proyectos Destacados</span>
+        </p>
+        <h2 class="animate-on-scroll" data-i18n="projects.title">Proyectos Destacados</h2>
+
         <div class="projects-grid">
-            
+
+            <!-- TravelPic -->
             <div class="card project-card animate-on-scroll">
                 <div class="project-image" style="background-image: url('assets/travelpic.jpeg');"></div>
                 <div class="project-info">
                     <div class="production-status">
-                        <span class="status-dot-sm"></span> <span data-i18n="projects.live">Disponible en tiendas</span>
+                        <span class="status-dot-sm"></span>
+                        <span data-i18n="projects.live">Disponible en tiendas</span>
                     </div>
                     <h3>TravelPic</h3>
                     <p data-i18n="projects.p1.desc">Plataforma multiplataforma estilo "Uber para fotógrafos". Desarrollada de principio a fin, integrando Stripe para pagos, geolocalización en tiempo real y mapas con Google Maps.</p>
                     <div class="project-tags">
                         <span class="tag">Flutter</span><span class="tag">Stripe</span><span class="tag">Google Maps</span>
                     </div>
-                    <div class="dropdown">
-                        <button class="btn btn-sm dropdown-btn">
-                            <i class="fas fa-download"></i> <span data-i18n="projects.download">Descargar</span>
-                        </button>
-                        <div class="dropdown-content dropup">
-                            <a href="https://apps.apple.com/ar/app/travelpic-reserva-fotógrafos/id6689491895" target="_blank"><i class="fab fa-apple" style="color: var(--color-texto);"></i> App Store</a>
-                            <a href="https://play.google.com/store/apps/details?id=com.carreterofabricio.travelpic" target="_blank"><i class="fab fa-google-play" style="color: #10b981;"></i> Google Play</a>
+                    <div class="project-links">
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline dropdown-btn">
+                                <i class="fas fa-download"></i>
+                                <span data-i18n="projects.download">Descargar</span>
+                            </button>
+                            <div class="dropdown-content dropup">
+                                <a href="https://apps.apple.com/ar/app/travelpic-reserva-fotógrafos/id6689491895" target="_blank"><i class="fab fa-apple"></i> App Store</a>
+                                <a href="https://play.google.com/store/apps/details?id=com.carreterofabricio.travelpic" target="_blank"><i class="fab fa-google-play"></i> Google Play</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- DeporTurnos -->
             <div class="card project-card animate-on-scroll">
                 <div class="project-image" style="background-image: url('assets/deporturnos.png');"></div>
                 <div class="project-info">
                     <div class="production-status">
-                        <span class="status-dot-sm"></span> <span data-i18n="projects.live">Disponible en tiendas</span>
+                        <span class="status-dot-sm"></span>
+                        <span data-i18n="projects.live">Disponible en tiendas</span>
                     </div>
                     <h3>DeporTurnos</h3>
                     <p data-i18n="projects.p2.desc">Sistema completo de gestión deportiva. Arquitectura serverless escalable con Firebase, notificaciones push nativas, chat en tiempo real y pagos a través de Mercado Pago.</p>
                     <div class="project-tags">
                         <span class="tag">Flutter</span><span class="tag">Firebase</span><span class="tag">Mercado Pago</span>
                     </div>
-                    <div class="dropdown">
-                        <button class="btn btn-sm dropdown-btn">
-                            <i class="fas fa-download"></i> <span data-i18n="projects.download">Descargar</span>
-                        </button>
-                        <div class="dropdown-content dropup">
-                            <a href="https://apps.apple.com/ar/app/deporturnos/id6670566502" target="_blank"><i class="fab fa-apple" style="color: var(--color-texto);"></i> App Store</a>
-                            <a href="https://play.google.com/store/apps/details?id=com.vldevelopment.deporturnos" target="_blank"><i class="fab fa-google-play" style="color: #10b981;"></i> Google Play</a>
+                    <div class="project-links">
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline dropdown-btn">
+                                <i class="fas fa-download"></i>
+                                <span data-i18n="projects.download">Descargar</span>
+                            </button>
+                            <div class="dropdown-content dropup">
+                                <a href="https://apps.apple.com/ar/app/deporturnos/id6670566502" target="_blank"><i class="fab fa-apple"></i> App Store</a>
+                                <a href="https://play.google.com/store/apps/details?id=com.vldevelopment.deporturnos" target="_blank"><i class="fab fa-google-play"></i> Google Play</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Compilador de Java -->
             <div class="card project-card animate-on-scroll">
                 <div class="project-image" style="background-image: url('assets/compilador.png');"></div>
                 <div class="project-info">
@@ -223,11 +270,15 @@
                         <span class="tag">Java</span><span class="tag" data-i18n="projects.p3.tag">Arquitectura</span>
                     </div>
                     <div class="project-links">
-                        <a href="https://github.com/FerminLasarte/Compilador" target="_blank" class="btn btn-sm btn-outline"><i class="fab fa-github"></i> <span data-i18n="projects.code">Código</span></a>
+                        <a href="https://github.com/FerminLasarte/Compilador" target="_blank" class="btn btn-sm btn-outline">
+                            <i class="fab fa-github"></i>
+                            <span data-i18n="projects.code">Código</span>
+                        </a>
                     </div>
                 </div>
             </div>
 
+            <!-- AI Chatbot NLU -->
             <div class="card project-card animate-on-scroll">
                 <div class="project-image" style="background-image: url('assets/chatbot.jpeg');"></div>
                 <div class="project-info">
@@ -239,6 +290,7 @@
                 </div>
             </div>
 
+            <!-- Juego iOS Nativo -->
             <div class="card project-card animate-on-scroll">
                 <div class="project-image" style="background-image: url('assets/impostor.jpeg');"></div>
                 <div class="project-info">
@@ -248,31 +300,35 @@
                         <span class="tag">Swift</span><span class="tag">SwiftUI</span><span class="tag">AI</span><span class="tag">Online</span>
                     </div>
                     <div class="project-links">
-                        <a href="https://github.com/FerminLasarte/ImpostorApp" target="_blank" class="btn btn-sm btn-outline"><i class="fab fa-github"></i> <span data-i18n="projects.code">Código</span></a>
+                        <a href="https://github.com/FerminLasarte/ImpostorApp" target="_blank" class="btn btn-sm btn-outline">
+                            <i class="fab fa-github"></i>
+                            <span data-i18n="projects.code">Código</span>
+                        </a>
                     </div>
                 </div>
             </div>
 
-            <!-- PROYECTO 6: Portfolio Beltrán con IA -->
+            <!-- Landing Beltrán con IA -->
             <div class="card project-card animate-on-scroll">
-                <div class="project-image" style="background: linear-gradient(135deg, #3b0e6e 0%, #5C2A9D 45%, #8A4FFF 100%);"></div>
+                <div class="project-image" style="background: linear-gradient(135deg, #2D1B69 0%, #4C1D95 50%, #6D28D9 100%);"></div>
                 <div class="project-info">
-                    <h3 data-i18n="projects.p6.title">Portfolio Beltrán con IA</h3>
-                    <p data-i18n="projects.p6.desc">Portfolio profesional potenciado con Inteligencia Artificial. Integra un asistente de IA para guiar a los visitantes, generación dinámica de contenido y análisis de interacciones, todo bajo una experiencia visual de alto impacto.</p>
+                    <h3 data-i18n="projects.p6.title">Landing Page con IA</h3>
+                    <p data-i18n="projects.p6.desc">Landing profesional potenciada con Inteligencia Artificial. Integra un asistente de IA para guiar a los visitantes, generación dinámica de contenido y análisis de interacciones, todo bajo una experiencia visual de alto impacto.</p>
                     <div class="project-tags">
                         <span class="tag">Next.js</span><span class="tag">OpenAI</span><span class="tag">JavaScript</span><span class="tag">UI/UX</span>
                     </div>
                     <div class="project-links">
-                        <button class="btn btn-sm btn-outline btn-private" disabled>
-                            <i class="fas fa-lock"></i> <span data-i18n="projects.private">Repositorio Privado</span>
+                        <a href="https://beltran-grupo-briones.vercel.app" target="_blank" class="btn btn-sm btn-outline">
+                            <i class="fas fa-paper-plane"></i>
+                            <span data-i18n="projects.private">Visitar</span>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- PROYECTO 7: App de Turnos para Barberías -->
+            <!-- App de Turnos para Barberías -->
             <div class="card project-card animate-on-scroll">
-                <div class="project-image" style="background: linear-gradient(135deg, #1a1a2e 0%, #2d1b69 55%, #4a1942 100%);"></div>
+                <div class="project-image" style="background: linear-gradient(135deg, #111827 0%, #1F2937 55%, #374151 100%);"></div>
                 <div class="project-info">
                     <h3 data-i18n="projects.p7.title">App de Turnos para Barberías</h3>
                     <p data-i18n="projects.p7.desc">Aplicación móvil desarrollada en Flutter para la gestión inteligente de citas y turnos en barberías. Permite reservas en tiempo real, recordatorios automáticos y un panel de control para el barbero.</p>
@@ -281,24 +337,26 @@
                     </div>
                     <div class="project-links">
                         <button class="btn btn-sm btn-outline btn-private" disabled>
-                            <i class="fas fa-lock"></i> <span data-i18n="projects.private">Repositorio Privado</span>
+                            <i class="fas fa-lock"></i>
+                            <span data-i18n="projects.private">Próximamente</span>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- PROYECTO 8: ClubSync -->
+            <!-- ClubSystem -->
             <div class="card project-card animate-on-scroll">
-                <div class="project-image" style="background: linear-gradient(135deg, #0f4c75 0%, #1b6ca8 50%, #0d7377 100%);"></div>
+                <div class="project-image" style="background: linear-gradient(135deg, #0C4A6E 0%, #0369A1 50%, #0891B2 100%);"></div>
                 <div class="project-info">
-                    <h3 data-i18n="projects.p8.title">ClubSync — Sistema de Clubes con IA</h3>
+                    <h3 data-i18n="projects.p8.title">ClubSystem — Sistema con IA</h3>
                     <p data-i18n="projects.p8.desc">Plataforma SaaS multi-tenant para la gestión integral de clubes deportivos. Incluye panel de administrador web, app móvil para socios y funcionalidades de IA para insights y automatizaciones.</p>
                     <div class="project-tags">
                         <span class="tag">React Native</span><span class="tag">Next.js</span><span class="tag">FastAPI</span><span class="tag">PostgreSQL</span><span class="tag">IA</span>
                     </div>
                     <div class="project-links">
                         <button class="btn btn-sm btn-outline btn-private" disabled>
-                            <i class="fas fa-lock"></i> <span data-i18n="projects.private">Repositorio Privado</span>
+                            <i class="fas fa-lock"></i>
+                            <span data-i18n="projects.private">Próximamente</span>
                         </button>
                     </div>
                 </div>
@@ -307,8 +365,14 @@
         </div>
     </section>
 
+    <!-- ======================== CONTACTO ======================== -->
     <section id="contacto">
-        <h2 class="animate-on-scroll"><i class="fas fa-envelope"></i> <span data-i18n="contact.title">Trabajemos juntos</span></h2>
+        <p class="section-label animate-on-scroll">
+            <i class="fas fa-envelope"></i>
+            <span data-i18n="contact.title">Trabajemos juntos</span>
+        </p>
+        <h2 class="animate-on-scroll" data-i18n="contact.title">Trabajemos juntos</h2>
+
         <div class="contact-grid">
             <div class="contact-method animate-left">
                 <i class="fas fa-paper-plane contact-icon"></i>
@@ -316,7 +380,7 @@
                 <p>fermin.lasarte@icloud.com</p>
                 <a href="mailto:fermin.lasarte@icloud.com" class="btn btn-sm btn-outline" data-i18n="contact.write">Escribir</a>
             </div>
-            <div class="contact-method animate-scale">
+            <div class="contact-method animate-on-scroll">
                 <i class="fab fa-whatsapp contact-icon"></i>
                 <h3 data-i18n="contact.phone">Teléfono</h3>
                 <p>+54 9 11 2171-1289</p>
@@ -331,19 +395,20 @@
         </div>
     </section>
 
+    <!-- ======================== FOOTER ======================== -->
     <footer class="footer">
-      <div class="container">
-        <div class="footer-content">
-          <div class="copyright">
-            © <span id="current-year">2026</span> Fermin Lasarte. <span data-i18n="footer.rights">Todos los derechos reservados.</span>
-          </div>
-          <div class="social-links">
-            <a href="https://github.com/FerminLasarte" target="_blank" class="social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
-            <a href="https://linkedin.com/in/ferminlasarte/" target="_blank" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-            <a href="mailto:fermin.lasarte@icloud.com" class="social-link" aria-label="Email"><i class="fas fa-envelope"></i></a>
-          </div>
+        <div class="container">
+            <div class="footer-content">
+                <div class="copyright">
+                    © <span id="current-year">2026</span> Fermin Lasarte. <span data-i18n="footer.rights">Todos los derechos reservados.</span>
+                </div>
+                <div class="social-links">
+                    <a href="https://github.com/FerminLasarte"      target="_blank" class="social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="https://linkedin.com/in/ferminlasarte/" target="_blank" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="mailto:fermin.lasarte@icloud.com"       class="social-link" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
         </div>
-      </div>
     </footer>
 
     <script src="js/translations.js"></script>
