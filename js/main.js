@@ -1,12 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
     
     // 1. Lógica del Intersection Observer (Animaciones al scroll)
-    const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+    // threshold: 0.1 → más seguro en móvil donde las tarjetas son altas
+    const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
     const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
                 observer.unobserve(entry.target);
+                // Liberar GPU tras la animación (will-change ya no es necesario)
+                setTimeout(() => {
+                    entry.target.style.willChange = 'auto';
+                }, 800);
             }
         });
     }, observerOptions);
