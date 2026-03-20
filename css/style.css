@@ -366,7 +366,10 @@ body.dark-mode .availability-badge {
 .hero-image::before {
     content: '';
     position: absolute;
-    inset: -12px;
+    top: -12px;
+    right: -12px;
+    bottom: -12px;
+    left: -12px;
     border-radius: var(--radius-circle);
     border: 1px solid rgba(var(--accent-rgb), 0.18);
 }
@@ -967,8 +970,8 @@ body.dark-mode .production-status { color: #4ADE80; }
     .hero-content p { margin-left: auto; margin-right: auto; }
     .hero-buttons { justify-content: center; }
     .hero-image { order: -1; }
-    .hero-image img { width: 13rem; height: 13rem; }
-    .hero-image::before { inset: -10px; }
+    .hero-image img { width: 12rem; height: 12rem; }
+    .hero-image::before { top: -10px; right: -10px; bottom: -10px; left: -10px; }
     .projects-grid { grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
 }
 
@@ -977,35 +980,48 @@ body.dark-mode .production-status { color: #4ADE80; }
     nav {
         width: calc(100% - 1.5rem);
         top: 10px;
-        padding: 0.4rem 0.6rem;
+        padding: 0.35rem 0.5rem;
+        /* contiene los botones sin desbordar */
+        overflow: hidden;
     }
 
     .nav-links {
         flex-wrap: nowrap;
         overflow-x: auto;
+        overflow-y: hidden;
         scrollbar-width: none;
         -webkit-overflow-scrolling: touch;
-        padding-right: 0.75rem;
+        padding-right: 0.5rem;
         border-right: none;
+        min-width: 0;       /* permite que flex-shrink funcione */
     }
     .nav-links::-webkit-scrollbar { display: none; }
-    .nav-links a { font-size: 0.76rem; }
+    .nav-links a { font-size: 0.74rem; padding: 0.3rem 0.5rem; }
 
-    nav:not(.nav-expanded) .nav-controls { margin: 0 auto; padding-left: 0; }
-    .nav-controls { gap: 0.25rem; padding-left: 0.4rem; }
-    .icon-btn { width: 1.8rem; height: 1.8rem; font-size: 0.72rem; }
-    #lang-toggle { font-size: 0.65rem; }
+    /* cuando está colapsado, centra los controles en la píldora */
+    nav:not(.nav-expanded) .nav-controls {
+        margin: 0 auto;
+        padding-left: 0;
+    }
+    .nav-controls {
+        gap: 0.22rem;
+        padding-left: 0.35rem;
+        flex-shrink: 0;     /* que los botones no se encojan */
+    }
+    .icon-btn { width: 1.75rem; height: 1.75rem; font-size: 0.7rem; }
+    #lang-toggle { font-size: 0.62rem; letter-spacing: 0.03em; }
 
     header#sobre-mi {
         padding-top: 5.5rem;
         padding-bottom: 3rem;
-        min-height: 100svh;
-        gap: 2rem;
+        min-height: 100vh;      /* fallback para iOS antiguo */
+        min-height: 100svh;     /* browser-chrome-aware */
+        gap: 1.75rem;
     }
 
-    .hero-content h1 { font-size: 2rem; }
-    .hero-image img  { width: 11rem; height: 11rem; }
-    .hero-image::before { inset: -8px; }
+    .hero-content h1 { font-size: 1.9rem; }
+    .hero-image img  { width: 10rem; height: 10rem; }
+    .hero-image::before { top: -7px; right: -7px; bottom: -7px; left: -7px; }
 
     .hero-buttons {
         flex-direction: column;
@@ -1031,12 +1047,20 @@ body.dark-mode .production-status { color: #4ADE80; }
     .footer { padding: 1.5rem; }
 }
 
-/* Teléfonos muy pequeños */
+/* Teléfonos muy pequeños (≤ 400px) */
 @media screen and (max-width: 25rem) {
-    nav { width: calc(100% - 1rem); }
-    .hero-content h1 { font-size: 1.75rem; }
-    .hero-image img  { width: 9.5rem; height: 9.5rem; }
-    section > h2 { font-size: 1.65rem; }
+    nav {
+        width: calc(100% - 1rem);
+        padding: 0.3rem 0.4rem;
+    }
+    /* 5 botones a 1.6rem caben en ~290px de nav útil */
+    .icon-btn { width: 1.6rem; height: 1.6rem; font-size: 0.66rem; }
+    #lang-toggle { font-size: 0.58rem; }
+
+    .hero-content h1 { font-size: 1.65rem; }
+    .hero-image img  { width: 8.5rem; height: 8.5rem; }
+    .hero-image::before { top: -6px; right: -6px; bottom: -6px; left: -6px; }
+    section > h2 { font-size: 1.6rem; }
 }
 
 /* Accesibilidad: movimiento reducido */
