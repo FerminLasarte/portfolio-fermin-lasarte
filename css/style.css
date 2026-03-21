@@ -78,7 +78,7 @@ nav {
     left: 50%;
     transform: translateX(-50%);
     width: auto;
-    max-width: calc(var(--max-width) - 2rem);
+    max-width: calc(100vw - 2rem);
     background-color: var(--nav-bg);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -110,7 +110,8 @@ body.dark-mode nav {
     display: flex;
     align-items: center;
     gap: 0.25rem;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: visible;
     max-width: 680px;
     white-space: nowrap;
     padding-right: 0.75rem;
@@ -145,12 +146,16 @@ nav:not(:hover):not(:focus-within):not(.nav-expanded) .nav-links {
     white-space: nowrap;
     padding: 0.35rem 0.65rem;
     border-radius: var(--radius-pill);
-    transition: color 0.2s ease, background-color 0.2s ease;
+    transition: color 0.2s ease;
 }
 
 .nav-links a:hover {
-    color: var(--text);
-    background-color: var(--border);
+    color: var(--accent);
+}
+
+.nav-links a.active {
+    color: var(--accent);
+    font-weight: 600;
 }
 
 .nav-controls {
@@ -943,6 +948,7 @@ body.dark-mode .production-status { color: #4ADE80; }
 .projects-grid .card:nth-child(4) { transition-delay: 0.26s; }
 .skills-grid   .card:nth-child(5),
 .projects-grid .card:nth-child(5) { transition-delay: 0.33s; }
+.skills-grid   .card:nth-child(6)  { transition-delay: 0.40s; }
 .projects-grid .card:nth-child(6) { transition-delay: 0.08s; }
 .projects-grid .card:nth-child(7) { transition-delay: 0.15s; }
 .projects-grid .card:nth-child(8) { transition-delay: 0.22s; }
@@ -981,14 +987,13 @@ body.dark-mode .production-status { color: #4ADE80; }
         width: calc(100% - 1.5rem);
         top: 10px;
         padding: 0.35rem 0.5rem;
-        /* contiene los botones sin desbordar */
-        overflow: hidden;
+        overflow-x: clip;   /* evita scroll horizontal sin recortar verticalmente */
     }
 
     .nav-links {
         flex-wrap: nowrap;
         overflow-x: auto;
-        overflow-y: hidden;
+        overflow-y: visible; /* permite altura completa sin recorte inferior */
         scrollbar-width: none;
         -webkit-overflow-scrolling: touch;
         padding-right: 0.5rem;
