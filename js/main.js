@@ -133,39 +133,36 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 7. Smooth scroll personalizado para links del nav (con offset de la nav fija)
-    function smoothScrollTo(targetY) {
-        const startY = window.pageYOffset;
-        const distance = targetY - startY;
-        const duration = 750;
-        let startTime = null;
-
-        // Easing: ease-in-out-quart — arranque progresivo, llegada suave
-        function easeInOutQuart(t) {
-            return t < 0.5 ? 8 * t * t * t * t : 1 - 8 * (--t) * t * t * t;
-        }
-
-        function step(currentTime) {
-            if (!startTime) startTime = currentTime;
-            const elapsed = Math.min(currentTime - startTime, duration);
-            window.scrollTo(0, startY + distance * easeInOutQuart(elapsed / duration));
-            if (elapsed < duration) requestAnimationFrame(step);
-        }
-
-        requestAnimationFrame(step);
-    }
-
+    // 7. Smooth scroll para links del nav (con offset de la nav fija)
     document.querySelectorAll('.nav-links a[href^="#"]').forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             const target = document.querySelector(link.getAttribute('href'));
             if (!target) return;
 
-            const navOffset = navEl.offsetHeight + 24; // altura del nav + breathing room
+            const navOffset = navEl.offsetHeight + 24;
             const targetY = target.getBoundingClientRect().top + window.pageYOffset - navOffset;
-            smoothScrollTo(targetY);
+            window.scrollTo({ top: targetY, behavior: 'smooth' });
         });
     });
+
+    // 8. Marcar link activo según sección visible
+    const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+    const sections = document.querySelectorAll('header[id], section[id]');
+
+    function setActiveLink(id) {
+        navLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+        });
+    }
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) setActiveLink(entry.target.id);
+        });
+    }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
+
+    sections.forEach(section => sectionObserver.observe(section));
 
     // 5. Actualizar año del footer automáticamente
     const yearSpan = document.getElementById("current-year");
