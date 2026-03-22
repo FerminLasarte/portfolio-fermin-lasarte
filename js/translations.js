@@ -46,11 +46,11 @@ const translations = {
         "projects.p3.tag": "Arquitectura",
         "projects.p4.desc": "Chatbot conversacional avanzado desarrollado con Rasa. Implementa modelos NLU (Natural Language Understanding) para interpretar y gestionar intenciones complejas del usuario.",
         "projects.p5.desc": "Videojuego desarrollado de forma nativa para iOS utilizando Swift, manejando lógicas de estado y renderizado nativo.",
-        "projects.p6.title": "Portfolio Beltrán con IA",
+        "projects.p6.title": "Landing con IA",
         "projects.p6.desc": "Portfolio profesional potenciado con Inteligencia Artificial. Integra un asistente de IA para guiar a los visitantes, generación dinámica de contenido y análisis de interacciones, todo bajo una experiencia visual de alto impacto.",
         "projects.p7.title": "App de Turnos para Barberías",
         "projects.p7.desc": "Aplicación móvil desarrollada en Flutter para la gestión inteligente de citas y turnos en barberías. Permite reservas en tiempo real, recordatorios automáticos y un panel de control para el barbero.",
-        "projects.p8.title": "ClubSync — Sistema de Clubes con IA",
+        "projects.p8.title": "ClubSystem — Sistema de Clubes con IA",
         "projects.p8.desc": "Plataforma SaaS multi-tenant para la gestión integral de clubes deportivos. Incluye panel de administrador web, app móvil para socios y funcionalidades de IA para insights y automatizaciones.",
         "projects.private": "Repositorio Privado",
 
