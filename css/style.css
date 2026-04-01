@@ -1765,3 +1765,119 @@ body.dark-mode .production-status { color: #4ADE80; }
         transition: border-color 0.3s ease;
     }
 }
+
+/* =========================================
+   EFECTOS PREMIUM (Interacciones y Animaciones)
+   ========================================= */
+
+/* 1. Fade-Up con Blur (Para usar en cualquier elemento) */
+.premium-reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    filter: blur(10px);
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), 
+                transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), 
+                filter 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: opacity, transform, filter; /* Optimización de rendimiento */
+}
+.premium-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+}
+
+/* 2. Cursor Magnético Contextual */
+@media (pointer: fine) { /* Solo aplica si hay mouse (no en celulares) */
+    body {
+        cursor: none; /* Oculta el cursor por defecto */
+    }
+    .premium-cursor {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 16px;
+        height: 16px;
+        background-color: white; /* O el color principal de tu marca */
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        mix-blend-mode: difference; /* Hace que contraste con el fondo */
+        transform: translate(-50%, -50%);
+        transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease, border 0.3s ease;
+    }
+    .premium-cursor.cursor-hover {
+        width: 60px;
+        height: 60px;
+        background-color: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(2px);
+        mix-blend-mode: normal;
+    }
+}
+
+/* 3. Consola de Ingeniero Oculta */
+.engineer-terminal {
+    background: #1e1e1e;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    font-family: 'Courier New', Courier, monospace; /* Fuente de código */
+    color: #00ff00; /* Verde hacker o puedes usar un blanco/gris */
+    text-align: left;
+}
+.terminal-header {
+    background: #2d2d2d;
+    padding: 10px 15px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.terminal-btn {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+.btn-close { background: #ff5f56; }
+.btn-min { background: #ffbd2e; }
+.btn-max { background: #27c93f; }
+.terminal-body {
+    padding: 20px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    min-height: 150px;
+}
+.terminal-cursor {
+    display: inline-block;
+    width: 8px;
+    height: 15px;
+    background: currentcolor;
+    animation: blink 1s step-end infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* 4. Smart Video Mockup */
+.smart-mockup-container {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+}
+.smart-mockup-img {
+    width: 100%;
+    display: block;
+    transition: opacity 0.4s ease;
+}
+.smart-mockup-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+.smart-mockup-container:hover .smart-mockup-img { opacity: 0; }
+.smart-mockup-container:hover .smart-mockup-video { opacity: 1; }
