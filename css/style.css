@@ -560,6 +560,33 @@ body.dark-mode .availability-badge {
     animation-delay: -1.2s;
 }
 
+/* ── Mobile tech badge strip (oculto en desktop/tablet) ─────
+   Se activa en ≤768px como alternativa a los badges flotantes.
+   Es el TERCER hijo del <header> en el grid, y se reordena
+   mediante `order` para aparecer justo debajo de la foto.     */
+.hero-badges-mobile {
+    display: none; /* hidden on desktop and tablet */
+}
+
+/* Cada píldora dentro del strip */
+.mobile-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.8rem;
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-sm);
+}
+
+.mobile-badge img { display: block; }
+
 /* ============================================================
    7. BUTTONS
    ============================================================ */
@@ -1619,6 +1646,26 @@ body.dark-mode .production-status { color: #4ADE80; }
 
     .hero-content h1   { font-size: 2.2rem; }
     .hero-image-frame  { width: 10rem; height: 10rem; }
+
+    /* Reordenamiento del grid de 1 columna:
+       foto (order -1) → strip de badges (0) → contenido (1) */
+    .hero-content        { order: 1; }
+    .hero-badges-mobile  {
+        order: 0;
+        display: flex;
+        gap: 0.5rem;
+        /* scroll horizontal suave si los badges no caben */
+        overflow-x: auto;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;           /* Firefox */
+        padding: 0.5rem 0.25rem 0.75rem; /* bottom: espacio visual al hacer scroll */
+        width: 100%;
+        /* fade-out en los bordes como indicador de scroll */
+        -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+        mask-image:         linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+    }
+    .hero-badges-mobile::-webkit-scrollbar { display: none; } /* Chrome/Safari */
 
     .hero-buttons {
         flex-direction: column;
