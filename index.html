@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fermin | Ingeniero de Sistemas</title>
+    <title>Fermin Lasarte — iOS & Mobile Engineer</title>
 
     <!-- SEO -->
-    <meta name="description" content="Portfolio de Fermin. Desarrollador Freelance y Estudiante avanzado de Ingeniería de Sistemas especializado en desarrollo móvil nativo y multiplataforma.">
+    <meta name="description" content="Portfolio de Fermin Lasarte. iOS & Cross-Platform Mobile Engineer especializado en Swift, Flutter y Backend. 2 apps publicadas en tiendas.">
     <link rel="canonical" href="https://ferminlasarte.github.io/portfolio-fermin-lasarte">
 
     <!-- Open Graph -->
@@ -14,15 +14,15 @@
     <meta property="og:site_name" content="Fermin Lasarte">
     <meta property="og:locale" content="es_ES">
     <meta property="og:url" content="https://ferminlasarte.github.io/portfolio-fermin-lasarte">
-    <meta property="og:title" content="Fermin | Ingeniero de Sistemas">
-    <meta property="og:description" content="Portfolio profesional. Especialista en Flutter, Swift, Java y Arquitectura de Sistemas.">
+    <meta property="og:title" content="Fermin Lasarte — iOS & Mobile Engineer">
+    <meta property="og:description" content="Portfolio profesional. Especialista en Swift, Flutter y Backend.">
     <meta property="og:image" content="https://ferminlasarte.github.io/portfolio-fermin-lasarte/assets/foto_perfil.jpeg">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@ferminlasarte">
-    <meta name="twitter:title" content="Fermin | Ingeniero de Sistemas">
-    <meta name="twitter:description" content="Portfolio profesional. Especialista en Flutter, Swift, Java y Arquitectura de Sistemas.">
+    <meta name="twitter:title" content="Fermin Lasarte — iOS & Mobile Engineer">
+    <meta name="twitter:description" content="Portfolio profesional. Especialista en Swift, Flutter y Backend.">
     <meta name="twitter:image" content="https://ferminlasarte.github.io/portfolio-fermin-lasarte/assets/foto_perfil.jpeg">
 
     <!-- Theme & Icons -->
@@ -38,8 +38,8 @@
       "@type": "Person",
       "name": "Fermin Lasarte",
       "url": "https://ferminlasarte.github.io/portfolio-fermin-lasarte",
-      "jobTitle": "Ingeniero de Sistemas",
-      "description": "Desarrollador Freelance especializado en desarrollo móvil nativo y multiplataforma.",
+      "jobTitle": "iOS & Mobile Engineer",
+      "description": "Desarrollador especializado en Swift, Flutter y Backend con apps publicadas en App Store y Google Play.",
       "sameAs": [
         "https://github.com/FerminLasarte",
         "https://linkedin.com/in/ferminlasarte/"
@@ -49,10 +49,16 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..800;1,14..32,300..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+
+    <!-- Ambient background orbs -->
+    <div class="bg-orb bg-orb--1" aria-hidden="true"></div>
+    <div class="bg-orb bg-orb--2" aria-hidden="true"></div>
+    <div class="bg-orb bg-orb--3" aria-hidden="true"></div>
 
     <!-- ======================== NAV ======================== -->
     <nav>
@@ -70,9 +76,9 @@
                 <i class="fas fa-moon"></i>
                 <i class="fas fa-sun"></i>
             </button>
-            <a href="https://github.com/FerminLasarte"       target="_blank" class="icon-btn" title="Mi GitHub"><i class="fab fa-github"></i></a>
-            <a href="https://linkedin.com/in/ferminlasarte/"  target="_blank" class="icon-btn" title="Mi LinkedIn"><i class="fab fa-linkedin"></i></a>
-            <a href="mailto:fermin.lasarte@icloud.com"        target="_blank" class="icon-btn" title="Mi Email"><i class="fas fa-envelope"></i></a>
+            <a href="https://github.com/FerminLasarte"      target="_blank" class="icon-btn" title="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://linkedin.com/in/ferminlasarte/" target="_blank" class="icon-btn" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            <a href="mailto:fermin.lasarte@icloud.com"       class="icon-btn" title="Email"><i class="fas fa-envelope"></i></a>
         </div>
     </nav>
 
@@ -90,21 +96,40 @@
                 </div>
             </div>
 
-            <h1 data-i18n="hero.greeting">Hola, soy Fermin</h1>
+            <h1>
+                <span data-i18n="hero.greeting">Hola, soy</span>
+                <span class="hero-name"> Fermin</span>
+            </h1>
 
-            <p class="hero-role">
-                <i class="fas fa-code"></i>
-                <span data-i18n="hero.role">Ingeniero de Sistemas</span>
-            </p>
+            <p class="hero-role" data-i18n="hero.role">iOS & Cross-Platform Mobile Engineer · Backend Developer</p>
 
-            <p data-i18n="hero.description">Estudiante avanzado de Ingeniería de Sistemas (UNICEN) con un sólido enfoque en desarrollo backend (Java, Python) y móvil (Flutter, Swift). Cuento con experiencia práctica en la creación de soluciones integrales, desde la arquitectura del sistema hasta la interfaz de usuario. Busco aportar mis habilidades técnicas y una mentalidad orientada al producto en entornos de alto crecimiento.</p>
+            <p class="hero-desc" data-i18n="hero.description">Estudiante avanzado de Ingeniería de Sistemas (UNICEN) con sólido enfoque en desarrollo móvil (Swift, Flutter) y backend. Experiencia creando soluciones end-to-end, desde la arquitectura del sistema hasta la publicación en tiendas. Mentalidad orientada al producto en entornos de alto crecimiento.</p>
+
+            <!-- Stats -->
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number">2</span>
+                    <span class="stat-label" data-i18n="hero.stat1">Apps en Producción</span>
+                </div>
+                <div class="stat-divider" aria-hidden="true"></div>
+                <div class="stat">
+                    <span class="stat-number">5+</span>
+                    <span class="stat-label" data-i18n="hero.stat2">Años de Experiencia</span>
+                </div>
+                <div class="stat-divider" aria-hidden="true"></div>
+                <div class="stat">
+                    <span class="stat-number">8+</span>
+                    <span class="stat-label" data-i18n="hero.stat3">Proyectos</span>
+                </div>
+            </div>
 
             <div class="hero-buttons">
-                <a href="#contacto" class="btn" data-i18n="hero.contactBtn">Contactame</a>
+                <a href="#proyectos" class="btn" data-i18n="hero.projectsBtn">Ver Proyectos</a>
+                <a href="#contacto" class="btn btn-outline" data-i18n="hero.contactBtn">Contactame</a>
                 <div class="dropdown" id="cv-dropdown">
-                    <a class="btn btn-outline" id="cv-btn">
+                    <a class="btn btn-ghost" id="cv-btn">
                         <i class="fas fa-download"></i>
-                        <span data-i18n="hero.cvBtn">Descargar CV</span>
+                        <span data-i18n="hero.cvBtn">CV</span>
                     </a>
                     <div class="dropdown-content" id="cv-content">
                         <a href="assets/CV - FL - ES copy.pdf" download="CV_Fermin_ES.pdf"><i class="far fa-file-pdf"></i> Español</a>
@@ -114,8 +139,31 @@
             </div>
         </div>
 
+        <!-- Profile image with floating badges -->
         <div class="hero-image animate-scale">
-            <img src="assets/foto_perfil.jpeg" alt="Foto de Fermin">
+            <div class="hero-image-frame">
+                <img src="assets/foto_perfil.jpeg" alt="Foto de Fermin">
+            </div>
+            <div class="hero-badge-float hero-badge-float--1" aria-hidden="true">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/swift/swift-original.svg" width="16" height="16" alt="">
+                <span>Swift</span>
+            </div>
+            <div class="hero-badge-float hero-badge-float--2" aria-hidden="true">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg" width="16" height="16" alt="">
+                <span>Flutter</span>
+            </div>
+            <div class="hero-badge-float hero-badge-float--0" aria-hidden="true">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg" width="16" height="16" alt="">
+                <span>TypeScript</span>
+            </div>
+            <div class="hero-badge-float hero-badge-float--4" aria-hidden="true">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg" width="16" height="16" alt="">
+                <span>C++</span>
+            </div>
+            <div class="hero-badge-float hero-badge-float--5" aria-hidden="true">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" width="16" height="16" alt="">
+                <span>Python</span>
+            </div>
         </div>
     </header>
 
@@ -123,7 +171,7 @@
     <section id="experiencia">
         <p class="section-label animate-on-scroll">
             <i class="fas fa-briefcase"></i>
-            <span data-i18n="exp.title">Trayectoria</span>
+            <span data-i18n="exp.sectionLabel">Experiencia</span>
         </p>
         <h2 class="animate-on-scroll" data-i18n="exp.title">Trayectoria</h2>
 
@@ -135,8 +183,11 @@
                         <h3 data-i18n="exp.job1.title">Desarrollador Mobile Freelance</h3>
                         <span class="timeline-period">2024 — 2025</span>
                     </div>
-                    <span class="timeline-company" data-i18n="exp.job1.company">Creador de TravelPic | Argentina</span>
+                    <span class="timeline-company" data-i18n="exp.job1.company">Desarrollador de TravelPic | Argentina</span>
                     <p data-i18n="exp.job1.desc">Diseñé la arquitectura y desarrollé una plataforma estilo "Uber para fotógrafos" utilizando Flutter. Integré la pasarela de pagos Stripe, implementé mapas en tiempo real con rutas (Google Maps) y optimicé el rendimiento general para asegurar una alta disponibilidad en tiendas.</p>
+                    <div class="timeline-tags">
+                        <span>Flutter</span><span>Stripe</span><span>Firebase</span><span>Google Maps</span>
+                    </div>
                 </div>
             </div>
 
@@ -149,6 +200,9 @@
                     </div>
                     <span class="timeline-company" data-i18n="exp.job2.company">Creador de DeporTurnos | Argentina</span>
                     <p data-i18n="exp.job2.desc">Desarrollé una plataforma para la gestión de reservas deportivas en tiempo real. Diseñé una arquitectura backend serverless con Firebase (Firestore, Cloud Messaging), integré pagos con Mercado Pago y desarrollé un chat nativo desde cero.</p>
+                    <div class="timeline-tags">
+                        <span>Flutter</span><span>Firebase</span><span>Mercado Pago</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -182,7 +236,7 @@
                         <h3 data-i18n="edu.item2.title">Inglés B2 (Intermedio-Avanzado)</h3>
                         <span class="timeline-period" data-i18n="edu.item2.period">Actualidad</span>
                     </div>
-                    <p data-i18n="edu.item2.desc">Capacidad fluida para la lectura de documentación técnica, escritura de código y colaboración eficaz en equipos internacionales y multidisciplinarios.</p>
+                    <p data-i18n="edu.item2.desc">Capacidad fluida para la lectura de documentación técnica, escritura de código y colaboración eficaz en equipos internacionales.</p>
                 </div>
             </div>
         </div>
@@ -196,43 +250,121 @@
         </p>
         <h2 class="animate-on-scroll" data-i18n="skills.title">Mis Habilidades</h2>
 
-        <div class="skills-grid">
-            <div class="card skill-category animate-on-scroll">
-                <h3><i class="fas fa-mobile-alt"></i> Mobile</h3>
-                <div class="compact-tags">
-                    <span>Flutter</span><span>Dart</span><span>Swift</span><span>SwiftUI</span>
+        <div class="skills-bento">
+
+            <!-- Mobile — featured -->
+            <div class="skill-card skill-card--featured animate-on-scroll">
+                <div class="skill-card-header">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>Mobile</h3>
+                </div>
+                <div class="skill-icons-grid">
+                    <div class="skill-icon" data-tooltip="Swift · Avanzado">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/swift/swift-original.svg" alt="Swift" loading="lazy">
+                    </div>
+                    <div class="skill-icon" data-tooltip="SwiftUI · Avanzado">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/swift/swift-original.svg" alt="SwiftUI" loading="lazy" style="filter:hue-rotate(200deg) saturate(1.5);">
+                    </div>
+                    <div class="skill-icon" data-tooltip="Flutter · Avanzado">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg" alt="Flutter" loading="lazy">
+                    </div>
+                    <div class="skill-icon" data-tooltip="Dart · Avanzado">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/dart/dart-original.svg" alt="Dart" loading="lazy">
+                    </div>
                 </div>
             </div>
-            <div class="card skill-category animate-on-scroll">
-                <h3><i class="fas fa-globe"></i> Web &amp; Frameworks</h3>
-                <div class="compact-tags">
-                    <span>HTML</span><span>CSS</span><span>JavaScript</span><span>TypeScript / TSX</span><span>Next.js</span>
+
+            <!-- Backend -->
+            <div class="skill-card animate-on-scroll">
+                <div class="skill-card-header">
+                    <i class="fas fa-server"></i>
+                    <h3>Backend</h3>
+                </div>
+                <div class="skill-icons-grid">
+                    <div class="skill-icon" data-tooltip="Java · Avanzado">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg" alt="Java" loading="lazy">
+                    </div>
+                    <div class="skill-icon" data-tooltip="Python · Intermedio">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" alt="Python" loading="lazy">
+                    </div>
+                    <div class="skill-icon" data-tooltip="FastAPI · Intermedio">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/fastapi/fastapi-original.svg" alt="FastAPI" loading="lazy">
+                    </div>
+                    <div class="skill-icon" data-tooltip="C# / .NET · Intermedio">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/csharp/csharp-original.svg" alt="C#" loading="lazy">
+                    </div>
                 </div>
             </div>
-            <div class="card skill-category animate-on-scroll">
-                <h3><i class="fas fa-server"></i> Backend &amp; Cloud</h3>
-                <div class="compact-tags">
-                    <span>Java</span><span>Python</span><span>FastAPI</span><span>C#</span><span>.NET</span><span>API REST</span><span>Firebase</span><span>Docker</span>
+
+            <!-- Web -->
+            <div class="skill-card animate-on-scroll">
+                <div class="skill-card-header">
+                    <i class="fas fa-globe"></i>
+                    <h3>Web</h3>
+                </div>
+                <div class="skill-icons-grid">
+                    <div class="skill-icon" data-tooltip="TypeScript · Intermedio">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg" alt="TypeScript" loading="lazy">
+                    </div>
+                    <div class="skill-icon" data-tooltip="Next.js · Intermedio">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg" alt="Next.js" loading="lazy" data-dark-invert>
+                    </div>
+                    <div class="skill-icon" data-tooltip="React · Intermedio">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg" alt="React" loading="lazy">
+                    </div>
+                    <div class="skill-icon" data-tooltip="JavaScript · Intermedio">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" alt="JavaScript" loading="lazy">
+                    </div>
                 </div>
             </div>
-            <div class="card skill-category animate-on-scroll">
-                <h3><i class="fas fa-database"></i> <span data-i18n="skills.db">Bases de Datos</span></h3>
-                <div class="compact-tags">
-                    <span>PostgreSQL</span><span>MongoDB</span><span>Firestore</span>
+
+            <!-- Cloud & DB -->
+            <div class="skill-card animate-on-scroll">
+                <div class="skill-card-header">
+                    <i class="fas fa-database"></i>
+                    <h3><span data-i18n="skills.db">Bases de Datos</span> & Cloud</h3>
+                </div>
+                <div class="skill-icons-grid">
+                    <div class="skill-icon" data-tooltip="PostgreSQL · Avanzado">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg" alt="PostgreSQL" loading="lazy">
+                    </div>
+                    <div class="skill-icon" data-tooltip="MongoDB · Avanzado">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original.svg" alt="MongoDB" loading="lazy">
+                    </div>
+                    <div class="skill-icon" data-tooltip="Firebase · Avanzado">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg" alt="Firebase" loading="lazy">
+                    </div>
+                    <div class="skill-icon" data-tooltip="Docker · Intermedio">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg" alt="Docker" loading="lazy">
+                    </div>
                 </div>
             </div>
-            <div class="card skill-category animate-on-scroll">
-                <h3><i class="fas fa-brain"></i> AI &amp; Machine Learning</h3>
-                <div class="compact-tags">
-                    <span>Machine Learning</span><span>Rasa</span><span>NLU Models</span>
+
+            <!-- Tools — wide -->
+            <div class="skill-card skill-card--wide animate-on-scroll">
+                <div class="skill-card-header">
+                    <i class="fas fa-tools"></i>
+                    <h3><span data-i18n="skills.tools">Herramientas Base</span></h3>
+                </div>
+                <div class="skill-icons-grid">
+                    <div class="skill-icon" data-tooltip="Git · Avanzado">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg" alt="Git" loading="lazy">
+                    </div>
+                    <div class="skill-icon" data-tooltip="XCode · Avanzado">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/xcode/xcode-original.svg" alt="XCode" loading="lazy">
+                    </div>
+                    <div class="skill-icon" data-tooltip="C / C++ · Avanzado">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg" alt="C++" loading="lazy">
+                    </div>
+                    <div class="skill-icon" data-tooltip="Figma · Avanzado">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg" alt="Figma" loading="lazy">
+                    </div>
+                    <div class="skill-icon" data-tooltip="GitHub · Avanzado">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg" alt="GitHub" loading="lazy" data-dark-invert>
+                    </div>
                 </div>
             </div>
-            <div class="card skill-category animate-on-scroll">
-                <h3><i class="fas fa-tools"></i> <span data-i18n="skills.tools">Herramientas Base</span></h3>
-                <div class="compact-tags">
-                    <span>Git / GitHub</span><span>XCode</span><span>Testflight</span><span>Scrum</span><span>C / C++</span>
-                </div>
-            </div>
+
         </div>
     </section>
 
@@ -244,24 +376,46 @@
         </p>
         <h2 class="animate-on-scroll" data-i18n="projects.title">Proyectos Destacados</h2>
 
-        <div class="projects-grid">
+        <div class="bento-grid">
 
-            <!-- TravelPic -->
-            <div class="card project-card animate-on-scroll">
-                <div class="project-image" style="background-image: url('assets/travelpic.jpeg');"></div>
-                <div class="project-info">
-                    <div class="production-status">
-                        <span class="status-dot-sm"></span>
-                        <span data-i18n="projects.live">Disponible en tiendas</span>
+            <!-- TravelPic — FEATURED (span 2, horizontal layout) -->
+            <article class="bento-card bento-card--large animate-on-scroll">
+                <div class="bento-card__image">
+                    <div class="bento-card__bg" style="background-image: url('assets/travelpic.jpeg');"></div>
+                    <div class="phone-mockup">
+                        <div class="phone-mockup__screen">
+                            <img src="assets/travelpic.jpeg" alt="TravelPic screenshot">
+                        </div>
+                    </div>
+                </div>
+                <div class="bento-card__content">
+                    <div class="bento-card__meta">
+                        <div class="production-status">
+                            <span class="status-dot-sm"></span>
+                            <span data-i18n="projects.live">En Producción</span>
+                        </div>
+                        <div class="bento-card__platform">
+                            <i class="fab fa-apple" title="App Store"></i>
+                            <i class="fab fa-google-play" title="Google Play"></i>
+                        </div>
                     </div>
                     <h3>TravelPic</h3>
-                    <p data-i18n="projects.p1.desc">Plataforma multiplataforma estilo "Uber para fotógrafos". Desarrollada de principio a fin, integrando Stripe para pagos, geolocalización en tiempo real y mapas con Google Maps.</p>
+                    <div class="project-story">
+                        <div class="story-block">
+                            <span class="story-label" data-i18n="projects.problem">Problema</span>
+                            <p data-i18n="projects.p1.problem">Los fotógrafos no tenían forma de conectar con clientes cercanos en tiempo real.</p>
+                        </div>
+                        <div class="story-block">
+                            <span class="story-label story-label--accent" data-i18n="projects.solution">Solución Técnica</span>
+                            <p data-i18n="projects.p1.solution">App Flutter con arquitectura BLoC, Stripe SDK, Google Maps Platform y backend Firebase serverless.</p>
+                        </div>
+                    </div>
                     <div class="project-tags">
-                        <span class="tag">Flutter</span><span class="tag">Stripe</span><span class="tag">Google Maps</span>
+                        <span class="tag">Flutter</span><span class="tag">Stripe</span><span class="tag">Google Maps</span><span class="tag">Firebase</span>
                     </div>
                     <div class="project-links">
                         <div class="dropdown">
-                            <button class="btn btn-sm btn-outline dropdown-btn">
+                            <button class="btn btn-sm dropdown-btn">
                                 <i class="fas fa-download"></i>
                                 <span data-i18n="projects.download">Descargar</span>
                             </button>
@@ -272,18 +426,36 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </article>
 
             <!-- DeporTurnos -->
-            <div class="card project-card animate-on-scroll">
-                <div class="project-image" style="background-image: url('assets/deporturnos.png');"></div>
-                <div class="project-info">
-                    <div class="production-status">
-                        <span class="status-dot-sm"></span>
-                        <span data-i18n="projects.live">Disponible en tiendas</span>
+            <article class="bento-card animate-on-scroll">
+                <div class="bento-card__image">
+                    <div class="bento-card__bg" style="background-image: url('assets/deporturnos.png');"></div>
+                    <div class="phone-mockup phone-mockup--sm">
+                        <div class="phone-mockup__screen">
+                            <img src="assets/deporturnos.png" alt="DeporTurnos screenshot">
+                        </div>
+                    </div>
+                </div>
+                <div class="bento-card__content">
+                    <div class="bento-card__meta">
+                        <div class="production-status">
+                            <span class="status-dot-sm"></span>
+                            <span data-i18n="projects.live">En Producción</span>
+                        </div>
+                        <div class="bento-card__platform">
+                            <i class="fab fa-apple"></i>
+                            <i class="fab fa-google-play"></i>
+                        </div>
                     </div>
                     <h3>DeporTurnos</h3>
-                    <p data-i18n="projects.p2.desc">Sistema completo de gestión deportiva. Arquitectura serverless escalable con Firebase, notificaciones push nativas, chat en tiempo real y pagos a través de Mercado Pago.</p>
+                    <div class="project-story">
+                        <div class="story-block">
+                            <span class="story-label story-label--accent" data-i18n="projects.solution">Solución Técnica</span>
+                            <p data-i18n="projects.p2.solution">Arquitectura serverless Firebase Firestore para reservas en tiempo real, chat nativo con Streams y pagos con Mercado Pago SDK.</p>
+                        </div>
+                    </div>
                     <div class="project-tags">
                         <span class="tag">Flutter</span><span class="tag">Firebase</span><span class="tag">Mercado Pago</span>
                     </div>
@@ -300,46 +472,23 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </article>
 
-            <!-- Compilador de Java -->
-            <div class="card project-card animate-on-scroll">
-                <div class="project-image" style="background-image: url('assets/compilador.png');"></div>
-                <div class="project-info">
-                    <h3 data-i18n="projects.p3.title">Compilador de Java</h3>
-                    <p data-i18n="projects.p3.desc">Diseño de la arquitectura de un compilador completo. Gestión desde el análisis léxico y sintáctico hasta la generación de código ejecutable.</p>
-                    <div class="project-tags">
-                        <span class="tag">Java</span><span class="tag" data-i18n="projects.p3.tag">Arquitectura</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/FerminLasarte/Compilador" target="_blank" class="btn btn-sm btn-outline">
-                            <i class="fab fa-github"></i>
-                            <span data-i18n="projects.code">Código</span>
-                        </a>
-                    </div>
+            <!-- iOS Native Game -->
+            <article class="bento-card animate-on-scroll">
+                <div class="bento-card__image">
+                    <div class="bento-card__bg" style="background-image: url('assets/impostor.jpeg');"></div>
                 </div>
-            </div>
-
-            <!-- AI Chatbot NLU -->
-            <div class="card project-card animate-on-scroll">
-                <div class="project-image" style="background-image: url('assets/chatbot.jpeg');"></div>
-                <div class="project-info">
-                    <h3>AI Chatbot NLU</h3>
-                    <p data-i18n="projects.p4.desc">Chatbot conversacional avanzado desarrollado con Rasa. Implementa modelos NLU (Natural Language Understanding) para interpretar y gestionar intenciones complejas del usuario.</p>
-                    <div class="project-tags">
-                        <span class="tag">Python</span><span class="tag">Rasa / AI</span>
+                <div class="bento-card__content">
+                    <h3 data-i18n="projects.p5.title">Juego iOS Nativo</h3>
+                    <div class="project-story">
+                        <div class="story-block">
+                            <span class="story-label story-label--accent" data-i18n="projects.solution">Solución Técnica</span>
+                            <p data-i18n="projects.p5.solution">Juego multijugador en SwiftUI con patrón MVVM, sincronización online y generación procedural de partidas.</p>
+                        </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Juego iOS Nativo -->
-            <div class="card project-card animate-on-scroll">
-                <div class="project-image" style="background-image: url('assets/impostor.jpeg');"></div>
-                <div class="project-info">
-                    <h3>Juego iOS Nativo</h3>
-                    <p data-i18n="projects.p5.desc">Videojuego desarrollado de forma nativa para iOS utilizando Swift, manejando lógicas de estado y renderizado nativo.</p>
                     <div class="project-tags">
-                        <span class="tag">Swift</span><span class="tag">SwiftUI</span><span class="tag">AI</span><span class="tag">Online</span>
+                        <span class="tag">Swift</span><span class="tag">SwiftUI</span><span class="tag">Multiplayer</span>
                     </div>
                     <div class="project-links">
                         <a href="https://github.com/FerminLasarte/ImpostorApp" target="_blank" class="btn btn-sm btn-outline">
@@ -348,34 +497,104 @@
                         </a>
                     </div>
                 </div>
-            </div>
+            </article>
 
-            <!-- Landing Beltrán con IA -->
-            <div class="card project-card animate-on-scroll">
-                <div class="project-image" style="background-image: url('assets/landing-ia.png');"></div>
-                <div class="project-info">
-                    <h3 data-i18n="projects.p6.title">Landing Page con IA</h3>
-                    <p data-i18n="projects.p6.desc">Landing profesional potenciada con Inteligencia Artificial. Integra un asistente de IA para guiar a los visitantes, generación dinámica de contenido y análisis de interacciones, todo bajo una experiencia visual de alto impacto.</p>
+            <!-- AI Chatbot NLU -->
+            <article class="bento-card animate-on-scroll">
+                <div class="bento-card__image">
+                    <div class="bento-card__bg" style="background-image: url('assets/chatbot.jpeg');"></div>
+                </div>
+                <div class="bento-card__content">
+                    <h3>AI Chatbot NLU</h3>
+                    <div class="project-story">
+                        <div class="story-block">
+                            <span class="story-label story-label--accent" data-i18n="projects.solution">Solución Técnica</span>
+                            <p data-i18n="projects.p4.solution">Pipeline NLU con Rasa: entrenamiento de modelos de intención, manejo de contexto conversacional y fallback handling.</p>
+                        </div>
+                    </div>
                     <div class="project-tags">
-                        <span class="tag">Next.js</span><span class="tag">OpenAI</span><span class="tag">JavaScript</span><span class="tag">UI/UX</span>
+                        <span class="tag">Python</span><span class="tag">Rasa</span><span class="tag">NLU</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Java Compiler -->
+            <article class="bento-card animate-on-scroll">
+                <div class="bento-card__image">
+                    <div class="bento-card__bg" style="background-image: url('assets/compilador.png');"></div>
+                </div>
+                <div class="bento-card__content">
+                    <h3 data-i18n="projects.p3.title">Compilador de Java</h3>
+                    <div class="project-story">
+                        <div class="story-block">
+                            <span class="story-label story-label--accent" data-i18n="projects.solution">Solución Técnica</span>
+                            <p data-i18n="projects.p3.solution">Pipeline completo: análisis léxico (scanner), sintáctico (parser LL(1)) y generación de código MiniJava a bytecode.</p>
+                        </div>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">Java</span><span class="tag">Compilers</span><span class="tag" data-i18n="projects.p3.tag">Arquitectura</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/FerminLasarte/Compilador" target="_blank" class="btn btn-sm btn-outline">
+                            <i class="fab fa-github"></i>
+                            <span data-i18n="projects.code">Código</span>
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Landing IA — span 2 with browser mockup -->
+            <article class="bento-card bento-card--large animate-on-scroll">
+                <div class="bento-card__image">
+                    <div class="bento-card__bg" style="background-image: url('assets/landing-ia.png');"></div>
+                    <div class="browser-mockup">
+                        <div class="browser-mockup__bar">
+                            <span class="browser-dot browser-dot--red"></span>
+                            <span class="browser-dot browser-dot--yellow"></span>
+                            <span class="browser-dot browser-dot--green"></span>
+                            <span class="browser-url">beltran-grupo-briones.vercel.app</span>
+                        </div>
+                        <div class="browser-mockup__screen">
+                            <img src="assets/landing-ia.png" alt="Landing IA screenshot">
+                        </div>
+                    </div>
+                </div>
+                <div class="bento-card__content">
+                    <h3 data-i18n="projects.p6.title">Landing Page con IA</h3>
+                    <div class="project-story">
+                        <div class="story-block">
+                            <span class="story-label story-label--accent" data-i18n="projects.solution">Solución Técnica</span>
+                            <p data-i18n="projects.p6.solution">Next.js App Router con integración OpenAI API para asistente conversacional y contenido dinámico. Desplegado en Vercel con Edge Functions.</p>
+                        </div>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">Next.js</span><span class="tag">OpenAI</span><span class="tag">TypeScript</span><span class="tag">Vercel</span>
                     </div>
                     <div class="project-links">
                         <a href="https://beltran-grupo-briones.vercel.app" target="_blank" class="btn btn-sm btn-outline">
-                            <i class="fas fa-paper-plane"></i>
+                            <i class="fas fa-external-link-alt"></i>
                             <span data-i18n="projects.visit">Visitar</span>
                         </a>
                     </div>
                 </div>
-            </div>
+            </article>
 
-            <!-- App de Turnos para Barberías -->
-            <div class="card project-card animate-on-scroll">
-                <div class="project-image" style="background: linear-gradient(135deg, #111827 0%, #1F2937 55%, #374151 100%);"></div>
-                <div class="project-info">
+            <!-- Barbería App -->
+            <article class="bento-card animate-on-scroll">
+                <div class="bento-card__image">
+                    <div class="bento-card__bg" style="background: linear-gradient(135deg, #111827 0%, #1F2937 55%, #374151 100%);"></div>
+                    <div class="bento-wip-badge">WIP</div>
+                </div>
+                <div class="bento-card__content">
                     <h3 data-i18n="projects.p7.title">App de Turnos para Barberías</h3>
-                    <p data-i18n="projects.p7.desc">Aplicación móvil desarrollada en Flutter para la gestión inteligente de citas y turnos en barberías. Permite reservas en tiempo real, recordatorios automáticos y un panel de control para el barbero.</p>
+                    <div class="project-story">
+                        <div class="story-block">
+                            <span class="story-label story-label--accent" data-i18n="projects.solution">Solución Técnica</span>
+                            <p data-i18n="projects.p7.solution">App Flutter con reservas en tiempo real, notificaciones push locales y panel de control para el barbero con analytics de ocupación.</p>
+                        </div>
+                    </div>
                     <div class="project-tags">
-                        <span class="tag">Flutter</span><span class="tag">Dart</span><span class="tag">Mobile</span>
+                        <span class="tag">Flutter</span><span class="tag">Dart</span><span class="tag">Firebase</span>
                     </div>
                     <div class="project-links">
                         <button class="btn btn-sm btn-outline btn-private" disabled>
@@ -384,16 +603,39 @@
                         </button>
                     </div>
                 </div>
-            </div>
+            </article>
 
-            <!-- ClubSystem -->
-            <div class="card project-card animate-on-scroll">
-                <div class="project-image" style="background: linear-gradient(135deg, #0C4A6E 0%, #0369A1 50%, #0891B2 100%);"></div>
-                <div class="project-info">
+            <!-- ClubSystem — full width -->
+            <article class="bento-card bento-card--full animate-on-scroll">
+                <div class="bento-card__image">
+                    <div class="bento-card__bg" style="background: linear-gradient(135deg, #0C4A6E 0%, #0369A1 50%, #0891B2 100%);"></div>
+                    <div class="bento-wip-badge">WIP</div>
+                    <!-- Decorative code lines -->
+                    <div class="bento-code-decoration" aria-hidden="true">
+                        <span>class ClubSystem: SaaS &#123;</span>
+                        <span>&nbsp;&nbsp;let tenants: [Club]</span>
+                        <span>&nbsp;&nbsp;var ai: VectorSearch</span>
+                        <span>&nbsp;&nbsp;func insights() &#123;&#125;</span>
+                        <span>&#125;</span>
+                    </div>
+                </div>
+                <div class="bento-card__content">
+                    <div class="bento-card__meta">
+                        <div class="bento-saas-badge">SaaS</div>
+                    </div>
                     <h3 data-i18n="projects.p8.title">ClubSystem — Sistema con IA</h3>
-                    <p data-i18n="projects.p8.desc">Plataforma SaaS multi-tenant para la gestión integral de clubes deportivos. Incluye panel de administrador web, app móvil para socios y funcionalidades de IA para insights y automatizaciones.</p>
+                    <div class="project-story">
+                        <div class="story-block">
+                            <span class="story-label" data-i18n="projects.problem">Problema</span>
+                            <p data-i18n="projects.p8.problem">Los clubes deportivos carecen de herramientas modernas para gestionar socios, pagos y comunicación.</p>
+                        </div>
+                        <div class="story-block">
+                            <span class="story-label story-label--accent" data-i18n="projects.solution">Solución Técnica</span>
+                            <p data-i18n="projects.p8.solution">Plataforma multi-tenant: Next.js + FastAPI + PostgreSQL con vector embeddings para búsqueda semántica, React Native para la app de socios.</p>
+                        </div>
+                    </div>
                     <div class="project-tags">
-                        <span class="tag">React Native</span><span class="tag">Next.js</span><span class="tag">FastAPI</span><span class="tag">PostgreSQL</span><span class="tag">IA</span>
+                        <span class="tag">React Native</span><span class="tag">Next.js</span><span class="tag">FastAPI</span><span class="tag">PostgreSQL</span><span class="tag">AI</span>
                     </div>
                     <div class="project-links">
                         <button class="btn btn-sm btn-outline btn-private" disabled>
@@ -402,7 +644,7 @@
                         </button>
                     </div>
                 </div>
-            </div>
+            </article>
 
         </div>
     </section>
@@ -417,19 +659,25 @@
 
         <div class="contact-grid">
             <div class="contact-method animate-left">
-                <i class="fas fa-paper-plane contact-icon"></i>
+                <div class="contact-icon-wrap">
+                    <i class="fas fa-paper-plane"></i>
+                </div>
                 <h3>Email</h3>
                 <p>fermin.lasarte@icloud.com</p>
                 <a href="mailto:fermin.lasarte@icloud.com" class="btn btn-sm btn-outline" data-i18n="contact.write">Escribir</a>
             </div>
             <div class="contact-method animate-on-scroll">
-                <i class="fab fa-whatsapp contact-icon"></i>
+                <div class="contact-icon-wrap">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
                 <h3 data-i18n="contact.phone">Teléfono</h3>
                 <p>+54 9 11 2171-1289</p>
                 <a href="https://wa.me/5491121711289" target="_blank" class="btn btn-sm btn-outline" data-i18n="contact.msg">Mensaje</a>
             </div>
             <div class="contact-method animate-right">
-                <i class="fab fa-linkedin contact-icon"></i>
+                <div class="contact-icon-wrap">
+                    <i class="fab fa-linkedin"></i>
+                </div>
                 <h3>LinkedIn</h3>
                 <p data-i18n="contact.connect">Conectá conmigo</p>
                 <a href="https://linkedin.com/in/ferminlasarte/" target="_blank" class="btn btn-sm btn-outline" data-i18n="contact.profile">Ver Perfil</a>

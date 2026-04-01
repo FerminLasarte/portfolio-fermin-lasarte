@@ -1,172 +1,131 @@
 document.addEventListener("DOMContentLoaded", () => {
-    
-    // 1. Lógica del Intersection Observer (Animaciones al scroll)
-    // threshold: 0.1 → más seguro en móvil donde las tarjetas son altas
-    const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
-    const observer = new IntersectionObserver((entries, observer) => {
+
+    // ── 1. Intersection Observer (scroll animations) ──────────────────
+    const observer = new IntersectionObserver((entries, obs) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
-                observer.unobserve(entry.target);
-                // Liberar GPU tras la animación (will-change ya no es necesario)
-                setTimeout(() => {
-                    entry.target.style.willChange = 'auto';
-                }, 800);
+                obs.unobserve(entry.target);
+                // Release GPU layer after animation completes
+                setTimeout(() => { entry.target.style.willChange = 'auto'; }, 1000);
             }
         });
-    }, observerOptions);
+    }, { root: null, rootMargin: '0px', threshold: 0.08 });
 
-    // Seleccionamos todas las clases de animaciones
-    const elementsToAnimate = document.querySelectorAll('.animate-on-scroll, .animate-left, .animate-right, .animate-scale');
-    elementsToAnimate.forEach((elem) => observer.observe(elem));
+    document.querySelectorAll('.animate-on-scroll, .animate-left, .animate-right, .animate-scale')
+        .forEach(el => observer.observe(el));
 
-    // 2. Lógica del Modo Oscuro y Color del Navegador
-    const themeToggleBtn = document.getElementById('theme-toggle');
-    const metaThemeColor = document.getElementById('meta-theme-color');
-    
-    // Función simple para cambiar el color
-    function updateBrowserBarColor(isDark) {
-        if (metaThemeColor) {
-            // #1e1e1e es el color oscuro de tu nav, #ffffff es el claro
-            metaThemeColor.setAttribute('content', isDark ? '#1e1e1e' : '#ffffff');
-        }
+    // ── 2. Dark Mode ──────────────────────────────────────────────────
+    const themeBtn    = document.getElementById('theme-toggle');
+    const metaTheme   = document.getElementById('meta-theme-color');
+
+    function setTheme(dark) {
+        document.body.classList.toggle('dark-mode', dark);
+        if (metaTheme) metaTheme.setAttribute('content', dark ? '#0A0A0C' : '#F5F5F7');
     }
 
-    // Revisar si el usuario ya tenía el modo oscuro guardado al entrar
-    if (localStorage.getItem('theme') === 'dark') {
-        document.body.classList.add('dark-mode');
-        updateBrowserBarColor(true);
+    // Honour saved preference; fall back to OS preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        setTheme(savedTheme === 'dark');
     } else {
-        updateBrowserBarColor(false);
+        setTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
     }
 
-    // Evento al tocar el botón de la luna/sol
-    themeToggleBtn.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        
-        const isDarkMode = document.body.classList.contains('dark-mode');
-        
-        if (isDarkMode) {
-            localStorage.setItem('theme', 'dark');
-            updateBrowserBarColor(true);
-        } else {
-            localStorage.setItem('theme', 'light');
-            updateBrowserBarColor(false);
-        }
+    themeBtn.addEventListener('click', () => {
+        const dark = !document.body.classList.contains('dark-mode');
+        setTheme(dark);
+        localStorage.setItem('theme', dark ? 'dark' : 'light');
     });
 
-    // 3. Lógica del Idioma (Traductor Funcional)
-    const langToggleBtn = document.getElementById('lang-toggle');
-    let currentLang = localStorage.getItem('language') || 'es';
+    // ── 3. Language / i18n ───────────────────────────────────────────
+    const langBtn    = document.getElementById('lang-toggle');
+    let   currentLang = localStorage.getItem('language') || 'es';
 
     function applyTranslations(lang) {
-        document.querySelectorAll('[data-i18n]').forEach(element => {
-            const key = element.getAttribute('data-i18n');
-            if (translations[lang] && translations[lang][key]) {
-                element.textContent = translations[lang][key];
-            }
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (translations[lang]?.[key]) el.textContent = translations[lang][key];
         });
-        
-        langToggleBtn.textContent = lang === 'es' ? 'EN' : 'ES';
+        langBtn.textContent = lang === 'es' ? 'EN' : 'ES';
         document.documentElement.lang = lang;
     }
 
     applyTranslations(currentLang);
 
-    langToggleBtn.addEventListener('click', () => {
+    langBtn.addEventListener('click', () => {
         currentLang = currentLang === 'es' ? 'en' : 'es';
         localStorage.setItem('language', currentLang);
         applyTranslations(currentLang);
     });
 
-    // 4. Lógica de Menús Desplegables Generales (CV y Tiendas)
-    const dropdownBtns = document.querySelectorAll('.dropdown-btn, #cv-btn');
-
-    dropdownBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
+    // ── 4. Dropdowns (CV + store download buttons) ───────────────────
+    document.querySelectorAll('.dropdown-btn, #cv-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
             e.preventDefault();
             e.stopPropagation();
-
-            const dropdownContent = btn.nextElementSibling;
-
-            document.querySelectorAll('.dropdown-content').forEach(content => {
-                if (content !== dropdownContent) {
-                    content.classList.remove('show');
-                }
+            const content = btn.nextElementSibling;
+            // Close any other open dropdown first
+            document.querySelectorAll('.dropdown-content').forEach(c => {
+                if (c !== content) c.classList.remove('show');
             });
-
-            dropdownContent.classList.toggle('show');
+            content.classList.toggle('show');
         });
     });
 
-    // Cierra dropdowns si se hace clic afuera
-    window.addEventListener('click', (event) => {
-        if (!event.target.closest('.dropdown')) {
-            document.querySelectorAll('.dropdown-content').forEach(content => {
-                content.classList.remove('show');
-            });
+    window.addEventListener('click', e => {
+        if (!e.target.closest('.dropdown')) {
+            document.querySelectorAll('.dropdown-content').forEach(c => c.classList.remove('show'));
         }
     });
 
-    // 6. Nav colapsable: expand/collapse en dispositivos táctiles
-    const navEl = document.querySelector('nav');
-    const isTouchDevice = () => !window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    // ── 5. Collapsible nav (touch devices) ───────────────────────────
+    const navEl        = document.querySelector('nav');
+    const isTouch      = () => !window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-    navEl.addEventListener('click', (e) => {
-        if (!isTouchDevice()) return; // En desktop lo maneja el CSS :hover
-
-        // Si se tocó un link de navegación → colapsar y hacer scroll
+    navEl.addEventListener('click', e => {
+        if (!isTouch()) return;
         if (e.target.closest('.nav-links a')) {
             navEl.classList.remove('nav-expanded');
             return;
         }
-        // Si se tocó el nav (no un dropdown ni su contenido) → toggle
         if (!e.target.closest('.dropdown-content')) {
             navEl.classList.toggle('nav-expanded');
         }
     });
 
-    // Cerrar nav táctil al tocar fuera
-    document.addEventListener('click', (e) => {
-        if (isTouchDevice() && !e.target.closest('nav')) {
-            navEl.classList.remove('nav-expanded');
-        }
+    document.addEventListener('click', e => {
+        if (isTouch() && !e.target.closest('nav')) navEl.classList.remove('nav-expanded');
     });
 
-    // 7. Smooth scroll para links del nav (con offset de la nav fija)
+    // ── 6. Smooth scroll (with fixed-nav offset) ─────────────────────
     document.querySelectorAll('.nav-links a[href^="#"]').forEach(link => {
-        link.addEventListener('click', (e) => {
+        link.addEventListener('click', e => {
             e.preventDefault();
             const target = document.querySelector(link.getAttribute('href'));
             if (!target) return;
-
-            const navOffset = navEl.offsetHeight + 24;
-            const targetY = target.getBoundingClientRect().top + window.pageYOffset - navOffset;
-            window.scrollTo({ top: targetY, behavior: 'smooth' });
+            navEl.classList.remove('nav-expanded');
+            const offset = navEl.offsetHeight + 24;
+            window.scrollTo({ top: target.getBoundingClientRect().top + window.pageYOffset - offset, behavior: 'smooth' });
         });
     });
 
-    // 8. Marcar link activo según sección visible
+    // ── 7. Active nav link (Intersection Observer) ───────────────────
     const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
     const sections = document.querySelectorAll('header[id], section[id]');
 
-    function setActiveLink(id) {
-        navLinks.forEach(link => {
-            link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
-        });
-    }
-
-    const sectionObserver = new IntersectionObserver((entries) => {
+    const sectionObserver = new IntersectionObserver(entries => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) setActiveLink(entry.target.id);
+            if (entry.isIntersecting) {
+                const id = entry.target.id;
+                navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === `#${id}`));
+            }
         });
     }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
 
-    sections.forEach(section => sectionObserver.observe(section));
+    sections.forEach(s => sectionObserver.observe(s));
 
-    // 5. Actualizar año del footer automáticamente
-    const yearSpan = document.getElementById("current-year");
-    if (yearSpan) {
-        yearSpan.textContent = new Date().getFullYear();
-    }
+    // ── 8. Footer year ────────────────────────────────────────────────
+    const yearEl = document.getElementById('current-year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
 });
