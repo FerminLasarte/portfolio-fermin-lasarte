@@ -3,7 +3,6 @@
  * Estilo: Apple Minimal + Glassmorphism + Bento Grid
  * ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 /* ============================================================
    1. DESIGN TOKENS
@@ -42,7 +41,7 @@
     --radius-circle: 50%;
 }
 
-body.dark-mode {
+html.dark-mode {
     --accent:        #818CF8;
     --accent-hover:  #6D6FF0;
     --accent-rgb:    129, 140, 248;
@@ -78,7 +77,7 @@ html {
 }
 
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    font-family: var(--font-inter), 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
     background-color: var(--bg);
     color: var(--text);
     line-height: 1.65;
@@ -101,7 +100,7 @@ body {
     animation: orbDrift 18s ease-in-out infinite alternate;
 }
 
-body.dark-mode .bg-orb { opacity: 0.18; }
+html.dark-mode .bg-orb { opacity: 0.18; }
 
 .bg-orb--1 {
     width: 45vw;
@@ -248,8 +247,8 @@ nav:not(:hover):not(:focus-within):not(.nav-expanded) .nav-links {
 
 #lang-toggle { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; }
 #theme-toggle .fa-sun  { display: none; }
-body.dark-mode #theme-toggle .fa-moon { display: none; }
-body.dark-mode #theme-toggle .fa-sun  { display: inline-block; }
+html.dark-mode #theme-toggle .fa-moon { display: none; }
+html.dark-mode #theme-toggle .fa-sun  { display: inline-block; }
 
 /* ============================================================
    5. SECTION STRUCTURE
@@ -341,7 +340,7 @@ header#sobre-mi {
     border-color: rgba(34, 197, 94, 0.2);
 }
 
-body.dark-mode .availability-badge {
+html.dark-mode .availability-badge {
     background: rgba(74, 222, 128, 0.07);
     color: #4ADE80;
     border-color: rgba(74, 222, 128, 0.2);
@@ -685,7 +684,7 @@ body.dark-mode .availability-badge {
     transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.22s;
 }
 
-body.dark-mode .dropdown-content {
+html.dark-mode .dropdown-content {
     background: #1C1C1F;
     box-shadow: 0 8px 32px rgba(0,0,0,0.6);
 }
@@ -839,9 +838,10 @@ body.dark-mode .dropdown-content {
 
 .skill-card {
     background: var(--bg-alt);
-    border: 1px solid var(--border);
+    border: 1px solid transparent;
     border-radius: var(--radius-lg);
     padding: 1.5rem;
+    box-shadow: var(--shadow-md);
     transition: border-color 0.25s ease, box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
                 transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -919,7 +919,7 @@ body.dark-mode .dropdown-content {
 }
 
 /* Next.js / GitHub icons need inversion in dark mode */
-body.dark-mode .skill-icon img[data-dark-invert] {
+html.dark-mode .skill-icon img[data-dark-invert] {
     filter: invert(1) brightness(0.85);
 }
 
@@ -981,21 +981,24 @@ body.dark-mode .skill-icon img[data-dark-invert] {
 /* --- Base card --- */
 .bento-card {
     background: var(--bg-alt);
-    border: 1px solid var(--border);
+    border: 1px solid transparent;
     border-radius: var(--radius-xl);
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    box-shadow: var(--shadow-lg);
     transition: border-color 0.3s ease,
                 box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
                 transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
     position: relative;
+    /* Capa de composición propia → recorte redondeado estable (ver __image). */
+    transform: translateZ(0);
 }
 
 .bento-card:hover {
     border-color: var(--border-hover);
     box-shadow: var(--shadow-xl);
-    transform: translateY(-4px);
+    transform: translateY(-4px) translateZ(0);
 }
 
 /* --- Large card: horizontal layout (content | image) --- */
@@ -1043,6 +1046,11 @@ body.dark-mode .skill-icon img[data-dark-invert] {
     background: var(--bg);
     flex-shrink: 0;
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    /* El fondo borroso (filter: blur) hace que Chromium pierda el redondeo del
+       recorte durante repaints/animaciones (esquinas puntiagudas). Forzar una
+       capa de composición propia rasteriza el clip redondeado de forma estable. */
+    transform: translateZ(0);
+    isolation: isolate;
 }
 
 /* Background image (blurred behind mockup) */
@@ -1051,6 +1059,7 @@ body.dark-mode .skill-icon img[data-dark-invert] {
     inset: -4px; /* extend to hide blur edges */
     background-size: cover;
     background-position: center;
+    border-radius: inherit; /* red de seguridad: nunca mostrar esquinas cuadradas */
     filter: blur(14px) brightness(0.5) saturate(0.7);
     transition: filter 0.4s ease;
 }
@@ -1106,7 +1115,7 @@ body.dark-mode .skill-icon img[data-dark-invert] {
     z-index: 3;
 }
 
-body.dark-mode .bento-wip-badge {
+html.dark-mode .bento-wip-badge {
     background: rgba(251, 191, 36, 0.1);
     color: #FBB124;
     border-color: rgba(251, 191, 36, 0.2);
@@ -1351,7 +1360,7 @@ body.dark-mode .bento-wip-badge {
     color: #16A34A;
 }
 
-body.dark-mode .production-status { color: #4ADE80; }
+html.dark-mode .production-status { color: #4ADE80; }
 
 .status-dot-sm {
     width: 5px;
@@ -1373,7 +1382,7 @@ body.dark-mode .production-status { color: #4ADE80; }
 
 .contact-method {
     background: var(--bg-alt);
-    border: 1px solid var(--border);
+    border: 1px solid transparent;
     border-radius: var(--radius-xl);
     padding: 2rem 1.5rem;
     text-align: center;
@@ -1381,6 +1390,7 @@ body.dark-mode .production-status { color: #4ADE80; }
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
+    box-shadow: var(--shadow-md);
     transition: border-color 0.25s ease,
                 box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
                 transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
@@ -1390,6 +1400,15 @@ body.dark-mode .production-status { color: #4ADE80; }
     border-color: var(--border-hover);
     box-shadow: var(--shadow-lg);
     transform: translateY(-4px);
+}
+
+/* En modo oscuro la sombra casi no se percibe sobre el fondo negro, así que
+   añadimos un borde hairline tenue para que las cards conserven su definición
+   de panel elevado (el modo claro se apoya sólo en la sombra). */
+html.dark-mode .bento-card:not(:hover),
+html.dark-mode .skill-card:not(:hover),
+html.dark-mode .contact-method:not(:hover) {
+    border-color: rgba(255, 255, 255, 0.08);
 }
 
 .contact-icon-wrap {
@@ -1744,9 +1763,11 @@ body.dark-mode .production-status { color: #4ADE80; }
     .animate-on-scroll,
     .animate-left,
     .animate-right,
-    .animate-scale {
+    .animate-scale,
+    .premium-reveal {
         opacity: 1;
         transform: none;
+        filter: none;
         transition: none;
         will-change: auto;
     }
@@ -1784,6 +1805,20 @@ body.dark-mode .production-status { color: #4ADE80; }
     opacity: 1;
     transform: translateY(0);
     filter: blur(0);
+}
+
+/* Fix esquinas cuadradas en Proyectos Destacados:
+   un `filter: blur()` sobre un elemento con `overflow: hidden` + `border-radius`
+   hace que Chromium pierda el redondeo durante la animación de entrada.
+   Las bento-cards se revelan sólo con opacidad + desplazamiento (sin blur) y
+   manteniendo translateZ(0) para no perder la capa de composición estable. */
+.bento-card.premium-reveal {
+    filter: none;
+    transform: translateY(40px) translateZ(0);
+}
+.bento-card.premium-reveal.is-visible {
+    filter: none;
+    transform: translateY(0) translateZ(0);
 }
 
 /* 2. Cursor Magnético Contextual */
@@ -1855,29 +1890,3 @@ body.dark-mode .production-status { color: #4ADE80; }
     animation: blink 1s step-end infinite;
 }
 @keyframes blink { 50% { opacity: 0; } }
-
-/* 4. Smart Video Mockup */
-.smart-mockup-container {
-    position: relative;
-    border-radius: 20px;
-    overflow: hidden;
-    cursor: pointer;
-}
-.smart-mockup-img {
-    width: 100%;
-    display: block;
-    transition: opacity 0.4s ease;
-}
-.smart-mockup-video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    pointer-events: none;
-}
-.smart-mockup-container:hover .smart-mockup-img { opacity: 0; }
-.smart-mockup-container:hover .smart-mockup-video { opacity: 1; }
