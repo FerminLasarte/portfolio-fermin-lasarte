@@ -2,6 +2,8 @@ import Image from "next/image";
 import Dropdown from "@/components/Dropdown";
 import HeroParallax from "@/components/HeroParallax";
 import { CV, DEVICON, HERO_BADGES, PERSON, ROLE_TAGLINE, STATS } from "@/lib/site";
+import Icon from "@/components/Icon";
+import { faDownload, faFilePdf, faLocationDot } from "@/lib/icons";
 
 export default function Hero({ t }) {
   return (
@@ -14,7 +16,7 @@ export default function Hero({ t }) {
             <span>{t("hero.availability")}</span>
           </div>
           <div className="location-badge">
-            <i className="fas fa-map-marker-alt" />
+            <Icon icon={faLocationDot} />
             <span>{PERSON.location}</span>
           </div>
         </div>
@@ -56,14 +58,14 @@ export default function Hero({ t }) {
             triggerClassName="btn btn-ghost"
             triggerContent={
               <>
-                <i className="fas fa-download" />
+                <Icon icon={faDownload} />
                 <span>{t("hero.cvBtn")}</span>
               </>
             }
           >
             {CV.map((cv) => (
               <a key={cv.lang} href={cv.href} download={cv.download}>
-                <i className="far fa-file-pdf" /> {cv.label}
+                <Icon icon={faFilePdf} /> {cv.label}
               </a>
             ))}
           </Dropdown>
@@ -85,7 +87,7 @@ export default function Hero({ t }) {
         </div>
         {HERO_BADGES.map((b) => (
           <div key={b.alt} className={`hero-badge-float hero-badge-float--${b.pos}`} aria-hidden="true">
-            <Image src={`${DEVICON}/${b.icon}.svg`} width={16} height={16} alt="" unoptimized loading="eager" />
+            <Image src={`${DEVICON}/${b.icon}.svg`} width={16} height={16} alt="" loading="eager" />
             <span>{b.alt}</span>
           </div>
         ))}
@@ -95,7 +97,7 @@ export default function Hero({ t }) {
       <div className="hero-badges-mobile" aria-hidden="true">
         {HERO_BADGES.map((b) => (
           <div key={b.alt} className="mobile-badge">
-            <Image src={`${DEVICON}/${b.icon}.svg`} width={14} height={14} alt="" unoptimized loading="eager" />
+            <Image src={`${DEVICON}/${b.icon}.svg`} width={14} height={14} alt="" loading="eager" />
             <span>{b.alt}</span>
           </div>
         ))}

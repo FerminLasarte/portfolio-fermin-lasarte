@@ -87,6 +87,16 @@ body {
     overflow-x: hidden;
 }
 
+/* Iconos SVG inline (components/Icon.jsx): mismo tamaño y alineación que el glifo
+   de la fuente de Font Awesome (1em de alto, ancho según el viewBox). */
+.icon {
+    display: inline-block;
+    height: 1em;
+    overflow: visible;
+    vertical-align: -0.125em;
+    fill: currentColor;
+}
+
 /* ============================================================
    3. BACKGROUND ORBS (ambient gradients)
    ============================================================ */
@@ -247,9 +257,9 @@ nav:not(:hover):not(:focus-within):not(.nav-expanded) .nav-links {
 
 /* Es un enlace (a la otra ruta de idioma): Arial es la fuente que Chrome le daba cuando era <button>. */
 #lang-toggle { font-family: Arial, sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; }
-#theme-toggle .fa-sun  { display: none; }
-html.dark-mode #theme-toggle .fa-moon { display: none; }
-html.dark-mode #theme-toggle .fa-sun  { display: inline-block; }
+#theme-toggle .icon-sun  { display: none; }
+html.dark-mode #theme-toggle .icon-moon { display: none; }
+html.dark-mode #theme-toggle .icon-sun  { display: inline-block; }
 
 /* ============================================================
    5. SECTION STRUCTURE
@@ -273,7 +283,13 @@ section {
     margin-bottom: 0.875rem;
 }
 
-.section-label i { font-size: 0.68rem; }
+/* .section-label es inline-flex y se apoya en la línea de texto con la línea base de su
+   primer ítem, el icono. La del SVG es su borde inferior; la del glifo de la fuente
+   estaba 0.172em (del icono) más arriba, así que la etiqueta se baja eso para quedar
+   donde estaba. El margen derecho es el letter-spacing de la etiqueta (0.14em de
+   0.7rem), que antes se sumaba al ancho del glifo. */
+.section-label { vertical-align: calc(-0.172 * 0.68rem); }
+.section-label .icon { font-size: 0.68rem; margin-right: 0.144em; }
 
 section > h2 {
     font-size: clamp(1.9rem, 4vw, 2.7rem);
@@ -361,7 +377,7 @@ html.dark-mode .availability-badge {
     border-color: var(--border);
 }
 
-.location-badge i { font-size: 0.68rem; }
+.location-badge .icon { font-size: 0.68rem; }
 
 /* Heading */
 .hero-content h1 {
@@ -620,7 +636,7 @@ html.dark-mode .availability-badge {
 }
 
 .btn:active { transform: scale(0.97); transition-duration: 0.08s; }
-.btn i { font-size: 0.9em; }
+.btn .icon { font-size: 0.9em; }
 
 .btn-outline {
     background: transparent;
@@ -721,7 +737,7 @@ html.dark-mode .dropdown-content {
     color: var(--accent);
 }
 
-.dropdown-content a .fa-file-pdf { color: #E2574C; }
+.dropdown-content a .icon-file-pdf { color: #E2574C; }
 
 /* ============================================================
    9. TIMELINE
@@ -860,7 +876,8 @@ html.dark-mode .dropdown-content {
     margin-bottom: 1.25rem;
 }
 
-.skill-card-header i {
+/* Caja del icono de cada tarjeta (el SVG va adentro, a 1em = 0.85rem). */
+.skill-card-icon {
     color: var(--accent);
     font-size: 0.85rem;
     width: 1.4rem;

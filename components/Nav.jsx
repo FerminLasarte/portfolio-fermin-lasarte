@@ -3,6 +3,8 @@
 import { useEffect, useRef } from "react";
 import { toggleTheme } from "@/lib/theme";
 import { PERSON, SOCIAL } from "@/lib/site";
+import Icon from "@/components/Icon";
+import { faEnvelope, faGithub, faLinkedin, faMoon, faSun } from "@/lib/icons";
 
 // Recibe los textos ya traducidos desde el layout (así el diccionario no viaja al
 // navegador). `links`: [{ href, label }], con la home del idioma y el hash de la
@@ -97,8 +99,8 @@ export default function Nav({ links, switchTo, langLabel, themeLabel }) {
           onClick={toggleTheme}
           aria-label={themeLabel}
         >
-          <i className="fas fa-moon" />
-          <i className="fas fa-sun" />
+          <Icon icon={faMoon} />
+          <Icon icon={faSun} />
         </button>
         <a
           href={SOCIAL.github}
@@ -107,7 +109,7 @@ export default function Nav({ links, switchTo, langLabel, themeLabel }) {
           className="icon-btn"
           title="GitHub"
         >
-          <i className="fab fa-github" />
+          <Icon icon={faGithub} />
         </a>
         <a
           href={SOCIAL.linkedin}
@@ -116,10 +118,10 @@ export default function Nav({ links, switchTo, langLabel, themeLabel }) {
           className="icon-btn"
           title="LinkedIn"
         >
-          <i className="fab fa-linkedin" />
+          <Icon icon={faLinkedin} />
         </a>
         <a href={`mailto:${PERSON.email}`} className="icon-btn" title="Email">
-          <i className="fas fa-envelope" />
+          <Icon icon={faEnvelope} />
         </a>
       </div>
     </nav>

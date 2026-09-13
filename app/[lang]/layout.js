@@ -110,10 +110,6 @@ export default async function RootLayout({ children, params }) {
     <html lang={lang} suppressHydrationWarning>
       <head>
         <meta name="theme-color" content="#F5F5F7" />
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        />
         {/* Apply saved/preferred theme before first paint to avoid flashing. */}
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <script

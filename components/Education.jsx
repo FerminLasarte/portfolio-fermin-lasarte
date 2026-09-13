@@ -1,5 +1,7 @@
 import Timeline from "@/components/Timeline";
 import { EDUCATION } from "@/lib/site";
+import Icon from "@/components/Icon";
+import { faGraduationCap } from "@/lib/icons";
 
 export default function Education({ t }) {
   const items = EDUCATION.map((e) => ({
@@ -13,7 +15,7 @@ export default function Education({ t }) {
   return (
     <section id="educacion">
       <p className="section-label animate-on-scroll">
-        <i className="fas fa-graduation-cap" />
+        <Icon icon={faGraduationCap} />
         <span>{t("edu.title")}</span>
       </p>
       <h2 className="animate-on-scroll">{t("edu.title")}</h2>

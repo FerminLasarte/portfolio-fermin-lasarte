@@ -2,20 +2,22 @@ import Image from "next/image";
 import Dropdown from "@/components/Dropdown";
 import Terminal from "@/components/Terminal";
 import { fill } from "@/lib/translations";
+import Icon from "@/components/Icon";
+import { faApple, faDownload, faGithub, faGooglePlay, faLock, faUpRightFromSquare } from "@/lib/icons";
 
 const STORES = {
-  appstore: { icon: "fab fa-apple", label: "App Store" },
-  playstore: { icon: "fab fa-google-play", label: "Google Play" },
+  appstore: { icon: faApple, label: "App Store" },
+  playstore: { icon: faGooglePlay, label: "Google Play" },
 };
 
 const PLATFORMS = {
-  ios: { icon: "fab fa-apple", label: "iOS" },
-  android: { icon: "fab fa-google-play", label: "Android" },
+  ios: { icon: faApple, label: "iOS" },
+  android: { icon: faGooglePlay, label: "Android" },
 };
 
 const LINKS = {
-  repo: { icon: "fab fa-github", labelKey: "projects.code" },
-  demo: { icon: "fas fa-external-link-alt", labelKey: "projects.visit" },
+  repo: { icon: faGithub, labelKey: "projects.code" },
+  demo: { icon: faUpRightFromSquare, labelKey: "projects.visit" },
 };
 
 function ProjectMedia({ project, t }) {
@@ -96,7 +98,7 @@ export default function ProjectCard({ project, t }) {
             {platforms.length > 0 && (
               <div className="bento-card__platform">
                 {platforms.map((p) => (
-                  <i key={p} className={PLATFORMS[p].icon} title={PLATFORMS[p].label} />
+                  <Icon key={p} icon={PLATFORMS[p].icon} title={PLATFORMS[p].label} />
                 ))}
               </div>
             )}
@@ -131,14 +133,14 @@ export default function ProjectCard({ project, t }) {
                 triggerClassName={`${btnClass} dropdown-btn`}
                 triggerContent={
                   <>
-                    <i className="fas fa-download" />
+                    <Icon icon={faDownload} />
                     <span>{t("projects.download")}</span>
                   </>
                 }
               >
                 {stores.map((l) => (
                   <a key={l.type} href={l.url} target="_blank" rel="noopener noreferrer">
-                    <i className={STORES[l.type].icon} /> {STORES[l.type].label}
+                    <Icon icon={STORES[l.type].icon} /> {STORES[l.type].label}
                   </a>
                 ))}
               </Dropdown>
@@ -151,13 +153,13 @@ export default function ProjectCard({ project, t }) {
                 rel="noopener noreferrer"
                 className={btnClass}
               >
-                <i className={LINKS[l.type].icon} />
+                <Icon icon={LINKS[l.type].icon} />
                 <span>{t(LINKS[l.type].labelKey)}</span>
               </a>
             ))}
             {links.length === 0 && (
               <button className="btn btn-sm btn-outline btn-private" disabled>
-                <i className="fas fa-lock" />
+                <Icon icon={faLock} />
                 <span>{t("projects.soon")}</span>
               </button>
             )}

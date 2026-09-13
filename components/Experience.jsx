@@ -1,5 +1,7 @@
 import Timeline from "@/components/Timeline";
 import { EXPERIENCE } from "@/lib/site";
+import Icon from "@/components/Icon";
+import { faBriefcase } from "@/lib/icons";
 
 export default function Experience({ t }) {
   const items = EXPERIENCE.map((e) => ({
@@ -14,7 +16,7 @@ export default function Experience({ t }) {
   return (
     <section id="experiencia">
       <p className="section-label animate-on-scroll">
-        <i className="fas fa-briefcase" />
+        <Icon icon={faBriefcase} />
         <span>{t("exp.sectionLabel")}</span>
       </p>
       <h2 className="animate-on-scroll">{t("exp.title")}</h2>

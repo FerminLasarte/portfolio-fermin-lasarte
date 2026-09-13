@@ -1,4 +1,6 @@
 import { PERSON, SOCIAL } from "@/lib/site";
+import Icon from "@/components/Icon";
+import { faEnvelope, faGithub, faLinkedin } from "@/lib/icons";
 
 export default function Footer({ t }) {
   return (
@@ -17,7 +19,7 @@ export default function Footer({ t }) {
               className="social-link"
               aria-label="GitHub"
             >
-              <i className="fab fa-github" />
+              <Icon icon={faGithub} />
             </a>
             <a
               href={SOCIAL.linkedin}
@@ -26,14 +28,14 @@ export default function Footer({ t }) {
               className="social-link"
               aria-label="LinkedIn"
             >
-              <i className="fab fa-linkedin" />
+              <Icon icon={faLinkedin} />
             </a>
             <a
               href={`mailto:${PERSON.email}`}
               className="social-link"
               aria-label="Email"
             >
-              <i className="fas fa-envelope" />
+              <Icon icon={faEnvelope} />
             </a>
           </div>
         </div>
