@@ -39,7 +39,8 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
     - Si el repo es público, valorar reescribir el historial con `git filter-repo`.
     - Revisar también los PDF del CV y el resto de imágenes.
 
-- [ ] **C2. En móvil el texto del hero queda cortado a la derecha** · Fase 0 **[nav]**
+- [x] **C2. En móvil el texto del hero queda cortado a la derecha** · Fase 0 **[nav]**
+  - **Hecho (Fase 0):** `grid-template-columns: minmax(0, 1fr)` en el hero (≤900px) y `.stat-label { white-space: normal }` en ≤48rem. Verificado en el navegador: a 375px la columna pasó de 381,6px a 327px, ya no hay nada del hero que pase del viewport y los tres `.stat-label` entran (dos van en dos líneas); a 1024px no cambió nada (`640px 272px`). Fuera del hero, lo único que se sale es decorativo o transitorio: un `.bg-orb` y el `translateX` inicial de `.animate-right` antes de revelarse. El `overflow-x: hidden` de `html` y `body` sigue ahí (se quita en el rediseño, criterio 1).
   - **Dónde:** `app/globals.css:1578` (`grid-template-columns: 1fr`), `:436` (`.stat-label { white-space: nowrap }`) y `:412`.
   - **Problema:** a 375px, la columna del grid mide 381,6px, porque `1fr` no baja del ancho mínimo de su contenido. El `overflow-x: hidden` de `html` y `body` recorta el sobrante sin avisar.
   - **Solución:** usar `grid-template-columns: minmax(0, 1fr)` y dejar que `.stat-label` haga salto de línea a partir de 48rem. Es un parche de 2 líneas y vale la pena aunque venga el rediseño.

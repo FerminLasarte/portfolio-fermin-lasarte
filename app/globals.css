@@ -1575,7 +1575,8 @@ html.dark-mode .contact-method:not(:hover) {
 /* Tablet (≤ 900px) */
 @media screen and (max-width: 56.25rem) {
     header#sobre-mi {
-        grid-template-columns: 1fr;
+        /* minmax(0, …): con 1fr la columna no baja del ancho mínimo del contenido y desborda */
+        grid-template-columns: minmax(0, 1fr);
         text-align: center;
         padding-top: 7rem;
         padding-bottom: 4rem;
@@ -1701,6 +1702,8 @@ html.dark-mode .contact-method:not(:hover) {
         gap: 1rem;
         padding: 1rem 1.25rem;
     }
+
+    .stat-label { white-space: normal; }
 
     section {
         padding: 4.5rem var(--section-x);
