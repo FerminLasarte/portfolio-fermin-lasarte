@@ -2,6 +2,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { LanguageProvider } from "@/context/LanguageProvider";
 import { themeInitScript } from "@/lib/theme";
+import { SITE_URL } from "@/lib/site";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import BackgroundOrbs from "@/components/BackgroundOrbs";
@@ -15,7 +16,6 @@ const inter = Inter({
   display: "swap",
 });
 
-const SITE_URL = "https://ferminlasarte.github.io/portfolio-fermin-lasarte";
 const DESCRIPTION =
   "Portfolio de Fermin Lasarte. iOS & Cross-Platform Mobile Engineer especializado en Swift, Flutter y Backend. 2 apps publicadas en App Store y Google Play.";
 

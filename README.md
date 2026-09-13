@@ -17,6 +17,20 @@ npm install
 npm run dev      # http://localhost:3000
 ```
 
+## Despliegue (Vercel)
+
+La web está en **https://portfolio-fermin-lasarte.vercel.app** y Vercel la despliega sola con cada push a `main` (los PR generan previews).
+
+- `SITE_URL` (canonical, Open Graph y JSON-LD) está en `lib/site.js`. Se arma con `VERCEL_PROJECT_PRODUCTION_URL`, una variable de sistema que Vercel expone en el build, así que si se agrega un dominio propio se actualiza sola.
+- Para forzar otra URL, definí `NEXT_PUBLIC_SITE_URL` en Settings → Environment Variables del proyecto.
+- En local, `SITE_URL` es `http://localhost:3000`.
+
+**Imágenes nuevas:** antes de subir capturas o fotos, quitales los metadatos (EXIF puede incluir la ubicación GPS):
+
+```bash
+node scripts/strip-metadata.mjs public/assets/nueva.jpeg
+```
+
 ## Scripts
 
 | Comando         | Descripción                              |

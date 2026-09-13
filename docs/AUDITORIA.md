@@ -54,7 +54,9 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
     - Usar miniaturas de 32–64px para el fondo difuminado.
     - Usar `next/image` con `sizes` y quitar `no-img-element: off` de `.eslintrc.json`.
 
-- [ ] **C4. El canonical, el Open Graph y el JSON-LD apuntan a una URL que no sirve esta web** · Fase 0
+- [x] **C4. El canonical, el Open Graph y el JSON-LD apuntan a una URL que no sirve esta web** · Fase 0
+  - **Hecho (Fase 0):** se despliega en **Vercel** (`portfolio-fermin-lasarte.vercel.app`). `SITE_URL` pasó a `lib/site.js` y sale de `NEXT_PUBLIC_SITE_URL` o, si no está, de `VERCEL_PROJECT_PRODUCTION_URL`. `next.config` queda sin cambios. Está documentado en el README. Primero se configuró para GitHub Pages por error y se revirtió en el mismo commit.
+  - GitHub Pages (modo "legacy", publicaba el README en `ferminlasarte.github.io/portfolio-fermin-lasarte`) se desactivó el 2026-09-13; la web solo vive en Vercel.
   - **Dónde:** `app/layout.js:18` y `next.config.mjs:2-4`.
   - **Problema:** `SITE_URL = …github.io/portfolio-fermin-lasarte` responde con un README de GitHub Pages (Jekyll), y `/assets/foto_perfil.jpeg` da 404. Además, no hay `output: 'export'` ni `basePath`.
   - **Solución:**
