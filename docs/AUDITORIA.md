@@ -291,6 +291,8 @@ Requisitos que el diseño nuevo tiene que cumplir para no repetir lo encontrado:
 
 _(Agregá aquí lo que aparezca durante las fases.)_
 
-- [ ] **N1. La foto con GPS sigue en el historial de git** · Fase 0 (decisión pendiente)
+- [x] **N1. La foto con GPS sigue en el historial de git** · Fase 0
+  - **Hecho (2026-09-13):** se reescribió el historial con `git filter-repo --invert-paths` (sobre un clon nuevo) y se hizo force-push. Cambiaron todos los hashes, así que los que se citan en este archivo son de antes de la reescritura. Ningún commit contiene ya la foto y el árbol final no cambió.
+  - **Pendiente (manual):** pedirle a GitHub Support que purgue de la caché los commits viejos, y borrar en Vercel los deploys anteriores, que todavía sirven la foto en sus URLs propias.
   - **Dónde:** blob `ee01416`, como `assets/foto_perfil.jpeg` desde `fc441bf` (2026-02-15) y como `public/assets/foto_perfil.jpeg` en `5b87af2`. Aparece en 34 commits y el repo es público.
   - **Opciones:** reescribir el historial con `git filter-repo` y hacer force-push, o dejarlo como está. Ver la explicación de la Fase 0.
