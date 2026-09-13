@@ -45,13 +45,20 @@ node scripts/strip-metadata.mjs public/assets/nueva.jpeg
 ```
 app/
   [lang]/
-    layout.js      # layout raíz por idioma: metadata, hreflang, fuente, tema
-    page.js        # composición de secciones
-  globals.css      # estilos globales
-components/         # Nav, Hero, Skills, Projects, Contact, efectos, etc.
+    layout.js           # layout raíz por idioma: metadata y hreflang
+    page.js             # composición de secciones
+    opengraph-image.js  # imagen de Open Graph de cada idioma
+  global-not-found.js   # 404 bilingüe de todas las URLs que no existen
+  sitemap.js, robots.js
+  globals.css           # estilos globales
+components/              # Document (html, nav y footer), secciones, Icon, efectos, etc.
 lib/
-  i18n.js          # idiomas, rutas por idioma y getT(lang)
-  translations.js  # textos ES/EN
-  theme.js         # lógica de tema (toggle + script anti-FOUC)
-public/assets/     # imágenes y CVs
+  site.js               # datos del sitio (persona, proyectos, tecnologías…)
+  i18n.js               # idiomas, rutas por idioma y getT(lang)
+  translations.js       # textos ES/EN
+  icons.js              # iconos de Font Awesome como SVG
+  theme.js              # lógica de tema (toggle + script anti-FOUC)
+public/
+  assets/               # imágenes y CVs
+  icons/devicon/        # SVG de Devicon (2.17.0)
 ```

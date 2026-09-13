@@ -1915,3 +1915,30 @@ html.dark-mode .contact-method:not(:hover) {
     animation: blink 1s step-end infinite;
 }
 @keyframes blink { 50% { opacity: 0; } }
+
+/* ============================================================
+   PÁGINA 404 (components/NotFound.jsx)
+   ============================================================ */
+/* Flujo normal (sin flex) para que herede la alineación de las secciones: a la
+   izquierda en escritorio y centrado en móvil. */
+.not-found { min-height: 70vh; }
+
+.not-found > h2 { margin-bottom: 1rem; }
+
+.not-found-text {
+    color: var(--text-muted);
+    max-width: 36rem;
+    margin-bottom: 1rem;
+}
+
+.not-found-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+}
+
+@media screen and (max-width: 48rem) {
+    .not-found-text    { margin-inline: auto; }
+    .not-found-actions { justify-content: center; }
+}
