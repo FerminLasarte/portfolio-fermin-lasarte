@@ -174,6 +174,7 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
   - **Dónde:** `components/Projects.jsx:26-30`, `:97-101` y `globals.css:1200-1204`.
   - **Problema:** se leen "TravelPi" y "epor". En Juego iOS y Chatbot (`:157-163` y `:192-198`) solo se ve un borrón.
   - **Solución:** conseguir capturas verticales reales de cada app (es contenido; se necesita para el rediseño).
+  - **Pendiente (Fase 1):** faltan las capturas verticales de TravelPic y DeporTurnos (las que se muestran en el teléfono), y opcionalmente del juego iOS, el chatbot, Vault, Bookit y ClubSystem, que hoy solo tienen fondo o degradado. Cuando lleguen: pasarlas a WebP de ~800px de alto con `sharp`, quitarles los metadatos con `scripts/strip-metadata.mjs` y actualizar `image`, `width`, `height` y `thumb` en `PROJECTS` (`lib/site.js`). Los `sizes` de `ProjectCard` suponen capturas horizontales 2:1; con capturas verticales bajan al ancho del teléfono (~90px y ~72px).
 
 - [ ] **I13. Recortes en anchos intermedios** · → Rediseño **[nav]**
   - **Badges:** a 1024px, los badges Swift y C++ se salen (acaban en 1056 y 1064px; `globals.css:530-551`).
