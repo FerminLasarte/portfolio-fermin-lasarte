@@ -29,8 +29,9 @@ export function LanguageProvider({ children }) {
     });
   }, []);
 
+  // Si la clave no existe devuelve `fallback` (por defecto, la propia clave).
   const t = useCallback(
-    (key) => translations[lang]?.[key] ?? key,
+    (key, fallback = key) => translations[lang]?.[key] ?? fallback,
     [lang],
   );
 

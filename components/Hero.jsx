@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useLanguage } from "@/context/LanguageProvider";
 import Dropdown from "@/components/Dropdown";
-import { CV, DEVICON, HERO_BADGES, PERSON, ROLE_TAGLINE } from "@/lib/site";
+import { CV, DEVICON, HERO_BADGES, PERSON, ROLE_TAGLINE, STATS } from "@/lib/site";
 
 export default function Hero() {
   const { t } = useLanguage();
@@ -93,17 +93,17 @@ export default function Hero() {
 
         <div className="hero-stats">
           <div className="stat">
-            <span className="stat-number">2</span>
+            <span className="stat-number">{STATS.appsLive}</span>
             <span className="stat-label">{t("hero.stat1")}</span>
           </div>
           <div className="stat-divider" aria-hidden="true" />
           <div className="stat">
-            <span className="stat-number">5+</span>
+            <span className="stat-number">{STATS.years}+</span>
             <span className="stat-label">{t("hero.stat2")}</span>
           </div>
           <div className="stat-divider" aria-hidden="true" />
           <div className="stat">
-            <span className="stat-number">8+</span>
+            <span className="stat-number">{STATS.projects}+</span>
             <span className="stat-label">{t("hero.stat3")}</span>
           </div>
         </div>

@@ -1,9 +1,20 @@
 "use client";
 
 import { useLanguage } from "@/context/LanguageProvider";
+import Timeline from "@/components/Timeline";
+import { EXPERIENCE } from "@/lib/site";
 
 export default function Experience() {
   const { t } = useLanguage();
+
+  const items = EXPERIENCE.map((e) => ({
+    id: e.id,
+    title: t(`exp.${e.id}.title`),
+    period: `${e.start} — ${e.end}`,
+    company: t(`exp.${e.id}.company`),
+    desc: t(`exp.${e.id}.desc`),
+    tags: e.tags,
+  }));
 
   return (
     <section id="experiencia">
@@ -13,42 +24,7 @@ export default function Experience() {
       </p>
       <h2 className="animate-on-scroll">{t("exp.title")}</h2>
 
-      <div className="timeline">
-        <div className="timeline-item animate-on-scroll">
-          <div className="timeline-dot" />
-          <div className="timeline-content">
-            <div className="timeline-header">
-              <h3>{t("exp.job1.title")}</h3>
-              <span className="timeline-period">2024 — 2025</span>
-            </div>
-            <span className="timeline-company">{t("exp.job1.company")}</span>
-            <p>{t("exp.job1.desc")}</p>
-            <div className="timeline-tags">
-              <span>Flutter</span>
-              <span>Stripe</span>
-              <span>Firebase</span>
-              <span>Google Maps</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="timeline-item animate-on-scroll">
-          <div className="timeline-dot" />
-          <div className="timeline-content">
-            <div className="timeline-header">
-              <h3>{t("exp.job2.title")}</h3>
-              <span className="timeline-period">2021 — 2023</span>
-            </div>
-            <span className="timeline-company">{t("exp.job2.company")}</span>
-            <p>{t("exp.job2.desc")}</p>
-            <div className="timeline-tags">
-              <span>Flutter</span>
-              <span>Firebase</span>
-              <span>Mercado Pago</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Timeline items={items} />
     </section>
   );
 }

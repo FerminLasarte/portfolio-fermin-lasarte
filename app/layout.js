@@ -2,7 +2,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { LanguageProvider } from "@/context/LanguageProvider";
 import { themeInitScript } from "@/lib/theme";
-import { PERSON, ROLE, ROLE_SHORT, SITE_URL, SKILLS, SOCIAL } from "@/lib/site";
+import { PERSON, ROLE, ROLE_SHORT, SITE_URL, SKILLS, SOCIAL, STATS } from "@/lib/site";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import BackgroundOrbs from "@/components/BackgroundOrbs";
@@ -17,7 +17,7 @@ const inter = Inter({
 });
 
 const TITLE = `${PERSON.name} — ${ROLE_SHORT}`;
-const DESCRIPTION = `Portfolio de ${PERSON.name}. ${ROLE} especializado en Swift, Flutter y Backend. 2 apps publicadas en App Store y Google Play.`;
+const DESCRIPTION = `Portfolio de ${PERSON.name}. ${ROLE} especializado en Swift, Flutter y Backend. ${STATS.appsLive} apps publicadas en App Store y Google Play.`;
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),

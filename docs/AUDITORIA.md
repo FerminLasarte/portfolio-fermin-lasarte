@@ -231,7 +231,8 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
   - Hoy esos datos están repetidos en Nav, Footer, Contact y layout.
   - El cargo aparece en 3 versiones: `layout.js:24`, `:61` y `translations.js:13`.
   - `knowsAbout` (`layout.js:63`), `TECH_BADGES` y `CARDS` usan listas de tecnologías distintas.
-- [ ] **M11.** Pasar Proyectos, Experiencia y Educación a arrays de datos más un componente (`ProjectCard` o `Timeline`).
+- [x] **M11.** Pasar Proyectos, Experiencia y Educación a arrays de datos más un componente (`ProjectCard` o `Timeline`).
+  - **Hecho (Fase 1):** `PROJECTS`, `EXPERIENCE` y `EDUCATION` en `lib/site.js`; `components/ProjectCard.jsx` (medio, estado, enlaces por tipo: tiendas, repo o demo) y `components/Timeline.jsx`. Los textos siguen en `translations.js`, con claves por id (`projects.travelpic.*`, `exp.travelpic.*`, `edu.unicen.*`), y `t(clave, fallback)` permite que el título o el bloque "Problema" sean opcionales. Las cifras del hero (`STATS`) salen de los datos: apps con `status: "live"`, años entre el primer inicio y el último fin de la trayectoria, y cantidad de proyectos. Las diferencias accidentales quedaron unificadas: los iconos de plataforma siempre tienen `title` y "Problema" aparece si hay texto. El estilo relleno del botón de TravelPic se mantiene con `primary: true`. HTML comparado con el anterior: solo cambió "5+" → "4+" (2021–2025).
   - Hoy son JSX copiado a mano, con diferencias accidentales: `title` en los iconos de plataforma, estilo del botón Descargar y el bloque "Problema".
   - Las cifras del hero tienen que salir de estos datos.
 - [ ] **M12.** Hay dos sistemas de animación de entrada (`animate-*` y `premium-reveal`) → Rediseño: dejar uno solo.
