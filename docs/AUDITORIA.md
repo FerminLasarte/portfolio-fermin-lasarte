@@ -266,7 +266,17 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
 
 ### Textos (Fase 1)
 
-- [ ] **M15.** Correcciones de redacción:
+- [x] **M15.** Correcciones de redacción:
+  - **Hecho (Fase 1), aprobado por Fermin:**
+    - Mayúsculas normales en ES: "Ver proyectos", "Solución técnica", "En producción", "Apps en producción", "Años de experiencia", "Mis habilidades", "Proyectos destacados", "Ver perfil", "Bases de datos y nube", "Herramientas" (EN: "Tools") y "Desarrollador mobile freelance / independiente".
+    - La tarjeta "Teléfono" pasa a llamarse "WhatsApp", y el número es un enlace `tel:` que hereda el color del texto.
+    - "XCode" pasa a "Xcode".
+    - Idiomas: se quitaron "capacidad fluida" y "escritura de código".
+    - `locale: "es_AR"` con `alternateLocale: ["en_US"]`.
+    - Hero EN: "Final-year Systems Engineering student".
+    - La cuenta de Twitter existe: `@FerminLasarte`.
+    - TravelPic: "Desarrollador de TravelPic" / "Developer at TravelPic".
+    - "Notificaciones push locales" dejó de aplicar porque el proyecto se quitó en I4.
   - Mayúsculas de estilo inglés en ES ("Ver Proyectos", "Solución Técnica").
   - La tarjeta "Teléfono" abre WhatsApp y no hay `tel:` (`Contact.jsx:29-34`).
   - "XCode" en `Skills.jsx:61`.

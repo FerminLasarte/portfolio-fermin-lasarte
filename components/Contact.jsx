@@ -29,8 +29,10 @@ export default function Contact() {
           <div className="contact-icon-wrap">
             <i className="fab fa-whatsapp" />
           </div>
-          <h3>{t("contact.phone")}</h3>
-          <p>{PERSON.phone}</p>
+          <h3>WhatsApp</h3>
+          <p>
+            <a href={PERSON.phoneHref}>{PERSON.phone}</a>
+          </p>
           <a
             href={PERSON.whatsapp}
             target="_blank"

@@ -44,7 +44,8 @@ export const metadata = {
   openGraph: {
     type: "website",
     siteName: PERSON.name,
-    locale: "es_ES",
+    locale: "es_AR",
+    alternateLocale: ["en_US"],
     url: SITE_URL,
     title: TITLE,
     description: DESCRIPTION,

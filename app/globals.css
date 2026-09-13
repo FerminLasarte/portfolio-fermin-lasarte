@@ -1437,6 +1437,16 @@ html.dark-mode .contact-method:not(:hover) {
     margin-bottom: 0.75rem;
 }
 
+/* Número de teléfono como enlace tel: con el mismo aspecto que el texto. */
+.contact-method p a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.contact-method p a:hover {
+    text-decoration: underline;
+}
+
 /* ============================================================
    15. FOOTER
    ============================================================ */
