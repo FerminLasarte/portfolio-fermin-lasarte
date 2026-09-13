@@ -110,6 +110,7 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
     - **ES/EN:** los textos que tenían agregados en una sola versión se reescribieron iguales en los dos idiomas.
     - **Idiomas:** el ítem de inglés pasó a "Inglés y francés (B2)".
     - **Tecnologías:** Objective-C (intermedio), JavaScript (avanzado), HTML y CSS (avanzado), React Native, Supabase y SQLite (intermedio) en Skills. REST API, Tauri, TestFlight, Scrum, Claude API, Rasa y Machine Learning, sin icono, van a `OTHER_SKILLS` (JSON-LD).
+  - **Ajustes posteriores:** chatbot-ai está en producción. "Apps en producción" cuenta solo los proyectos en producción con plataformas móviles, así que sigue en 2. React Native, Supabase y SQLite pasan a avanzado. El rol en inglés en DeporTurnos es "Founder & Developer". Sobre el enfoque, se mantiene el de la web ("móvil (Swift, Flutter) y backend") porque es coherente con el cargo; el CV se alinea a eso.
   - **CV:** los CV no se editan desde el repo (se generan en Google Docs); la lista de cambios se le pasó a Fermin.
   - **Ubicación:** `lib/translations.js:11,109` dice "Tandil", pero los dos CV dicen "Buenos Aires" y el teléfono tiene prefijo 11.
   - **Años de experiencia:** `Hero.jsx:110` dice "5+ años", pero la trayectoria (`Experience.jsx:22,40`) va de 2021 a 2023 y de 2024 a 2025.
