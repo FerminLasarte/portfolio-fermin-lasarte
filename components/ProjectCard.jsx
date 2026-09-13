@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useLanguage } from "@/context/LanguageProvider";
 import Dropdown from "@/components/Dropdown";
 import Terminal from "@/components/Terminal";
@@ -39,9 +40,9 @@ function ProjectMedia({ project }) {
     );
   }
 
-  const alt = fill(t("projects.screenshotAlt"), { name });
-  const bgStyle = media.image
-    ? { backgroundImage: `url('${media.image}')` }
+  // El fondo difuminado usa la miniatura: con blur(14px) no se nota la diferencia.
+  const bgStyle = media.thumb
+    ? { backgroundImage: `url('${media.thumb}')` }
     : { background: media.background };
 
   return (
@@ -51,20 +52,15 @@ function ProjectMedia({ project }) {
       {media.type === "phone" && (
         <div className={`phone-mockup${media.small ? " phone-mockup--sm" : ""}`}>
           <div className="phone-mockup__screen">
-            <img src={media.image} alt={alt} />
-          </div>
-        </div>
-      )}
-      {media.type === "browser" && (
-        <div className="browser-mockup">
-          <div className="browser-mockup__bar">
-            <span className="browser-dot browser-dot--red" />
-            <span className="browser-dot browser-dot--yellow" />
-            <span className="browser-dot browser-dot--green" />
-            <span className="browser-url">{media.url}</span>
-          </div>
-          <div className="browser-mockup__screen">
-            <img src={media.image} alt={alt} />
+            {/* La captura llena la pantalla con object-fit: cover, así que se dibuja
+                más ancha que el teléfono: ~360px en el grande y ~290px en el chico. */}
+            <Image
+              src={media.image}
+              width={media.width}
+              height={media.height}
+              sizes={media.small ? "290px" : "360px"}
+              alt={fill(t("projects.screenshotAlt"), { name })}
+            />
           </div>
         </div>
       )}

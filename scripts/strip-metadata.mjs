@@ -52,9 +52,41 @@ function stripPng(buf) {
   return Buffer.concat(out);
 }
 
+// WebP (RIFF): se descartan los chunks EXIF y XMP, y se apagan sus flags en VP8X.
+// Se conserva ICCP (perfil de color).
+const WEBP_DROP = new Set(["EXIF", "XMP "]);
+const VP8X_EXIF = 0x08;
+const VP8X_XMP = 0x04;
+
+function stripWebp(buf) {
+  if (buf.toString("latin1", 0, 4) !== "RIFF" || buf.toString("latin1", 8, 12) !== "WEBP") {
+    throw new Error("no es un WebP");
+  }
+  const out = [];
+  let i = 12;
+  while (i + 8 <= buf.length) {
+    const type = buf.toString("latin1", i, i + 4);
+    const len = buf.readUInt32LE(i + 4);
+    const chunk = Buffer.from(buf.subarray(i, i + 8 + len + (len % 2))); // los chunks van alineados a 2 bytes
+    if (type === "VP8X") chunk[8] &= ~(VP8X_EXIF | VP8X_XMP);
+    if (!WEBP_DROP.has(type)) out.push(chunk);
+    i += 8 + len + (len % 2);
+  }
+  const body = Buffer.concat(out);
+  const header = Buffer.alloc(12);
+  header.write("RIFF", 0, "latin1");
+  header.writeUInt32LE(4 + body.length, 4);
+  header.write("WEBP", 8, "latin1");
+  return Buffer.concat([header, body]);
+}
+
 for (const file of process.argv.slice(2)) {
   const buf = readFileSync(file);
-  const stripped = /\.png$/i.test(file) ? stripPng(buf) : stripJpeg(buf);
+  const stripped = /\.png$/i.test(file)
+    ? stripPng(buf)
+    : /\.webp$/i.test(file)
+      ? stripWebp(buf)
+      : stripJpeg(buf);
   writeFileSync(file, stripped);
   console.log(`${file}: ${buf.length} → ${stripped.length} bytes`);
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import { useLanguage } from "@/context/LanguageProvider";
 import Dropdown from "@/components/Dropdown";
 import { CV, DEVICON, HERO_BADGES, PERSON, ROLE_TAGLINE, STATS } from "@/lib/site";
@@ -135,11 +136,18 @@ export default function Hero() {
 
       <div className="hero-image animate-scale">
         <div className="hero-image-frame">
-          <img src="/assets/foto_perfil.webp" width="560" height="715" alt={t("hero.photoAlt")} />
+          <Image
+            src="/assets/foto_perfil.webp"
+            width={560}
+            height={715}
+            sizes="(max-width: 25rem) 8.5rem, (max-width: 48rem) 10rem, (max-width: 56.25rem) 12rem, 17rem"
+            priority
+            alt={t("hero.photoAlt")}
+          />
         </div>
         {HERO_BADGES.map((b) => (
           <div key={b.alt} className={`hero-badge-float hero-badge-float--${b.pos}`} aria-hidden="true">
-            <img src={`${DEVICON}/${b.icon}.svg`} width="16" height="16" alt="" />
+            <Image src={`${DEVICON}/${b.icon}.svg`} width={16} height={16} alt="" unoptimized loading="eager" />
             <span>{b.alt}</span>
           </div>
         ))}
@@ -149,7 +157,7 @@ export default function Hero() {
       <div className="hero-badges-mobile" aria-hidden="true">
         {HERO_BADGES.map((b) => (
           <div key={b.alt} className="mobile-badge">
-            <img src={`${DEVICON}/${b.icon}.svg`} width="14" height="14" alt="" />
+            <Image src={`${DEVICON}/${b.icon}.svg`} width={14} height={14} alt="" unoptimized loading="eager" />
             <span>{b.alt}</span>
           </div>
         ))}

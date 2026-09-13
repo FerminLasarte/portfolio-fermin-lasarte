@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useLanguage } from "@/context/LanguageProvider";
 import { DEVICON, SKILL_GROUPS } from "@/lib/site";
 
@@ -28,10 +29,12 @@ export default function Skills() {
                   className="skill-icon"
                   data-tooltip={`${s.name} · ${t(`skills.level.${s.level}`)}`}
                 >
-                  <img
+                  <Image
                     src={`${DEVICON}/${s.icon}.svg`}
                     alt={s.alt ?? s.name}
-                    loading="lazy"
+                    width={30}
+                    height={30}
+                    unoptimized
                     style={s.style}
                     {...(s.darkInvert ? { "data-dark-invert": "" } : {})}
                   />

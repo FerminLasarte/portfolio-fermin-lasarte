@@ -45,7 +45,9 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
   - **Problema:** a 375px, la columna del grid mide 381,6px, porque `1fr` no baja del ancho mínimo de su contenido. El `overflow-x: hidden` de `html` y `body` recorta el sobrante sin avisar.
   - **Solución:** usar `grid-template-columns: minmax(0, 1fr)` y dejar que `.stat-label` haga salto de línea a partir de 48rem. Es un parche de 2 líneas y vale la pena aunque venga el rediseño.
 
-- [ ] **C3. Se descargan ~14,8 MB en la primera carga** · Fase 1 **[nav]**
+- [x] **C3. Se descargan ~14,8 MB en la primera carga** · Fase 1 **[nav]**
+  - **Hecho (Fase 1):** las capturas pasaron a WebP de 800px (`travelpic.webp` 4,7 KB y `deporturnos.webp` 8,8 KB) y los fondos difuminados usan miniaturas de 48px (`*-thumb.webp`, entre 0,2 y 0,6 KB). Se borraron los originales (`travelpic.jpeg`, `deporturnos.png`, `impostor.jpeg` y `chatbot.jpeg`), y los de Impostor y Chatbot no se regeneraron porque esas tarjetas solo muestran el fondo. La foto del hero, las capturas y los iconos usan `next/image`: la foto con `sizes` según los cortes del CSS y `priority`; las capturas con `sizes` de 360px y 290px, porque con `object-fit: cover` se dibujan más anchas que el teléfono; los SVG de Devicon con `unoptimized` hasta I11. Se quitó `no-img-element: off` de `.eslintrc.json` y el lint da 0 avisos. Medido en local: las imágenes propias pesan unos 20 KB en total (foto 10 KB, capturas 3,6 y 5,4 KB, miniaturas 1,3 KB).
+  - `scripts/strip-metadata.mjs` ahora también limpia WebP (quita los chunks EXIF y XMP y apaga sus flags en VP8X). Se probó con una imagen con metadatos y se pasó por las imágenes nuevas.
   - **Dónde:** `components/Projects.jsx:24,28,95,99,161,196,262,272`.
   - **Problema:**
     - `landing-ia.png` (6,4 MB) y `deporturnos.png` (5 MB), de ~2900×1440px, se muestran a 230×110 y 66×142px.
