@@ -1,6 +1,7 @@
 "use client";
 
 import { useLanguage } from "@/context/LanguageProvider";
+import { PERSON, SOCIAL } from "@/lib/site";
 
 export default function Footer() {
   const { t } = useLanguage();
@@ -10,12 +11,12 @@ export default function Footer() {
       <div className="container">
         <div className="footer-content">
           <div className="copyright">
-            © <span suppressHydrationWarning>{new Date().getFullYear()}</span> Fermin Lasarte.{" "}
+            © <span suppressHydrationWarning>{new Date().getFullYear()}</span> {PERSON.name}.{" "}
             <span>{t("footer.rights")}</span>
           </div>
           <div className="social-links">
             <a
-              href="https://github.com/FerminLasarte"
+              href={SOCIAL.github}
               target="_blank"
               rel="noopener noreferrer"
               className="social-link"
@@ -24,7 +25,7 @@ export default function Footer() {
               <i className="fab fa-github" />
             </a>
             <a
-              href="https://linkedin.com/in/ferminlasarte/"
+              href={SOCIAL.linkedin}
               target="_blank"
               rel="noopener noreferrer"
               className="social-link"
@@ -33,7 +34,7 @@ export default function Footer() {
               <i className="fab fa-linkedin" />
             </a>
             <a
-              href="mailto:fermin.lasarte@icloud.com"
+              href={`mailto:${PERSON.email}`}
               className="social-link"
               aria-label="Email"
             >

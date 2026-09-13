@@ -3,16 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useLanguage } from "@/context/LanguageProvider";
 import Dropdown from "@/components/Dropdown";
-
-const DEVICON = "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons";
-
-const TECH_BADGES = [
-  { cls: "hero-badge-float--1", icon: "swift/swift-original", label: "Swift" },
-  { cls: "hero-badge-float--2", icon: "flutter/flutter-original", label: "Flutter" },
-  { cls: "hero-badge-float--0", icon: "typescript/typescript-original", label: "TypeScript" },
-  { cls: "hero-badge-float--4", icon: "cplusplus/cplusplus-original", label: "C++" },
-  { cls: "hero-badge-float--5", icon: "python/python-original", label: "Python" },
-];
+import { CV, DEVICON, HERO_BADGES, PERSON, ROLE_TAGLINE } from "@/lib/site";
 
 export default function Hero() {
   const { t } = useLanguage();
@@ -87,16 +78,16 @@ export default function Hero() {
           </div>
           <div className="location-badge">
             <i className="fas fa-map-marker-alt" />
-            <span>{t("hero.location")}</span>
+            <span>{PERSON.location}</span>
           </div>
         </div>
 
         <h1>
           <span>{t("hero.greeting")}</span>
-          <span className="hero-name"> Fermin</span>
+          <span className="hero-name"> {PERSON.firstName}</span>
         </h1>
 
-        <p className="hero-role">{t("hero.role")}</p>
+        <p className="hero-role">{ROLE_TAGLINE}</p>
 
         <p className="hero-desc">{t("hero.description")}</p>
 
@@ -133,12 +124,11 @@ export default function Hero() {
               </>
             }
           >
-            <a href="/assets/CV-Fermin-ES.pdf" download="CV_Fermin_ES.pdf">
-              <i className="far fa-file-pdf" /> Español
-            </a>
-            <a href="/assets/CV-Fermin-EN.pdf" download="CV_Fermin_EN.pdf">
-              <i className="far fa-file-pdf" /> English
-            </a>
+            {CV.map((cv) => (
+              <a key={cv.lang} href={cv.href} download={cv.download}>
+                <i className="far fa-file-pdf" /> {cv.label}
+              </a>
+            ))}
           </Dropdown>
         </div>
       </div>
@@ -147,20 +137,20 @@ export default function Hero() {
         <div className="hero-image-frame">
           <img src="/assets/foto_perfil.webp" width="560" height="715" alt="Foto de Fermin" />
         </div>
-        {TECH_BADGES.map((b) => (
-          <div key={b.label} className={`hero-badge-float ${b.cls}`} aria-hidden="true">
+        {HERO_BADGES.map((b) => (
+          <div key={b.alt} className={`hero-badge-float hero-badge-float--${b.pos}`} aria-hidden="true">
             <img src={`${DEVICON}/${b.icon}.svg`} width="16" height="16" alt="" />
-            <span>{b.label}</span>
+            <span>{b.alt}</span>
           </div>
         ))}
       </div>
 
       {/* Horizontal tech strip — visible only on mobile (floating badges hide ≤768px). */}
       <div className="hero-badges-mobile" aria-hidden="true">
-        {TECH_BADGES.map((b) => (
-          <div key={b.label} className="mobile-badge">
+        {HERO_BADGES.map((b) => (
+          <div key={b.alt} className="mobile-badge">
             <img src={`${DEVICON}/${b.icon}.svg`} width="14" height="14" alt="" />
-            <span>{b.label}</span>
+            <span>{b.alt}</span>
           </div>
         ))}
       </div>

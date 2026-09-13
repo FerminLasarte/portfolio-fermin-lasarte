@@ -226,7 +226,8 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
 
 ### Datos y estructura (Fase 1)
 
-- [ ] **M10.** Crear `lib/site.js` con las URLs de GitHub y LinkedIn, el email, el teléfono, el cargo y `SITE_URL`.
+- [x] **M10.** Crear `lib/site.js` con las URLs de GitHub y LinkedIn, el email, el teléfono, el cargo y `SITE_URL`.
+  - **Hecho (Fase 1):** `lib/site.js` tiene `PERSON` (nombre, ubicación, email, teléfono, WhatsApp), `SOCIAL`, `CV`, el cargo (`ROLE` para el JSON-LD, `ROLE_SHORT` para el `<title>` y `ROLE_TAGLINE` para el hero) y una sola lista de tecnologías (`SKILL_GROUPS`) de la que salen Skills, los badges del hero (`HERO_BADGES`) y `knowsAbout`. Nav, Footer, Contact, Hero y `layout.js` los importan; `DEVICON` ya no está duplicado. El HTML generado es igual al anterior salvo `knowsAbout`, que ahora lista todas las tecnologías.
   - Hoy esos datos están repetidos en Nav, Footer, Contact y layout.
   - El cargo aparece en 3 versiones: `layout.js:24`, `:61` y `translations.js:13`.
   - `knowsAbout` (`layout.js:63`), `TECH_BADGES` y `CARDS` usan listas de tecnologías distintas.

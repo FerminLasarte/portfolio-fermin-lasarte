@@ -1,6 +1,7 @@
 "use client";
 
 import { useLanguage } from "@/context/LanguageProvider";
+import { PERSON, SOCIAL } from "@/lib/site";
 
 export default function Contact() {
   const { t } = useLanguage();
@@ -19,8 +20,8 @@ export default function Contact() {
             <i className="fas fa-paper-plane" />
           </div>
           <h3>Email</h3>
-          <p>fermin.lasarte@icloud.com</p>
-          <a href="mailto:fermin.lasarte@icloud.com" className="btn btn-sm btn-outline">
+          <p>{PERSON.email}</p>
+          <a href={`mailto:${PERSON.email}`} className="btn btn-sm btn-outline">
             {t("contact.write")}
           </a>
         </div>
@@ -29,9 +30,9 @@ export default function Contact() {
             <i className="fab fa-whatsapp" />
           </div>
           <h3>{t("contact.phone")}</h3>
-          <p>+54 9 11 2171-1289</p>
+          <p>{PERSON.phone}</p>
           <a
-            href="https://wa.me/5491121711289"
+            href={PERSON.whatsapp}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-sm btn-outline"
@@ -46,7 +47,7 @@ export default function Contact() {
           <h3>LinkedIn</h3>
           <p>{t("contact.connect")}</p>
           <a
-            href="https://linkedin.com/in/ferminlasarte/"
+            href={SOCIAL.linkedin}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-sm btn-outline"

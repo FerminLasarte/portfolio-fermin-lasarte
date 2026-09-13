@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useLanguage } from "@/context/LanguageProvider";
 import { toggleTheme } from "@/lib/theme";
+import { PERSON, SOCIAL } from "@/lib/site";
 
 const LINKS = [
   { href: "#sobre-mi", key: "nav.about" },
@@ -115,7 +116,7 @@ export default function Nav() {
           <i className="fas fa-sun" />
         </button>
         <a
-          href="https://github.com/FerminLasarte"
+          href={SOCIAL.github}
           target="_blank"
           rel="noopener noreferrer"
           className="icon-btn"
@@ -124,7 +125,7 @@ export default function Nav() {
           <i className="fab fa-github" />
         </a>
         <a
-          href="https://linkedin.com/in/ferminlasarte/"
+          href={SOCIAL.linkedin}
           target="_blank"
           rel="noopener noreferrer"
           className="icon-btn"
@@ -132,7 +133,7 @@ export default function Nav() {
         >
           <i className="fab fa-linkedin" />
         </a>
-        <a href="mailto:fermin.lasarte@icloud.com" className="icon-btn" title="Email">
+        <a href={`mailto:${PERSON.email}`} className="icon-btn" title="Email">
           <i className="fas fa-envelope" />
         </a>
       </div>

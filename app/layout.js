@@ -2,7 +2,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { LanguageProvider } from "@/context/LanguageProvider";
 import { themeInitScript } from "@/lib/theme";
-import { SITE_URL } from "@/lib/site";
+import { PERSON, ROLE, ROLE_SHORT, SITE_URL, SKILLS, SOCIAL } from "@/lib/site";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import BackgroundOrbs from "@/components/BackgroundOrbs";
@@ -16,35 +16,35 @@ const inter = Inter({
   display: "swap",
 });
 
-const DESCRIPTION =
-  "Portfolio de Fermin Lasarte. iOS & Cross-Platform Mobile Engineer especializado en Swift, Flutter y Backend. 2 apps publicadas en App Store y Google Play.";
+const TITLE = `${PERSON.name} — ${ROLE_SHORT}`;
+const DESCRIPTION = `Portfolio de ${PERSON.name}. ${ROLE} especializado en Swift, Flutter y Backend. 2 apps publicadas en App Store y Google Play.`;
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Fermin Lasarte — iOS & Mobile Engineer",
+  title: TITLE,
   description: DESCRIPTION,
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
-    siteName: "Fermin Lasarte",
+    siteName: PERSON.name,
     locale: "es_ES",
     url: SITE_URL,
-    title: "Fermin Lasarte — iOS & Mobile Engineer",
+    title: TITLE,
     description: DESCRIPTION,
     images: [
       {
         url: "/assets/foto_perfil.jpg",
         width: 560,
         height: 715,
-        alt: "Fermin Lasarte — iOS & Mobile Engineer. Swift, Flutter & Backend Developer.",
+        alt: `${TITLE}. Swift, Flutter & Backend Developer.`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    site: "@ferminlasarte",
-    creator: "@ferminlasarte",
-    title: "Fermin Lasarte — iOS & Mobile Engineer",
+    site: SOCIAL.twitter,
+    creator: SOCIAL.twitter,
+    title: TITLE,
     description: DESCRIPTION,
     images: ["/assets/foto_perfil.jpg"],
   },
@@ -56,13 +56,13 @@ export const metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
-  name: "Fermin Lasarte",
+  name: PERSON.name,
   url: SITE_URL,
-  jobTitle: "iOS & Cross-Platform Mobile Engineer",
+  jobTitle: ROLE,
   description: DESCRIPTION,
-  knowsAbout: ["Swift", "SwiftUI", "Flutter", "Dart", "Firebase", "Java", "Python", "FastAPI"],
+  knowsAbout: SKILLS.map((s) => s.name),
   image: `${SITE_URL}/assets/foto_perfil.jpg`,
-  sameAs: ["https://github.com/FerminLasarte", "https://linkedin.com/in/ferminlasarte/"],
+  sameAs: [SOCIAL.github, SOCIAL.linkedin],
 };
 
 export default function RootLayout({ children }) {
