@@ -9,6 +9,11 @@ const STORES = {
   playstore: { icon: "fab fa-google-play", label: "Google Play" },
 };
 
+const PLATFORMS = {
+  ios: { icon: "fab fa-apple", label: "iOS" },
+  android: { icon: "fab fa-google-play", label: "Android" },
+};
+
 const LINKS = {
   repo: { icon: "fab fa-github", labelKey: "projects.code" },
   demo: { icon: "fas fa-external-link-alt", labelKey: "projects.visit" },
@@ -74,13 +79,13 @@ function ProjectMedia({ project }) {
 
 export default function ProjectCard({ project }) {
   const { t } = useLanguage();
-  const { id, name, size, status, badge, primary, tags, links } = project;
+  const { id, name, size, status, platforms = [], badge, primary, tags, links } = project;
 
   const stores = links.filter((l) => l.type in STORES);
   const others = links.filter((l) => !(l.type in STORES));
   const btnClass = `btn btn-sm${primary ? "" : " btn-outline"}`;
   const problem = t(`projects.${id}.problem`, null);
-  const showMeta = status === "live" || stores.length > 0 || badge;
+  const showMeta = status === "live" || platforms.length > 0 || badge;
   const showLinks = links.length > 0 || status === "wip";
 
   return (
@@ -95,10 +100,10 @@ export default function ProjectCard({ project }) {
                 <span>{t("projects.live")}</span>
               </div>
             )}
-            {stores.length > 0 && (
+            {platforms.length > 0 && (
               <div className="bento-card__platform">
-                {stores.map((l) => (
-                  <i key={l.type} className={STORES[l.type].icon} title={STORES[l.type].label} />
+                {platforms.map((p) => (
+                  <i key={p} className={PLATFORMS[p].icon} title={PLATFORMS[p].label} />
                 ))}
               </div>
             )}
@@ -119,14 +124,11 @@ export default function ProjectCard({ project }) {
           </div>
         </div>
         <div className="project-tags">
-          {tags.map((tag) => {
-            const label = typeof tag === "string" ? tag : t(tag.key);
-            return (
-              <span key={label} className="tag">
-                {label}
-              </span>
-            );
-          })}
+          {tags.map((tag) => (
+            <span key={tag} className="tag">
+              {tag}
+            </span>
+          ))}
         </div>
         {showLinks && (
           <div className="project-links">

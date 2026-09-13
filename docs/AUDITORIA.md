@@ -96,7 +96,18 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
     - La metadata de `app/layout.js`.
   - **Solución:** todo a traducciones, con los niveles como clave (`skills.level.advanced`).
 
-- [ ] **I4. Datos contradictorios** · Fase 1
+- [x] **I4. Datos contradictorios** · Fase 1
+  - **Hecho (Fase 1), según lo que decidió Fermin el 2026-09-13:**
+    - **Ubicación:** "Buenos Aires, Argentina" (vive en Capital Federal), igual que en los CV.
+    - **Cifras:** salen de los datos, con "+" en años y proyectos. Hoy: 2 apps en producción, 4+ años (2021–2025) y 8+ proyectos.
+    - **Trayectoria:** DeporTurnos pasa a 2021–2025, con el rol "Ideólogo y creador". TravelPic termina en 2025.
+    - **TravelPic:** la dieron de baja las tiendas por inactividad y falta volver a subirla. Sigue como "En producción", pero el botón lleva a travelpicapp.com. Los iconos de plataforma ahora salen de `platforms` y no de los enlaces.
+    - **Compilador:** "Compilador en Java". El texto y el terminal describen lo que hace el repo: parser con Yacc, código intermedio y assembler x86 (MASM), no LL(1) ni bytecode.
+    - **Proyectos:** se quitó la Landing con IA (y `landing-ia.png`). La app de barberías pasa a ser Bookit (Flutter y Supabase, en desarrollo, enlace a la landing). El chatbot con Rasa se reemplazó por `chatbot-ai`. Se sumó Vault (repo y landing). El juego iOS se describe como es (un solo dispositivo; el modo online está en desarrollo) y está marcado en desarrollo. ClubSystem sigue en desarrollo, con enlace al repo y detección de anomalías con la API de Anthropic, sin embeddings. El repo del juego pasó a llamarse `impostor-app`.
+    - **ES/EN:** los textos que tenían agregados en una sola versión se reescribieron iguales en los dos idiomas.
+    - **Idiomas:** el ítem de inglés pasó a "Inglés y francés (B2)".
+    - **Tecnologías:** Objective-C (intermedio), JavaScript (avanzado), HTML y CSS (avanzado), React Native, Supabase y SQLite (intermedio) en Skills. REST API, Tauri, TestFlight, Scrum, Claude API, Rasa y Machine Learning, sin icono, van a `OTHER_SKILLS` (JSON-LD).
+  - **CV:** los CV no se editan desde el repo (se generan en Google Docs); la lista de cambios se le pasó a Fermin.
   - **Ubicación:** `lib/translations.js:11,109` dice "Tandil", pero los dos CV dicen "Buenos Aires" y el teléfono tiene prefijo 11.
   - **Años de experiencia:** `Hero.jsx:110` dice "5+ años", pero la trayectoria (`Experience.jsx:22,40`) va de 2021 a 2023 y de 2024 a 2025.
   - **Cantidad de proyectos:** `Hero.jsx:115` dice "8+ proyectos", pero hay exactamente 8 y dos están en curso.

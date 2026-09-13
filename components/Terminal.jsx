@@ -3,10 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 
 const LINES = [
-  "> Inicializando motor del compilador UNICEN...",
-  "> Cargando analizador léxico y parser LL(1)... OK",
-  "> Generando Abstract Syntax Tree... OK",
-  "> Traducción a Bytecode completada en 0.42s.",
+  "> Inicializando compilador UNICEN...",
+  "> Análisis léxico y parser (Yacc)... OK",
+  "> Generando código intermedio... OK",
+  "> Traducción a assembler x86 completada en 0.42s.",
   "> ",
 ];
 

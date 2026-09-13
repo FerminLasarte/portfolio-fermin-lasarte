@@ -2,7 +2,16 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { LanguageProvider } from "@/context/LanguageProvider";
 import { themeInitScript } from "@/lib/theme";
-import { PERSON, ROLE, ROLE_SHORT, SITE_URL, SKILLS, SOCIAL, STATS } from "@/lib/site";
+import {
+  OTHER_SKILLS,
+  PERSON,
+  ROLE,
+  ROLE_SHORT,
+  SITE_URL,
+  SKILLS,
+  SOCIAL,
+  STATS,
+} from "@/lib/site";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import BackgroundOrbs from "@/components/BackgroundOrbs";
@@ -60,7 +69,7 @@ const jsonLd = {
   url: SITE_URL,
   jobTitle: ROLE,
   description: DESCRIPTION,
-  knowsAbout: SKILLS.map((s) => s.name),
+  knowsAbout: [...SKILLS.map((s) => s.name), ...OTHER_SKILLS],
   image: `${SITE_URL}/assets/foto_perfil.jpg`,
   sameAs: [SOCIAL.github, SOCIAL.linkedin],
 };
