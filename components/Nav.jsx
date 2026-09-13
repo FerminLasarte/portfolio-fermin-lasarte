@@ -1,22 +1,15 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useLanguage } from "@/context/LanguageProvider";
 import { toggleTheme } from "@/lib/theme";
 import { PERSON, SOCIAL } from "@/lib/site";
 
-const LINKS = [
-  { href: "#sobre-mi", key: "nav.about" },
-  { href: "#experiencia", key: "nav.experience" },
-  { href: "#educacion", key: "nav.education" },
-  { href: "#habilidades", key: "nav.skills" },
-  { href: "#proyectos", key: "nav.projects" },
-  { href: "#contacto", key: "nav.contact" },
-];
-
-export default function Nav() {
-  const { lang, toggle, t } = useLanguage();
+// Recibe los textos ya traducidos desde el layout (así el diccionario no viaja al
+// navegador). `links`: [{ href, label }]; `switchTo`: el otro idioma, { lang, href }.
+export default function Nav({ links, switchTo, langLabel, themeLabel }) {
   const navRef = useRef(null);
+  // Sección visible, para que el cambio de idioma vuelva a la misma sección.
+  const activeRef = useRef(null);
 
   // Smooth scroll with fixed-nav offset + collapse on touch devices.
   const handleLinkClick = (e, href) => {
@@ -32,6 +25,10 @@ export default function Nav() {
     });
   };
 
+  const handleLangClick = (e) => {
+    if (activeRef.current) e.currentTarget.href = `${switchTo.href}#${activeRef.current}`;
+  };
+
   // Active nav link highlight via IntersectionObserver.
   useEffect(() => {
     const navLinks = navRef.current?.querySelectorAll('.nav-links a[href^="#"]') ?? [];
@@ -42,6 +39,7 @@ export default function Nav() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const id = entry.target.id;
+            activeRef.current = id;
             navLinks.forEach((l) =>
               l.classList.toggle("active", l.getAttribute("href") === `#${id}`),
             );
@@ -88,29 +86,31 @@ export default function Nav() {
   return (
     <nav ref={navRef}>
       <ul className="nav-links">
-        {LINKS.map((link) => (
+        {links.map((link) => (
           <li key={link.href}>
             <a href={link.href} onClick={(e) => handleLinkClick(e, link.href)}>
-              {t(link.key)}
+              {link.label}
             </a>
           </li>
         ))}
       </ul>
       <div className="nav-controls">
-        <button
+        <a
           id="lang-toggle"
           className="icon-btn"
-          title={t("nav.langToggle")}
-          onClick={toggle}
+          href={switchTo.href}
+          hrefLang={switchTo.lang}
+          title={langLabel}
+          onClick={handleLangClick}
         >
-          {lang === "es" ? "EN" : "ES"}
-        </button>
+          {switchTo.lang.toUpperCase()}
+        </a>
         <button
           id="theme-toggle"
           className="icon-btn"
-          title={t("nav.themeToggle")}
+          title={themeLabel}
           onClick={toggleTheme}
-          aria-label={t("nav.themeToggle")}
+          aria-label={themeLabel}
         >
           <i className="fas fa-moon" />
           <i className="fas fa-sun" />

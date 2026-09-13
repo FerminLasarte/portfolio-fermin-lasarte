@@ -1,12 +1,7 @@
-"use client";
-
 import Image from "next/image";
-import { useLanguage } from "@/context/LanguageProvider";
 import { DEVICON, SKILL_GROUPS } from "@/lib/site";
 
-export default function Skills() {
-  const { t } = useLanguage();
-
+export default function Skills({ t }) {
   return (
     <section id="habilidades">
       <p className="section-label premium-reveal">

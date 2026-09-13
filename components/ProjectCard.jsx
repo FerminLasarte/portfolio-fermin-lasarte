@@ -1,7 +1,4 @@
-"use client";
-
 import Image from "next/image";
-import { useLanguage } from "@/context/LanguageProvider";
 import Dropdown from "@/components/Dropdown";
 import Terminal from "@/components/Terminal";
 import { fill } from "@/lib/translations";
@@ -21,9 +18,8 @@ const LINKS = {
   demo: { icon: "fas fa-external-link-alt", labelKey: "projects.visit" },
 };
 
-function ProjectMedia({ project }) {
-  const { t } = useLanguage();
-  const { media, status, name } = project;
+function ProjectMedia({ project, t }) {
+  const { id, media, status, name } = project;
 
   if (media.type === "terminal") {
     return (
@@ -34,7 +30,7 @@ function ProjectMedia({ project }) {
             <div className="terminal-btn btn-min" />
             <div className="terminal-btn btn-max" />
           </div>
-          <Terminal />
+          <Terminal lines={t(`projects.${id}.terminal`)} />
         </div>
       </div>
     );
@@ -75,8 +71,7 @@ function ProjectMedia({ project }) {
   );
 }
 
-export default function ProjectCard({ project }) {
-  const { t } = useLanguage();
+export default function ProjectCard({ project, t }) {
   const { id, name, size, status, platforms = [], badge, primary, tags, links } = project;
 
   const stores = links.filter((l) => l.type in STORES);
@@ -88,7 +83,7 @@ export default function ProjectCard({ project }) {
 
   return (
     <article className={`bento-card${size ? ` bento-card--${size}` : ""} premium-reveal`}>
-      <ProjectMedia project={project} />
+      <ProjectMedia project={project} t={t} />
       <div className="bento-card__content">
         {showMeta && (
           <div className="bento-card__meta">

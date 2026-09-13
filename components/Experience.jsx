@@ -1,12 +1,7 @@
-"use client";
-
-import { useLanguage } from "@/context/LanguageProvider";
 import Timeline from "@/components/Timeline";
 import { EXPERIENCE } from "@/lib/site";
 
-export default function Experience() {
-  const { t } = useLanguage();
-
+export default function Experience({ t }) {
   const items = EXPERIENCE.map((e) => ({
     id: e.id,
     title: t(`exp.${e.id}.title`),

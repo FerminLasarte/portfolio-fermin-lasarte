@@ -1,12 +1,7 @@
-"use client";
-
-import { useLanguage } from "@/context/LanguageProvider";
 import ProjectCard from "@/components/ProjectCard";
 import { PROJECTS } from "@/lib/site";
 
-export default function Projects() {
-  const { t } = useLanguage();
-
+export default function Projects({ t }) {
   return (
     <section id="proyectos">
       <p className="section-label premium-reveal">
@@ -17,7 +12,7 @@ export default function Projects() {
 
       <div className="bento-grid">
         {PROJECTS.map((project) => (
-          <ProjectCard key={project.id} project={project} />
+          <ProjectCard key={project.id} project={project} t={t} />
         ))}
       </div>
     </section>

@@ -1,20 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useLanguage } from "@/context/LanguageProvider";
 
-export default function Terminal() {
-  const { t } = useLanguage();
-  const fullText = t("projects.compiler.terminal").join("\n");
+// `lines`: las líneas ya traducidas (el idioma viene de la ruta y no cambia en la página).
+export default function Terminal({ lines }) {
+  const fullText = lines.join("\n");
+  const length = fullText.length;
   const ref = useRef(null);
-  // El efecto de tipeo lee el largo del texto actual (cambia con el idioma).
-  const lengthRef = useRef(fullText.length);
   const [count, setCount] = useState(0);
-  const [done, setDone] = useState(false);
-
-  useEffect(() => {
-    lengthRef.current = fullText.length;
-  }, [fullText]);
 
   // Typewriter effect that starts once the terminal scrolls into view.
   useEffect(() => {
@@ -28,10 +21,8 @@ export default function Terminal() {
     const type = (i) => {
       if (cancelled) return;
       setCount(i);
-      if (i < lengthRef.current) {
+      if (i < length) {
         timeoutId = setTimeout(() => type(i + 1), Math.random() * 30 + 10);
-      } else {
-        setDone(true);
       }
     };
 
@@ -55,10 +46,9 @@ export default function Terminal() {
       clearTimeout(timeoutId);
       observer.disconnect();
     };
-  }, []);
+  }, [length]);
 
-  // Una vez terminado se muestra el texto completo, aunque se cambie de idioma.
-  const shown = (done ? fullText : fullText.slice(0, count)).split("\n");
+  const shown = fullText.slice(0, count).split("\n");
 
   return (
     <div className="terminal-body" ref={ref}>

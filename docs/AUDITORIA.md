@@ -148,6 +148,7 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
     - Quien eligió EN ve primero la versión en ES.
     - No se usa `navigator.language`.
   - **Solución:** se resuelve con I14 (idioma en la ruta). Como mínimo, try/catch más `navigator.language`.
+  - **Hecho (Fase 2, con I14):** el idioma sale de la URL, así que se borró `context/LanguageProvider.jsx` y ya no se usa `localStorage` para el idioma. El HTML llega en el idioma correcto, sin parpadeo, y `<html lang>` se genera en el servidor. No hay detección automática: Fermin eligió no redirigir por `Accept-Language` ni por `navigator.language` (el bot de Google entra sin esa cabecera, y quien comparte `/` espera que el otro vea lo mismo). El botón de idioma es un enlace a la otra ruta y conserva la sección visible (`/en#proyectos`).
 
 - [ ] **I9. El bucle `requestAnimationFrame` del hero no para nunca** · → Rediseño
   - **Dónde:** `components/Hero.jsx:52-71`.
@@ -187,6 +188,9 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
   - **Dónde:** `"use client"` en Experience, Education, Skills, Projects, Contact y Footer.
   - **Problema:** se envían los dos idiomas y todo el JSX al navegador, y el inglés no se indexa.
   - **Solución:** usar `app/[lang]` con `generateStaticParams`, el diccionario en el servidor, `generateMetadata` por idioma y `hreflang`. Solo quedan de cliente Dropdown, Terminal, Nav y los efectos.
+  - **Hecho (Fase 2):** esquema elegido por Fermin: **`/` en español y `/en` en inglés, sin redirección**. Las páginas viven en `app/[lang]` (`generateStaticParams` con `es` y `en`, `dynamicParams = false`); `next.config` reescribe `/` a `/es` y redirige `/es` a `/` (308), sin middleware, así que las dos páginas son estáticas. `lib/i18n.js` tiene `LOCALES`, `homePath()` y `getT(lang)` (el diccionario solo se importa en el servidor). `generateMetadata` arma por idioma la descripción, el canonical (`/` o `/en`), `hreflang` (`es`, `en` y `x-default` → `/`), `og:locale` y `og:url`; el JSON-LD usa la descripción del idioma.
+  - Hero, Experience, Education, Skills, Projects, ProjectCard, Contact y Footer pasaron a server components y reciben `t` por prop. Siguen de cliente Dropdown, Terminal (recibe las líneas), Nav (recibe los textos ya traducidos), `HeroParallax` (el efecto del hero, separado de Hero), PremiumCursor y RevealObserver. El botón de idioma pasó de `<button>` a `<a hreflang>`, con `font-family: Arial` para que se vea igual que antes (es la fuente que Chrome le daba al botón).
+  - **Verificado:** el HTML de `/` y `/en` es igual al anterior (el de EN se comparó con un build de la base con el idioma inicial en inglés), salvo el `<head>` por idioma y el `<a>` del botón. En el navegador, posición, tamaño, fuente y color de los 467 elementos coinciden con la base en ES y EN, a 375px y 1024px. El diccionario ya no está en el JS del cliente y la página pasó de 118 kB a 109 kB de First Load JS. `/foo` y `/en/foo` dan 404 (el 404 traducido llega con I16).
 
 - [ ] **I15. UX de proyectos y CV** · Fase 1 (datos) y → Rediseño (presentación)
   - **Problema:**

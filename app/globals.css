@@ -245,7 +245,8 @@ nav:not(:hover):not(:focus-within):not(.nav-expanded) .nav-links {
     transform: translateY(-1px);
 }
 
-#lang-toggle { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; }
+/* Es un enlace (a la otra ruta de idioma): Arial es la fuente que Chrome le daba cuando era <button>. */
+#lang-toggle { font-family: Arial, sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; }
 #theme-toggle .fa-sun  { display: none; }
 html.dark-mode #theme-toggle .fa-moon { display: none; }
 html.dark-mode #theme-toggle .fa-sun  { display: inline-block; }

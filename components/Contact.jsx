@@ -1,11 +1,6 @@
-"use client";
-
-import { useLanguage } from "@/context/LanguageProvider";
 import { PERSON, SOCIAL } from "@/lib/site";
 
-export default function Contact() {
-  const { t } = useLanguage();
-
+export default function Contact({ t }) {
   return (
     <section id="contacto">
       <p className="section-label animate-on-scroll">

@@ -7,7 +7,7 @@ Portfolio personal de Fermin Lasarte (iOS & Cross-Platform Mobile Engineer), con
 - [Next.js 15](https://nextjs.org/) (App Router)
 - React 19
 - CSS plano (`app/globals.css`) — diseño Apple minimal + glassmorphism + bento grid
-- i18n propio (ES / EN) vía React Context
+- i18n por ruta: `/` en español y `/en` en inglés, prerenderizadas, con el diccionario en el servidor (`lib/i18n.js`)
 - Tema claro/oscuro con persistencia y sin parpadeo (FOUC)
 
 ## Desarrollo
@@ -44,13 +44,13 @@ node scripts/strip-metadata.mjs public/assets/nueva.jpeg
 
 ```
 app/
-  layout.js        # layout raíz: metadata, fuente, tema, providers
-  page.js          # composición de secciones
+  [lang]/
+    layout.js      # layout raíz por idioma: metadata, hreflang, fuente, tema
+    page.js        # composición de secciones
   globals.css      # estilos globales
 components/         # Nav, Hero, Skills, Projects, Contact, efectos, etc.
-context/
-  LanguageProvider.jsx
 lib/
+  i18n.js          # idiomas, rutas por idioma y getT(lang)
   translations.js  # textos ES/EN
   theme.js         # lógica de tema (toggle + script anti-FOUC)
 public/assets/     # imágenes y CVs

@@ -1,12 +1,7 @@
-"use client";
-
-import { useLanguage } from "@/context/LanguageProvider";
 import Timeline from "@/components/Timeline";
 import { EDUCATION } from "@/lib/site";
 
-export default function Education() {
-  const { t } = useLanguage();
-
+export default function Education({ t }) {
   const items = EDUCATION.map((e) => ({
     id: e.id,
     title: t(`edu.${e.id}.title`),

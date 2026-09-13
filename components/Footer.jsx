@@ -1,17 +1,12 @@
-"use client";
-
-import { useLanguage } from "@/context/LanguageProvider";
 import { PERSON, SOCIAL } from "@/lib/site";
 
-export default function Footer() {
-  const { t } = useLanguage();
-
+export default function Footer({ t }) {
   return (
     <footer className="footer">
       <div className="container">
         <div className="footer-content">
           <div className="copyright">
-            © <span suppressHydrationWarning>{new Date().getFullYear()}</span> {PERSON.name}.{" "}
+            © <span>{new Date().getFullYear()}</span> {PERSON.name}.{" "}
             <span>{t("footer.rights")}</span>
           </div>
           <div className="social-links">
