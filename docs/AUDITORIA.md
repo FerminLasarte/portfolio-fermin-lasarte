@@ -189,6 +189,7 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
     - El CV es el botón menos visible y pide elegir idioma aunque ya se conoce (`Hero.jsx:127-142`).
     - Proyectos aparece después de Educación y Skills (`app/page.js:11-16`) y repite lo que ya cuenta Experiencia.
   - **Solución:** botones directos a las tiendas, mockup clicable, CV directo según el idioma de la interfaz y Proyectos justo después del hero.
+  - **Datos hechos (Fase 1):** cada proyecto de `PROJECTS` (`lib/site.js`) declara sus enlaces por tipo (`appstore`, `playstore`, `repo` o `demo`) y sus plataformas, y los CV están en `CV` con su idioma. Todos los proyectos tienen al menos un enlace (antes el chatbot, la app de barberías y ClubSystem no tenían ninguno). Queda para el rediseño cómo se presentan: botones directos en vez del dropdown, mockup clicable, CV según el idioma y el orden de las secciones.
 
 - [ ] **I16. SEO e iconos** · Fase 2
   - **Problema:**
