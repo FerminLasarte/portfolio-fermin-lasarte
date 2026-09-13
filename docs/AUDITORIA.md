@@ -74,6 +74,8 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
   - **Solución:**
     - Ocultar solo bajo `html.js`, con la clase puesta desde `themeInitScript` en `lib/theme.js`.
     - No animar la foto del hero y ponerle `fetchpriority="high"`.
+  - **Hecho (Fase 2):** `themeInitScript` agrega `html.js` antes del primer pintado, y el estado oculto de `.animate-on-scroll`, `.animate-left`, `.animate-right`, `.premium-reveal` y `.bento-card.premium-reveal` quedó bajo `:where(html.js)`. `:where()` no suma especificidad, así que con JS todo pesa lo mismo que antes y no cambia nada (tampoco lo que queda para el rediseño: I5, I6, I10). La foto del hero ya no tiene `animate-scale` (la clase quedó sin uso y se borró del CSS y de RevealObserver) y lleva `fetchPriority="high"` además de `priority` (en Next 15, `priority` solo agrega el preload y no pone `fetchpriority` en el `<img>`).
+  - **Verificado:** sin JS (HTML sin `<script>` en un iframe), la base tenía los 31 elementos animados con `opacity: 0`, foto incluida; ahora hay 0 ocultos de 30, en ES y EN. Con JS, al cargar siguen ocultos los de más abajo, la foto se ve de entrada (`opacity: 1`, sin `transform`), y la huella del layout ya revelado coincide con la base en ES y EN, a 375px y 1024px.
 
 ## 🟠 Importante
 

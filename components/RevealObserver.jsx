@@ -4,16 +4,14 @@ import { useEffect } from "react";
 
 /**
  * Single IntersectionObserver that drives all scroll-reveal animations:
- *  - `.animate-on-scroll` / `.animate-left` / `.animate-right` / `.animate-scale` → adds `.visible`
+ *  - `.animate-on-scroll` / `.animate-left` / `.animate-right` → adds `.visible`
  *  - `.premium-reveal` → adds `.is-visible`
  * Mounted once near the root, it observes the already-rendered DOM.
  */
 export default function RevealObserver() {
   useEffect(() => {
     const basic = Array.from(
-      document.querySelectorAll(
-        ".animate-on-scroll, .animate-left, .animate-right, .animate-scale",
-      ),
+      document.querySelectorAll(".animate-on-scroll, .animate-left, .animate-right"),
     );
     const premium = Array.from(document.querySelectorAll(".premium-reveal"));
 

@@ -70,7 +70,8 @@ export default function Hero({ t }) {
         </div>
       </div>
 
-      <div className="hero-image animate-scale">
+      {/* La foto es el LCP: sin animación de entrada y con prioridad alta. */}
+      <div className="hero-image">
         <div className="hero-image-frame">
           <Image
             src="/assets/foto_perfil.webp"
@@ -78,6 +79,7 @@ export default function Hero({ t }) {
             height={715}
             sizes="(max-width: 25rem) 8.5rem, (max-width: 48rem) 10rem, (max-width: 56.25rem) 12rem, 17rem"
             priority
+            fetchPriority="high"
             alt={t("hero.photoAlt")}
           />
         </div>
