@@ -5,25 +5,14 @@ import { toggleTheme } from "@/lib/theme";
 import { PERSON, SOCIAL } from "@/lib/site";
 
 // Recibe los textos ya traducidos desde el layout (así el diccionario no viaja al
-// navegador). `links`: [{ href, label }]; `switchTo`: el otro idioma, { lang, href }.
+// navegador). `links`: [{ href, label }], con la home del idioma y el hash de la
+// sección ("/#proyectos", "/en#proyectos"): son anclas nativas, que funcionan desde
+// cualquier página, y el scroll suave y el margen del nav fijo salen del CSS
+// (`scroll-behavior` y `scroll-margin-top`). `switchTo`: el otro idioma, { lang, href }.
 export default function Nav({ links, switchTo, langLabel, themeLabel }) {
   const navRef = useRef(null);
   // Sección visible, para que el cambio de idioma vuelva a la misma sección.
   const activeRef = useRef(null);
-
-  // Smooth scroll with fixed-nav offset + collapse on touch devices.
-  const handleLinkClick = (e, href) => {
-    e.preventDefault();
-    const target = document.querySelector(href);
-    if (!target) return;
-    const nav = navRef.current;
-    nav?.classList.remove("nav-expanded");
-    const offset = (nav?.offsetHeight ?? 0) + 24;
-    window.scrollTo({
-      top: target.getBoundingClientRect().top + window.pageYOffset - offset,
-      behavior: "smooth",
-    });
-  };
 
   const handleLangClick = (e) => {
     if (activeRef.current) e.currentTarget.href = `${switchTo.href}#${activeRef.current}`;
@@ -31,7 +20,7 @@ export default function Nav({ links, switchTo, langLabel, themeLabel }) {
 
   // Active nav link highlight via IntersectionObserver.
   useEffect(() => {
-    const navLinks = navRef.current?.querySelectorAll('.nav-links a[href^="#"]') ?? [];
+    const navLinks = navRef.current?.querySelectorAll(".nav-links a") ?? [];
     const sections = document.querySelectorAll("header[id], section[id]");
 
     const observer = new IntersectionObserver(
@@ -40,9 +29,7 @@ export default function Nav({ links, switchTo, langLabel, themeLabel }) {
           if (entry.isIntersecting) {
             const id = entry.target.id;
             activeRef.current = id;
-            navLinks.forEach((l) =>
-              l.classList.toggle("active", l.getAttribute("href") === `#${id}`),
-            );
+            navLinks.forEach((l) => l.classList.toggle("active", l.hash === `#${id}`));
           }
         });
       },
@@ -88,9 +75,7 @@ export default function Nav({ links, switchTo, langLabel, themeLabel }) {
       <ul className="nav-links">
         {links.map((link) => (
           <li key={link.href}>
-            <a href={link.href} onClick={(e) => handleLinkClick(e, link.href)}>
-              {link.label}
-            </a>
+            <a href={link.href}>{link.label}</a>
           </li>
         ))}
       </ul>

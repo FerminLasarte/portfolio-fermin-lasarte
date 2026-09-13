@@ -124,7 +124,7 @@ export default async function RootLayout({ children, params }) {
       <body className={inter.variable}>
         <BackgroundOrbs />
         <Nav
-          links={NAV_SECTIONS.map((s) => ({ href: `#${s.id}`, label: t(s.key) }))}
+          links={NAV_SECTIONS.map((s) => ({ href: `${homePath(lang)}#${s.id}`, label: t(s.key) }))}
           switchTo={{ lang: other, href: homePath(other) }}
           langLabel={t("nav.langToggle")}
           themeLabel={t("nav.themeToggle")}
