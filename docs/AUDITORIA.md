@@ -85,7 +85,8 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
   - **Problema:** hace `preventDefault()` y después `querySelector(href)`, que en `/no-existe` devuelve `null`. La URL nunca recibe el `#hash`. Además duplica lo que ya hacen `scroll-behavior` y `scroll-margin-top`.
   - **Solución:** quitar `handleLinkClick` y usar enlaces nativos `href="/#proyectos"`.
 
-- [ ] **I3. En modo EN quedan textos en español** · Fase 1 **[nav]**
+- [x] **I3. En modo EN quedan textos en español** · Fase 1 **[nav]**
+  - **Hecho (Fase 1):** todo pasa por `translations.js`: tooltips de Skills con el nivel como clave (`skills.level.advanced` / `.intermediate`), títulos de las tarjetas de Skills (sin el sufijo " & Cloud" suelto), las líneas del terminal (`projects.compiler.terminal`; el tipeo usa el texto del idioma actual), el `alt` de la foto y de las capturas (`projects.screenshotAlt` con `fill()`), `title` y `aria-label` del nav, el badge "WIP" (ahora "Próximamente" / "Coming Soon") y la metadata (`meta.description`, `meta.ogAlt`). "AI Chatbot NLU" y las etiquetas "Multiplayer", "Compilers" y "AI" desaparecieron con I4. La metadata se genera en español porque el HTML se prerenderiza en un solo idioma; el idioma por ruta llega con I14. Verificado en el navegador en ES y EN.
   - **Dónde:**
     - `components/Skills.jsx:13-64`: tooltips "· Avanzado".
     - `Skills.jsx:11,26,36,47`: títulos y el sufijo " & Cloud".

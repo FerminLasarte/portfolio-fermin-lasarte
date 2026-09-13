@@ -3,6 +3,7 @@
 import { useLanguage } from "@/context/LanguageProvider";
 import Dropdown from "@/components/Dropdown";
 import Terminal from "@/components/Terminal";
+import { fill } from "@/lib/translations";
 
 const STORES = {
   appstore: { icon: "fab fa-apple", label: "App Store" },
@@ -20,6 +21,7 @@ const LINKS = {
 };
 
 function ProjectMedia({ project }) {
+  const { t } = useLanguage();
   const { media, status, name } = project;
 
   if (media.type === "terminal") {
@@ -37,7 +39,7 @@ function ProjectMedia({ project }) {
     );
   }
 
-  const alt = `${name} screenshot`;
+  const alt = fill(t("projects.screenshotAlt"), { name });
   const bgStyle = media.image
     ? { backgroundImage: `url('${media.image}')` }
     : { background: media.background };
@@ -45,7 +47,7 @@ function ProjectMedia({ project }) {
   return (
     <div className="bento-card__image">
       <div className="bento-card__bg" style={bgStyle} />
-      {status === "wip" && <div className="bento-wip-badge">WIP</div>}
+      {status === "wip" && <div className="bento-wip-badge">{t("projects.soon")}</div>}
       {media.type === "phone" && (
         <div className={`phone-mockup${media.small ? " phone-mockup--sm" : ""}`}>
           <div className="phone-mockup__screen">

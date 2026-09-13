@@ -2,6 +2,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { LanguageProvider } from "@/context/LanguageProvider";
 import { themeInitScript } from "@/lib/theme";
+import { fill, translations } from "@/lib/translations";
 import {
   OTHER_SKILLS,
   PERSON,
@@ -25,8 +26,15 @@ const inter = Inter({
   display: "swap",
 });
 
+// La metadata se genera en español: el HTML se prerenderiza en un solo idioma
+// (el idioma por ruta llega con I14).
+const es = translations.es;
 const TITLE = `${PERSON.name} — ${ROLE_SHORT}`;
-const DESCRIPTION = `Portfolio de ${PERSON.name}. ${ROLE} especializado en Swift, Flutter y Backend. ${STATS.appsLive} apps publicadas en App Store y Google Play.`;
+const DESCRIPTION = fill(es["meta.description"], {
+  name: PERSON.name,
+  role: ROLE,
+  apps: STATS.appsLive,
+});
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
@@ -45,7 +53,7 @@ export const metadata = {
         url: "/assets/foto_perfil.jpg",
         width: 560,
         height: 715,
-        alt: `${TITLE}. Swift, Flutter & Backend Developer.`,
+        alt: fill(es["meta.ogAlt"], { title: TITLE }),
       },
     ],
   },

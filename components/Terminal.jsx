@@ -1,20 +1,20 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-
-const LINES = [
-  "> Inicializando compilador UNICEN...",
-  "> Análisis léxico y parser (Yacc)... OK",
-  "> Generando código intermedio... OK",
-  "> Traducción a assembler x86 completada en 0.42s.",
-  "> ",
-];
-
-const FULL_TEXT = LINES.join("\n");
+import { useLanguage } from "@/context/LanguageProvider";
 
 export default function Terminal() {
+  const { t } = useLanguage();
+  const fullText = t("projects.compiler.terminal").join("\n");
   const ref = useRef(null);
+  // El efecto de tipeo lee el largo del texto actual (cambia con el idioma).
+  const lengthRef = useRef(fullText.length);
   const [count, setCount] = useState(0);
+  const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    lengthRef.current = fullText.length;
+  }, [fullText]);
 
   // Typewriter effect that starts once the terminal scrolls into view.
   useEffect(() => {
@@ -28,8 +28,10 @@ export default function Terminal() {
     const type = (i) => {
       if (cancelled) return;
       setCount(i);
-      if (i < FULL_TEXT.length) {
+      if (i < lengthRef.current) {
         timeoutId = setTimeout(() => type(i + 1), Math.random() * 30 + 10);
+      } else {
+        setDone(true);
       }
     };
 
@@ -55,7 +57,8 @@ export default function Terminal() {
     };
   }, []);
 
-  const shown = FULL_TEXT.slice(0, count).split("\n");
+  // Una vez terminado se muestra el texto completo, aunque se cambie de idioma.
+  const shown = (done ? fullText : fullText.slice(0, count)).split("\n");
 
   return (
     <div className="terminal-body" ref={ref}>

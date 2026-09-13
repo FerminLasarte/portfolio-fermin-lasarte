@@ -3,8 +3,6 @@
 import { useLanguage } from "@/context/LanguageProvider";
 import { DEVICON, SKILL_GROUPS } from "@/lib/site";
 
-const LEVEL_LABEL = { advanced: "Avanzado", intermediate: "Intermedio" };
-
 export default function Skills() {
   const { t } = useLanguage();
 
@@ -21,17 +19,14 @@ export default function Skills() {
           <div key={card.id} className={`skill-card ${card.extraClass ?? ""} premium-reveal`.trim()}>
             <div className="skill-card-header">
               <i className={card.icon} />
-              <h3>
-                {card.titleKey ? <span>{t(card.titleKey)}</span> : card.title}
-                {card.titleSuffix}
-              </h3>
+              <h3>{t(card.titleKey)}</h3>
             </div>
             <div className="skill-icons-grid">
               {card.skills.map((s) => (
                 <div
                   key={s.name}
                   className="skill-icon"
-                  data-tooltip={`${s.name} · ${LEVEL_LABEL[s.level]}`}
+                  data-tooltip={`${s.name} · ${t(`skills.level.${s.level}`)}`}
                 >
                   <img
                     src={`${DEVICON}/${s.icon}.svg`}

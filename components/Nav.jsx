@@ -100,7 +100,7 @@ export default function Nav() {
         <button
           id="lang-toggle"
           className="icon-btn"
-          title="Cambiar idioma"
+          title={t("nav.langToggle")}
           onClick={toggle}
         >
           {lang === "es" ? "EN" : "ES"}
@@ -108,9 +108,9 @@ export default function Nav() {
         <button
           id="theme-toggle"
           className="icon-btn"
-          title="Cambiar tema"
+          title={t("nav.themeToggle")}
           onClick={toggleTheme}
-          aria-label="Cambiar tema"
+          aria-label={t("nav.themeToggle")}
         >
           <i className="fas fa-moon" />
           <i className="fas fa-sun" />

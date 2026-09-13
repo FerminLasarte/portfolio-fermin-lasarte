@@ -135,7 +135,7 @@ export default function Hero() {
 
       <div className="hero-image animate-scale">
         <div className="hero-image-frame">
-          <img src="/assets/foto_perfil.webp" width="560" height="715" alt="Foto de Fermin" />
+          <img src="/assets/foto_perfil.webp" width="560" height="715" alt={t("hero.photoAlt")} />
         </div>
         {HERO_BADGES.map((b) => (
           <div key={b.alt} className={`hero-badge-float hero-badge-float--${b.pos}`} aria-hidden="true">
