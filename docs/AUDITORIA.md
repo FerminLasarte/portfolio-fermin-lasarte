@@ -297,7 +297,8 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
 
 ### Herramientas (Fase 2)
 
-- [ ] **M17.** `next lint` desaparece en Next 16: migrar con `npx @next/codemod next-lint-to-eslint-cli .`.
+- [x] **M17.** `next lint` desaparece en Next 16: migrar con `npx @next/codemod next-lint-to-eslint-cli .`.
+  - **Hecho (Fase 2):** el codemod cambió el script a `eslint .`, pero el `eslint.config.mjs` que generó no funcionaba (hacía spread de `eslint-config-next/core-web-vitals`, que en la 15 sigue siendo formato eslintrc). Se reescribió con `FlatCompat` (`@eslint/eslintrc` como devDependency), se agregó `files: ["**/*.{js,jsx,mjs,cjs}"]` (sin eso el CLI se salteaba todos los `.jsx`) y se ignoran `.next/`, `out/` y `build/`. Se borró `.eslintrc.json`. Comprobado con un `<img>` de prueba en un `.jsx` (salta `no-img-element`); el lint da 0 avisos y `next build` lo sigue usando. Al pasar a Next 16 se puede cambiar por el import directo de `eslint-config-next`.
 
 ---
 

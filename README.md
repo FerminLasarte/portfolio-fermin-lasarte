@@ -38,7 +38,7 @@ node scripts/strip-metadata.mjs public/assets/nueva.jpeg
 | `npm run dev`   | Servidor de desarrollo en el puerto 3000 |
 | `npm run build` | Build de producción                      |
 | `npm run start` | Sirve el build de producción             |
-| `npm run lint`  | Lint con ESLint / Next                   |
+| `npm run lint`  | Lint con el CLI de ESLint (`eslint .`)   |
 
 ## Estructura
 
