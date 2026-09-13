@@ -33,9 +33,9 @@ export const metadata = {
     description: DESCRIPTION,
     images: [
       {
-        url: "/assets/foto_perfil.jpeg",
-        width: 1200,
-        height: 630,
+        url: "/assets/foto_perfil.jpg",
+        width: 560,
+        height: 715,
         alt: "Fermin Lasarte — iOS & Mobile Engineer. Swift, Flutter & Backend Developer.",
       },
     ],
@@ -46,7 +46,7 @@ export const metadata = {
     creator: "@ferminlasarte",
     title: "Fermin Lasarte — iOS & Mobile Engineer",
     description: DESCRIPTION,
-    images: ["/assets/foto_perfil.jpeg"],
+    images: ["/assets/foto_perfil.jpg"],
   },
   icons: {
     icon: { url: "/favicon.svg", type: "image/svg+xml" },
@@ -61,7 +61,7 @@ const jsonLd = {
   jobTitle: "iOS & Cross-Platform Mobile Engineer",
   description: DESCRIPTION,
   knowsAbout: ["Swift", "SwiftUI", "Flutter", "Dart", "Firebase", "Java", "Python", "FastAPI"],
-  image: `${SITE_URL}/assets/foto_perfil.jpeg`,
+  image: `${SITE_URL}/assets/foto_perfil.jpg`,
   sameAs: ["https://github.com/FerminLasarte", "https://linkedin.com/in/ferminlasarte/"],
 };
 

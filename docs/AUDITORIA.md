@@ -29,7 +29,9 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
 
 ## 🔴 Crítico
 
-- [ ] **C1. La foto de perfil publica dónde se tomó** · Fase 0
+- [x] **C1. La foto de perfil publica dónde se tomó** · Fase 0
+  - **Hecho (Fase 0):** `foto_perfil.jpeg` se reemplazó por `foto_perfil.webp` (hero, 14 KB) y `foto_perfil.jpg` (OG y JSON-LD, 24 KB), las dos de 560×715 y sin metadatos. A las capturas de proyectos se les quitó el EXIF y el XMP sin recomprimirlas, con `scripts/strip-metadata.mjs` (reutilizable para capturas nuevas). Los PDF no tenían datos personales (solo `Title` y `Producer` de Google Docs) y no se tocaron.
+  - **Pendiente:** el historial de git todavía conserva la foto original (ver "Hallazgos nuevos"). No se reescribió sin confirmación.
   - **Dónde:** `public/assets/foto_perfil.jpeg`, usada en `components/Hero.jsx:148` y `app/layout.js:36,49,64`.
   - **Problema:** el EXIF incluye coordenadas GPS (latitud, longitud y altitud, con unos 16 m de precisión), el modelo del teléfono y la fecha. Está en la web y en el historial de git.
   - **Solución:**
@@ -285,3 +287,7 @@ Requisitos que el diseño nuevo tiene que cumplir para no repetir lo encontrado:
 ## Hallazgos nuevos
 
 _(Agregá aquí lo que aparezca durante las fases.)_
+
+- [ ] **N1. La foto con GPS sigue en el historial de git** · Fase 0 (decisión pendiente)
+  - **Dónde:** blob `ee01416`, como `assets/foto_perfil.jpeg` desde `fc441bf` (2026-02-15) y como `public/assets/foto_perfil.jpeg` en `5b87af2`. Aparece en 34 commits y el repo es público.
+  - **Opciones:** reescribir el historial con `git filter-repo` y hacer force-push, o dejarlo como está. Ver la explicación de la Fase 0.
