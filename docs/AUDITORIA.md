@@ -20,7 +20,7 @@
 | **0. Urgente** | C1, C4, C2 | Privacidad, despliegue roto y bug visible en móvil. Son independientes del diseño y baratos. |
 | **1. Contenido y datos** | I4, I3, C3, I12, datos centralizados, textos menores | El rediseño va a necesitar el contenido correcto, las imágenes buenas y los datos en un solo lugar. |
 | **2. Arquitectura** | I14, I8, I2, C5, I11, I16, lint | Es la base técnica sobre la que se apoya el rediseño (i18n por ruta, server components, iconos, SEO). No depende de lo visual. |
-| **3. Rediseño** | Nuevo diseño visual + los "Criterios del rediseño" | La mayoría de los problemas de CSS, animaciones y accesibilidad visual se resuelven en el diseño nuevo, en vez de parchear el actual. |
+| **3. Rediseño** | Nuevo diseño visual (skills de diseño + douglus.site) + los "Criterios del rediseño" | La mayoría de los problemas de CSS, animaciones y accesibilidad visual se resuelven en el diseño nuevo, en vez de parchear el actual. |
 | **4. Re-auditoría** | Repetir esta auditoría sobre el resultado | Confirmar que no volvieron los problemas. |
 
 Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual**: se usan como requisitos del diseño nuevo.
@@ -128,12 +128,14 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
   - **Los CV entre sí:** el de inglés incluye Objective-C y JavaScript pero no SwiftUI; el de español al revés. El de inglés dice "System Engineering". Además, el francés B2 de los CV no aparece en la web.
   - **Solución:** decidir la versión correcta de cada dato y sacar las cifras de los datos, no escribirlas a mano. Regenerar los dos CV desde la misma fuente.
 
-- [ ] **I5. `prefers-reduced-motion` no tiene efecto en Skills ni en Proyectos** · → Rediseño
+- [~] **I5. `prefers-reduced-motion` no tiene efecto en Skills ni en Proyectos** · → Rediseño
+  - **Fuera de los criterios (2026-09-14):** el movimiento lo definen las skills de diseño y douglus.site, no la auditoría.
   - **Dónde:** `app/globals.css:1762-1788`, anulado por `:1795` y `:1815`. El `:1778` pierde contra `.availability-badge .status-dot` (`:349`).
   - **Problema:** tampoco se desactivan el scroll suave (`:74`, `Nav.jsx:30`), el parpadeo del terminal (`:1890`) ni el tecleo de `Terminal.jsx`.
   - **Requisito para el diseño nuevo:** envolver los efectos en `@media (prefers-reduced-motion: no-preference)`.
 
-- [ ] **I6. Las tarjetas no se elevan al hacer hover** · → Rediseño **[nav]**
+- [~] **I6. Las tarjetas no se elevan al hacer hover** · → Rediseño **[nav]**
+  - **Fuera de los criterios (2026-09-14):** el movimiento lo definen las skills de diseño y douglus.site, no la auditoría.
   - **Dónde:** `globals.css:1546-1549` (`.visible { transform … !important }`), `:1804` y `:1819`, que pisan los hovers de `:1399`, `:849` y `:998`.
   - **Requisito:** que las animaciones de entrada y los hovers no compitan por `transform`; por ejemplo, usar la propiedad independiente `translate`.
 
@@ -154,7 +156,8 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
   - **Solución:** se resuelve con I14 (idioma en la ruta). Como mínimo, try/catch más `navigator.language`.
   - **Hecho (Fase 2, con I14):** el idioma sale de la URL, así que se borró `context/LanguageProvider.jsx` y ya no se usa `localStorage` para el idioma. El HTML llega en el idioma correcto, sin parpadeo, y `<html lang>` se genera en el servidor. No hay detección automática: Fermin eligió no redirigir por `Accept-Language` ni por `navigator.language` (el bot de Google entra sin esa cabecera, y quien comparte `/` espera que el otro vea lo mismo). El botón de idioma es un enlace a la otra ruta y conserva la sección visible (`/en#proyectos`).
 
-- [ ] **I9. El bucle `requestAnimationFrame` del hero no para nunca** · → Rediseño
+- [~] **I9. El bucle `requestAnimationFrame` del hero no para nunca** · → Rediseño
+  - **Fuera de los criterios (2026-09-14):** el movimiento lo definen las skills de diseño y douglus.site, no la auditoría. El hero actual se reemplaza entero.
   - **Dónde:** `components/Hero.jsx:52-71`.
   - **Problema:**
     - Corre a 60fps siempre, aunque el hero no se vea.
@@ -164,7 +167,8 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
     - Tiene un `backdrop-filter` inútil sobre fondo opaco (`globals.css:514`).
   - **Requisito:** los efectos de ratón solo escriben variables CSS y se pausan fuera del viewport.
 
-- [ ] **I10. Efectos costosos para la GPU** · → Rediseño
+- [~] **I10. Efectos costosos para la GPU** · → Rediseño
+  - **Fuera de los criterios (2026-09-14):** el movimiento lo definen las skills de diseño y douglus.site, no la auditoría.
   - **Dónde:**
     - Orbes con `blur(80px)` animados sin fin (`globals.css:93-136`).
     - `will-change` permanente en unos 31 elementos (`:1519-1543`, `:1802`, más `RevealObserver.jsx:28`).
@@ -239,7 +243,8 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
 
 ### Cursor personalizado (→ Rediseño: quitarlo o rehacerlo)
 
-- [ ] **M7.** Problemas en `globals.css:1825-1842` y `components/PremiumCursor.jsx`:
+- [~] **M7.** Problemas en `globals.css:1825-1842` y `components/PremiumCursor.jsx`:
+  - **Fuera de los criterios (2026-09-14):** si hay cursor personalizado lo decide el diseño (douglus.site tiene uno).
   - `cursor: none` se aplica antes de que exista el cursor personalizado.
   - Al cargar, aparece un punto en la posición (0,0) **[nav]**.
   - Sobre `.btn` y los enlaces se ven dos cursores.
@@ -271,7 +276,8 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
   - **Hecho (Fase 1):** `PROJECTS`, `EXPERIENCE` y `EDUCATION` en `lib/site.js`; `components/ProjectCard.jsx` (medio, estado, enlaces por tipo: tiendas, repo o demo) y `components/Timeline.jsx`. Los textos siguen en `translations.js`, con claves por id (`projects.travelpic.*`, `exp.travelpic.*`, `edu.unicen.*`), y `t(clave, fallback)` permite que el título o el bloque "Problema" sean opcionales. Las cifras del hero (`STATS`) salen de los datos: apps con `status: "live"`, años entre el primer inicio y el último fin de la trayectoria, y cantidad de proyectos. Las diferencias accidentales quedaron unificadas: los iconos de plataforma siempre tienen `title` y "Problema" aparece si hay texto. El estilo relleno del botón de TravelPic se mantiene con `primary: true`. HTML comparado con el anterior: solo cambió "5+" → "4+" (2021–2025).
   - Hoy son JSX copiado a mano, con diferencias accidentales: `title` en los iconos de plataforma, estilo del botón Descargar y el bloque "Problema".
   - Las cifras del hero tienen que salir de estos datos.
-- [ ] **M12.** Hay dos sistemas de animación de entrada (`animate-*` y `premium-reveal`) → Rediseño: dejar uno solo.
+- [~] **M12.** Hay dos sistemas de animación de entrada (`animate-*` y `premium-reveal`) → Rediseño: dejar uno solo.
+  - **Fuera de los criterios (2026-09-14):** el movimiento lo definen las skills de diseño y douglus.site, no la auditoría.
 - [ ] **M13.** `app/*.js` usa `.js` y el resto de componentes `.jsx`. Los badges se numeran `--0,1,2,4,5` y se detecta Python por su clase (`Hero.jsx:61`).
 
 ### Estilos (→ Rediseño: tokens desde el inicio)
@@ -323,18 +329,15 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
 
 ## Criterios del rediseño (Fase 3)
 
-Requisitos que el diseño nuevo tiene que cumplir para no repetir lo encontrado:
+El diseño visual y el movimiento salen de las skills `design-taste-frontend`, `impeccable` y `emil-design-eng`, y de [douglus.site](https://douglus.site) (navegación horizontal y animaciones). Estos criterios son solo buenas prácticas de programación que el código nuevo tiene que cumplir (decidido por Fermin el 2026-09-14):
 
-1. **Responsive:** sin desborde horizontal en 375, 768, 900, 1024 y 1440px. Nada de `overflow-x: hidden` en `body` para tapar desbordes (C2, I13).
-2. **Contenido visible sin JS:** las animaciones de entrada son una mejora progresiva (C5).
-3. **Movimiento:** solo se anima `opacity` y `transform`; sin `will-change` fijo, sin blur animado y sin bucles rAF permanentes. Todo desactivable con `prefers-reduced-motion` (I5, I9, I10).
-4. **Contraste:** AA (4,5:1) en los dos temas, verificado (I7).
-5. **Nav:** accesible, con botón de menú explícito en móvil, anclas nativas y `aria-current` (I1, I2, M3).
-6. **Tokens:** colores, radios, sombras y fuentes como tokens, sin hex sueltos (M14).
-7. **Un solo sistema** de animación de entrada, y sin conflictos entre el hover y la entrada (I6, M12).
-8. **Assets:** imágenes optimizadas con `next/image`, iconos SVG y cero CSS externo bloqueante (C3, I11).
-9. **Proyectos:** enlaces directos a tiendas, repo o demo; capturas reales; los datos salen de un array (I12, I15, M11).
-10. **Accesibilidad:** `<main>`, enlace para saltar al contenido, `:focus-visible` propio, zonas táctiles de al menos 24px (mejor 44px), información que no dependa del hover (M1–M6).
+1. **Sin desbordes tapados:** nada de `overflow-x: hidden` en `html` o `body` para esconder lo que se sale; un desborde que no es intencional se arregla donde nace. Probar en 375, 768, 900, 1024 y 1440px (C2, I13).
+2. **Contenido visible sin JS:** el HTML trae todo el contenido y los enlaces; lo que agrega JS es una mejora progresiva (C5).
+3. **Nav:** botón de menú explícito en móvil (`<button>` con `aria-expanded` y `aria-controls`, que cierra con Escape), anclas nativas y `aria-current` (I1, I2, M3).
+4. **Tokens:** colores, radios, sombras y fuentes como tokens, sin hex sueltos (M14).
+5. **Assets:** imágenes con `next/image`, iconos SVG y ningún CSS externo que bloquee el render (C3, I11).
+6. **Proyectos:** enlaces directos a tiendas, repo o demo; capturas reales; los datos salen de un array (I12, I15, M11).
+7. **Accesibilidad:** `<main>`, enlace para saltar al contenido, `:focus-visible` propio, contraste AA (4,5:1) en los dos temas, verificado, zonas táctiles de al menos 24px (mejor 44px) e información que no dependa del hover (I7, M1–M6).
 
 ## Hallazgos nuevos
 
