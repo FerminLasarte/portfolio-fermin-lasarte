@@ -1,18 +1,25 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
+
+const FINE_POINTER = "(pointer: fine)";
+
+// ¿Hay mouse? En el servidor no se sabe, así que el cursor recién aparece al hidratar.
+const subscribe = (onChange) => {
+  const mq = window.matchMedia(FINE_POINTER);
+  mq.addEventListener("change", onChange);
+  return () => mq.removeEventListener("change", onChange);
+};
+const hasFinePointer = () => window.matchMedia(FINE_POINTER).matches;
+const noPointerOnServer = () => false;
 
 /**
  * Magnetic contextual cursor — only rendered on devices with a fine pointer
  * (mouse). It grows when hovering interactive elements.
  */
 export default function PremiumCursor() {
-  const [enabled, setEnabled] = useState(false);
+  const enabled = useSyncExternalStore(subscribe, hasFinePointer, noPointerOnServer);
   const cursorRef = useRef(null);
-
-  useEffect(() => {
-    if (window.matchMedia("(pointer: fine)").matches) setEnabled(true);
-  }, []);
 
   useEffect(() => {
     if (!enabled) return;

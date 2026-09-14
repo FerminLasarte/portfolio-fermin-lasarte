@@ -4,7 +4,7 @@ Portfolio personal de Fermin Lasarte (iOS & Cross-Platform Mobile Engineer), con
 
 ## Stack
 
-- [Next.js 15](https://nextjs.org/) (App Router)
+- [Next.js 16](https://nextjs.org/) (App Router, Turbopack)
 - React 19
 - CSS plano (`app/globals.css`) — diseño Apple minimal + glassmorphism + bento grid
 - i18n por ruta: `/` en español y `/en` en inglés, prerenderizadas, con el diccionario en el servidor (`lib/i18n.js`)

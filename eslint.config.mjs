@@ -1,18 +1,10 @@
-import { FlatCompat } from "@eslint/eslintrc";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
 
-// eslint-config-next 15 todavía exporta la configuración en el formato viejo
-// (eslintrc); FlatCompat la convierte al formato plano del CLI de ESLint 9.
-const compat = new FlatCompat({
-  baseDirectory: path.dirname(fileURLToPath(import.meta.url)),
-});
+// eslint-config-next 16 ya exporta la configuración en el formato plano de ESLint 9.
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  globalIgnores([".next/**", "out/**", "build/**"]),
+]);
 
-const config = [
-  { ignores: [".next/", "out/", "build/"] },
-  // Sin esto el CLI solo revisa .js, .mjs y .cjs, y se saltea los componentes .jsx.
-  { files: ["**/*.{js,jsx,mjs,cjs}"] },
-  ...compat.extends("next/core-web-vitals"),
-];
-
-export default config;
+export default eslintConfig;
