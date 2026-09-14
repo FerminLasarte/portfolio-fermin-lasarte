@@ -345,7 +345,8 @@ _(Agregá aquí lo que aparezca durante las fases.)_
   - **Dónde:** blob `ee01416`, como `assets/foto_perfil.jpeg` desde `fc441bf` (2026-02-15) y como `public/assets/foto_perfil.jpeg` en `5b87af2`. Aparece en 34 commits y el repo es público.
   - **Opciones:** reescribir el historial con `git filter-repo` y hacer force-push, o dejarlo como está. Ver la explicación de la Fase 0.
 
-- [ ] **N2. Los datos de `lib/site.js` viajan en el JS del cliente** · Fase 2 (hallado en I11)
+- [x] **N2. Los datos de `lib/site.js` viajan en el JS del cliente** · Fase 2 (hallado en I11)
+  - **Hecho:** Nav ya no importa `lib/site.js`. `Document` le pasa `social` (`github`, `linkedin` y `email`) por props, igual que los textos. El HTML de ES y EN no cambió. En el JS del cliente ya no están `PROJECTS` ni los iconos de `SKILL_GROUPS`: el chunk del nav y la página bajó de 6,6 KB a 3,5 KB comprimido.
   - **Dónde:** `components/Nav.jsx` importa `PERSON` y `SOCIAL` de `lib/site.js`.
   - **Problema:** como `site.js` calcula `SKILLS`, `HERO_BADGES` y `STATS` con llamadas a funciones, el bundler no puede descartar el resto del módulo. El chunk del layout lleva `PROJECTS`, `SKILL_GROUPS` (con sus 5 iconos) y demás, aunque Nav solo use el email y dos URLs. Ya pasaba antes de la Fase 2.
   - **Solución:** que el layout le pase a Nav el email y las URLs por props (como ya hace con los textos), o separar `PERSON` y `SOCIAL` en un módulo aparte.

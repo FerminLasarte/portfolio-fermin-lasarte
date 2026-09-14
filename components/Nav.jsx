@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import { toggleTheme } from "@/lib/theme";
-import { PERSON, SOCIAL } from "@/lib/site";
 import Icon from "@/components/Icon";
 import { faEnvelope, faGithub, faLinkedin, faMoon, faSun } from "@/lib/icons";
 
@@ -11,7 +10,9 @@ import { faEnvelope, faGithub, faLinkedin, faMoon, faSun } from "@/lib/icons";
 // sección ("/#proyectos", "/en#proyectos"): son anclas nativas, que funcionan desde
 // cualquier página, y el scroll suave y el margen del nav fijo salen del CSS
 // (`scroll-behavior` y `scroll-margin-top`). `switchTo`: el otro idioma, { lang, href }.
-export default function Nav({ links, switchTo, langLabel, themeLabel }) {
+// `social`: { github, linkedin, email }. Llega por props y no se importa de lib/site.js
+// para que los datos del sitio no terminen en el JS del navegador.
+export default function Nav({ links, switchTo, langLabel, themeLabel, social }) {
   const navRef = useRef(null);
   // Sección visible, para que el cambio de idioma vuelva a la misma sección.
   const activeRef = useRef(null);
@@ -103,7 +104,7 @@ export default function Nav({ links, switchTo, langLabel, themeLabel }) {
           <Icon icon={faSun} />
         </button>
         <a
-          href={SOCIAL.github}
+          href={social.github}
           target="_blank"
           rel="noopener noreferrer"
           className="icon-btn"
@@ -112,7 +113,7 @@ export default function Nav({ links, switchTo, langLabel, themeLabel }) {
           <Icon icon={faGithub} />
         </a>
         <a
-          href={SOCIAL.linkedin}
+          href={social.linkedin}
           target="_blank"
           rel="noopener noreferrer"
           className="icon-btn"
@@ -120,7 +121,7 @@ export default function Nav({ links, switchTo, langLabel, themeLabel }) {
         >
           <Icon icon={faLinkedin} />
         </a>
-        <a href={`mailto:${PERSON.email}`} className="icon-btn" title="Email">
+        <a href={`mailto:${social.email}`} className="icon-btn" title="Email">
           <Icon icon={faEnvelope} />
         </a>
       </div>

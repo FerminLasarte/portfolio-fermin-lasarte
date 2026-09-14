@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google";
 import { themeInitScript } from "@/lib/theme";
 import { LOCALES, getT, homePath } from "@/lib/i18n";
-import { NAV_SECTIONS } from "@/lib/site";
+import { NAV_SECTIONS, PERSON, SOCIAL } from "@/lib/site";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import BackgroundOrbs from "@/components/BackgroundOrbs";
@@ -38,6 +38,7 @@ export default function Document({ lang, head, children }) {
           switchTo={{ lang: other, href: homePath(other) }}
           langLabel={t("nav.langToggle")}
           themeLabel={t("nav.themeToggle")}
+          social={{ github: SOCIAL.github, linkedin: SOCIAL.linkedin, email: PERSON.email }}
         />
         {children}
         <Footer t={t} />
