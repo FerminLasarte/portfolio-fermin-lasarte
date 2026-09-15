@@ -91,7 +91,7 @@
   --w-card: clamp(22rem, 28cqi, 28rem);
   --w-timeline: clamp(96rem, 130cqi, 110rem);
   --w-skills: clamp(48rem, 80cqi, 80rem);
-  --w-bleed: clamp(28rem, 65cqi, 64rem);
+  --w-bleed: 65cqi; /* 70cqi desde 100rem, como douglus */
 }
 
 /* Tema oscuro: lo pone lib/theme.js en <html> antes del primer pintado. */
@@ -108,4 +108,11 @@ html.dark-mode {
   --wash-1: #2a1d55;
   --wash-2: #5b3bc4;
   color-scheme: dark;
+}
+
+/* La transición al cierre, como en douglus: 65% del ancho y 70% desde 1600px. */
+@media (min-width: 100rem) {
+  :root {
+    --w-bleed: 70cqi;
+  }
 }

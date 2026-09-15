@@ -14,6 +14,7 @@
   --wash-mask: ellipse 140% 100% at 50% 100%;
   --wash-origin: center top;
   --wash-from: 1 0.05;
+  --wash-to: 1 1;
   position: relative;
   block-size: clamp(12rem, 45vh, 26rem);
   padding: 0;
@@ -36,14 +37,15 @@
   transform-origin: var(--wash-origin);
 }
 
-/* En vertical se dibuja mientras la franja entra a la vista. Sin soporte, sin JS o con
-   reduce motion queda dibujada, quieta. */
+/* En vertical se estira mientras la franja entra a la vista: lo dibujado nunca es más
+   corto que lo visible, así parece que ya estaba ahí. Sin soporte, sin JS o con reduce
+   motion queda dibujada, quieta. */
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
     html.js .bleed__wash {
       animation: draw linear both;
       animation-timeline: view();
-      animation-range: entry 0% cover 55%;
+      animation-range: entry 0% entry 100%;
     }
   }
 }
@@ -51,6 +53,10 @@
 @keyframes draw {
   from {
     scale: var(--wash-from);
+  }
+
+  to {
+    scale: var(--wash-to);
   }
 }
 
@@ -132,16 +138,20 @@
     --wash-mask: ellipse 100% 140% at 100% 50%;
     --wash-origin: left center;
     --wash-from: 0.05 1;
+    --wash-to: 1.02 1;
     block-size: 100%;
   }
 
-  /* Se dibuja con la misma línea de tiempo que mueve la pista: desde que el panel
-     asoma (su borde izquierdo al 90% del ancho de la ventana) hasta que ese borde
-     llega al 35%. Sin animation-timeline (Firefox) lo hace TrackController. */
+  /* El tramo de douglus (ScrollTrigger de "center center" a "right+=100 center" del
+     panel anterior): se estira desde que el panel asoma por el borde derecho hasta que
+     su borde izquierdo llega al centro menos 100px, de 0,05 a 1,02. Así lo estirado
+     siempre es más ancho que lo visible y parece que ya estaba ahí. Usa la misma línea
+     de tiempo que mueve la pista; sin animation-timeline (Firefox) lo hace
+     TrackController. */
   @supports (animation-timeline: view()) {
     html.js .bleed__wash {
       animation-timeline: --pan;
-      animation-range: contain calc(var(--x-bleed) - 90cqi) contain calc(var(--x-bleed) - 35cqi);
+      animation-range: contain calc(var(--x-bleed) - 100cqi) contain calc(var(--x-bleed) - 50cqi + 100px);
     }
   }
 

@@ -89,12 +89,12 @@ export default function TrackController() {
       const x = p * (track.scrollWidth - vw);
       track.style.translate = `${-x}px 0`;
       if (fill) fill.style.scale = `${p} 1`;
-      // La transición al cierre se dibuja mientras su borde izquierdo va del 90% al 35%
-      // del ancho de la ventana (el mismo tramo que styles/contact.css).
+      // La transición al cierre se estira mientras su borde izquierdo va del borde
+      // derecho de la ventana al centro menos 100px (el mismo tramo que styles/contact.css).
       if (wash) {
-        const start = wash.parentElement.offsetLeft - 0.9 * vw;
-        const t = Math.min(Math.max((x - start) / (0.55 * vw), 0), 1);
-        wash.style.scale = `${0.05 + 0.95 * t} 1`;
+        const start = wash.parentElement.offsetLeft - vw;
+        const t = Math.min(Math.max((x - start) / (0.5 * vw + 100), 0), 1);
+        wash.style.scale = `${0.05 + 0.97 * t} 1`;
       }
     };
     const onScroll = () => {

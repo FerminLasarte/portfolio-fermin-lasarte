@@ -150,7 +150,7 @@ Proyectos pasa a estar justo después del hero (I15). Experiencia y Educación s
 | 3 | Un panel por proyecto, en el orden de `PROJECTS` | `proyecto-<id>` | `--w-card-lg: clamp(30rem, 40cqi, 42rem)` para las apps en producción con plataforma móvil; `--w-card: clamp(22rem, 28cqi, 28rem)` para el resto |
 | 4 | Trayectoria (experiencia y educación) | `experiencia`; la fila de UNICEN lleva `educacion` | `--w-timeline: clamp(96rem, 130cqi, 110rem)`: ancha también en 1024px, para que las cuatro fichas entren a lo alto |
 | 5 | Habilidades | `habilidades` | `--w-skills: clamp(48rem, 80cqi, 80rem)` |
-| 6 | Transición al cierre: decorativa, `aria-hidden` (agregada el 2026-09-14) | | `--w-bleed: clamp(28rem, 65cqi, 64rem)` |
+| 6 | Transición al cierre: decorativa, `aria-hidden` (agregada el 2026-09-14) | | `--w-bleed: 65cqi` (70cqi desde 1600px, como douglus) |
 | 7 | Contacto | `contacto` | `100cqi` |
 
 En vertical, después del último panel va un `<footer>` corto (© y derechos). En horizontal el pie no se muestra: la página termina con la pista, sin scroll de más (antes el pie agregaba 85px al final), y el © ya está en la franja inferior. El nav queda con **cuatro enlaces**: Proyectos, Trayectoria, Habilidades y Contacto; "Sobre mí" es el nombre, a la izquierda. **Esto cambia las etiquetas del nav y hay que aprobarlo** (sección 10).
@@ -343,7 +343,7 @@ Rediseñado el 2026-09-14 a pedido de Fermin, como el final de douglus (antes er
 
 **Transición dibujada** (`.bleed`, decorativa y `aria-hidden`):
 - **Horizontal:** un panel de `--w-bleed` entre Habilidades y Contacto con un degradado del acento: transparente, `--wash-1` a `--wash-4` y `--night`, que empalma con el contacto. Una máscara ovalada ablanda los bordes del lado claro, como la mancha de douglus.
-- **Cómo se dibuja:** crece de izquierda a derecha (`scale` X de 0,05 a 1) atado al scroll, mientras el borde izquierdo del panel va del 90% al 35% del ancho de la ventana. Usa la misma línea de tiempo `--pan` de la pista, con `animation-range` calculado a partir de `--x-bleed` (la suma de los anchos anteriores, en `.h-scroll`). En Firefox lo hace el respaldo de TrackController. douglus hace lo mismo con una imagen cálida y ScrollTrigger; acá es un degradado de CSS, sin imagen.
+- **Cómo se dibuja:** se estira de izquierda a derecha (`scale` X de 0,05 a 1,02) atado al scroll, con el tramo exacto de douglus: desde que el panel asoma por el borde derecho de la ventana hasta que su borde izquierdo llega al centro menos 100px. Como lo estirado siempre es más ancho que la parte visible del panel, el degradado parece estar ya ahí y abrirse. (La primera versión iba del 90% al 35%: durante un tramo se veía papel entre el degradado y el borde, y parecía que se iba construyendo). Usa la misma línea de tiempo `--pan` de la pista, con `animation-range` calculado a partir de `--x-bleed` (la suma de los anchos anteriores, en `.h-scroll`). En Firefox lo hace el respaldo de TrackController. douglus hace lo mismo con una imagen cálida y ScrollTrigger; acá es un degradado de CSS, sin imagen.
 - **Vertical:** una franja de `clamp(12rem, 45vh, 26rem)` de alto que baja hacia el contacto y se dibuja de arriba a abajo mientras entra a la vista (`view()`). Sin soporte, sin JS o con reduce motion, queda dibujada y quieta.
 
 **Contacto** (`#contacto`), en `--night` en los dos temas:
@@ -480,7 +480,7 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
 | Scroll con la rueda | Rueda o trackpad, con puntero fino | Scroll del documento, con Lenis | `lerp: 0.1` por frame; anclas y "Volver arriba" en 1,2 s con `1 − (1 − t)³` | Scroll nativo, sin suavizar |
 | Preloader | Primera carga de la sesión | `translate` Y y `scale` de palabras y letras, `scale` X de la línea, `opacity` del velo | Unos 5,3 s en total (7.11) | No existe |
 | Barra de progreso | Scroll | `scale` X | Lineal | No existe (vertical) |
-| Transición al cierre | Scroll | `scale` del degradado de 0,05 a 1: en X en horizontal, en Y en vertical | Lineal, atada al scroll: en horizontal, mientras el borde izquierdo del panel va del 90% al 35% del ancho de la ventana (misma línea de tiempo que la pista; en Firefox, TrackController); en vertical, `view()` de `entry 0%` a `cover 55%` | Quieta y dibujada |
+| Transición al cierre | Scroll | `scale` del degradado: de 0,05 a 1,02 en X (horizontal) o de 0,05 a 1 en Y (vertical) | Lineal, atada al scroll: en horizontal, mientras el borde izquierdo del panel va del borde derecho de la ventana al centro menos 100px (misma línea de tiempo que la pista; en Firefox, TrackController); en vertical, `view()` de `entry 0%` a `entry 100%` | Quieta y dibujada |
 | Nav y franja en noche | El contacto cruza el centro (horizontal) | `background-color` y `color` | 420ms `--ease-out` | Igual |
 | Tachado del nav y de contacto | Hover o foco | `scale` X del pseudo-elemento | 220ms `--ease-out` | Aparece sin transición |
 | Botón: relleno | Hover | `translate` Y del `::before` (entra desde abajo, sale por arriba con JS) | 500ms entrada, 400ms salida, `--ease-out` | Fundido de `opacity` |
