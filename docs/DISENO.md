@@ -132,7 +132,7 @@ Proyectos pasa a estar justo después del hero (I15). Experiencia y Educación s
 | 5 | Habilidades | `habilidades` | `--w-skills: clamp(48rem, 80cqi, 80rem)` |
 | 6 | Contacto | `contacto` | `100cqi` |
 
-Después de la pista horizontal, la página sigue en vertical con un `<footer>` corto (© y derechos). El nav queda con **cuatro enlaces**: Proyectos, Trayectoria, Habilidades y Contacto; "Sobre mí" es el nombre, a la izquierda. **Esto cambia las etiquetas del nav y hay que aprobarlo** (sección 10).
+En vertical, después del último panel va un `<footer>` corto (© y derechos). En horizontal el pie no se muestra: la página termina con la pista, sin scroll de más (antes el pie agregaba 85px al final), y el © ya está en la franja inferior. El nav queda con **cuatro enlaces**: Proyectos, Trayectoria, Habilidades y Contacto; "Sobre mí" es el nombre, a la izquierda. **Esto cambia las etiquetas del nav y hay que aprobarlo** (sección 10).
 
 ## 6. Navegación horizontal
 
