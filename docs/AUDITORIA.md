@@ -686,7 +686,17 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
     - Desde la tarjeta de Vault, el cambio lleva a `/en#proyectos` y la tarjeta queda a 2.794px, porque las 8 tarjetas tienen `data-section="proyectos"`.
   - **Solución:** que el nombre empiece con lo visible ("EN, English") y que el enlace guarde el `id` del panel visible, no el de la sección.
 
-- [ ] **R-M9. Con el menú móvil abierto, el Tab sale del menú** **[nav]**
+- [x] **R-M9. Con el menú móvil abierto, el Tab sale del menú** **[nav]**
+  - **Hecho:**
+    - Con el menú abierto, `Nav` pone `inert` también en el enlace de salto, el nombre y las herramientas del nav, salvo el botón (`.nav__tools > :not(.nav__menu)`), además de `main`, el pie y la franja.
+    - El nombre del botón es siempre "Menú" / "Menu", en un `sr-only`; el cambio a "Cerrar" es `aria-hidden` y solo visual, y el estado lo da `aria-expanded`.
+    - Queda una tensión con 2.5.3: con el menú abierto se ve "Cerrar" y el nombre es "Menú". Quien use control por voz puede decir "Menú" o apretar Escape.
+  - **Verificado** sobre el servidor local, a 375×812, en `/`, `/en` y `/trayectoria`:
+    - **Antes:** después de LinkedIn, el foco pasaba por el enlace de salto, el nombre y el enlace de idioma (que quedan detrás del panel). El botón se anunciaba "Cerrar, expandido".
+    - **Después:** con Tab y con Shift+Tab (14 pasos en cada sentido), el foco solo pasa por el botón y los enlaces del menú. Lo único que queda fuera es `<nextjs-portal>`, el indicador de Next en desarrollo, que en producción no existe, y el paso por la interfaz del navegador.
+    - El árbol de accesibilidad da "Menú" con `expanded` en false, true y false; Escape devuelve el foco al botón y saca todos los `inert`.
+    - El botón mide lo mismo (88×44) y sigue cambiando de palabra en pantalla.
+  - DISENO.md, 7.1.
   - **Dónde:** `components/Nav.jsx:47-66` y `:131-143`.
   - **Problema:**
     - Después de LinkedIn, el foco pasa al enlace de salto, que lleva a un `main` inerte, y después al nombre y a "EN", que quedan detrás del menú.

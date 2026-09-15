@@ -282,7 +282,8 @@ Si `CSS.supports("animation-timeline: view()")` da falso y el modo horizontal es
 
 **Móvil:** botón `<button aria-expanded aria-controls="menu">` con el texto "Menú" / "Cerrar", que rueda de uno al otro (7.6).
 - Abre un panel fijo a pantalla completa con los cuatro enlaces en tamaño Display, y abajo el tema y las redes.
-- Mientras está abierto: `main` y el `footer` quedan `inert`; `Escape` lo cierra y devuelve el foco al botón; tocar un enlace también lo cierra.
+- Mientras está abierto: `main`, el `footer` y lo que el panel tapa del nav (el enlace de salto, el nombre y el idioma) quedan `inert`, así el foco no sale del botón y del menú; `Escape` lo cierra y devuelve el foco al botón; tocar un enlace también lo cierra.
+- El nombre accesible del botón es siempre "Menú" (en un `sr-only`) y el estado lo da `aria-expanded`; "Cerrar" es solo visual. Antes cambiaba junto con `aria-expanded` y se anunciaba de más ("Cerrar, expandido"). (2026-09-15, R-M9 de la re-auditoría).
 - Sin JS no hay botón: la lista de enlaces se ve directamente, en una fila que puede partirse en dos (`html:not(.js)`).
 
 ### 7.2 Hero

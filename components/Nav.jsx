@@ -47,11 +47,15 @@ export default function Nav({ brand, links, switchTo, labels, social }) {
     if (current) e.currentTarget.href = `${switchTo.href}#${current}`;
   };
 
-  // Con el menú abierto, el resto de la página queda inerte; Escape lo cierra y
-  // devuelve el foco al botón, y se cierra solo si la ventana deja de ser de móvil.
+  // Con el menú abierto, el resto de la página queda inerte, también lo que el panel
+  // tapa del nav (el enlace de salto, el nombre y el idioma; R-M9): el foco no sale
+  // del botón y del menú. Escape lo cierra y devuelve el foco al botón, y se cierra
+  // solo si la ventana deja de ser de móvil.
   useEffect(() => {
     if (!open) return;
-    const rest = document.querySelectorAll("main, body > footer, .strip");
+    const rest = document.querySelectorAll(
+      "main, body > footer, .strip, .skip, .nav__brand, .nav__tools > :not(.nav__menu)",
+    );
     rest.forEach((el) => (el.inert = true));
     const mq = matchMedia(MOBILE);
     const onKey = (e) => {
@@ -141,9 +145,13 @@ export default function Nav({ brand, links, switchTo, labels, social }) {
             aria-controls="menu"
             onClick={() => setOpen((o) => !o)}
           >
-            <span className="swap">
-              <span aria-hidden={open}>{labels.menu}</span>
-              <span aria-hidden={!open}>{labels.close}</span>
+            {/* El nombre es siempre "Menú" y el estado lo da aria-expanded (R-M9): si
+                también cambiara a "Cerrar", se anunciaría de más ("Cerrar, expandido").
+                El cambio de palabra es solo visual. */}
+            <span className="sr-only">{labels.menu}</span>
+            <span className="swap" aria-hidden="true">
+              <span>{labels.menu}</span>
+              <span>{labels.close}</span>
             </span>
           </button>
         </div>
