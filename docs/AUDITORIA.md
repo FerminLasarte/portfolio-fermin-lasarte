@@ -73,7 +73,7 @@
   - **Herramienta:** la comparación de capturas que venía de eficiencia salteaba, en horizontal, el panel de Trayectoria a 1440, porque buscaba el id "trayectoria" y no "experiencia". Ahora recorre toda la pista. En eficiencia, la maquetación de ese panel se había verificado aparte, midiendo los 513 textos de `/` y `/trayectoria` (R-M14).
   - **Rama:** estos commits están locales, sin push.
   - **Sigue:** la documentación (R-M37 y R-M38), para que DISENO.md quede en su versión definitiva; después, I12, N4 y el merge a `main`.
-- **Siguen abiertos de antes:** I12 y N4 (contenido que tiene que conseguir Fermin), M13 y N10 (el tachado del nav, a medias en las capturas sin ventana; falta mirarlo a ojo, ver R-M33).
+- **Siguen abiertos de antes:** I12 y N4 (contenido que tiene que conseguir Fermin), y M13. N10 quedó cerrado: en el preview, el tachado del nav cruza la palabra entera (ver R-M33).
 
 Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual**: se usan como requisitos del diseño nuevo.
 
@@ -509,7 +509,7 @@ _(Agregá aquí lo que aparezca durante las fases.)_
   - SEO, robustez y seguridad (R-M21 a R-M27), de `5ff662b` a `b1bede4`;
   - eficiencia (R-M14 a R-M20), de `5e35694` a `f5ed6db`: R-M17 y R-M18 sin cambios, porque la medición dijo que no valía la pena;
   - limpieza (R-M28 a R-M36), de `677d961` a `1361fb4`. Solo R-M34 (los textos, con la copia que aprobó Fermin) y R-M33 (la foto al cambiar la ventana y el tachado con colores forzados) cambian algo a la vista.
-- **Sigue** la documentación (R-M37 y R-M38). Queda sin confirmar N10, el tachado del nav (ver R-M33).
+- **Sigue** la documentación (R-M37 y R-M38). N10, el tachado del nav, quedó cerrado: en el preview cruza la palabra entera (ver R-M33).
 
 No hay nada crítico. Los problemas más visibles son cuatro:
 - **R-I1:** dos nombres de proyecto quedan cortados en su placa.
@@ -1139,6 +1139,7 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
     - **El tachado con colores forzados emulados** (CDP), en claro y oscuro, con el mouse encima: antes el `::after` salía blanco sobre blanco (o negro sobre negro); ahora sale del color de los enlaces (`rgb(0, 0, 159)` y amarillo). En "Ver el proyecto" de `/trayectoria` la fila del medio queda cubierta al 100%, contra el 58% de antes, que es solo el texto.
     - Sin colores forzados no cambia nada: las capturas de las 16 combinaciones dan 0%, salvo la home a 1440, dentro del ruido (0,065% a 0,067%). La foto sigue siendo el LCP; el scroll suave, la ola, el ancla, el cierre y el imán funcionan, sin errores de consola.
   - **Nuevo (N10), sin confirmar:** en las capturas sin ventana, el tachado de los enlaces del nav en horizontal queda dibujado hasta la mitad ("Trayec" de "Trayectoria"), aunque el estilo calculado dice `scale: 1`; con la transición apagada, la línea es completa. Pasa igual en el build anterior, así que no viene de este cambio. En "Ver el proyecto", que está en la página y no en el nav fijo, la línea sale completa. Una ventana visible de Chrome no sirvió para medirlo. Falta mirarlo a ojo, pasando el mouse por el nav.
+  - **N10 cerrado (2026-09-15):** Fermin lo miró en el preview de la rama (`518b560`) y el tachado del nav cruza la palabra entera. Era un efecto de las capturas sin ventana, no del sitio.
   - La foto vuelve a su lugar sin animación cuando cambia el tamaño de la ventana (`DraggablePhoto.jsx:162-168`); DISENO dice 700ms.
   - `Magnet.jsx:10` espera 420ms, pero la transición dura 400ms (`base.css:220`), y el comentario dice que son el mismo valor.
   - En colores forzados, el `.strike` y otros detalles no tienen un estilo propio (ver R-I8).
