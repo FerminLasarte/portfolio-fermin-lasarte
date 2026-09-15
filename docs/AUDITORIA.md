@@ -59,9 +59,21 @@
     - con la página quieta, 0 frames por segundo en vez de 60;
     - CLS de `/trayectoria` con la fuente demorada: 0,0245 → 0,0102 a 1440 y 0,0225 → 0,0043 a 1024.
   - **Lo que cuesta:** el HTML de la home suma 0,4 KB gz (R-M15), y R-M14 no es idéntico píxel por píxel: el recorte de la fuente corre 0,35px como mucho el ancho de un título, sin cambiar la maquetación. Si Fermin prefiere el archivo de Google, se revierte `31b472c` y nada más.
-  - **Rama:** estos commits están locales, sin push. Queda para después del push, en el preview de Vercel: las cabeceras de caché de `/icons` y `/assets` (R-M19).
+  - **Rama:** estos commits están locales, sin push. Queda para después del push, en el preview de Vercel: las cabeceras de caché de `/icons` y `/assets` (R-M19). Después se pushearon (`fedd73d`), con autorización de Fermin, y R-M19 se verificó en el preview (`31b85da`).
   - **Sigue:** limpieza (R-M28 a R-M36), documentación (R-M37 y R-M38), I12, N4 y el merge a `main`.
-- **Siguen abiertos de antes:** I12 y N4 (contenido que tiene que conseguir Fermin), M13 y N5 (este último está en R-M35).
+- **Actualización (2026-09-15, limpieza):** R-M28 a R-M36 están cerrados, un commit por punto, en el orden que aprobó Fermin:
+  - la prueba de `global-error.js` con la fuente recortada, que quedó pendiente de R-M14 (`01501a1`, solo la nota: funciona en los 8 casos);
+  - R-M35 (`677d961`), R-M28 (`12d0533`), R-M29 (`d30fbd2`), R-M33 (`fa69000`), R-M34 (`8a5e34f`), R-M30 (`24b4034`), R-M32 (`46e48ba`), R-M31 (`c544f73`) y R-M36 (`1361fb4`).
+  - **Lo que cambió a la vista:**
+    - los textos de R-M34: las etapas llevan el nombre del proyecto con el rol debajo; "móvil", "de este sitio", "Back to top", comillas tipográficas y raya en las fechas; sin la frase del producto;
+    - la foto vuelve con animación al cambiar el tamaño de la ventana (R-M33);
+    - con colores forzados, el tachado de los enlaces se ve (R-M33).
+    - Todo lo demás dio 0% o ruido contra el build anterior a cada punto.
+  - **Nuevo:** `npm run build` corre `scripts/check.mjs` antes de compilar (R-M31). Si cambia una copia de la media query horizontal, falta una clave en un idioma o se separa un color copiado de los tokens, el build se detiene. N5 quedó cerrado con R-M35.
+  - **Herramienta:** la comparación de capturas que venía de eficiencia salteaba, en horizontal, el panel de Trayectoria a 1440, porque buscaba el id "trayectoria" y no "experiencia". Ahora recorre toda la pista. En eficiencia, la maquetación de ese panel se había verificado aparte, midiendo los 513 textos de `/` y `/trayectoria` (R-M14).
+  - **Rama:** estos commits están locales, sin push.
+  - **Sigue:** la documentación (R-M37 y R-M38), para que DISENO.md quede en su versión definitiva; después, I12, N4 y el merge a `main`.
+- **Siguen abiertos de antes:** I12 y N4 (contenido que tiene que conseguir Fermin), M13 y N10 (el tachado del nav, a medias en las capturas sin ventana; falta mirarlo a ojo, ver R-M33).
 
 Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual**: se usan como requisitos del diseño nuevo.
 
@@ -495,8 +507,9 @@ _(Agregá aquí lo que aparezca durante las fases.)_
 - **Menores:** están cerrados, cada uno en su commit:
   - accesibilidad y flujo (R-M1 a R-M13), de `bb6dc48` a `98750b8`;
   - SEO, robustez y seguridad (R-M21 a R-M27), de `5ff662b` a `b1bede4`;
-  - eficiencia (R-M14 a R-M20), de `5e35694` a `f5ed6db`: R-M17 y R-M18 sin cambios, porque la medición dijo que no valía la pena.
-- **Siguen** limpieza (R-M28 a R-M36) y documentación (R-M37 y R-M38). De R-M34, solo el detalle de "Backend" en `meta.description` quedó hecho, con R-I7. De R-M29, `PERSON.location` ya se usa, en el JSON-LD (R-M25).
+  - eficiencia (R-M14 a R-M20), de `5e35694` a `f5ed6db`: R-M17 y R-M18 sin cambios, porque la medición dijo que no valía la pena;
+  - limpieza (R-M28 a R-M36), de `677d961` a `1361fb4`. Solo R-M34 (los textos, con la copia que aprobó Fermin) y R-M33 (la foto al cambiar la ventana y el tachado con colores forzados) cambian algo a la vista.
+- **Sigue** la documentación (R-M37 y R-M38). Queda sin confirmar N10, el tachado del nav (ver R-M33).
 
 No hay nada crítico. Los problemas más visibles son cuatro:
 - **R-I1:** dos nombres de proyecto quedan cortados en su placa.
