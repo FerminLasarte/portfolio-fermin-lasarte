@@ -50,6 +50,17 @@
   - **Hecho (2026-09-15):** Fermin eligió "A · Teja" entre tres propuestas (teja, mandarina con texto oscuro, y naranja con cierre azul tinta). Acento `#A93C0B` / `#FF9A62`, papel arena `#F2EEE8` / `#14100D` y cierre café `#120B07`. Cambiaron `styles/tokens.css`, `lib/og.js`, `lib/theme.js` (el papel), el favicon, `favicon.ico` y el apple-icon. Los valores y el contraste están en DISENO.md, sección 2: el par más justo da 4,84.
     - **Verificado con Puppeteer** en el servidor local, en claro y oscuro. A 390px se midió el contraste de los 164 textos visibles sobre los colores calculados, y ninguno queda debajo de 4,5:1 (el mínimo da 5,90 en claro y 7,84 en oscuro). A 1440×900 se revisaron a la vista el hero, las tarjetas, la transición al cierre y el contacto. También se revisaron `theme-color`, la imagen OG y los íconos. No hay errores de consola.
   - **Después:** eficiencia (R-M14 a R-M20), limpieza (R-M28 a R-M36), documentación (R-M37 y R-M38), I12, N4 (Fermin va a sacar una foto nueva) y el merge a `main`. Dos commits de docs (`cba32e7` y `8592b65`) quedan locales y se pushean con el próximo grupo.
+- **Actualización (2026-09-15, eficiencia):** R-M14 a R-M20 están cerrados, un commit por punto, en el orden que aprobó Fermin: R-M19 (`5e35694`), R-M20 (`1651267`), R-M15 (`3414512`), R-M16 (`6cf32d4`), R-M14 (`31b472c`), y R-M17 (`7b9b15f`) y R-M18 (`f5ed6db`) sin cambios, porque la medición dijo que no valía la pena.
+  - **Cuánto se ganó**, en el build de producción, por página y en la primera visita:
+    - fuente: 88,0 → 55,6 KB;
+    - JS en el celular: 150,8 → 140,6 KB gz en la home y 147,7 → 137,1 en las páginas propias;
+    - JS en escritorio: 150,8 → 145,9 y 147,7 → 142,4;
+    - CSS: 8,9 → 8,5 KB gz;
+    - con la página quieta, 0 frames por segundo en vez de 60;
+    - CLS de `/trayectoria` con la fuente demorada: 0,0245 → 0,0102 a 1440 y 0,0225 → 0,0043 a 1024.
+  - **Lo que cuesta:** el HTML de la home suma 0,4 KB gz (R-M15), y R-M14 no es idéntico píxel por píxel: el recorte de la fuente corre 0,35px como mucho el ancho de un título, sin cambiar la maquetación. Si Fermin prefiere el archivo de Google, se revierte `31b472c` y nada más.
+  - **Rama:** estos commits están locales, sin push. Queda para después del push, en el preview de Vercel: las cabeceras de caché de `/icons` y `/assets` (R-M19).
+  - **Sigue:** limpieza (R-M28 a R-M36), documentación (R-M37 y R-M38), I12, N4 y el merge a `main`.
 - **Siguen abiertos de antes:** I12 y N4 (contenido que tiene que conseguir Fermin), M13 y N5 (este último está en R-M35).
 
 Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual**: se usan como requisitos del diseño nuevo.
@@ -483,8 +494,9 @@ _(Agregá aquí lo que aparezca durante las fases.)_
   - R-I8 (`df28bec`), R-I3 (`0d52325`, se deja como está) y R-I7 (`0601232`).
 - **Menores:** están cerrados, cada uno en su commit:
   - accesibilidad y flujo (R-M1 a R-M13), de `bb6dc48` a `98750b8`;
-  - SEO, robustez y seguridad (R-M21 a R-M27), de `5ff662b` a `b1bede4`.
-- **Siguen** eficiencia (R-M14 a R-M20), limpieza (R-M28 a R-M36) y documentación (R-M37 y R-M38). De R-M34, solo el detalle de "Backend" en `meta.description` quedó hecho, con R-I7. De R-M29, `PERSON.location` ya se usa, en el JSON-LD (R-M25).
+  - SEO, robustez y seguridad (R-M21 a R-M27), de `5ff662b` a `b1bede4`;
+  - eficiencia (R-M14 a R-M20), de `5e35694` a `f5ed6db`: R-M17 y R-M18 sin cambios, porque la medición dijo que no valía la pena.
+- **Siguen** limpieza (R-M28 a R-M36) y documentación (R-M37 y R-M38). De R-M34, solo el detalle de "Backend" en `meta.description` quedó hecho, con R-I7. De R-M29, `PERSON.location` ya se usa, en el JSON-LD (R-M25).
 
 No hay nada crítico. Los problemas más visibles son cuatro:
 - **R-I1:** dos nombres de proyecto quedan cortados en su placa.
