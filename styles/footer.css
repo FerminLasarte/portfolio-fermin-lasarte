@@ -2,7 +2,6 @@
 
 .footer {
   padding: var(--space-6) var(--pad-x);
-  border-top: 1px solid var(--line);
 }
 
 /* En horizontal la pista termina en el panel de contacto y ahí termina la página: si

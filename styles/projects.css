@@ -49,7 +49,6 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  border-top: 1px solid var(--line);
 }
 
 /* Placa: la captura o el logo sobre el color de la app, o el nombre en grande.
@@ -143,12 +142,6 @@
 @media (min-width: 64rem) and (min-height: 42.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   html.js .projects {
     display: contents;
-  }
-
-  html.js .intro,
-  html.js .card {
-    border-top: 0;
-    border-inline-start: 1px solid var(--line);
   }
 
   /* La placa toma el alto que sobra; el texto manda. */

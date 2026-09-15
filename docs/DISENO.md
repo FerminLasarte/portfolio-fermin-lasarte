@@ -296,7 +296,8 @@ Copia propuesta para el párrafo (hoy `hero.description` tiene 45 palabras y pas
 5. **Tecnologías:** en una línea de texto Meta, separadas por comas.
 6. **Enlaces directos:** un botón por destino ("App Store", "Google Play", "Código", "Visitar"). El primero es el principal y el resto van con borde. Se van el dropdown de "Descargar" y el botón deshabilitado "Próximamente" (M16).
 
-- **Tamaños:** `card--lg` para las apps móviles en producción; el resto, `card`. Los paneles se separan con un borde izquierdo de 1px en `--line`.
+- **Tamaños:** `card--lg` para las apps móviles en producción; el resto, `card`.
+- **Sin cortes entre paneles** (pedido de Fermin, 2026-09-14): los paneles no llevan bordes que los separen, ni en horizontal ni en vertical, y el pie tampoco. Los separa el aire (el margen lateral de cada panel), así el recorrido se lee como una sola tira. Las líneas que son parte del contenido (el eje de años, el título de cada grupo de habilidades) se quedan.
 - **En vertical:** las mismas tarjetas, en una grilla de una o dos columnas, con la placa en 4:3.
 
 ### 7.4 Timeline (Trayectoria)
