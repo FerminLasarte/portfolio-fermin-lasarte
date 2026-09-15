@@ -441,10 +441,11 @@ _(Agregá aquí lo que aparezca durante las fases.)_
   - **Solución:** conseguir una foto de al menos 1200px de alto, sin metadatos (`scripts/strip-metadata.mjs`), y actualizar `width` y `height` en `Hero.jsx`.
   - **Fase 4:** desde que la foto se achicó (7.2), en horizontal se dibuja a 320×459. Con `cover` ocupa 360px de ancho, así que en 2x alcanzaría una de unos 720×920. La actual (560×715) sigue quedando corta.
 
-- [ ] **N5. `npx eslint .` también revisa `.claude/worktrees/`** · Fase 4 (hallado en la Fase 3)
+- [x] **N5. `npx eslint .` también revisa `.claude/worktrees/`** · Fase 4 (hallado en la Fase 3)
+  - **Hecho (2026-09-15):** cerrado con R-M35. `eslint.config.mjs:12` suma `.claude/**` a `globalIgnores`, así que ya no depende de que la carpeta esté vacía: `--print-config` sobre un archivo de ahí devuelve `undefined`, y `npx eslint .` y `npx eslint app components lib` dan 0 problemas.
   - **Problema:** una sesión de Claude Code dejó un worktree en `.claude/worktrees/`, y como `eslint.config.mjs` no ignora esa carpeta, `npx eslint .` da 241 errores que no son del proyecto. `npx eslint app components lib` da 0.
   - **Solución:** sumar `.claude/**` a los `ignores` de `eslint.config.mjs` (y revisar si ese worktree todavía hace falta).
-  - **Fase 4:** `npx eslint .` da 0 errores, pero solo porque la carpeta quedó vacía. `--print-config` muestra que todavía no se ignora. Sigue en R-M35.
+  - **Fase 4 (antes del arreglo):** `npx eslint .` daba 0 errores, pero solo porque la carpeta quedó vacía. `--print-config` mostraba que todavía no se ignoraba. Pasó a R-M35.
 
 - [~] **N6. El respaldo para Firefox no se probó en Firefox** · Fase 4
   - **Fase 4 (2026-09-15):** Fermin decidió dejar Firefox fuera de la re-auditoría. El código del respaldo se revisó leyéndolo: las cuentas coinciden con las del CSS, y en Chrome no corre.
@@ -1386,7 +1387,7 @@ Se revisó en Chrome visible a 1440×900, en claro y en oscuro.
 - **I12** (capturas verticales): sigue abierto. Seis de las ocho tarjetas muestran solo el nombre en una placa, y dos de esas placas cortan el nombre (R-I1).
 - **M13** (`.js` y `.jsx`): cerrado sin cambios el 2026-09-15, por decisión de Fermin (ver M13).
 - **N4** (foto blanda en 2x): sigue. A 1440×900 la foto se dibuja a 320×459 (360px de ancho con `cover`), así que en 2x haría falta una de al menos 720×920. La actual mide 560×715.
-- **N5:** sigue abierto en la configuración (R-M35). *(Nota, R-M38: cerrado con R-M35.)*
+- **N5** (lint sobre `.claude/`): cerrado con R-M35 el 2026-09-15. La configuración ignora `.claude/**`; ya no depende de que la carpeta esté vacía.
 - **N6:** fuera de la auditoría, por decisión de Fermin.
 - **N7:** hecho (tabla de arriba y Lighthouse).
 - **N8:** medido; pasó a R-I3, que Fermin decidió dejar como está. El texto en contorno se lee bien sobre el papel y sobre el oscuro (los años de Trayectoria y las intermedias del muro, con 1px de `--ink`), pero en colores forzados pierde el contorno (R-I8).
