@@ -29,6 +29,10 @@
   gap: var(--space-1);
 }
 
+.trajectory__more {
+  align-self: flex-start;
+}
+
 .trajectory__note strong {
   font-size: var(--fs-3);
   font-weight: 650;

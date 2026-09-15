@@ -22,7 +22,7 @@ export default async function Home({ params }) {
       <Track cards={PROJECTS.length - cardsLg} cardsLg={cardsLg}>
         <Hero t={t} lang={lang} />
         <Projects t={t} />
-        <Trajectory t={t} />
+        <Trajectory t={t} lang={lang} />
         <Skills t={t} />
         <Contact t={t} />
       </Track>

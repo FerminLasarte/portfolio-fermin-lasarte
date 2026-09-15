@@ -6,9 +6,9 @@
 
 /* En horizontal la pista termina en el panel de contacto y ahí termina la página: si
    el pie quedara después, el último scroll bajaría la pista 85px. El © ya está en la
-   franja inferior. */
+   franja inferior. Las páginas propias no tienen pista, así que ahí el pie queda. */
 @media (min-width: 64rem) and (min-height: 42.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  html.js .footer {
+  html.js:has(.h-scroll) .footer {
     display: none;
   }
 }

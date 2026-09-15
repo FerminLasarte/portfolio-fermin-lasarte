@@ -1,0 +1,123 @@
+/*
+ * Páginas propias (docs/DISENO.md, 7.12): el detalle de Trayectoria y de Habilidades,
+ * como las páginas "About" y "Works" de douglus. Son verticales en todos los anchos,
+ * con el mismo nav y el pie; la home sigue siendo la única con pista.
+ */
+
+.page {
+  display: grid;
+  gap: var(--space-8);
+  max-inline-size: 90rem;
+  margin-inline: auto;
+  padding: var(--space-7) var(--pad-x) var(--space-9);
+}
+
+.page__head {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.page__title {
+  font-size: min(var(--fs-display), 19vw);
+}
+
+.page__lead {
+  max-width: 52ch;
+  font-size: var(--fs-3);
+  line-height: 1.35;
+  color: var(--ink-muted);
+  text-wrap: pretty;
+}
+
+/* ---------- Capítulos ---------- */
+
+.chapters {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.chapter {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.chapter__years {
+  display: flex;
+  align-items: baseline;
+  font-size: min(var(--fs-stage), 22vw);
+  font-weight: 800;
+  font-stretch: var(--wdth-display);
+  line-height: 0.84;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.chapter__end,
+.chapter--edu .chapter__years > :first-child {
+  color: transparent;
+  -webkit-text-stroke: 0.01em var(--ink);
+}
+
+.chapter__body {
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+}
+
+.chapter__title {
+  font-size: var(--fs-4);
+  font-weight: 800;
+  font-stretch: var(--wdth-display);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.chapter__place {
+  font-size: var(--fs-2);
+  font-weight: 500;
+}
+
+.chapter__desc {
+  max-width: 60ch;
+  font-size: var(--fs-2);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.chapter__link {
+  justify-self: start;
+  padding-block: var(--space-2);
+  font-weight: 600;
+}
+
+.page__back {
+  display: flex;
+}
+
+/* ---------- Desde escritorio: años a la izquierda, pegados arriba ---------- */
+
+@media (min-width: 64rem) {
+  .chapter {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: var(--space-7);
+    align-items: start;
+  }
+
+  .chapter__years,
+  .chapter__label {
+    position: sticky;
+    top: calc(var(--nav-h) + var(--space-5));
+  }
+}
+
+/* ---------- Entrada: el título sube en su máscara y el resto llega detrás ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  html.js .page__title {
+    animation: rv-mask 1100ms var(--ease-expo) both;
+  }
+
+  html.js .page__lead {
+    animation: rv-up 1100ms var(--ease-expo) 120ms both;
+  }
+}

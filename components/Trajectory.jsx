@@ -1,4 +1,5 @@
 import { EDUCATION, EXPERIENCE } from "@/lib/site";
+import { pagePath } from "@/lib/i18n";
 
 // Los dos últimos dígitos del año de fin: 2025 → "25".
 const twoDigits = (year) => String(year).slice(-2);
@@ -8,8 +9,8 @@ const twoDigits = (year) => String(year).slice(-2);
 // las une (se dibuja con el scroll) y una sola línea de texto; los idiomas, que no
 // tienen años, van como nota. Los años grandes son visuales (aria-hidden): las fechas
 // también están en texto, con <time>. La etapa de UNICEN lleva id="educacion", el ancla
-// de la sección vieja.
-export default function Trajectory({ t }) {
+// de la sección vieja. El detalle completo está en su página (7.12).
+export default function Trajectory({ t, lang }) {
   const now = new Date().getFullYear();
   const stages = [
     ...EDUCATION.filter((e) => e.start).map((e) => ({
@@ -49,6 +50,9 @@ export default function Trajectory({ t }) {
             <strong>{t(`edu.${note.id}.title`)}</strong>
           </p>
         ))}
+        <a className="btn trajectory__more" href={pagePath(lang, "experience")}>
+          <span className="btn__label">{t("exp.more")}</span>
+        </a>
       </div>
 
       <ol className="stages">

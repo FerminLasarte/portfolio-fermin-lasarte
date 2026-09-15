@@ -452,6 +452,15 @@ Pedido por Fermin el 2026-09-14. Al principio no se tomaba, porque tapa el conte
 - **Accesibilidad:** es `aria-hidden` y el contenido real ya está debajo. El enlace para saltar al contenido sigue siendo el primero.
 - **Costo:** unos 5 s de espera la primera vez. El LCP puede pasar a ser el texto del preloader (se pinta enseguida) en vez de la foto.
 
+### 7.12 Páginas propias
+
+Pedidas por Fermin el 2026-09-15: Trayectoria y Habilidades son vistas previas en la home, y cada una tiene su página con más información, como las de douglus ("About", "Works").
+- **Rutas:** en el idioma de cada versión: `/trayectoria` y `/en/experience`. Viven en `app/[lang]/[page]`, con `generateStaticParams` por idioma y `dynamicParams = false` (cualquier otra ruta da el 404 global). `lib/pages.mjs` tiene las rutas en un solo lugar (sin alias, porque también lo lee `next.config`, que reescribe la ruta española sin prefijo y redirige la que viene con `/es`); `pagePath()` y `pageUrl()` de `lib/i18n.js` arman los enlaces.
+- **Metadata:** título ("Trayectoria · Fermin Lasarte"), descripción, canonical y hreflang por idioma. Entran al sitemap.
+- **Layout:** vertical en todos los anchos, con el mismo nav y el pie. El modo horizontal del nav y del pie (transparente, `difference`, sin pie) aplica solo donde hay pista (`html.js:has(.h-scroll)`): en estas páginas el contenido pasa por debajo del nav, así que conserva el fondo. El botón de idioma lleva a la misma página en el otro idioma (`useSelectedLayoutSegment`). Al entrar y al volver a la home, la cortina entre documentos es la misma del cambio de idioma.
+- **Trayectoria:** el título en Display (sube en su máscara al cargar), el párrafo largo que antes estaba en la home y un capítulo por etapa, de la más nueva a la más vieja. Cada capítulo tiene, a la izquierda, el rango de años enorme, pegado arriba mientras se lee su texto; a la derecha, qué es y las fechas, el título, el rol y el lugar, la descripción completa, las tecnologías y "Ver el proyecto" si el proyecto está en la home. Los idiomas cierran la página, seguidos de "Volver al inicio". Un `<h1>` y un `<h2>` por etapa.
+- **Desde la home:** el botón "Ver trayectoria completa", al pie de la columna del título.
+
 ## 8. Movimiento
 
 Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):

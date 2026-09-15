@@ -1,6 +1,7 @@
 import { Archivo } from "next/font/google";
 import { THEME_COLORS, themeInitScript } from "@/lib/theme";
-import { LOCALES, getT, homePath } from "@/lib/i18n";
+import { LOCALES, getT, homePath, pagePath } from "@/lib/i18n";
+import { PAGES } from "@/lib/pages.mjs";
 import { NAV_SECTIONS, PERSON, SOCIAL } from "@/lib/site";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
@@ -42,7 +43,12 @@ export default function Document({ lang, head, children }) {
         <Nav
           brand={{ href: `${homePath(lang)}#sobre-mi`, label: PERSON.name }}
           links={NAV_SECTIONS.map((s) => ({ id: s.id, href: `${homePath(lang)}#${s.id}`, label: t(s.key) }))}
-          switchTo={{ lang: other, href: homePath(other), name: t(`lang.${other}`) }}
+          switchTo={{
+            lang: other,
+            href: homePath(other),
+            name: t(`lang.${other}`),
+            pages: Object.fromEntries(Object.keys(PAGES).map((id) => [PAGES[id][lang], pagePath(other, id)])),
+          }}
           labels={{
             sections: t("nav.sections"),
             menu: t("nav.menu"),

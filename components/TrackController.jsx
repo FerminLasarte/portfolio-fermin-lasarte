@@ -16,6 +16,7 @@ const REVEAL = [
   ".stats > div",
   ".trajectory__intro",
   ".trajectory__note",
+  ".trajectory__more",
   ".stage__years",
   ".stage__body",
   ".skills__lead",

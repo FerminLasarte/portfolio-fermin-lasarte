@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useSelectedLayoutSegment } from "next/navigation";
 import ThemeToggle from "@/components/ThemeToggle";
 import Icon from "@/components/Icon";
 import { faGithub, faLinkedin } from "@/lib/icons";
@@ -12,7 +13,8 @@ const MOBILE = "(max-width: 47.99rem)";
 //  - brand: { href, label }. El nombre, que lleva al hero.
 //  - links: [{ id, href, label }]. Anclas nativas a la home del idioma ("/#proyectos",
 //    "/en#proyectos"); la sección actual (aria-current) la marca TrackController.
-//  - switchTo: el otro idioma, { lang, href, name }.
+//  - switchTo: el otro idioma, { lang, href, name, pages }. `pages` lleva cada página
+//    propia de este idioma a la del otro ("trayectoria" → "/en/experience").
 //  - labels: { sections, menu, close, lang, theme }.
 //  - social: { github, linkedin }.
 // En móvil las secciones van en un menú a pantalla completa (I1): un <button> con
@@ -30,7 +32,13 @@ export default function Nav({ brand, links, switchTo, labels, social }) {
   const hideLast = () => setBrandState("out");
 
   // El cambio de idioma vuelve a la sección visible (/en#proyectos).
+  // En una página propia, el idioma lleva a la misma página en el otro idioma
+  // (useSelectedLayoutSegment da el segmento debajo del layout de [lang], igual en el
+  // servidor y en el navegador); en la home, a la otra home.
+  const segment = useSelectedLayoutSegment();
+  const langHref = (segment && switchTo.pages?.[segment]) || switchTo.href;
   const handleLangClick = (e) => {
+    if (segment) return;
     const current = document.querySelector("a[data-section][aria-current]")?.dataset.section;
     if (current) e.currentTarget.href = `${switchTo.href}#${current}`;
   };
@@ -111,7 +119,7 @@ export default function Nav({ brand, links, switchTo, labels, social }) {
         <div className="nav__tools">
           <a
             className="tool"
-            href={switchTo.href}
+            href={langHref}
             hrefLang={switchTo.lang}
             aria-label={`${labels.lang}: ${switchTo.name}`}
             onClick={handleLangClick}
