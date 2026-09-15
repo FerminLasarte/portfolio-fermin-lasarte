@@ -552,7 +552,11 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
    - Los niveles de skills se ven sin hover (M4) y el estado de un proyecto va en texto, no solo en color.
    - Un solo `<h1>` (el nombre), un `<h2>` por sección y un `<h3>` por proyecto. Se quita la etiqueta que repetía el h2 (M6).
    - El foco con teclado mueve la pista (6.5) y reduce motion da el modo vertical.
-   - El cursor propio (7.8) no aparece con táctil, reduce motion ni colores forzados, y nunca deja la pantalla sin cursor. La foto arrastrable (7.9) es decorativa: no esconde información y no se enfoca.
+   - El cursor propio (7.8) no aparece con táctil, reduce motion ni colores forzados, y nunca deja la pantalla sin cursor.
+   - **Colores forzados** (`styles/forced-colors.css`; 2026-09-15, R-I8 de la re-auditoría):
+     - el nav y la franja pierden el `difference` y toman el fondo del sistema;
+     - el muro, su leyenda y los años en contorno conservan el lleno y el contorno con `CanvasText`, y el muro queda quieto en su estado final;
+     - la línea y los puntos de Trayectoria y los puntos de la tabla de Habilidades se dibujan con los colores del sistema. La foto arrastrable (7.9) es decorativa: no esconde información y no se enfoca.
 
 ## 10. Decisiones y pendientes para aprobar
 

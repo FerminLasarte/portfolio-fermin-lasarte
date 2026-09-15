@@ -1,0 +1,70 @@
+/*
+ * Colores forzados (R-I8 de la re-auditoría): el modo de alto contraste del sistema.
+ * El navegador pinta el texto con CanvasText y los fondos con Canvas, y con eso se
+ * perdía información: el nav y la franja con difference quedaban amarillos sobre
+ * blanco (el botón de tema desaparecía), las intermedias del muro y los años en
+ * contorno salían llenos, y la tabla de Habilidades quedaba sin puntos. Acá cada una
+ * de esas piezas usa los colores del sistema a mano (forced-color-adjust: none).
+ */
+@media (forced-colors: active) {
+  /* Nav y franja en horizontal: sin difference, con fondo del sistema. */
+  html.js:has(.h-scroll) .nav,
+  html.js .strip {
+    mix-blend-mode: normal;
+    background: Canvas;
+  }
+
+  /* Lleno y contorno: el muro, su leyenda y los años (en la home y en /trayectoria). */
+  .wall__word,
+  .stage__end,
+  .stage--edu .stage__years > :first-child,
+  .chapter__end,
+  .chapter--edu .chapter__years > :first-child {
+    forced-color-adjust: none;
+    color: transparent;
+    -webkit-text-stroke-color: CanvasText;
+  }
+
+  .wall__word.is-strong {
+    color: CanvasText;
+  }
+
+  /* La ola del muro va del contorno gris a su estado final con colores del tema: en
+     colores forzados, quieto en el estado final. */
+  html.js .wall__word {
+    animation: none;
+  }
+
+  .wall__key {
+    forced-color-adjust: none;
+    border-color: CanvasText;
+  }
+
+  .wall__key.is-strong {
+    background: CanvasText;
+  }
+
+  /* La línea que une las etapas de Trayectoria y sus puntos: lleno para la
+     experiencia, hueco para la educación. */
+  html.js .stages::before,
+  html.js .stage__dot {
+    forced-color-adjust: none;
+    background: CanvasText;
+  }
+
+  html.js .stage--edu .stage__dot {
+    border-color: CanvasText;
+    background: Canvas;
+  }
+
+  /* Tabla de Habilidades: un punto donde se usó y uno chico donde no. */
+  .matrix__dot {
+    forced-color-adjust: none;
+    background: CanvasText;
+  }
+
+  .matrix td:not(:has(.matrix__dot))::before {
+    forced-color-adjust: none;
+    background: GrayText;
+  }
+}

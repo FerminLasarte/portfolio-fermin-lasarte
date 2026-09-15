@@ -523,7 +523,17 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
   - **Problema:** la descripción, la imagen OG y el JSON-LD dicen que las dos apps están publicadas, pero el propio `site.js` dice que TravelPic "se está volviendo a publicar" (I4). Quien la busque en las tiendas no la va a encontrar.
   - **Solución:** que decida Fermin. Se puede cambiar la copia a "apps en producción" o "apps lanzadas", o contar solo las que tienen enlace a una tienda (hoy daría 1).
 
-- [ ] **R-I8. Con colores forzados se pierde información** **[nav]**
+- [x] **R-I8. Con colores forzados se pierde información** **[nav]**
+  - **Hecho:** `styles/forced-colors.css`, dentro de `@media (forced-colors: active)`:
+    - el nav y la franja en horizontal van con `mix-blend-mode: normal` y fondo `Canvas`;
+    - el muro, su leyenda y los años en contorno (en la home y en `/trayectoria`) usan `forced-color-adjust: none`, con relleno transparente y contorno `CanvasText`; lo lleno va en `CanvasText`, y la ola del muro queda quieta;
+    - la línea de Trayectoria, sus puntos y los puntos de la tabla se dibujan con `CanvasText`, `GrayText` y `Canvas`.
+  - **Verificado** con la emulación de CDP a 1440×900, en claro y oscuro:
+    - el nav y la franja se leen (texto del sistema sobre `Canvas`) y el botón de tema vuelve a verse;
+    - el muro distingue avanzado de intermedio y la leyenda también;
+    - Trayectoria tiene su línea y sus puntos, y la tabla de `/habilidades`, los suyos;
+    - sin colores forzados no cambió nada (sigue `difference` y la ola del muro).
+  - **Queda:** el riel de la barra de progreso, que es decorativo, no se ve en colores forzados; el nombre de la sección se lee al lado. DISENO.md, 9.7.
   - **Dónde:** no hay ningún `@media (forced-colors: active)` en `styles/`. Afecta a `styles/page.css:201-219` (los puntos de la tabla), `nav.css:246-259` y `track.css:111-132`.
   - **Problema:** con la emulación de CDP:
     - **La tabla "Dónde las usé" queda vacía:** los puntos son `background` y el "Sí"/"No" es `sr-only`.
