@@ -4,6 +4,37 @@ import { useEffect } from "react";
 import { HORIZONTAL_QUERY } from "@/lib/track";
 import { smoothScrollTo } from "@/lib/scroll";
 
+// Lo que entra por separado en cada panel (styles/motion.css), en el orden del HTML.
+const REVEAL = [
+  ".display",
+  ".card__plate",
+  ".card__meta",
+  ".card__title",
+  ".card__text > p",
+  ".card__tags",
+  ".card__links > .btn",
+  ".stats > div",
+  ".trajectory__intro",
+  ".chart__axis",
+  ".chart__bar",
+  ".entry",
+  ".skills__group",
+  ".contact__rule",
+  ".contact__pills > .btn",
+  ".contact__back",
+].join(", ");
+
+// Cómo entra cada uno: los títulos suben en su máscara, las placas se destapan y las
+// líneas crecen; el resto sube con un fundido.
+const variant = (el) =>
+  el.matches(".display, .card__title")
+    ? ["rv--mask"]
+    : el.matches(".card__plate")
+      ? ["rv--plate"]
+      : el.matches(".chart__bar, .contact__rule")
+        ? ["rv--grow"]
+        : [];
+
 // Mejora de JS de la pista (docs/DISENO.md, 6.3 a 6.5). No renderiza nada: se engancha
 // a los paneles que ya vienen en el HTML.
 //  - Anclas: en horizontal el panel destino está dentro de la pista y el navegador no
@@ -125,26 +156,32 @@ export default function TrackController() {
     track.addEventListener("focusin", onFocus);
     mq.addEventListener("change", onModeChange);
 
-    // Entradas (docs/DISENO.md, sección 8): los paneles que no se ven al cargar esperan
-    // con .is-waiting hasta entrar a la vista, una vez; styles/motion.css anima la
-    // salida de ese estado. Sin JS o con reduce motion, nada espera.
+    // Entradas (docs/DISENO.md, sección 8), como en douglus: cada elemento de un panel
+    // entra por separado. Se marcan con .rv y su orden (--rv, con tope de 12 para que
+    // el último no espere de más). Los paneles que no se ven al cargar esperan con
+    // .is-waiting y, cuando llegan al 80% de la pantalla (85% del alto en vertical),
+    // pasan a .is-revealed, una vez; styles/motion.css anima ese paso. Sin JS o con
+    // reduce motion, nada espera.
     const reveal = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
-          entry.target.classList.remove("is-waiting");
+          entry.target.classList.replace("is-waiting", "is-revealed");
           reveal.unobserve(entry.target);
         }
       },
-      { threshold: 0.15 },
+      { rootMargin: mq.matches ? "0px -20% 0px 0px" : "0px 0px -15% 0px" },
     );
     if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
       for (const panel of panels) {
         const r = panel.getBoundingClientRect();
-        if (r.left >= innerWidth || r.top >= innerHeight) {
-          panel.classList.add("is-waiting");
-          reveal.observe(panel);
-        }
+        if (r.left < innerWidth && r.top < innerHeight) continue;
+        panel.querySelectorAll(REVEAL).forEach((el, i) => {
+          el.classList.add("rv", ...variant(el));
+          el.style.setProperty("--rv", Math.min(i, 12));
+        });
+        panel.classList.add("is-waiting");
+        reveal.observe(panel);
       }
     }
 
