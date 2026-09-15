@@ -252,7 +252,6 @@ html.dark-mode .theme-toggle .icon-sun {
   html.js:has(.h-scroll) .nav {
     --ink: var(--blend-ink);
     --ink-muted: var(--blend-ink-muted);
-    --line: var(--blend-line);
     --accent: var(--blend-ink);
     --focus: var(--blend-ink);
     position: fixed;

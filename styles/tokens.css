@@ -25,7 +25,6 @@
   --accent: #a93c0b;
   --accent-soft: #f8e3d4;
   --on-accent: #fff6ef;
-  --on-accent-muted: #ffe4d2;
   --focus: var(--accent);
   --cursor-ink: var(--ink);
   color-scheme: light;
@@ -62,14 +61,12 @@
   --fs-4: clamp(2rem, 1rem + 4vmin, 4.25rem);
   --fs-display: clamp(3.5rem, 17vmin, 13rem);
   --fs-section: clamp(2.5rem, 7.5vmin, 6rem);
-  --fs-mega: clamp(2.25rem, 9vmin, 7.5rem);
   --fs-stage: clamp(4rem, 15vmin, 11rem); /* los años de Trayectoria */
   --fs-wall: clamp(2.25rem, 11vw, 5rem); /* el muro de Habilidades, en vertical */
 
   /* Forma */
-  --radius-0: 0;
   --radius-pill: 999px;
-  --radius-device: 12%;
+  --radius-device: 12%; /* reservado para las capturas verticales de las apps (I12); sin uso todavía */
 
   /* Espacio (base de 4px) */
   --space-1: 0.25rem;
@@ -87,7 +84,6 @@
   --tap: 2.75rem;
 
   /* Capas */
-  --z-track: 0;
   --z-nav: 10;
   --z-strip: 10;
   --z-menu: 20;
@@ -130,7 +126,6 @@
     --accent: #ff9a62;
     --accent-soft: #3a1e10;
     --on-accent: #14100d;
-    --on-accent-muted: #4a2412;
     --wash-1: #4a2412;
     --wash-2: #9a3a10;
     color-scheme: dark;

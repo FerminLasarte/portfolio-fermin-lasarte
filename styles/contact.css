@@ -64,7 +64,6 @@
 
 .contact {
   --focus: var(--on-night);
-  --cursor-ink: var(--on-night);
   display: flex;
   flex-direction: column;
   justify-content: center;

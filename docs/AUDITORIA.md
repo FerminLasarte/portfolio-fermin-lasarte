@@ -1001,7 +1001,9 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
 
 ### Código muerto y coherencia
 
-- [ ] **R-M28. Tokens sin uso y restos de diseños anteriores**
+- [x] **R-M28. Tokens sin uso y restos de diseños anteriores**
+  - **Hecho:** se borraron `--on-accent-muted` (en los dos temas), `--fs-mega`, `--radius-0` y `--z-track` de `styles/tokens.css`; `--radius-device` queda, con un comentario (reservado para I12). También se fueron el `--focus` y la regla `.strip a` de la franja (ya no tiene enlaces desde que el CV pasó al hero), el `--line` del nav en horizontal (solo lo usa el borde del menú móvil, que en horizontal no se muestra) y el `--cursor-ink` de `.contact` (el cursor no está dentro de contacto; su color sobre el cierre lo pone `data-tone`). Lo que DISENO.md dice de esos tokens se corrige en R-M37.
+  - **Verificado** contra el build anterior, con Puppeteer, en `/`, `/en`, `/trayectoria` y `/habilidades`, a 1440 y 390, en claro y oscuro: 0% de píxeles distintos en todas las vistas, salvo la home a 1440 (0,064% a 0,067%, lo mismo que el ruido de fondo medido en eficiencia, 0,066%). La foto sigue siendo el LCP con su precarga; el scroll suave, la ola, el ancla a Contacto, el cierre y el imán funcionan, sin errores de consola.
   - **Dónde:**
     - Tokens: `styles/tokens.css:16` y `:117` (`--on-accent-muted`), `:52` (`--fs-mega`), `:57` (`--radius-0`), `:59` (`--radius-device`, reservado para I12) y `:77` (`--z-track`).
     - Restos del CV en la franja: `styles/track.css:118` (`--focus`) y `:134-136` (`.strip a`).
