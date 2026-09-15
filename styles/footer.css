@@ -1,0 +1,6 @@
+/* Pie: después de la pista, el © y los derechos. */
+
+.footer {
+  padding: var(--space-6) var(--pad-x);
+  border-top: 1px solid var(--line);
+}

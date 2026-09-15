@@ -1,0 +1,130 @@
+/*
+ * Trayectoria (docs/DISENO.md, 7.4): título, eje de años con barras y fichas.
+ * La experiencia usa barra llena de --accent; la educación, barra con borde. Cada
+ * ficha dice además qué es, así que no depende del color.
+ */
+
+.trajectory {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.trajectory__head {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.trajectory__intro {
+  max-width: 60ch;
+  color: var(--ink-muted);
+}
+
+/* ---------- Eje de años ---------- */
+
+.chart {
+  display: grid;
+  grid-template-columns: repeat(var(--years), minmax(0, 1fr));
+  row-gap: var(--space-2);
+}
+
+.chart__axis {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  margin-bottom: var(--space-1);
+}
+
+.chart__axis li {
+  padding-inline-start: var(--space-2);
+  border-inline-start: 1px solid var(--line);
+  font-size: var(--fs-0);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-muted);
+}
+
+.chart__bar {
+  position: relative;
+  grid-column: var(--from) / var(--to);
+  display: flex;
+  align-items: center;
+  min-block-size: 2rem;
+  padding-inline: var(--space-3);
+  font-size: var(--fs-0);
+  font-weight: 600;
+  white-space: nowrap;
+  container-type: inline-size;
+}
+
+/* Si la barra es muy corta para su nombre (un año, en móvil), el nombre va afuera, a
+   la izquierda, en color de texto. */
+@container (max-width: 6.5rem) {
+  .chart__bar span {
+    position: absolute;
+    right: calc(100% + var(--space-2));
+    color: var(--ink);
+  }
+}
+
+.chart__bar--work {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.chart__bar--edu {
+  border: 1px solid var(--ink);
+  color: var(--ink);
+}
+
+/* ---------- Fichas ---------- */
+
+.entries {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.entry {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+}
+
+.entry__title {
+  font-size: var(--fs-3);
+  font-weight: 650;
+  line-height: 1.15;
+}
+
+.entry__place {
+  font-weight: 500;
+}
+
+.entry__desc {
+  max-width: 46ch;
+}
+
+@media (min-width: 48rem) {
+  .entries {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--pad-x);
+  }
+}
+
+/* ---------- Horizontal: título y texto en una fila, fichas en cuatro columnas ---------- */
+
+@media (min-width: 64rem) and (min-height: 37.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html.js .trajectory {
+    justify-content: space-between;
+    gap: var(--space-5);
+  }
+
+  html.js .trajectory__head {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: end;
+    column-gap: var(--space-7);
+  }
+
+  html.js .entries {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

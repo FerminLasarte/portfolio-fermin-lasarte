@@ -1,44 +1,41 @@
 import Image from "next/image";
 import { DEVICON, SKILL_GROUPS } from "@/lib/site";
-import Icon from "@/components/Icon";
-import { faLaptopCode } from "@/lib/icons";
 
+// Habilidades (docs/DISENO.md, 7.7): los grupos de SKILL_GROUPS en columnas. El nivel
+// de cada tecnología está en texto visible, no en un tooltip (M4).
 export default function Skills({ t }) {
   return (
-    <section id="habilidades">
-      <p className="section-label premium-reveal">
-        <Icon icon={faLaptopCode} />
-        <span>{t("skills.title")}</span>
-      </p>
-      <h2 className="premium-reveal">{t("skills.title")}</h2>
+    <section
+      id="habilidades"
+      className="panel panel--skills skills"
+      data-section="habilidades"
+      data-label={t("nav.skills")}
+      aria-labelledby="habilidades-t"
+    >
+      <h2 id="habilidades-t" className="display display--section">
+        {t("skills.title")}
+      </h2>
 
-      <div className="skills-bento">
-        {SKILL_GROUPS.map((card) => (
-          <div key={card.id} className={`skill-card ${card.extraClass ?? ""} premium-reveal`.trim()}>
-            <div className="skill-card-header">
-              <span className="skill-card-icon">
-                <Icon icon={card.icon} />
-              </span>
-              <h3>{t(card.titleKey)}</h3>
-            </div>
-            <div className="skill-icons-grid">
-              {card.skills.map((s) => (
-                <div
-                  key={s.name}
-                  className="skill-icon"
-                  data-tooltip={`${s.name} · ${t(`skills.level.${s.level}`)}`}
-                >
+      <div className="skills__groups">
+        {SKILL_GROUPS.map((group) => (
+          <div key={group.id} className="skills__group">
+            <h3 className="skills__title">{t(group.titleKey)}</h3>
+            <ul className="skills__list">
+              {group.skills.map((skill) => (
+                <li key={skill.name} className="skill">
                   <Image
-                    src={`${DEVICON}/${s.icon}.svg`}
-                    alt={s.alt ?? s.name}
-                    width={30}
-                    height={30}
-                    style={s.style}
-                    {...(s.darkInvert ? { "data-dark-invert": "" } : {})}
+                    src={`${DEVICON}/${skill.icon}.svg`}
+                    alt=""
+                    width={20}
+                    height={20}
+                    style={skill.style}
+                    {...(skill.darkInvert ? { "data-dark-invert": "" } : {})}
                   />
-                </div>
+                  <span className="skill__name">{skill.name}</span>
+                  <span className="skill__level meta">{t(`skills.level.${skill.level}`)}</span>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         ))}
       </div>

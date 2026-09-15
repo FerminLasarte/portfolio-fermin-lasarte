@@ -1,0 +1,29 @@
+/* 404 bilingüe (app/global-not-found.js): el código en grande y un botón por idioma. */
+
+.not-found {
+  display: grid;
+  align-content: center;
+  gap: var(--space-4);
+  min-block-size: 70svh;
+  max-width: 60rem;
+  padding: calc(var(--nav-h) + var(--space-7)) var(--pad-x) var(--space-8);
+}
+
+.not-found__code {
+  color: var(--accent);
+}
+
+.not-found__title {
+  font-size: var(--fs-4);
+  font-weight: 800;
+  font-stretch: var(--wdth-display);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.not-found__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
