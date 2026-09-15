@@ -1011,7 +1011,23 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
     - `styles/contact.css:67`: `--cursor-ink`, sin efecto; el cursor cambia con `data-tone`.
   - **Solución:** borrarlos y dejar `--radius-device` con un comentario.
 
-- [ ] **R-M29. Datos, claves y props sin uso**
+- [x] **R-M29. Datos, claves y props sin uso**
+  - **Hecho:**
+    - **Borrados:**
+      - la clave `projects.screenshotAlt`, en ES y EN;
+      - `PERSON.firstName`;
+      - los `label` de `CV` y de `EXPERIENCE`; el de `EDUCATION` sí se usa ("UNICEN" en la etapa) y queda documentado;
+      - el prop `title` de `Icon`, que ahora es siempre decorativo;
+      - `.strip` en el `inert` del menú, porque ya está dentro de `main`;
+      - `reactStrictMode: true`, que en el App Router ya es el valor por defecto (guía de Next, `reactStrictMode.md`);
+      - el `notFound()` inalcanzable de `app/[lang]/[page]/page.js`, porque con `dynamicParams = false` solo llegan los slugs conocidos.
+    - **"Buenos Aires" sale del dato** (decidido por Fermin, 2026-09-15): `PERSON` guarda `city` y `country` por separado; la franja dice `fill(t("strip.credit"), { city })` ("Hecho a mano en {city}") y el `homeLocation` del JSON-LD arma "Buenos Aires, Argentina" con los dos.
+  - **Verificado** contra el build anterior:
+    - Capturas en las 16 combinaciones de siempre: 0%, salvo la home a 1440, dentro del ruido (0,065% a 0,068%).
+    - El JSON-LD (`homeLocation`) y el crédito de la franja dan el mismo texto en `/` y `/en`.
+    - `/trayectoria/xx`, `/en/experience/xx` y `/xx` siguen dando 404.
+    - El menú móvil deja inertes el enlace de salto, el nombre, `main` (con la franja adentro) y el pie, igual que antes, y Escape devuelve el foco al botón.
+    - La foto sigue siendo el LCP; el scroll suave, la ola, el ancla, el cierre y el imán funcionan; no hay errores de consola y el lint da 0.
   - **Dónde y problema:**
     - `projects.screenshotAlt` (`translations.js:93` y `:237`);
     - `PERSON.firstName` y `PERSON.location` (`site.js:15-16`); "Buenos Aires" está escrito a mano en `strip.credit`. Desde R-M25, `PERSON.location` se usa en el `homeLocation` del JSON-LD;

@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import {
   DEFAULT_LOCALE,
   LOCALES,
@@ -71,7 +70,6 @@ export async function generateMetadata({ params }) {
 export default async function Page({ params }) {
   const { lang, page } = await params;
   const id = pageId(lang, page);
-  if (!id) notFound();
   const Component = VIEWS[id];
   const t = getT(lang);
 

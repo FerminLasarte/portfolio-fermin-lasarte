@@ -1,4 +1,5 @@
 import { PERSON } from "@/lib/site";
+import { fill } from "@/lib/translations";
 import WaveText from "@/components/WaveText";
 
 // Franja inferior del modo horizontal (docs/DISENO.md, 7.1): el © y el progreso del
@@ -18,7 +19,7 @@ export default function Strip({ t }) {
         <span data-strip-label>{t("nav.about")}</span>
       </span>
       <span className="strip__credit">
-        <WaveText text={t("strip.credit")} />
+        <WaveText text={fill(t("strip.credit"), { city: PERSON.city })} />
       </span>
     </div>
   );

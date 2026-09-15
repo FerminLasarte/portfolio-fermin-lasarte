@@ -96,7 +96,7 @@ export default async function RootLayout({ children, params }) {
         knowsAbout: [...SKILLS.map((s) => s.name), ...OTHER_SKILLS],
         knowsLanguage: PERSON.languages,
         alumniOf: { "@type": "CollegeOrUniversity", name: t("edu.unicen.company") },
-        homeLocation: { "@type": "Place", name: PERSON.location },
+        homeLocation: { "@type": "Place", name: `${PERSON.city}, ${PERSON.country}` },
         sameAs: [SOCIAL.github, SOCIAL.linkedin],
       },
     ],

@@ -54,7 +54,7 @@ export default function Nav({ brand, links, switchTo, labels, social }) {
   useEffect(() => {
     if (!open) return;
     const rest = document.querySelectorAll(
-      "main, body > footer, .strip, .skip, .nav__brand, .nav__tools > :not(.nav__menu)",
+      "main, body > footer, .skip, .nav__brand, .nav__tools > :not(.nav__menu)",
     );
     rest.forEach((el) => (el.inert = true));
     const mq = matchMedia(MOBILE);
