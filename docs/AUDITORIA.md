@@ -23,6 +23,8 @@
 | **3. Rediseño** | Nuevo diseño visual (skills de diseño + douglus.site) + los "Criterios del rediseño" | La mayoría de los problemas de CSS, animaciones y accesibilidad visual se resuelven en el diseño nuevo, en vez de parchear el actual. |
 | **4. Re-auditoría** | Repetir esta auditoría sobre el resultado | Confirmar que no volvieron los problemas. |
 
+**Estado (2026-09-15):** las fases 0 a 3 están hechas. La Fase 3 está en la rama `fase-3-rediseno`, todavía sin merge a `main` (que publica en producción). El diseño final, con todo lo que cambió respecto del brief a pedido de Fermin, está en `docs/DISENO.md`. Sigue la Fase 4, conviene hacerla sobre el deploy de preview de Vercel de la rama. Quedan abiertos I12 y N4 (contenido que tiene que conseguir Fermin), M13 (decidir si se unifica `.js`/`.jsx`) y N5 a N8.
+
 Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual**: se usan como requisitos del diseño nuevo.
 
 ---
@@ -86,7 +88,7 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
   - **Problema:** cualquier toque que no sea un enlace de sección hace `toggle("nav-expanded")`. En móvil las secciones están ocultas (`globals.css:193-199`) y nada indica que el menú se puede abrir.
   - **Solución:** un botón de menú explícito con `aria-expanded` y `aria-controls`, estado en `useState` y cierre con Escape.
 
-- [ ] **I2. Los enlaces del nav no funcionan fuera de la home y no actualizan la URL** · Fase 2 **[nav]**
+- [x] **I2. Los enlaces del nav no funcionan fuera de la home y no actualizan la URL** · Fase 2 **[nav]**
   - **Dónde:** `components/Nav.jsx:21-32`.
   - **Problema:** hace `preventDefault()` y después `querySelector(href)`, que en `/no-existe` devuelve `null`. La URL nunca recibe el `#hash`. Además duplica lo que ya hacen `scroll-behavior` y `scroll-margin-top`.
   - **Solución:** quitar `handleLinkClick` y usar enlaces nativos `href="/#proyectos"`.
@@ -150,7 +152,7 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
     - Píldora WIP sobre el degradado azul (`:1109`, `:1120`): entre 1,2 y 2,9.
   - **Requisito:** la paleta nueva tiene que pasar 4,5:1 en texto normal y en los dos temas.
 
-- [ ] **I8. Idioma: `localStorage` sin try/catch, parpadeo al cargar y sin detección** · Fase 2
+- [x] **I8. Idioma: `localStorage` sin try/catch, parpadeo al cargar y sin detección** · Fase 2
   - **Dónde:** `context/LanguageProvider.jsx:11-16`.
   - **Problema:**
     - En la línea 14, si el almacenamiento está bloqueado, se lanza una excepción, React desmonta todo y (junto con C5) la página queda en blanco.
@@ -178,7 +180,7 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
     - `filter: blur` animado (`:1798`, `:1063-1069`).
   - **Requisito:** animar solo `opacity` y `transform`, sin `will-change` fijo ni blur animado.
 
-- [ ] **I11. Font Awesome completo por CDN y Devicon con `@latest`** · Fase 2
+- [x] **I11. Font Awesome completo por CDN y Devicon con `@latest`** · Fase 2
   - **Dónde:** `app/layout.js:73-76`, `components/Hero.jsx:7` y `components/Skills.jsx:5` (constante duplicada).
   - **Problema:** la hoja de estilos bloquea el render y usa `font-display: block` para unos 23 iconos. Devicon hace 20 peticiones sin versión fija.
   - **Solución:** iconos SVG inline y los SVG de Devicon copiados a `public/icons/`.
@@ -200,7 +202,7 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
   - **Terminal:** se corta 62px (`:1044`, `:1879-1884`).
   - **Requisito:** probar el diseño nuevo en 375, 768, 900, 1024 y 1440px.
 
-- [ ] **I14. Toda la web es de cliente solo para poder traducir** · Fase 2
+- [x] **I14. Toda la web es de cliente solo para poder traducir** · Fase 2
   - **Dónde:** `"use client"` en Experience, Education, Skills, Projects, Contact y Footer.
   - **Problema:** se envían los dos idiomas y todo el JSX al navegador, y el inglés no se indexa.
   - **Solución:** usar `app/[lang]` con `generateStaticParams`, el diccionario en el servidor, `generateMetadata` por idioma y `hreflang`. Solo quedan de cliente Dropdown, Terminal, Nav y los efectos.
@@ -217,7 +219,7 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
   - **Solución:** botones directos a las tiendas, mockup clicable, CV directo según el idioma de la interfaz y Proyectos justo después del hero.
   - **Datos hechos (Fase 1):** cada proyecto de `PROJECTS` (`lib/site.js`) declara sus enlaces por tipo (`appstore`, `playstore`, `repo` o `demo`) y sus plataformas, y los CV están en `CV` con su idioma. Todos los proyectos tienen al menos un enlace (antes el chatbot, la app de barberías y ClubSystem no tenían ninguno). Queda para el rediseño cómo se presentan: botones directos en vez del dropdown, mockup clicable, CV según el idioma y el orden de las secciones.
 
-- [ ] **I16. SEO e iconos** · Fase 2
+- [x] **I16. SEO e iconos** · Fase 2
   - **Problema:**
     - La imagen OG declara 1200×630, pero la foto mide 970×1238 (`app/layout.js:36-38`).
     - Faltan `apple-touch-icon`, `sitemap`, `robots` y `not-found`; el 404 es el de Next, en inglés **[nav]**.
@@ -365,6 +367,23 @@ _(Agregá aquí lo que aparezca durante las fases.)_
   - **Dónde:** `public/assets/foto_perfil.webp` (560×715).
   - **Problema:** en horizontal la foto se dibuja a unos 550×740px, así que en una pantalla 2x haría falta una imagen de unos 1100×1480. La original se borró por el GPS (C1).
   - **Solución:** conseguir una foto de al menos 1200px de alto, sin metadatos (`scripts/strip-metadata.mjs`), y actualizar `width` y `height` en `Hero.jsx`.
+
+- [ ] **N5. `npx eslint .` también revisa `.claude/worktrees/`** · Fase 4 (hallado en la Fase 3)
+  - **Problema:** una sesión de Claude Code dejó un worktree en `.claude/worktrees/`, y como `eslint.config.mjs` no ignora esa carpeta, `npx eslint .` da 241 errores que no son del proyecto. `npx eslint app components lib` da 0.
+  - **Solución:** sumar `.claude/**` a los `ignores` de `eslint.config.mjs` (y revisar si ese worktree todavía hace falta).
+
+- [ ] **N6. El respaldo para Firefox no se probó en Firefox** · Fase 4
+  - **Dónde:** `components/TrackController.jsx` (`paint`): sin `animation-timeline`, escribe el `translate` de la pista, el progreso, la transición al cierre (`scale` del degradado) y la línea de Trayectoria (`--rail`). El muro de Habilidades queda en su estado final.
+  - **Problema:** las cuentas replican las del CSS y se revisaron leyendo el código, pero nunca corrieron en un Firefox real.
+  - **Solución:** probar en Firefox a 1440×900 y 1024×680: recorrido, anclas del nav, foco con teclado, degradado y línea.
+
+- [ ] **N7. Movimiento sin verse en un navegador visible; LCP con el preloader** · Fase 4
+  - **Problema:** durante la Fase 3 el panel del navegador de las pruebas estaba oculto, y ahí no avanzan ni las animaciones atadas al scroll ni las de CSS. Por eso el recorrido, el degradado, la línea de Trayectoria, el muro, la ola de la franja, el preloader, las entradas por elemento y Lenis se verificaron midiendo sus tramos calculados (`animation-range`), sus clases y sus retrasos, no mirándolos. Además, el preloader tapa unos 5 s la primera visita y puede cambiar qué elemento cuenta como LCP.
+  - **Solución:** revisar todo en un navegador visible y correr Lighthouse (rendimiento, LCP, accesibilidad, SEO) sobre el deploy de preview, con y sin preloader (primera visita y siguientes de la sesión).
+
+- [ ] **N8. Contraste del nav y la franja con `difference`; texto en contorno** · Fase 4
+  - **Problema:** en horizontal, el nav y la franja inferior son blancos con `mix-blend-mode: difference` (como douglus): sobre el papel y sobre el cierre se leen bien, pero al pasar sobre tonos medios (un botón violeta, el degradado) el inverso contrasta cerca de 2:1 por un momento. Aparte, hay texto en contorno (`-webkit-text-stroke`): el fin de los rangos de años y las tecnologías intermedias del muro. Es decorativo (`aria-hidden`, la información está en texto), pero conviene mirar que se lea.
+  - **Solución:** medirlo en la Fase 4 y decidir con Fermin (por ejemplo, que el nav no pase sobre esos tonos o que el contorno sea más grueso).
 
 - [x] **N1. La foto con GPS sigue en el historial de git** · Fase 0
   - **Hecho (2026-09-13):** se reescribió el historial con `git filter-repo --invert-paths` (sobre un clon nuevo) y se hizo force-push. Cambiaron todos los hashes, así que los que se citan en este archivo son de antes de la reescritura. Ningún commit contiene ya la foto y el árbol final no cambió.
