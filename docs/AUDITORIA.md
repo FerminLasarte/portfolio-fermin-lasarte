@@ -634,7 +634,14 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
   - **Problema:** el muro es `aria-hidden` y la lista en texto de abajo tiene los nombres pero no el nivel, aunque DISENO 7.7 dice que es "la misma información". En colores forzados, las intermedias además se ven llenas y la leyenda no distingue nada. El detalle está en `/habilidades`.
   - **Solución:** sumar el nivel a la lista (visible o `sr-only`), o corregir DISENO.
 
-- [ ] **R-M5. La ola de la franja se repite sin fin y el teclado no la corta**
+- [x] **R-M5. La ola de la franja se repite sin fin y el teclado no la corta** **[nav]**
+  - **Hecho (decidido por Fermin, 2026-09-15: lo que propone la auditoría):** en `WaveText`, la ola pasa dos veces como máximo por cada vez que la página queda quieta. `pointermove`, `scroll`, `keydown` y `focusin` vuelven a empezar la espera y ponen la cuenta en cero. Solo corre si se cumple la media query horizontal (`HORIZONTAL_QUERY`, con listener de `change`). El timer de la ola y el de su final son dos timers separados, así una actividad a mitad de la ola ya no deja puesta la clase `is-waving`.
+  - **Verificado** sobre el servidor local, contando con un `MutationObserver` cada vez que se pone `is-waving`:
+    - a 1440×900, con la página quieta 22 s, hay olas a los 4,5 s y a los 11,2 s, y después ninguna más;
+    - con dos teclas (a los 0 y a los 3 s), vuelven dos olas, a los 5 s de la última tecla y a los 11,8 s;
+    - un cambio de foco a los 3 s reinicia la espera: no hay olas antes de los 6,5 s;
+    - a 375 (táctil, vertical) y con reduce motion no hay olas en 12 s.
+  - DISENO.md, 7.1 y 8.
   - **Dónde:** `components/WaveText.jsx:23-45`.
   - **Problema:** se repite cada 5 s mientras no se mueva el mouse ni se scrollee. Quien navega con teclado la ve siempre (2.2.2), y choca con "nada se mueve en loop" (DISENO 8.2). También corre en móvil, donde la franja está oculta.
   - **Solución:** reiniciar la espera también con `keydown` y `focusin`, limitarla a una o dos repeticiones y activarla solo en horizontal.
