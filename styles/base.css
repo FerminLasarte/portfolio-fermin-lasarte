@@ -290,7 +290,13 @@ ol {
   background: currentColor;
   scale: 0 1;
   transform-origin: right center;
-  transition: scale var(--dur-hover) var(--ease-out);
+}
+
+/* Con reduce motion, el tachado aparece sin transición (R-M6; DISENO.md, sección 8). */
+@media (prefers-reduced-motion: no-preference) {
+  .strike::after {
+    transition: scale var(--dur-hover) var(--ease-out);
+  }
 }
 
 .strike:focus-visible::after {

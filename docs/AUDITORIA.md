@@ -646,7 +646,9 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
   - **Problema:** se repite cada 5 s mientras no se mueva el mouse ni se scrollee. Quien navega con teclado la ve siempre (2.2.2), y choca con "nada se mueve en loop" (DISENO 8.2). También corre en móvil, donde la franja está oculta.
   - **Solución:** reiniciar la espera también con `keydown` y `focusin`, limitarla a una o dos repeticiones y activarla solo en horizontal.
 
-- [ ] **R-M6. El tachado se anima igual con reduce motion**
+- [x] **R-M6. El tachado se anima igual con reduce motion**
+  - **Hecho:** la `transition` de `.strike::after` pasó a `@media (prefers-reduced-motion: no-preference)`, como dice la tabla de DISENO 8 ("aparece sin transición"). Se revisaron las demás transiciones que están fuera de `no-preference`: el `translate` de "Menú" / "Cerrar" ya se corta con reduce motion (`nav.css`), y el `scale` de presionar (botones y foto) queda igual a propósito, porque no desplaza.
+  - **Verificado** sobre el servidor local, a 1440, en el nav de la home y en "Ver el proyecto" de `/trayectoria`: sin reduce motion, la transición es `scale 0.22s` y a los 20ms de enfocar el tachado va por la mitad; con reduce motion es `all 0s` y aparece entero enseguida.
   - **Dónde:** `styles/base.css:279-290`: la `transition` de `.strike::after` está fuera de `no-preference`.
   - **Solución:** moverla dentro de `@media (prefers-reduced-motion: no-preference)`, como dice la tabla de DISENO 8.
 
