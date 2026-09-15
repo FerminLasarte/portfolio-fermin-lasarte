@@ -37,11 +37,17 @@ export default function Document({ lang, head, children }) {
           {t("nav.skip")}
         </a>
         <Nav
-          links={NAV_SECTIONS.map((s) => ({ href: `${homePath(lang)}#${s.id}`, label: t(s.key) }))}
-          switchTo={{ lang: other, href: homePath(other) }}
-          langLabel={t("nav.langToggle")}
-          themeLabel={t("nav.themeToggle")}
-          social={{ github: SOCIAL.github, linkedin: SOCIAL.linkedin, email: PERSON.email }}
+          brand={{ href: `${homePath(lang)}#sobre-mi`, label: PERSON.name }}
+          links={NAV_SECTIONS.map((s) => ({ id: s.id, href: `${homePath(lang)}#${s.id}`, label: t(s.key) }))}
+          switchTo={{ lang: other, href: homePath(other), name: t(`lang.${other}`) }}
+          labels={{
+            sections: t("nav.sections"),
+            menu: t("nav.menu"),
+            close: t("nav.close"),
+            lang: t("nav.langToggle"),
+            theme: t("nav.themeToggle"),
+          }}
+          social={{ github: SOCIAL.github, linkedin: SOCIAL.linkedin }}
         />
         <main id="contenido">{children}</main>
         <Footer t={t} />
