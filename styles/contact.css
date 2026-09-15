@@ -1,66 +1,174 @@
 /*
- * Contacto (docs/DISENO.md, 7.5): el único panel lleno de --accent. Adentro, el
- * texto, el foco y el cursor usan --on-accent (contraste en DISENO.md, sección 2).
+ * Cierre (docs/DISENO.md, 7.5), como el final de douglus: antes del contacto, un
+ * panel con un degradado del acento que se "dibuja" con el scroll y termina en el
+ * color noche; después, el contacto en noche (el mismo en los dos temas), con el
+ * título gigante, una línea y las píldoras.
  */
 
+/* ---------- Transición dibujada ---------- */
+
+/* Decorativa (aria-hidden). En vertical es una franja que baja hacia el contacto; en
+   horizontal, un panel que se dibuja de izquierda a derecha. */
+.bleed {
+  --wash-dir: 180deg;
+  --wash-mask: ellipse 140% 100% at 50% 100%;
+  --wash-origin: center top;
+  --wash-from: 1 0.05;
+  position: relative;
+  block-size: clamp(12rem, 45vh, 26rem);
+  padding: 0;
+}
+
+/* La máscara ovalada ablanda los bordes del lado claro, como la mancha de douglus. */
+.bleed__wash {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    var(--wash-dir),
+    transparent 0%,
+    var(--wash-1) 22%,
+    var(--wash-2) 42%,
+    var(--wash-3) 62%,
+    var(--wash-4) 82%,
+    var(--night) 100%
+  );
+  mask-image: radial-gradient(var(--wash-mask), #000 55%, transparent 100%);
+  transform-origin: var(--wash-origin);
+}
+
+/* En vertical se dibuja mientras la franja entra a la vista. Sin soporte, sin JS o con
+   reduce motion queda dibujada, quieta. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    html.js .bleed__wash {
+      animation: draw linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 55%;
+    }
+  }
+}
+
+@keyframes draw {
+  from {
+    scale: var(--wash-from);
+  }
+}
+
+/* ---------- Contacto ---------- */
+
 .contact {
-  --focus: var(--on-accent);
-  --cursor-ink: var(--on-accent);
+  --focus: var(--on-night);
+  --cursor-ink: var(--on-night);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: var(--space-7);
-  background: var(--accent);
-  color: var(--on-accent);
+  justify-content: center;
+  background: var(--night);
+  color: var(--on-night);
 }
 
 .contact ::selection {
-  background: var(--on-accent);
-  color: var(--accent);
+  background: var(--on-night);
+  color: var(--night);
 }
 
-.contact__email {
+.contact__title {
+  font-size: min(var(--fs-display), 15vw);
+}
+
+.contact__title em {
+  font-style: normal;
+  color: var(--night-accent);
+}
+
+.contact__rule {
+  block-size: 2px;
+  margin-block: clamp(1.5rem, 3vh, 3rem) clamp(2rem, 4vh, 4rem);
+  background: var(--night-line);
+}
+
+.contact__actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-4) var(--space-5);
+  justify-content: space-between;
+  gap: var(--space-6);
 }
 
-/* El email es el botón principal: en tamaño Mega, subrayado. */
-.contact__mail {
-  font-size: var(--fs-mega);
-  font-weight: 700;
-  font-stretch: var(--wdth-mega);
-  line-height: 0.95;
-  letter-spacing: -0.02em;
-  text-decoration-thickness: 0.06em;
-  text-underline-offset: 0.12em;
-  overflow-wrap: anywhere;
-}
-
-.btn--on-accent {
-  --btn-ink: var(--on-accent);
-  --btn-line: var(--on-accent);
-  --btn-fill: var(--on-accent);
-  --btn-fill-ink: var(--accent);
-}
-
-.contact__rows li {
+.contact__pills {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-2) var(--space-4);
-  padding-block: var(--space-3);
-  border-top: 1px solid var(--on-accent-muted);
+  gap: var(--space-3);
+  min-inline-size: 0;
 }
 
-.contact__row {
-  font-size: var(--fs-3);
-  font-weight: 650;
+.contact__back svg {
+  inline-size: 3.5rem;
+  block-size: auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: square;
 }
 
-.contact__detail {
-  color: var(--on-accent-muted);
-  font-variant-numeric: tabular-nums;
+/* Píldoras del cierre: grandes, en caja normal (el email no va en mayúsculas) y
+   sobre noche; el relleno es claro y el texto pasa a noche. */
+.btn--night {
+  --btn-bg: var(--night-raised);
+  --btn-ink: var(--on-night);
+  --btn-line: var(--night-line-strong);
+  --btn-fill: var(--on-night);
+  --btn-fill-ink: var(--night);
+}
+
+.btn--lg {
+  padding: 1.125rem 1.875rem;
+  font-size: var(--fs-1);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* ---------- Horizontal ---------- */
+
+@media (min-width: 64rem) and (min-height: 42.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html.js .bleed {
+    --wash-dir: 90deg;
+    --wash-mask: ellipse 100% 140% at 100% 50%;
+    --wash-origin: left center;
+    --wash-from: 0.05 1;
+    block-size: 100%;
+  }
+
+  /* Se dibuja con la misma línea de tiempo que mueve la pista: desde que el panel
+     asoma (su borde izquierdo al 90% del ancho de la ventana) hasta que ese borde
+     llega al 35%. Sin animation-timeline (Firefox) lo hace TrackController. */
+  @supports (animation-timeline: view()) {
+    html.js .bleed__wash {
+      animation-timeline: --pan;
+      animation-range: contain calc(var(--x-bleed) - 90cqi) contain calc(var(--x-bleed) - 35cqi);
+    }
+  }
+
+  /* El título en una sola línea, como el "Let's have a chat" de douglus. */
+  html.js .contact__title {
+    font-size: min(var(--fs-display), 8.6cqi);
+    white-space: nowrap;
+  }
+
+  /* Cuando el contacto llega al centro, el nav y la franja inferior pasan a noche
+     (TrackController pone html.on-night): así no quedan dos bandas claras sobre el
+     cierre. */
+  html.js :is(.nav, .strip) {
+    color: var(--ink);
+    transition:
+      background-color var(--dur-menu) var(--ease-out),
+      color var(--dur-menu) var(--ease-out);
+  }
+
+  html.on-night :is(.nav, .strip) {
+    --paper: var(--night);
+    --ink: var(--on-night);
+    --ink-muted: var(--on-night-muted);
+    --line: var(--night-line-strong);
+    --accent: var(--night-accent);
+    --focus: var(--on-night);
+  }
 }

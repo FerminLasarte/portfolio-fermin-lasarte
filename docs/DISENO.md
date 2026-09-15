@@ -21,7 +21,7 @@
 | Tipografía | Neue Montreal y FK Screamer (comerciales) | Archivo variable: angosta y pesada para los títulos, ancho normal para el texto |
 | Scroll | Lenis mueve una pista fija; el `body` tiene `overflow: hidden` | Scroll del documento (Lenis solo suaviza la rueda); `sticky` más `translate` atado al scroll |
 | Proyectos | Capturas en marcos de escritorio | Placas del color de cada app, con capturas verticales de teléfono |
-| Cierre | Panel con degradado y nombre gigante | Panel de contacto lleno de cobalto, con el email como botón principal |
+| Cierre | Degradado cálido que se dibuja con el scroll y panel negro con el título gigante | Degradado del acento que se dibuja con el scroll y panel noche con el título gigante y píldoras (7.5) |
 
 **Qué se toma de douglus y qué no:**
 
@@ -43,7 +43,7 @@ Todo el texto es HTML real. Nada se dibuja en canvas.
 
 ## 2. Paleta
 
-Estrategia **restringida con un bloque comprometido**: neutros fríos más un solo acento, violeta eléctrico, que aparece en los botones principales, los estados y el progreso, y que llena un panel completo, el de contacto, como cierre. No hay verdes, ámbar ni grises sueltos: el estado de un proyecto se dice con texto, no con un punto de color.
+Estrategia **restringida con un bloque comprometido**: neutros fríos más un solo acento, violeta eléctrico, que aparece en los botones principales, los estados y el progreso. El cierre es un bloque de color noche, igual en los dos temas, al que se llega por un degradado del acento (7.5). No hay verdes, ámbar ni grises sueltos: el estado de un proyecto se dice con texto, no con un punto de color.
 
 Los tokens van en `:root` y se redefinen bajo `html.dark-mode` (se mantiene el mecanismo actual de `lib/theme.js`, que respeta `prefers-color-scheme` y guarda la elección). `THEME_COLORS` pasa a `--paper` de cada tema.
 
@@ -58,9 +58,22 @@ Los tokens van en `:root` y se redefinen bajo `html.dark-mode` (se mantiene el m
 | `--accent-soft` | `#ECE6FF` | `#221840` | Placas tipográficas de proyecto |
 | `--on-accent` | `#F6F3FF` | `#0E1012` | Texto y foco sobre `--accent` |
 | `--on-accent-muted` | `#E2D9FF` | `#2A1D55` | Texto secundario sobre `--accent` |
-| `--focus` | `= --accent` | `= --accent` | Anillo de foco (sobre el panel de contacto pasa a `--on-accent`) |
+| `--focus` | `= --accent` | `= --accent` | Anillo de foco (sobre el cierre pasa a `--on-night`) |
 
 El acento empezó en cobalto (`#1D3FD8` / `#8CA3FF`). El 2026-09-14 Fermin lo cambió por un violeta más vivo: el cobalto se sentía insulso y no transmitía confianza.
+
+**Cierre (7.5):** colores propios, iguales en los dos temas.
+
+| Token | Valor | Uso |
+|---|---|---|
+| `--night` | `#0B0912` | Fondo del contacto y final del degradado |
+| `--night-raised` | `#17141F` | Fondo de las píldoras |
+| `--on-night` | `#F3F0FA` | Texto, foco, cursor y relleno de las píldoras |
+| `--on-night-muted` | `#A7A1B5` | Texto secundario (nav y franja en modo noche) |
+| `--night-accent` | `#A57BFF` | La última palabra del título |
+| `--night-line` | `#2A2632` | La línea bajo el título (decorativa) |
+| `--night-line-strong` | `#6A6377` | Borde de las píldoras |
+| `--wash-1` a `--wash-4` | `#E4D6FF`, `#A47CFF`, `#6224F0`, `#2B1273` (en oscuro, los dos primeros pasan a `#2A1D55` y `#5B3BC4`) | Paradas del degradado |
 
 **Contraste medido** (WCAG 2.x, luminancia relativa; script en el anexo B). Texto: mínimo 4,5:1. Bordes y controles: mínimo 3:1.
 
@@ -78,6 +91,11 @@ El acento empezó en cobalto (`#1D3FD8` / `#8CA3FF`). El 2026-09-14 Fermin lo ca
 | `--on-accent-muted` sobre `--accent` | 5,15 | 4,89 |
 | `--line` sobre `--paper` (borde, 3:1) | 3,40 | 3,82 |
 | `--line` sobre `--surface` (borde, 3:1) | 3,09 | 3,46 |
+| `--on-night` sobre `--night` / `--night-raised` | 17,57 / 16,13 | igual |
+| `--on-night-muted` sobre `--night` | 7,92 | igual |
+| `--night-accent` sobre `--night` | 6,48 | igual |
+| `--night-line-strong` sobre `--night` (borde, 3:1) | 3,45 | igual |
+| `--night` sobre `--on-night` (píldora con el relleno) | 17,57 | igual |
 
 Reglas:
 - `--ink-muted` nunca va sobre `--accent` (da 1,02).
@@ -132,7 +150,8 @@ Proyectos pasa a estar justo después del hero (I15). Experiencia y Educación s
 | 3 | Un panel por proyecto, en el orden de `PROJECTS` | `proyecto-<id>` | `--w-card-lg: clamp(30rem, 40cqi, 42rem)` para las apps en producción con plataforma móvil; `--w-card: clamp(22rem, 28cqi, 28rem)` para el resto |
 | 4 | Trayectoria (experiencia y educación) | `experiencia`; la fila de UNICEN lleva `educacion` | `--w-timeline: clamp(96rem, 130cqi, 110rem)`: ancha también en 1024px, para que las cuatro fichas entren a lo alto |
 | 5 | Habilidades | `habilidades` | `--w-skills: clamp(48rem, 80cqi, 80rem)` |
-| 6 | Contacto | `contacto` | `100cqi` |
+| 6 | Transición al cierre: decorativa, `aria-hidden` (agregada el 2026-09-14) | | `--w-bleed: clamp(28rem, 65cqi, 64rem)` |
+| 7 | Contacto | `contacto` | `100cqi` |
 
 En vertical, después del último panel va un `<footer>` corto (© y derechos). En horizontal el pie no se muestra: la página termina con la pista, sin scroll de más (antes el pie agregaba 85px al final), y el © ya está en la franja inferior. El nav queda con **cuatro enlaces**: Proyectos, Trayectoria, Habilidades y Contacto; "Sobre mí" es el nombre, a la izquierda. **Esto cambia las etiquetas del nav y hay que aprobarlo** (sección 10).
 
@@ -318,13 +337,21 @@ Copia propuesta para el párrafo (hoy `hero.description` tiene 45 palabras y pas
 
 Los rangos de años se escriben con guion corto normal ("2021-2025") en el texto visible, o con "a" en la lectura ("2021 a 2025").
 
-### 7.5 Contacto
+### 7.5 Cierre: transición dibujada y contacto
 
-**El único panel lleno de color:** fondo `--accent`, texto `--on-accent` y foco `--on-accent`.
-- `<h2>` "Trabajemos juntos" en Display.
-- Debajo, el email en tamaño Mega como enlace `mailto:` (es el botón principal), con un botón "Copiar" al lado. Al copiar, dice "Copiado" durante 2 s, anunciado con `aria-live="polite"`. Si el portapapeles no está disponible, el botón no se muestra (M16).
-- Tres filas grandes: WhatsApp, LinkedIn y GitHub, con el mismo tachado del nav al pasar el mouse. El teléfono sigue siendo un `tel:`.
-- **En vertical:** el mismo bloque, a lo ancho.
+Rediseñado el 2026-09-14 a pedido de Fermin, como el final de douglus (antes era un panel lleno de cobalto con el email en tamaño Mega y filas con tachado).
+
+**Transición dibujada** (`.bleed`, decorativa y `aria-hidden`):
+- **Horizontal:** un panel de `--w-bleed` entre Habilidades y Contacto con un degradado del acento: transparente, `--wash-1` a `--wash-4` y `--night`, que empalma con el contacto. Una máscara ovalada ablanda los bordes del lado claro, como la mancha de douglus.
+- **Cómo se dibuja:** crece de izquierda a derecha (`scale` X de 0,05 a 1) atado al scroll, mientras el borde izquierdo del panel va del 90% al 35% del ancho de la ventana. Usa la misma línea de tiempo `--pan` de la pista, con `animation-range` calculado a partir de `--x-bleed` (la suma de los anchos anteriores, en `.h-scroll`). En Firefox lo hace el respaldo de TrackController. douglus hace lo mismo con una imagen cálida y ScrollTrigger; acá es un degradado de CSS, sin imagen.
+- **Vertical:** una franja de `clamp(12rem, 45vh, 26rem)` de alto que baja hacia el contacto y se dibuja de arriba a abajo mientras entra a la vista (`view()`). Sin soporte, sin JS o con reduce motion, queda dibujada y quieta.
+
+**Contacto** (`#contacto`), en `--night` en los dos temas:
+- `<h2>` "Trabajemos juntos" en Display, con la última palabra en `--night-accent`. En horizontal va en una sola línea, como el "Let's have a chat" de douglus.
+- Una línea de 2px en `--night-line`.
+- Píldoras grandes (`.btn--night.btn--lg`, en caja normal): el email (`mailto:`), "Copiar email" (dice "Copiado" 2 s, con `aria-live`; si no hay portapapeles no se muestra, M16), WhatsApp, el teléfono como `tel:`, LinkedIn y GitHub. A la derecha, "Volver al inicio" con una flecha larga: un ancla a `#sobre-mi` que pasa por el scroll suave (7.10).
+- Foco, selección y cursor en `--on-night`.
+- **Modo noche del nav y la franja (horizontal):** cuando el contacto cruza el centro de la ventana, TrackController pone `html.on-night` y el nav y la franja inferior redefinen sus tokens con los de noche, así no quedan dos bandas claras sobre el cierre.
 
 ### 7.6 Botones
 
@@ -351,7 +378,7 @@ En vertical, los grupos van en dos columnas (una por debajo de 30rem).
 Es el de douglus, rehecho sin los problemas de M7 (reemplaza a `PremiumCursor`).
 
 **Qué es:**
-- Un círculo de `--cursor-size` (28px) con borde de 1px y un punto de 4px, los dos en `--cursor-ink` (que vale `--ink`; sobre el panel de contacto, `--on-accent`).
+- Un círculo de `--cursor-size` (28px) con borde de 1px y un punto de 4px, los dos en `--cursor-ink` (que vale `--ink`; sobre el cierre, `--on-night`).
 - El punto sigue al mouse con un retraso de 0,35 por frame y el círculo con 0,2 (los valores de douglus), así que el círculo llega un poco después.
 
 **Estados**, según lo que tenga debajo:
@@ -442,6 +469,8 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
 | Pista horizontal | Scroll | `translate` | Lineal, 1:1 | Modo vertical |
 | Scroll con la rueda | Rueda o trackpad, con puntero fino | Scroll del documento, con Lenis | `lerp: 0.1` por frame; anclas y "Volver arriba" en 1,2 s con `1 − (1 − t)³` | Scroll nativo, sin suavizar |
 | Barra de progreso | Scroll | `scale` X | Lineal | No existe (vertical) |
+| Transición al cierre | Scroll | `scale` del degradado de 0,05 a 1: en X en horizontal, en Y en vertical | Lineal, atada al scroll: en horizontal, mientras el borde izquierdo del panel va del 90% al 35% del ancho de la ventana (misma línea de tiempo que la pista; en Firefox, TrackController); en vertical, `view()` de `entry 0%` a `cover 55%` | Quieta y dibujada |
+| Nav y franja en noche | El contacto cruza el centro (horizontal) | `background-color` y `color` | 420ms `--ease-out` | Igual |
 | Tachado del nav y de contacto | Hover o foco | `scale` X del pseudo-elemento | 220ms `--ease-out` | Aparece sin transición |
 | Botón: relleno | Hover | `translate` Y del `::before` (entra desde abajo, sale por arriba con JS) | 500ms entrada, 400ms salida, `--ease-out` | Fundido de `opacity` |
 | Botón: salto del texto | Hover | `translate` Y y `opacity` de `.btn__label` | 350ms `--ease-out` | Sin movimiento |
@@ -493,7 +522,7 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
    - Las capturas son reales: hoy `travelpic.webp` y `deporturnos.webp` son los logos, no pantallas de las apps (ver sección 10).
 7. **Accesibilidad.**
    - `<main id="contenido">` y enlace para saltar a él.
-   - `:focus-visible` propio: anillo de 2px en `--focus` con separación de 3px; sobre el panel de contacto, en `--on-accent`.
+   - `:focus-visible` propio: anillo de 2px en `--focus` con separación de 3px; sobre el cierre, en `--on-night`.
    - Contraste AA medido en los dos temas (tabla de la sección 2).
    - Zonas táctiles de 44px en el nav, los botones y las filas de contacto, y de al menos 24px en los enlaces dentro del texto.
    - Los niveles de skills se ven sin hover (M4) y el estado de un proyecto va en texto, no solo en color.

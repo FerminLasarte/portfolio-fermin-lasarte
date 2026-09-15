@@ -18,9 +18,9 @@
   opacity: 1;
 }
 
-/* Sobre el panel de contacto (fondo --accent). */
-.cursor[data-tone="accent"] {
-  --c: var(--on-accent);
+/* Sobre el cierre (fondo --night). */
+.cursor[data-tone="night"] {
+  --c: var(--on-night);
 }
 
 .cursor__circle {

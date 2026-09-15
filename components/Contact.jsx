@@ -1,59 +1,80 @@
 import { PERSON, SOCIAL } from "@/lib/site";
 import CopyEmail from "@/components/CopyEmail";
 
-// El usuario de un perfil, sacado de su URL ("https://github.com/FerminLasarte" → "FerminLasarte").
-const handle = (url) => url.split("/").filter(Boolean).pop();
+const EXTERNAL = { target: "_blank", rel: "noopener noreferrer" };
 
-// Contacto (docs/DISENO.md, 7.5): el único panel lleno de color. El email en grande es
-// el botón principal y al lado está el botón para copiarlo (M16). Debajo, WhatsApp
-// (con el número como enlace tel:), LinkedIn y GitHub, con el tachado del nav.
+// Cierre (docs/DISENO.md, 7.5), como el final de douglus. Primero, la transición: un
+// panel decorativo con un degradado que se dibuja con el scroll y termina en el color
+// noche. Después, el contacto en noche: el título gigante con la última palabra en
+// acento, una línea y las píldoras (el email, copiarlo, WhatsApp, el teléfono como
+// tel:, LinkedIn y GitHub), con "Volver al inicio" a la derecha.
 export default function Contact({ t }) {
-  const rows = [
-    { name: "WhatsApp", href: PERSON.whatsapp, detail: PERSON.phone, detailHref: PERSON.phoneHref },
-    { name: "LinkedIn", href: SOCIAL.linkedin, detail: handle(SOCIAL.linkedin) },
-    { name: "GitHub", href: SOCIAL.github, detail: handle(SOCIAL.github) },
+  const words = t("contact.title").split(" ");
+  const last = words.pop();
+  const pills = [
+    { label: "WhatsApp", href: PERSON.whatsapp, external: true },
+    { label: PERSON.phone, href: PERSON.phoneHref },
+    { label: "LinkedIn", href: SOCIAL.linkedin, external: true },
+    { label: "GitHub", href: SOCIAL.github, external: true },
   ];
 
   return (
-    <section
-      id="contacto"
-      className="panel panel--screen contact"
-      data-section="contacto"
-      data-label={t("nav.contact")}
-      aria-labelledby="contacto-t"
-    >
-      <h2 id="contacto-t" className="display">
-        {t("contact.title")}
-      </h2>
-
-      <div className="contact__email">
-        <a className="contact__mail" href={`mailto:${PERSON.email}`}>
-          {PERSON.email}
-        </a>
-        <CopyEmail
-          email={PERSON.email}
-          label={t("contact.copy")}
-          done={t("contact.copied")}
-          className="btn btn--on-accent"
-        />
+    <>
+      <div
+        className="panel panel--bleed bleed"
+        data-section="contacto"
+        data-label={t("nav.contact")}
+        aria-hidden="true"
+      >
+        <div className="bleed__wash" />
       </div>
 
-      <ul className="contact__rows">
-        {rows.map((row) => (
-          <li key={row.name}>
-            <a className="contact__row strike" href={row.href} target="_blank" rel="noopener noreferrer">
-              {row.name}
+      <section
+        id="contacto"
+        className="panel panel--screen contact"
+        data-section="contacto"
+        data-label={t("nav.contact")}
+        aria-labelledby="contacto-t"
+      >
+        <h2 id="contacto-t" className="display contact__title">
+          {words.join(" ")} <em>{last}</em>
+        </h2>
+
+        <div className="contact__rule" aria-hidden="true" />
+
+        <div className="contact__actions">
+          <div className="contact__pills">
+            <a className="btn btn--night btn--lg" href={`mailto:${PERSON.email}`}>
+              <span className="btn__label">{PERSON.email}</span>
             </a>
-            {row.detailHref ? (
-              <a className="contact__detail" href={row.detailHref}>
-                {row.detail}
+            <CopyEmail
+              email={PERSON.email}
+              label={t("contact.copy")}
+              done={t("contact.copied")}
+              className="btn btn--night btn--lg"
+            />
+            {pills.map((pill) => (
+              <a
+                key={pill.label}
+                className="btn btn--night btn--lg"
+                href={pill.href}
+                {...(pill.external ? EXTERNAL : {})}
+              >
+                <span className="btn__label">{pill.label}</span>
               </a>
-            ) : (
-              <span className="contact__detail">{row.detail}</span>
-            )}
-          </li>
-        ))}
-      </ul>
-    </section>
+            ))}
+          </div>
+
+          <a className="btn btn--night btn--lg contact__back" href="#sobre-mi">
+            <span className="btn__label">
+              <svg viewBox="0 0 56 9" aria-hidden="true">
+                <path d="M1.5 4.5h53M1.5 4.5l5-3M1.5 4.5l5 3" />
+              </svg>
+              {t("contact.back")}
+            </span>
+          </a>
+        </div>
+      </section>
+    </>
   );
 }

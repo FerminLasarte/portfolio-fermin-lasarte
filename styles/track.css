@@ -15,12 +15,15 @@ main,
 
 /* Largo de la pista: la suma de los anchos de los paneles (definidos abajo). Va en
    .h-scroll y no en :root porque un var() se resuelve donde se declara la variable,
-   y --n-card y --n-card-lg los escribe el servidor recién en este elemento. */
+   y --n-card y --n-card-lg los escribe el servidor recién en este elemento.
+   --x-bleed es dónde empieza la transición al cierre: la usa styles/contact.css para
+   saber en qué tramo del recorrido se dibuja. */
 .h-scroll {
-  --track-w: calc(
+  --x-bleed: calc(
     100cqi + var(--w-intro) + var(--n-card-lg) * var(--w-card-lg) + var(--n-card) * var(--w-card) +
-      var(--w-timeline) + var(--w-skills) + 100cqi
+      var(--w-timeline) + var(--w-skills)
   );
+  --track-w: calc(var(--x-bleed) + var(--w-bleed) + 100cqi);
 }
 
 .panel {
@@ -97,6 +100,10 @@ body {
 
   html.js .panel--skills {
     inline-size: var(--w-skills);
+  }
+
+  html.js .panel--bleed {
+    inline-size: var(--w-bleed);
   }
 
   html.js .strip {

@@ -22,6 +22,7 @@ export default function TrackController() {
     const native = CSS.supports("animation-timeline: view()");
     const panels = [...track.querySelectorAll(".panel")];
     const fill = document.querySelector(".strip__fill");
+    const wash = track.querySelector(".bleed__wash");
     const label = document.querySelector("[data-strip-label]");
 
     // Scroll que deja el panel de `el` contra el borde izquierdo de la ventana.
@@ -68,6 +69,8 @@ export default function TrackController() {
               else a.removeAttribute("aria-current");
             }
             if (label && name) label.textContent = name;
+            // Nav y franja en noche mientras el contacto está en el centro (styles/contact.css).
+            document.documentElement.classList.toggle("on-night", entry.target.classList.contains("contact"));
           }
         },
         { rootMargin: mq.matches ? "0px -50% 0px -50%" : "-40% 0px -59% 0px" },
@@ -82,8 +85,17 @@ export default function TrackController() {
       raf = 0;
       const range = wrap.offsetHeight - innerHeight;
       const p = range > 0 ? Math.min(Math.max(-wrap.getBoundingClientRect().top / range, 0), 1) : 0;
-      track.style.translate = `${-p * (track.scrollWidth - track.parentElement.clientWidth)}px 0`;
+      const vw = track.parentElement.clientWidth;
+      const x = p * (track.scrollWidth - vw);
+      track.style.translate = `${-x}px 0`;
       if (fill) fill.style.scale = `${p} 1`;
+      // La transición al cierre se dibuja mientras su borde izquierdo va del 90% al 35%
+      // del ancho de la ventana (el mismo tramo que styles/contact.css).
+      if (wash) {
+        const start = wash.parentElement.offsetLeft - 0.9 * vw;
+        const t = Math.min(Math.max((x - start) / (0.55 * vw), 0), 1);
+        wash.style.scale = `${0.05 + 0.95 * t} 1`;
+      }
     };
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(paint);
@@ -94,6 +106,7 @@ export default function TrackController() {
       if (native || !mq.matches) {
         track.style.translate = "";
         if (fill) fill.style.scale = "";
+        if (wash) wash.style.scale = "";
         return;
       }
       addEventListener("scroll", onScroll, { passive: true });
@@ -140,6 +153,7 @@ export default function TrackController() {
     return () => {
       io?.disconnect();
       reveal.disconnect();
+      document.documentElement.classList.remove("on-night");
       cancelAnimationFrame(raf);
       removeEventListener("scroll", onScroll);
       removeEventListener("resize", onScroll);

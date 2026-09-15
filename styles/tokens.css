@@ -18,6 +18,20 @@
   --cursor-ink: var(--ink);
   color-scheme: light;
 
+  /* Cierre (DISENO.md, 7.5): el color noche del contacto, igual en los dos temas, y el
+     degradado del acento que lleva hasta él. */
+  --night: #0b0912;
+  --night-raised: #17141f;
+  --on-night: #f3f0fa;
+  --on-night-muted: #a7a1b5;
+  --night-accent: #a57bff;
+  --night-line: #2a2632;
+  --night-line-strong: #6a6377;
+  --wash-1: #e4d6ff;
+  --wash-2: #a47cff;
+  --wash-3: #6224f0;
+  --wash-4: #2b1273;
+
   /* Tipografía: Archivo variable (ejes wght y wdth), cargada con next/font. */
   --font: var(--font-archivo), "Helvetica Neue", Arial, system-ui, sans-serif;
   --wdth-display: 68%;
@@ -76,6 +90,7 @@
   --w-card: clamp(22rem, 28cqi, 28rem);
   --w-timeline: clamp(96rem, 130cqi, 110rem);
   --w-skills: clamp(48rem, 80cqi, 80rem);
+  --w-bleed: clamp(28rem, 65cqi, 64rem);
 }
 
 /* Tema oscuro: lo pone lib/theme.js en <html> antes del primer pintado. */
@@ -89,5 +104,7 @@ html.dark-mode {
   --accent-soft: #221840;
   --on-accent: #0e1012;
   --on-accent-muted: #2a1d55;
+  --wash-1: #2a1d55;
+  --wash-2: #5b3bc4;
   color-scheme: dark;
 }
