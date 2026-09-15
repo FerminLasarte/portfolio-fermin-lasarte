@@ -1,7 +1,7 @@
 # Diseño del portfolio (Fase 3)
 
 - **Fecha:** 2026-09-14
-- **Estado:** brief para aprobar. Todavía no se tocó código.
+- **Estado:** aprobado por Fermin el 2026-09-14 e implementado en la rama `fase-3-rediseno`, un commit por paso (sección 10). Donde la implementación se apartó del brief, este documento ya lo dice.
 - **Fuentes, en orden de prioridad:** los "Criterios del rediseño" de `docs/AUDITORIA.md`; [douglus.site](https://douglus.site) (navegación horizontal y sus animaciones); las skills `design-taste-frontend`, `impeccable` y `emil-design-eng`. Si dos fuentes chocan, manda la de más arriba.
 - **Cómo se analizó douglus.site:** en el panel del navegador a 1440×900 (modo horizontal) y a 390×844 (modo vertical), leyendo el DOM, su CSS y su JS publicado. Los datos concretos están en el anexo A.
 
@@ -105,6 +105,7 @@ Reglas:
 --fs-3: clamp(1.375rem, 1rem + 1vw, 1.75rem);
 --fs-4: clamp(2rem, 1rem + 4vmin, 4.25rem);
 --fs-display: clamp(3.5rem, 17vmin, 13rem);     /* 153px a 1440×900; 66px a 390px */
+--fs-section: clamp(2.5rem, 7.5vmin, 6rem);     /* títulos de sección en paneles angostos */
 --fs-mega: clamp(2.25rem, 9vmin, 7.5rem);
 ```
 
@@ -125,9 +126,9 @@ Proyectos pasa a estar justo después del hero (I15). Experiencia y Educación s
 | # | Panel | `id` | Ancho en horizontal |
 |---|---|---|---|
 | 1 | Hero | `sobre-mi` | `100cqi` (una pantalla) |
-| 2 | Proyectos: entrada con las cifras | `proyectos` | `--w-intro: clamp(20rem, 26cqi, 26rem)` |
+| 2 | Proyectos: entrada con las cifras | `proyectos` | `--w-intro: clamp(22rem, 30cqi, 30rem)` (con 26rem, "PROYECTOS" no entraba) |
 | 3 | Un panel por proyecto, en el orden de `PROJECTS` | `proyecto-<id>` | `--w-card-lg: clamp(30rem, 40cqi, 42rem)` para las apps en producción con plataforma móvil; `--w-card: clamp(22rem, 28cqi, 28rem)` para el resto |
-| 4 | Trayectoria (experiencia y educación) | `experiencia`; la fila de UNICEN lleva `educacion` | `--w-timeline: clamp(60rem, 120cqi, 110rem)` |
+| 4 | Trayectoria (experiencia y educación) | `experiencia`; la fila de UNICEN lleva `educacion` | `--w-timeline: clamp(96rem, 130cqi, 110rem)`: ancha también en 1024px, para que las cuatro fichas entren a lo alto |
 | 5 | Habilidades | `habilidades` | `--w-skills: clamp(48rem, 80cqi, 80rem)` |
 | 6 | Contacto | `contacto` | `100cqi` |
 
@@ -169,7 +170,7 @@ main, .h-sticky { container-type: inline-size; }  /* cqi = ancho sin la barra de
                 + var(--w-timeline) + var(--w-skills) + 100cqi);
 }
 
-@media (min-width: 64rem) and (min-height: 37.5rem) and (pointer: fine)
+@media (min-width: 64rem) and (min-height: 42.5rem) and (pointer: fine)
        and (prefers-reduced-motion: no-preference) {
   html.js .h-scroll { height: calc(var(--track-w) - 100cqi + 100dvh); view-timeline: --pan block; }
   html.js .h-sticky { position: sticky; top: 0; height: 100dvh; overflow: clip; }
@@ -199,7 +200,7 @@ Detalles que importan:
 
 ### 6.2 Cuándo es horizontal
 
-Las cinco condiciones a la vez: `html.js` (lo pone `themeInitScript` antes del primer pintado), ancho ≥ 64rem, alto ≥ 37,5rem, puntero fino y sin `prefers-reduced-motion: reduce`. Si falta cualquiera, la página es vertical: los mismos paneles, uno debajo del otro, en el mismo orden.
+Las cinco condiciones a la vez: `html.js` (lo pone `themeInitScript` antes del primer pintado), ancho ≥ 64rem, alto ≥ 42,5rem (680px), puntero fino y sin `prefers-reduced-motion: reduce`. El alto empezó en 37,5rem, pero a 1024×640 Trayectoria y ClubSystem no entraban en su panel; con 42,5rem, y con menos aire vertical por debajo de 50rem de alto, entra todo desde 1024×680 (probado en 1024×680, 1024×720, 1024×768, 1366×680 y 1440×900). Si falta cualquiera, la página es vertical: los mismos paneles, uno debajo del otro, en el mismo orden.
 
 | Situación | Resultado |
 |---|---|
@@ -431,7 +432,7 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
 | Entrada de cada panel | El panel entra en la vista (`IntersectionObserver`, una vez) | Placa: `clip-path: inset(0 0 0 100%) → inset(0)`, desde el lado por donde entra; texto: `opacity` y `translate` de 12px | 700ms `--ease-expo`; texto 60ms después | Sin animación |
 | Menú móvil | Botón | Panel: `clip-path` desde arriba; enlaces: `translate` Y 16px y `opacity`, 40ms entre cada uno; `@starting-style` | Abre en 420ms `--ease-out`; cierra en 200ms | Fundido de 150ms |
 | "Menú" / "Cerrar" | Botón | `translate` Y | 260ms `--ease-out` | Cambio directo |
-| Cambio de idioma | Navegación a `/en` o `/` | View Transition entre documentos (`@view-transition { navigation: auto }`): la página nueva sube desde abajo con borde curvo, `clip-path: ellipse(150% 0% at 50% 100%) → ellipse(150% 150% at 50% 100%)`, y su nombre de idioma aparece encima | 800ms `--ease-in-out` | Fundido de 150ms |
+| Cambio de idioma | Navegación a `/en` o `/` | View Transition entre documentos (`@view-transition { navigation: auto }`): la página nueva sube desde abajo con borde curvo, `clip-path: ellipse(150% 0% at 50% 100%) → ellipse(150% 150% at 50% 100%)`. Sin el nombre del idioma encima (a diferencia de douglus): con View Transitions entre documentos, ese texto tendría que estar en las dos páginas | 800ms `--ease-in-out` | Fundido de 150ms |
 | Cursor: seguimiento | Movimiento del mouse | `translate` del punto y del círculo | Retraso de 0,35 y 0,2 por frame; se detiene al alcanzar al mouse | No existe (cursor del sistema) |
 | Cursor: estados | Hover o presionar | `scale` del círculo, `opacity` del punto y del texto | 260ms `--ease-out` | No existe |
 | Foto: presionar | `pointerdown` | Marco a `scale: 0.8`, imagen a `scale: 1.5` | 260ms `--ease-out` | Igual |
@@ -449,7 +450,7 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
 1. **Sin desbordes tapados.**
    - `html` y `body` no llevan `overflow`. El único recorte es `overflow: clip` en `.h-sticky`, que es donde nace el desborde intencional de la pista.
    - Los anchos de panel usan `cqi` (sin el sobrante de la barra de scroll) y el texto largo se parte (`overflow-wrap: anywhere` en el email).
-   - Se prueba en 375, 768, 900, 1024 y 1440px: 1024 y 1440 en horizontal (con alto ≥ 600px) y además forzando vertical; el resto, en vertical. En cada ancho se verifica con JS que ningún elemento pase de `document.documentElement.clientWidth`, salvo la pista.
+   - Se prueba en 375, 768, 900, 1024 y 1440px: 1024 y 1440 en horizontal (con alto ≥ 680px); el resto, y 1024×640, en vertical. En cada ancho se verifica con JS que ningún elemento pase de `document.documentElement.clientWidth`, salvo la pista.
 2. **Contenido visible sin JS.**
    - Sin JS, la página es vertical y completa: hero, proyectos, trayectoria, habilidades y contacto.
    - Todos los enlaces son `<a href>` reales, y las anclas del nav, nativas.

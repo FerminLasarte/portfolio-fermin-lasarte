@@ -51,15 +51,20 @@
   margin-top: var(--space-5);
 }
 
+/* 14vw: en tablet el nombre va en una columna de ~57% del ancho y "LASARTE" tiene que
+   entrar en una sola línea. */
 .hero__name {
   grid-area: name;
+  font-size: min(var(--fs-display), 14vw);
 }
 
-/* Cada línea es una máscara: las letras entran desde abajo (styles/motion.css). */
+/* Cada línea es una máscara: las letras entran desde abajo (styles/motion.css). Las
+   letras son inline-block, así que sin nowrap la palabra podría cortarse entre ellas. */
 .hero__name .line {
   display: block;
   overflow: clip;
   padding-bottom: 0.04em;
+  white-space: nowrap;
 }
 
 .hero__name .ch {
@@ -81,13 +86,15 @@
 
 /* ---------- Foto arrastrable (7.9) ---------- */
 
+/* En vertical el marco se mide por el ancho de su columna (4:5); en horizontal toma
+   el alto de la pantalla (abajo). Si tomara el alto en tablet, el 4:5 le daría un
+   ancho mayor que la columna. */
 .drag {
   position: relative;
-  block-size: 100%;
 }
 
 .drag__frame {
-  block-size: 100%;
+  inline-size: 100%;
   aspect-ratio: 4 / 5;
   overflow: clip;
   transition: scale var(--dur-ui) var(--ease-out);
@@ -150,7 +157,7 @@
 
 /* ---------- Horizontal: una pantalla, en 12 columnas ---------- */
 
-@media (min-width: 64rem) and (min-height: 37.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+@media (min-width: 64rem) and (min-height: 42.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   html.js .hero {
     grid-template-columns: repeat(12, minmax(0, 1fr));
     grid-template-rows: auto 1fr auto;
@@ -164,6 +171,11 @@
 
   html.js .hero__copy {
     align-self: center;
+  }
+
+  html.js .drag,
+  html.js .drag__frame {
+    block-size: 100%;
   }
 
   html.js .drag__frame {

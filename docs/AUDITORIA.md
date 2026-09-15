@@ -68,7 +68,8 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
     - Si es GitHub Pages: configurar `output: 'export'`, `basePath`, `images.unoptimized` y un workflow de despliegue.
     - Documentarlo en el README.
 
-- [ ] **C5. Sin JS la página sale casi vacía y la foto del hero depende de JS** · Fase 2 (y → Rediseño)
+- [x] **C5. Sin JS la página sale casi vacía y la foto del hero depende de JS** · Fase 2 (y → Rediseño)
+  - **Hecho (Fase 3):** en el diseño nuevo, todo lo que oculta contenido de entrada (letras del nombre, paneles que esperan con `.is-waiting`) va bajo `html.js` y `prefers-reduced-motion: no-preference`. Sin JS la página es vertical y completa: el HTML de `/` y `/en` trae el h1, los seis `id`, las 8 tarjetas, los enlaces directos a las tiendas, el CV, `mailto:` y `tel:`. La foto sigue sin animación de entrada (`loading="eager"` y `fetchPriority="high"`; en Next 16 `priority` está deprecado).
   - **Dónde:** `app/globals.css:1514-1544` y `:1795-1803`, `components/RevealObserver.jsx:25` y `components/Hero.jsx:146`.
   - **Problema:** todo el contenido animado empieza con `opacity: 0` y solo aparece tras la hidratación. Si JS falla, no se ve nada. El LCP (la foto) espera a JS más una animación de 1s.
   - **Solución:**
@@ -79,7 +80,8 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
 
 ## 🟠 Importante
 
-- [ ] **I1. En táctil, tocar idioma o tema también abre el menú; no hay botón de menú** · → Rediseño **[nav]**
+- [x] **I1. En táctil, tocar idioma o tema también abre el menú; no hay botón de menú** · → Rediseño **[nav]**
+  - **Hecho (Fase 3):** en móvil hay un `<button>` "Menú" con `aria-expanded` y `aria-controls` que abre un menú a pantalla completa; el resto de la página queda `inert`, Escape lo cierra y devuelve el foco, y se cierra solo al pasar a escritorio. Idioma y tema son controles aparte. Sin JS, la lista se ve en una segunda fila.
   - **Dónde:** `components/Nav.jsx:64-73`.
   - **Problema:** cualquier toque que no sea un enlace de sección hace `toggle("nav-expanded")`. En móvil las secciones están ocultas (`globals.css:193-199`) y nada indica que el menú se puede abrir.
   - **Solución:** un botón de menú explícito con `aria-expanded` y `aria-controls`, estado en `useState` y cierre con Escape.
@@ -139,7 +141,8 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
   - **Dónde:** `globals.css:1546-1549` (`.visible { transform … !important }`), `:1804` y `:1819`, que pisan los hovers de `:1399`, `:849` y `:998`.
   - **Requisito:** que las animaciones de entrada y los hovers no compitan por `transform`; por ejemplo, usar la propiedad independiente `translate`.
 
-- [ ] **I7. Contraste por debajo de WCAG AA** · → Rediseño
+- [x] **I7. Contraste por debajo de WCAG AA** · → Rediseño
+  - **Hecho (Fase 3):** paleta nueva (DISENO.md, sección 2). Medido en el navegador sobre los colores calculados, en claro y oscuro: el mínimo es 5,09 (claro) y 5,44 (oscuro), el texto secundario sobre el panel de contacto; el resto va de 5,92 a 16,69. Los bordes de control dan 3,09 o más.
   - **Dónde:**
     - Botón primario en modo oscuro, `#fff` sobre `#818CF8` (`globals.css:45`, `:600`): **2,98**.
     - `.production-status` (`:1360`): **3,30**.
@@ -184,12 +187,14 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
   - **Verificado:** el HTML ya no tiene ninguna referencia a cdnjs ni a jsDelivr. Solo cambian los `<i>`, que pasan a `<svg>`, y el `src` y el preload de Devicon. En el navegador se comparó posición y tamaño de los 467 elementos con la base (ES a 1024px y EN a 375px, oscuro): la diferencia máxima es de 0,27px en x, 0,09px en y y 0,15px de ancho (los `.btn` con icono miden 0,14px menos, porque ya no se suma el `letter-spacing` de 0,01em al glifo). El único cambio de más de medio píxel es el ancho propio de los iconos de `.section-label`, porque ahora el `letter-spacing` es un margen; el texto que sigue está en el mismo lugar. Antes del ajuste de `vertical-align`, cada etiqueta de sección quedaba 1,88px más arriba y toda la página se acortaba unos 9px.
 
 - [ ] **I12. Los mockups de teléfono muestran capturas horizontales recortadas** · Fase 1 (contenido) **[nav]**
+  - **Fase 3:** mientras no haya capturas verticales, TravelPic y DeporTurnos muestran su logo sobre el color de fondo de la imagen, y el resto, su nombre en grande (`media.type` en `PROJECTS`). Falta conseguir las capturas.
   - **Dónde:** `components/Projects.jsx:26-30`, `:97-101` y `globals.css:1200-1204`.
   - **Problema:** se leen "TravelPi" y "epor". En Juego iOS y Chatbot (`:157-163` y `:192-198`) solo se ve un borrón.
   - **Solución:** conseguir capturas verticales reales de cada app (es contenido; se necesita para el rediseño).
   - **Pendiente (Fase 1):** faltan las capturas verticales de TravelPic y DeporTurnos (las que se muestran en el teléfono), y opcionalmente del juego iOS, el chatbot, Vault, Bookit y ClubSystem, que hoy solo tienen fondo o degradado. Cuando lleguen: pasarlas a WebP de ~800px de alto con `sharp`, quitarles los metadatos con `scripts/strip-metadata.mjs` y actualizar `image`, `width`, `height` y `thumb` en `PROJECTS` (`lib/site.js`). Los `sizes` de `ProjectCard` suponen capturas horizontales 2:1; con capturas verticales bajan al ancho del teléfono (~90px y ~72px).
 
-- [ ] **I13. Recortes en anchos intermedios** · → Rediseño **[nav]**
+- [x] **I13. Recortes en anchos intermedios** · → Rediseño **[nav]**
+  - **Hecho (Fase 3):** probado en 375, 768, 900, 1024 y 1440px, más 1024×640, 1024×680, 1024×720, 1024×768 y 1366×680: ningún elemento pasa del ancho de la ventana (salvo la pista, a propósito) y en horizontal ningún panel se desborda a lo alto. Arreglos que salieron de esas pruebas: la foto del hero en tablet se medía por el alto, el nombre podía cortarse entre letras y el umbral de alto del modo horizontal pasó a 42,5rem.
   - **Badges:** a 1024px, los badges Swift y C++ se salen (acaban en 1056 y 1064px; `globals.css:530-551`).
   - **Franja sin badges:** entre 769 y 900px no se ve ninguna de las dos versiones (`:1593` frente a `:1672`).
   - **Terminal:** se corta 62px (`:1044`, `:1879-1884`).
@@ -203,7 +208,8 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
   - Hero, Experience, Education, Skills, Projects, ProjectCard, Contact y Footer pasaron a server components y reciben `t` por prop. Siguen de cliente Dropdown, Terminal (recibe las líneas), Nav (recibe los textos ya traducidos), `HeroParallax` (el efecto del hero, separado de Hero), PremiumCursor y RevealObserver. El botón de idioma pasó de `<button>` a `<a hreflang>`, con `font-family: Arial` para que se vea igual que antes (es la fuente que Chrome le daba al botón).
   - **Verificado:** el HTML de `/` y `/en` es igual al anterior (el de EN se comparó con un build de la base con el idioma inicial en inglés), salvo el `<head>` por idioma y el `<a>` del botón. En el navegador, posición, tamaño, fuente y color de los 467 elementos coinciden con la base en ES y EN, a 375px y 1024px. El diccionario ya no está en el JS del cliente y la página pasó de 118 kB a 109 kB de First Load JS. `/foo` y `/en/foo` dan 404 (el 404 traducido llega con I16).
 
-- [ ] **I15. UX de proyectos y CV** · Fase 1 (datos) y → Rediseño (presentación)
+- [x] **I15. UX de proyectos y CV** · Fase 1 (datos) y → Rediseño (presentación)
+  - **Hecho (Fase 3):** un botón por destino (App Store, Google Play, Código, Visitar), sin dropdown; la placa de cada tarjeta lleva al destino principal; "Descargar CV" baja directo el PDF del idioma de la página (en el hero y en la franja inferior); Proyectos va justo después del hero.
   - **Problema:**
     - Las apps publicadas piden 2 clics a la tienda, a través de un dropdown (`Projects.jsx:61-85`, `:127-151`), y los mockups no enlazan a nada.
     - El CV es el botón menos visible y pide elegir idioma aunque ya se conoce (`Hero.jsx:127-142`).
@@ -229,17 +235,23 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
 
 ### Accesibilidad (→ Rediseño)
 
-- [ ] **M1.** No hay `<main>` ni enlace para saltar al contenido (`app/layout.js:84-92`).
-- [ ] **M2.** El Dropdown no se cierra con Escape ni con `focusout`, y usa `aria-haspopup` sin `role="menu"` (`components/Dropdown.jsx:14-39`).
-- [ ] **M3.** Nombres y estados accesibles en `Nav.jsx`:
+- [x] **M1.** No hay `<main>` ni enlace para saltar al contenido (`app/layout.js:84-92`).
+  - **Hecho (Fase 3):** `<main id="contenido">` en `Document` y enlace "Saltar al contenido", primero en el orden de foco.
+- [~] **M2.** El Dropdown no se cierra con Escape ni con `focusout`, y usa `aria-haspopup` sin `role="menu"` (`components/Dropdown.jsx:14-39`).
+  - **Hecho (Fase 3):** ya no hay dropdowns: las tiendas y el CV son enlaces directos. `Dropdown.jsx` se borró.
+- [x] **M3.** Nombres y estados accesibles en `Nav.jsx`:
+  - **Hecho (Fase 3):** idioma con `aria-label` ("Cambiar idioma: English") y `hreflang`; GitHub y LinkedIn con `aria-label`; `aria-current="location"` en la sección visible (lo pone `TrackController`); tema con `aria-pressed`; los iconos decorativos van con `aria-hidden`.
   - El botón de idioma no tiene `aria-label`.
   - Los iconos sociales solo tienen `title`.
   - Falta `aria-current` en el enlace activo.
   - El botón de tema no tiene `aria-pressed`.
   - Los `<i>` de iconos no tienen `aria-hidden`.
-- [ ] **M4.** El nivel de cada skill solo se ve al hacer hover (`globals.css:927-966`), no con teclado ni en táctil.
-- [ ] **M5.** Zonas táctiles pequeñas en móvil: sociales del footer de 15–18px y botones de 26px **[nav]**.
-- [ ] **M6.** La etiqueta de cada sección repite el texto del h2 (Projects `:14/16`, Skills `:76/78`, Education/Contact `:12/14`), y los lectores de pantalla lo leen dos veces.
+- [x] **M4.** El nivel de cada skill solo se ve al hacer hover (`globals.css:927-966`), no con teclado ni en táctil.
+  - **Hecho (Fase 3):** cada tecnología muestra su nivel en texto, debajo del nombre.
+- [x] **M5.** Zonas táctiles pequeñas en móvil: sociales del footer de 15–18px y botones de 26px **[nav]**.
+  - **Hecho (Fase 3):** botones, herramientas del nav y filas de contacto de 44px (`--tap`).
+- [x] **M6.** La etiqueta de cada sección repite el texto del h2 (Projects `:14/16`, Skills `:76/78`, Education/Contact `:12/14`), y los lectores de pantalla lo leen dos veces.
+  - **Hecho (Fase 3):** no hay etiquetas sobre los títulos: cada sección tiene solo su h2.
 
 ### Cursor personalizado (→ Rediseño: quitarlo o rehacerlo)
 
@@ -252,12 +264,14 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
 
 ### Código muerto y redundante
 
-- [ ] **M8.** En `app/globals.css`:
+- [x] **M8.** En `app/globals.css`:
+  - **Hecho (Fase 3):** el CSS anterior se reemplazó entero por `styles/*.css`, importados desde `globals.css`.
   - `:286`: `section > h2 i` no afecta a nada.
   - `:33`: la variable `--nav-h` no se usa.
   - Reglas repetidas en `:1596`, `:1622-1624`, `:1695`, `:1448-1449` y `:1655`.
   - `floatBadge` (`:1504`) nunca se ve.
-- [ ] **M9.** En el JS:
+- [x] **M9.** En el JS:
+  - **Hecho (Fase 3):** se borraron Dropdown, Terminal, HeroParallax, BackgroundOrbs, PremiumCursor, RevealObserver, Experience, Education y Timeline, y los 16 iconos de `lib/icons.js` que ya no se usaban. La fuente es Archivo variable (sin pesos sueltos).
   - `.dropdown-btn` no tiene CSS (`Projects.jsx:63,129`).
   - La condición de `Nav.jsx:70` siempre es verdadera.
   - El `.trim()` de `Skills.jsx:82` es inútil.
@@ -279,10 +293,12 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
 - [~] **M12.** Hay dos sistemas de animación de entrada (`animate-*` y `premium-reveal`) → Rediseño: dejar uno solo.
   - **Fuera de los criterios (2026-09-14):** el movimiento lo definen las skills de diseño y douglus.site, no la auditoría.
 - [ ] **M13.** `app/*.js` usa `.js` y el resto de componentes `.jsx`. Los badges se numeran `--0,1,2,4,5` y se detecta Python por su clase (`Hero.jsx:61`).
+  - **Fase 3:** los badges ya no existen. Queda la mezcla de `.js` en `app/` y `.jsx` en `components/`.
 
 ### Estilos (→ Rediseño: tokens desde el inicio)
 
-- [ ] **M14.**
+- [x] **M14.**
+  - **Hecho (Fase 3):** colores, esquinas, espacios, capas, fuentes, tamaños, curvas, duraciones y anchos de panel en `styles/tokens.css`. El único color fuera del tema es el de las placas de marca, que es un dato de `PROJECTS`.
   - `#FBB124` es una errata de `#FBBF24` (`globals.css:1120`).
   - Verdes, ámbar y grises escritos a mano en vez de tokens.
   - Tres pilas de fuentes monoespaciadas distintas.
@@ -313,7 +329,8 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
 
 ### UX pequeña (→ Rediseño)
 
-- [ ] **M16.**
+- [x] **M16.**
+  - **Hecho (Fase 3):** botón "Copiar email" con aviso por `aria-live`; sin botones deshabilitados; chatbot-ai enlaza al repo; nombre completo en el h1; en móvil los botones del hero entran en la primera pantalla (terminan en y=473 a 390×844).
   - Botón para copiar el email con feedback (`Contact.jsx:22-25`).
   - Quitar los botones deshabilitados "Próximamente" (`Projects.jsx:329`, `:378`).
   - AI Chatbot no tiene ningún enlace.
@@ -342,6 +359,11 @@ El diseño visual y el movimiento salen de las skills `design-taste-frontend`, `
 ## Hallazgos nuevos
 
 _(Agregá aquí lo que aparezca durante las fases.)_
+
+- [ ] **N4. La foto del hero se ve blanda en pantallas 2x** · Fase 3 (contenido)
+  - **Dónde:** `public/assets/foto_perfil.webp` (560×715).
+  - **Problema:** en horizontal la foto se dibuja a unos 550×740px, así que en una pantalla 2x haría falta una imagen de unos 1100×1480. La original se borró por el GPS (C1).
+  - **Solución:** conseguir una foto de al menos 1200px de alto, sin metadatos (`scripts/strip-metadata.mjs`), y actualizar `width` y `height` en `Hero.jsx`.
 
 - [x] **N1. La foto con GPS sigue en el historial de git** · Fase 0
   - **Hecho (2026-09-13):** se reescribió el historial con `git filter-repo --invert-paths` (sobre un clon nuevo) y se hizo force-push. Cambiaron todos los hashes, así que los que se citan en este archivo son de antes de la reescritura. Ningún commit contiene ya la foto y el árbol final no cambió.

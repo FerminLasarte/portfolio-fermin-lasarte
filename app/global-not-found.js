@@ -15,7 +15,7 @@ import NotFound from "@/components/NotFound";
 const titles = LOCALES.map((lang) => getT(lang)("notFound.title")).join(" · ");
 
 export const metadata = {
-  title: `${titles} — ${PERSON.name}`,
+  title: `${titles} · ${PERSON.name}`,
   icons: ICONS,
 };
 

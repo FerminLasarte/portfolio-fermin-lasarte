@@ -74,7 +74,7 @@
   --w-intro: clamp(22rem, 30cqi, 30rem);
   --w-card-lg: clamp(30rem, 40cqi, 42rem);
   --w-card: clamp(22rem, 28cqi, 28rem);
-  --w-timeline: clamp(60rem, 110cqi, 100rem);
+  --w-timeline: clamp(96rem, 130cqi, 110rem);
   --w-skills: clamp(48rem, 80cqi, 80rem);
 }
 

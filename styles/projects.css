@@ -140,13 +140,9 @@
 
 /* ---------- Horizontal: cada tarjeta es un panel ---------- */
 
-@media (min-width: 64rem) and (min-height: 37.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+@media (min-width: 64rem) and (min-height: 42.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   html.js .projects {
     display: contents;
-  }
-
-  html.js .projects > .panel {
-    padding-block: calc(var(--nav-h) + var(--space-5)) calc(var(--strip-h) + var(--space-5));
   }
 
   html.js .intro,
