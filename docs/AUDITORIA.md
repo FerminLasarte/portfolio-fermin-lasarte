@@ -845,7 +845,7 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
     - con curl, las cuatro cabeceras salen en `/`, `/en`, `/trayectoria`, `/en/opengraph-image`, `/assets/…`, `/icons/…`, `/sitemap.xml`, `/robots.txt`, un chunk de `/_next/static` y el 404; la redirección de `/es/trayectoria` sigue igual;
     - con Puppeteer, en `/`, `/en`, `/trayectoria`, `/en/skills` y el 404: sin errores de consola ni violaciones de CSP, con el script del tema, el JSON-LD, la fuente y las imágenes cargando;
     - la home dentro de un `<iframe>` de otro origen no se muestra.
-  - **Queda:** confirmarlas en el preview de Vercel después del push.
+  - **Verificado en Vercel** (preview de `c0f0de9`): las cuatro cabeceras salen en `/`, junto con el HSTS de Vercel y sin `X-Powered-By`.
   - **Solución:** un `headers()` con `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` y una CSP mínima: `frame-ancestors 'none'; base-uri 'self'; object-src 'none'`. Una CSP completa choca con los scripts inline de Next y del tema.
 
 - [x] **R-M23. `SITE_URL` es frágil**
@@ -897,8 +897,9 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
     - **Años,** en un build aislado: las 6 páginas figuran con 86.400 s en el `prerender-manifest`, y `next start` manda `s-maxage=86400, stale-while-revalidate`. Con un build temporal a 5 s (solo en la copia), el pedido que llega después sale como `STALE`, la página se regenera (el HTML guardado se reescribió) y el siguiente es `HIT`.
     - **Tema,** con Puppeteer en `/trayectoria`, cambiando `prefers-color-scheme` con la página abierta: sin tema guardado, sigue al sistema en los dos sentidos (clase, `theme-color`, fondo y `aria-pressed`); después de usar el botón, ya no; con "light" guardado, no se mueve.
     - **Imagen OG:** las 6 pasan de unos 380 KB a entre 50 y 61 KB, en dev y prerenderizadas en el build. El `<head>` dice `og:image:type` `image/jpeg`. El texto violeta chico, comparado recortado contra el PNG, no cambia a la vista.
+  - **Verificado en Vercel** (preview de `c0f0de9`): la home sale de la caché de Vercel (`x-vercel-cache: HIT`) y `/trayectoria`, prerenderizada (`PRERENDER`); al navegador le manda `max-age=0`, porque la revalidación la maneja Vercel. Las imágenes OG son `image/jpeg` de 51 a 61 KB, y `/xx/opengraph-image` y `/habilidades/opengraph-image` dan 404.
   - **Queda:**
-    - Probar la tarjeta compartiendo el enlace del preview por WhatsApp, y ver las cabeceras de caché en Vercel (después del push).
+    - Que Fermin comparta el enlace del preview por WhatsApp y confirme que aparece la imagen.
     - El 404 global (`/_not-found`) no revalida: su © queda con el año del último deploy.
   - **Años:** el © y el "en curso" quedan con el año del build (`Strip.jsx:12`, `Footer.jsx:9`, `Preloader.jsx:43` y `ExperiencePage.jsx:14`).
   - **Tema:** si no hay tema guardado, la página no sigue al sistema cuando cambia con la página abierta (`lib/theme.js`).
