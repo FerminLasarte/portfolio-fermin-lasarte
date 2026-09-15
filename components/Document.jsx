@@ -4,6 +4,7 @@ import { LOCALES, getT, homePath } from "@/lib/i18n";
 import { NAV_SECTIONS, PERSON, SOCIAL } from "@/lib/site";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import Cursor from "@/components/Cursor";
 
 // Archivo variable: el eje de peso viene siempre; el de ancho (wdth, 62–125) hay que
 // pedirlo, y es el que da los títulos angostos (docs/DISENO.md, sección 3).
@@ -51,6 +52,7 @@ export default function Document({ lang, head, children }) {
         />
         <main id="contenido">{children}</main>
         <Footer t={t} />
+        <Cursor />
       </body>
     </html>
   );

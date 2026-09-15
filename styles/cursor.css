@@ -1,0 +1,100 @@
+/*
+ * Cursor propio (docs/DISENO.md, 7.8): círculo de 28px con borde de 1px y un punto
+ * de 4px. Los estados los pone components/Cursor.jsx en data-mode y data-tone.
+ */
+
+.cursor {
+  --c: var(--cursor-ink);
+  --size: 28px;
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-cursor);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-ui) var(--ease-out);
+}
+
+.cursor.is-on {
+  opacity: 1;
+}
+
+/* Sobre el panel de contacto (fondo --accent). */
+.cursor[data-tone="accent"] {
+  --c: var(--on-accent);
+}
+
+.cursor__circle {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  inline-size: var(--size);
+  block-size: var(--size);
+  margin: calc(var(--size) / -2) 0 0 calc(var(--size) / -2);
+}
+
+.cursor__shape {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--c);
+  border-radius: 50%;
+  transition:
+    scale var(--dur-ui) var(--ease-out),
+    background-color var(--dur-ui) var(--ease-out);
+}
+
+.cursor__dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  inline-size: 4px;
+  block-size: 4px;
+  margin: -2px 0 0 -2px;
+  border-radius: 50%;
+  background: var(--c);
+  transition: opacity var(--dur-hover) var(--ease-out);
+}
+
+.cursor__text {
+  position: relative;
+  color: var(--c);
+  font: 600 0.625rem / 1 var(--font);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity var(--dur-hover) var(--ease-out);
+}
+
+.cursor[data-mode="link"] .cursor__shape {
+  scale: 1.7;
+  background-color: color-mix(in srgb, var(--c) 8%, transparent);
+}
+
+.cursor[data-mode="drag"] .cursor__shape {
+  scale: 3.4;
+}
+
+.cursor[data-mode="drag"] .cursor__dot {
+  opacity: 0;
+}
+
+.cursor[data-mode="drag"] .cursor__text {
+  opacity: 1;
+}
+
+.cursor.is-down .cursor__shape {
+  scale: 0.78;
+}
+
+.cursor.is-down[data-mode="drag"] .cursor__shape {
+  scale: 2.8;
+}
+
+/* Sin cursor del sistema mientras el propio está activo (tampoco sobre enlaces:
+   nunca dos cursores a la vez). */
+html.has-cursor,
+html.has-cursor * {
+  cursor: none !important;
+}

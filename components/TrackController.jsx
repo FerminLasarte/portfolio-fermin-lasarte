@@ -111,8 +111,32 @@ export default function TrackController() {
     track.addEventListener("focusin", onFocus);
     mq.addEventListener("change", onModeChange);
 
+    // Entradas (docs/DISENO.md, sección 8): los paneles que no se ven al cargar esperan
+    // con .is-waiting hasta entrar a la vista, una vez; styles/motion.css anima la
+    // salida de ese estado. Sin JS o con reduce motion, nada espera.
+    const reveal = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.classList.remove("is-waiting");
+          reveal.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.15 },
+    );
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      for (const panel of panels) {
+        const r = panel.getBoundingClientRect();
+        if (r.left >= innerWidth || r.top >= innerHeight) {
+          panel.classList.add("is-waiting");
+          reveal.observe(panel);
+        }
+      }
+    }
+
     return () => {
       io?.disconnect();
+      reveal.disconnect();
       cancelAnimationFrame(raf);
       removeEventListener("scroll", onScroll);
       removeEventListener("resize", onScroll);

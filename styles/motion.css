@@ -1,0 +1,118 @@
+/*
+ * Movimiento (docs/DISENO.md, sección 8). Todo lo que oculta contenido de entrada va
+ * bajo html.js (sin JS la página se ve completa) y todo desplazamiento, bajo
+ * prefers-reduced-motion: no-preference. El recorrido de la pista no está acá: no se
+ * anima, sigue al scroll (styles/track.css).
+ */
+
+/* Desde dónde entra el contenido: de abajo en vertical, de la derecha en horizontal. */
+:root {
+  --enter-x: 0;
+  --enter-y: 0.75rem;
+  --plate-hidden: inset(100% 0 0 0);
+}
+
+@media (min-width: 64rem) and (min-height: 37.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  :root {
+    --enter-x: 1.5rem;
+    --enter-y: 0;
+    --plate-hidden: inset(0 0 0 100%);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Nombre del hero, letra por letra: cada letra sube dentro de la máscara de su
+     línea (styles/hero.css). */
+  html.js .hero__name .ch {
+    animation: rise var(--dur-enter) var(--ease-expo) both;
+    animation-delay: calc(var(--i) * 28ms + 120ms);
+  }
+
+  /* Entrada de los paneles que no se ven al cargar: TrackController les pone
+     .is-waiting y se la saca cuando entran a la vista (una vez). La placa se destapa
+     desde el lado por donde entra y el resto llega 60ms después. */
+  html.js .card__plate {
+    transition: clip-path var(--dur-enter) var(--ease-expo);
+  }
+
+  html.js :is(.card > :not(.card__plate), .entry, .skills__group) {
+    transition:
+      opacity var(--dur-enter) var(--ease-expo) 60ms,
+      translate var(--dur-enter) var(--ease-expo) 60ms;
+  }
+
+  html.js .chart__bar {
+    transform-origin: left center;
+    transition: scale var(--dur-enter) var(--ease-expo) 60ms;
+  }
+
+  html.js :is(.entry, .skills__group, .chart__bar):nth-child(2) {
+    transition-delay: 100ms;
+  }
+
+  html.js :is(.entry, .skills__group, .chart__bar):nth-child(3) {
+    transition-delay: 140ms;
+  }
+
+  html.js :is(.entry, .skills__group, .chart__bar):nth-child(4) {
+    transition-delay: 180ms;
+  }
+
+  html.js :is(.entry, .skills__group):nth-child(5) {
+    transition-delay: 220ms;
+  }
+
+  html.js .is-waiting .card__plate {
+    clip-path: var(--plate-hidden);
+  }
+
+  html.js .is-waiting :is(.card > :not(.card__plate), .entry, .skills__group) {
+    opacity: 0;
+    translate: var(--enter-x) var(--enter-y);
+  }
+
+  html.js .is-waiting .chart__bar {
+    scale: 0 1;
+  }
+}
+
+@keyframes rise {
+  from {
+    translate: 0 105%;
+  }
+}
+
+/* ---------- Cambio de idioma: la cortina de douglus, con View Transitions ----------
+   El botón de idioma es un <a> que carga la otra página, así que la transición es
+   entre documentos: la página nueva sube desde abajo con el borde curvo. Donde el
+   navegador no la soporta, es una navegación normal. */
+
+@view-transition {
+  navigation: auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) {
+    animation: none;
+  }
+
+  ::view-transition-new(root) {
+    animation: curtain var(--dur-curtain) var(--ease-in-out) both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(root) {
+    animation-duration: 150ms;
+  }
+}
+
+@keyframes curtain {
+  from {
+    clip-path: ellipse(150% 0% at 50% 100%);
+  }
+
+  to {
+    clip-path: ellipse(150% 150% at 50% 100%);
+  }
+}
