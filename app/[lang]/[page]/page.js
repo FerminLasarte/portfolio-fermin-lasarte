@@ -1,15 +1,16 @@
 import { notFound } from "next/navigation";
-import { DEFAULT_LOCALE, LOCALES, OG_LOCALES, getT, pageId, pagePath, pageUrl } from "@/lib/i18n";
+import { DEFAULT_LOCALE, LOCALES, OG_LOCALES, PAGE_TEXT, getT, pageId, pagePath, pageUrl } from "@/lib/i18n";
 import { PAGES } from "@/lib/pages.mjs";
 import { PERSON, SOCIAL } from "@/lib/site";
 import ExperiencePage from "@/components/ExperiencePage";
 import SkillsPage from "@/components/SkillsPage";
 
-// Páginas propias (docs/DISENO.md, 7.12): qué componente muestra cada una y con qué
-// textos se arma su metadata.
+// Páginas propias (docs/DISENO.md, 7.12): qué componente muestra cada una. Los textos
+// de su metadata están en PAGE_TEXT (lib/i18n.js), compartidos con su imagen de Open
+// Graph (opengraph-image.js, en esta misma carpeta).
 const VIEWS = {
-  experience: { Component: ExperiencePage, title: "exp.title", description: "exp.pageDescription" },
-  skills: { Component: SkillsPage, title: "skills.title", description: "skills.pageDescription" },
+  experience: ExperiencePage,
+  skills: SkillsPage,
 };
 
 // Una página por idioma con la ruta de ese idioma (/trayectoria, /en/experience);
@@ -24,8 +25,8 @@ export async function generateMetadata({ params }) {
   const { lang, page } = await params;
   const id = pageId(lang, page);
   const t = getT(lang);
-  const title = `${t(VIEWS[id].title)} · ${PERSON.name}`;
-  const description = t(VIEWS[id].description);
+  const title = `${t(PAGE_TEXT[id].title)} · ${PERSON.name}`;
+  const description = t(PAGE_TEXT[id].description);
 
   return {
     title,
@@ -60,6 +61,6 @@ export default async function Page({ params }) {
   const { lang, page } = await params;
   const id = pageId(lang, page);
   if (!id) notFound();
-  const { Component } = VIEWS[id];
+  const Component = VIEWS[id];
   return <Component t={getT(lang)} lang={lang} />;
 }

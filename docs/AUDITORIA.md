@@ -509,7 +509,11 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
   - **Problema:** usa el nombre de `PROJECTS` sin traducir, así que "Compilador" sale 4 veces en `/en/skills` (en la columna de la tabla y en "Used in"). Verificado en el HTML del preview. `ProjectCard` ya usa `t(\`projects.${id}.name\`, name)`.
   - **Solución:** usar lo mismo en SkillsPage, o un helper compartido.
 
-- [ ] **R-I6. Las páginas propias no tienen imagen de Open Graph ni de X**
+- [x] **R-I6. Las páginas propias no tienen imagen de Open Graph ni de X**
+  - **Hecho:** `app/[lang]/[page]/opengraph-image.js` genera una imagen por página y por idioma, con el nombre arriba, la descripción de la página y su título en grande. Tiene `dynamicParams = false`, y una ruta que no existe da 404.
+  - El diseño pasó a `lib/og.js`, que comparten la home y las páginas propias; la imagen de la home no cambió (pesa los mismos bytes que en el preview). Los textos de cada página quedaron en `PAGE_TEXT` (`lib/i18n.js`), que usan la metadata y la imagen.
+  - **Verificado:** en el servidor local, `/trayectoria`, `/habilidades`, `/en/experience` y `/en/skills` tienen `og:image` y `twitter:image` apuntando a su imagen (PNG de 1200×630). En un build aislado, las cuatro se prerenderizan (SSG).
+  - **Queda para R-M21:** `/trayectoria/opengraph-image` (sin `/es`) sigue dando 500. Ninguna página la usa.
   - **Dónde:** `app/[lang]/[page]/page.js:40-55`.
   - **Problema:** `/trayectoria`, `/habilidades`, `/en/experience` y `/en/skills` no tienen `og:image` ni `twitter:image`, aunque declaran `summary_large_image` (verificado en el HTML del preview). El `openGraph` de la página reemplaza entero al del layout, porque la metadata se combina de forma superficial, y con eso se pierde la imagen de `opengraph-image.js`. Compartida en LinkedIn o WhatsApp, la tarjeta sale sin imagen.
   - **Solución:** crear `app/[lang]/[page]/opengraph-image.js` con el título de la página. Como mínimo, sumar la imagen de la home a `openGraph.images` y `twitter.images`.
