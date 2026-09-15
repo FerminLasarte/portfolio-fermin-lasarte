@@ -652,7 +652,18 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
   - **Dónde:** `styles/base.css:279-290`: la `transition` de `.strike::after` está fuera de `no-preference`.
   - **Solución:** moverla dentro de `@media (prefers-reduced-motion: no-preference)`, como dice la tabla de DISENO 8.
 
-- [ ] **R-M7. Sin JS hay controles que no hacen nada** **[nav]**
+- [x] **R-M7. Sin JS hay controles que no hacen nada** **[nav]**
+  - **Hecho:**
+    - `html:not(.js) .theme-toggle { display: none }` en `styles/nav.css`.
+    - En `styles/hero.css`, el `cursor: grab` / `grabbing` de `.drag` pasó a `html.js`, dentro de la misma media query de puntero fino.
+    - Se quitó el `touch-action: none`: `DraggablePhoto` solo atiende al mouse (`pointerType !== "mouse"`), así que no le servía a nada, y en un portátil táctil (que da `pointer: fine`) impedía scrollear tocando la foto.
+  - **Verificado** sobre el servidor local:
+    - **Sin JS** (a 1440 y 375 en la home, y en `/trayectoria`): los dos botones de tema tienen `display: none` y ninguno se puede enfocar. La foto queda con `cursor: auto`.
+    - **Con JS:** a 1440 el botón vuelve (44px) y la foto sigue con `grab`; a 375, el del menú aparece al abrirlo.
+    - En todos los casos, `touch-action: auto` y sin desbordes.
+    - En la captura del nav sin JS, las demás herramientas (idioma, GitHub y LinkedIn) quedan en su lugar.
+  - DISENO.md, 7.1 y 7.9.
+  - **Sin confirmar:** que tocar la foto scrollee en un portátil táctil real (no hay uno para probar; Puppeteer no lo emula con `pointer: fine`).
   - **Dónde:** `components/ThemeToggle.jsx:22-33` y `styles/hero.css:137-141`.
   - **Problema:**
     - Sin JS, el botón de tema se ve y se puede enfocar, pero no hace nada.

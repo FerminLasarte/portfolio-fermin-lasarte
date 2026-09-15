@@ -273,7 +273,7 @@ Si `CSS.supports("animation-timeline: view()")` da falso y el modo horizontal es
 - Centro: `<nav aria-label="Secciones">` con `<ul>` de cuatro enlaces en `--ink-muted`.
   - **Hover y foco (puntero fino):** el texto pasa a `--ink` y se dibuja un tachado de 2px a media altura, que crece desde la izquierda (`scale: 0 1 → 1 1`, 220ms, `--ease-out`) y se va hacia la derecha al salir. Es el efecto `menu--linethrough` de douglus, que allá aparece de golpe.
   - **Sección actual:** `aria-current="location"`, texto en `--ink` y subrayado de 1px abajo. El indicador no depende solo del color, y no usa el tachado (que se leería como "descartado").
-- Derecha: botón de idioma (`<a hreflang>`, con `aria-label` "Cambiar idioma: English"), botón de tema (`<button aria-pressed>`, M3) y GitHub y LinkedIn, iconos con `aria-label`. Cada control mide al menos 44×44px. El email no va acá: tiene su lugar en Contacto.
+- Derecha: botón de idioma (`<a hreflang>`, con `aria-label` "Cambiar idioma: English"), botón de tema (`<button aria-pressed>`, M3; sin JS no se muestra, porque no haría nada: R-M7 de la re-auditoría) y GitHub y LinkedIn, iconos con `aria-label`. Cada control mide al menos 44×44px. El email no va acá: tiene su lugar en Contacto.
 
 **Franja inferior (solo en horizontal):** fija, `--strip-h`, con tres zonas, como el pie de douglus. Igual que el nav: sin fondo, en blanco con `difference` (la barra de progreso de douglus también lo usa).
 - Izquierda: "© 2026 Fermin Lasarte".
@@ -429,6 +429,7 @@ La foto del hero se puede arrastrar con el mouse, como en douglus.
 
 **Cuándo se puede arrastrar:**
 - Solo con puntero fino. En táctil, arrastrar es scrollear.
+- Solo con el mouse (`pointerType`), así que la foto no lleva `touch-action: none`: en un portátil táctil, tocarla sigue scrolleando. El `cursor: grab` va solo con JS (2026-09-15, R-M7 de la re-auditoría).
 - Con reduce motion se arrastra igual (el movimiento lo hace la persona), pero sin inercia ni estela.
 - Durante el arrastre, la rueda sigue scrolleando la página.
 

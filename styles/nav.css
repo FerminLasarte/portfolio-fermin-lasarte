@@ -161,6 +161,11 @@
   font-size: 1.125rem;
 }
 
+/* Sin JS, el botón de tema no haría nada: no se muestra (R-M7). */
+html:not(.js) .theme-toggle {
+  display: none;
+}
+
 /* El icono del botón de tema: luna en claro, sol en oscuro. */
 .theme-toggle .icon-sun,
 html.dark-mode .theme-toggle .icon-moon {

@@ -135,12 +135,14 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .drag {
+  /* Solo con JS, que es lo que la mueve (R-M7). Sin touch-action: el arrastre es solo
+     con mouse (DraggablePhoto), y en un portátil táctil tocar la foto sigue
+     scrolleando. */
+  html.js .drag {
     cursor: grab;
-    touch-action: none;
   }
 
-  .drag.is-down {
+  html.js .drag.is-down {
     cursor: grabbing;
   }
 }
