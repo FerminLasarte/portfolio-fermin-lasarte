@@ -1072,7 +1072,9 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
     - "Mentalidad orientada al producto en entornos de alto crecimiento" es relleno que la trayectoria no respalda.
   - **Solución:** unificar cada caso. Lo del relleno lo decide Fermin.
 
-- [ ] **R-M35. El lint: N5 pasa solo por casualidad y no detecta variables sin usar**
+- [x] **R-M35. El lint: N5 pasa solo por casualidad y no detecta variables sin usar**
+  - **Hecho:** `eslint.config.mjs` suma `.claude/**` a `globalIgnores` y `"no-unused-vars": "warn"`; el `catch (e)` de `toggleTheme` (`lib/theme.js`) pasa a `catch {}`. Los `catch (e)` del script del tema quedan: están dentro de un texto, el lint no los ve.
+  - **Antes y después:** con la regla prendida sobre la configuración vieja, `npx eslint .` daba 1 aviso (`lib/theme.js:67`, `'e' is defined but never used`) y `--print-config` sobre `.claude/worktrees/` devolvía una configuración. Ahora `npx eslint .` y `npx eslint app components lib` dan 0 problemas y `--print-config` devuelve `undefined` (archivo ignorado). N5 queda cerrado.
   - **Dónde:** `eslint.config.mjs:7-8`.
   - **Problema:**
     - `npx eslint .` da 0 errores solo porque `.claude/worktrees/` quedó vacía: `--print-config` muestra que esa carpeta todavía no se ignora.
