@@ -156,11 +156,28 @@ html.dark-mode .theme-toggle .icon-sun {
   }
 }
 
-/* En horizontal el nav sale del flujo, para que la pista ocupe toda la pantalla. */
+/* En horizontal el nav sale del flujo, para que la pista ocupe toda la pantalla, y es
+   parte de cada sección, como el de douglus: sin banda de fondo, con los tokens en
+   blanco y mix-blend-mode: difference, así se invierte sobre lo que pasa debajo
+   (oscuro sobre el papel, claro sobre el cierre). Lo transparente deja pasar los
+   clics. En vertical el contenido pasa por debajo, así que conserva el fondo. */
 @media (min-width: 64rem) and (min-height: 42.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   html.js .nav {
+    --ink: var(--blend-ink);
+    --ink-muted: var(--blend-ink-muted);
+    --line: var(--blend-line);
+    --accent: var(--blend-ink);
+    --focus: var(--blend-ink);
     position: fixed;
     inset: 0 0 auto;
+    background: transparent;
+    color: var(--ink);
+    mix-blend-mode: difference;
+    pointer-events: none;
+  }
+
+  html.js .nav :is(a, button) {
+    pointer-events: auto;
   }
 }
 

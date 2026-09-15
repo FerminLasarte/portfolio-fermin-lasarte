@@ -160,23 +160,4 @@
     font-size: min(var(--fs-display), 8.6cqi);
     white-space: nowrap;
   }
-
-  /* Cuando el contacto llega al centro, el nav y la franja inferior pasan a noche
-     (TrackController pone html.on-night): así no quedan dos bandas claras sobre el
-     cierre. */
-  html.js :is(.nav, .strip) {
-    color: var(--ink);
-    transition:
-      background-color var(--dur-menu) var(--ease-out),
-      color var(--dur-menu) var(--ease-out);
-  }
-
-  html.on-night :is(.nav, .strip) {
-    --paper: var(--night);
-    --ink: var(--on-night);
-    --ink-muted: var(--on-night-muted);
-    --line: var(--night-line-strong);
-    --accent: var(--night-accent);
-    --focus: var(--on-night);
-  }
 }

@@ -69,10 +69,11 @@ El acento empezó en cobalto (`#1D3FD8` / `#8CA3FF`). El 2026-09-14 Fermin lo ca
 | `--night` | `#0B0912` | Fondo del contacto y final del degradado |
 | `--night-raised` | `#17141F` | Fondo de las píldoras |
 | `--on-night` | `#F3F0FA` | Texto, foco, cursor y relleno de las píldoras |
-| `--on-night-muted` | `#A7A1B5` | Texto secundario (nav y franja en modo noche) |
+| `--on-night-muted` | `#A7A1B5` | Texto secundario sobre noche (el cargo del preloader) |
 | `--night-accent` | `#A57BFF` | La última palabra del título |
 | `--night-line` | `#2A2632` | La línea bajo el título (decorativa) |
 | `--night-line-strong` | `#6A6377` | Borde de las píldoras |
+| `--blend-ink`, `--blend-ink-muted`, `--blend-line` | `#FFF`, blanco al 72% y al 40% | Nav y franja en horizontal, con `mix-blend-mode: difference` (7.1) |
 | `--wash-1` a `--wash-4` | `#E4D6FF`, `#A47CFF`, `#6224F0`, `#2B1273` (en oscuro, los dos primeros pasan a `#2A1D55` y `#5B3BC4`) | Paradas del degradado |
 
 **Contraste medido** (WCAG 2.x, luminancia relativa; script en el anexo B). Texto: mínimo 4,5:1. Bordes y controles: mínimo 3:1.
@@ -267,14 +268,14 @@ Si `CSS.supports("animation-timeline: view()")` da falso y el modo horizontal es
 
 ### 7.1 Nav
 
-**Escritorio:** barra fija de `--nav-h`, con fondo `--paper` (sin transparencia ni blur) y tres zonas.
+**Escritorio:** barra fija de `--nav-h` y tres zonas. En horizontal no tiene fondo: como el de douglus, es transparente, con los tokens en blanco (`--blend-*`) y `mix-blend-mode: difference`, así el texto toma el color inverso de lo que pasa debajo (oscuro sobre el papel, claro sobre el cierre) y el nav es parte de cada sección. Lo transparente deja pasar los clics (`pointer-events`). Sobre tonos medios (un botón violeta, el degradado, una placa de color) el inverso contrasta poco mientras pasa: douglus lo acepta y Fermin también (2026-09-14). En vertical el contenido pasa por debajo del nav, así que ahí conserva el fondo `--paper`.
 - Izquierda: "Fermin Lasarte", enlace a `#sobre-mi`.
 - Centro: `<nav aria-label="Secciones">` con `<ul>` de cuatro enlaces en `--ink-muted`.
   - **Hover y foco (puntero fino):** el texto pasa a `--ink` y se dibuja un tachado de 2px a media altura, que crece desde la izquierda (`scale: 0 1 → 1 1`, 220ms, `--ease-out`) y se va hacia la derecha al salir. Es el efecto `menu--linethrough` de douglus, que allá aparece de golpe.
   - **Sección actual:** `aria-current="location"`, texto en `--ink` y subrayado de 1px abajo. El indicador no depende solo del color, y no usa el tachado (que se leería como "descartado").
 - Derecha: botón de idioma (`<a hreflang>`, con `aria-label` "Cambiar idioma: English"), botón de tema (`<button aria-pressed>`, M3) y GitHub y LinkedIn, iconos con `aria-label`. Cada control mide al menos 44×44px. El email no va acá: tiene su lugar en Contacto.
 
-**Franja inferior (solo en horizontal):** fija, `--strip-h`, con tres zonas, como el pie de douglus.
+**Franja inferior (solo en horizontal):** fija, `--strip-h`, con tres zonas, como el pie de douglus. Igual que el nav: sin fondo, en blanco con `difference` (la barra de progreso de douglus también lo usa).
 - Izquierda: "© 2026 Fermin Lasarte".
 - Centro: riel de 10rem × 1px en `--line` con el relleno en `--accent` (`scale` en X, con la línea de tiempo `--pan`), y a su lado el nombre de la sección actual (`aria-hidden`: la información útil ya está en `aria-current`).
 - Derecha: "Descargar CV", enlace directo al PDF del idioma de la página (I15, sin dropdown).
@@ -351,7 +352,7 @@ Rediseñado el 2026-09-14 a pedido de Fermin, como el final de douglus (antes er
 - Una línea de 2px en `--night-line`.
 - Píldoras grandes (`.btn--night.btn--lg`, en caja normal): el email (`mailto:`), "Copiar email" (dice "Copiado" 2 s, con `aria-live`; si no hay portapapeles no se muestra, M16), WhatsApp, el teléfono como `tel:`, LinkedIn y GitHub. A la derecha, "Volver al inicio" con una flecha larga: un ancla a `#sobre-mi` que pasa por el scroll suave (7.10).
 - Foco, selección y cursor en `--on-night`.
-- **Modo noche del nav y la franja (horizontal):** cuando el contacto cruza el centro de la ventana, TrackController pone `html.on-night` y el nav y la franja inferior redefinen sus tokens con los de noche, así no quedan dos bandas claras sobre el cierre.
+- **Nav y franja sobre el cierre:** como son transparentes con `difference` (7.1), sobre el contacto se ven claros solos. (Hubo un "modo noche" que los pintaba de `--night` con `html.on-night`; se quitó cuando el nav pasó a integrarse a cada sección).
 
 ### 7.6 Botones
 
@@ -481,7 +482,6 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
 | Preloader | Primera carga de la sesión | `translate` Y y `scale` de palabras y letras, `scale` X de la línea, `opacity` del velo | Unos 5,3 s en total (7.11) | No existe |
 | Barra de progreso | Scroll | `scale` X | Lineal | No existe (vertical) |
 | Transición al cierre | Scroll | `scale` del degradado: de 0,05 a 1,02 en X (horizontal) o de 0,05 a 1 en Y (vertical) | Lineal, atada al scroll: en horizontal, mientras el borde izquierdo del panel va del borde derecho de la ventana al centro menos 100px (misma línea de tiempo que la pista; en Firefox, TrackController); en vertical, `view()` de `entry 0%` a `entry 100%` | Quieta y dibujada |
-| Nav y franja en noche | El contacto cruza el centro (horizontal) | `background-color` y `color` | 420ms `--ease-out` | Igual |
 | Tachado del nav y de contacto | Hover o foco | `scale` X del pseudo-elemento | 220ms `--ease-out` | Aparece sin transición |
 | Botón: relleno | Hover | `translate` Y del `::before` (entra desde abajo, sale por arriba con JS) | 500ms entrada, 400ms salida, `--ease-out` | Fundido de `opacity` |
 | Botón: salto del texto | Hover | `translate` Y y `opacity` de `.btn__label` | 350ms `--ease-out` | Sin movimiento |

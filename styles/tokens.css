@@ -32,6 +32,12 @@
   --wash-3: #6224f0;
   --wash-4: #2b1273;
 
+  /* Nav y franja en horizontal (DISENO.md, 7.1): blanco con mix-blend-mode: difference,
+     que da el color inverso de lo que pasa debajo. */
+  --blend-ink: #fff;
+  --blend-ink-muted: rgb(255 255 255 / 0.72);
+  --blend-line: rgb(255 255 255 / 0.4);
+
   /* Tipografía: Archivo variable (ejes wght y wdth), cargada con next/font. */
   --font: var(--font-archivo), "Helvetica Neue", Arial, system-ui, sans-serif;
   --wdth-display: 68%;

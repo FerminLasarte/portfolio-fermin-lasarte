@@ -106,7 +106,14 @@ body {
     inline-size: var(--w-bleed);
   }
 
+  /* Como el nav (styles/nav.css): sin fondo, en blanco con difference, así se
+     invierte sobre cada sección. La barra de progreso de douglus hace lo mismo. */
   html.js .strip {
+    --ink: var(--blend-ink);
+    --ink-muted: var(--blend-ink-muted);
+    --line: var(--blend-line);
+    --accent: var(--blend-ink);
+    --focus: var(--blend-ink);
     position: fixed;
     inset: auto 0 0;
     z-index: var(--z-strip);
@@ -115,9 +122,15 @@ body {
     align-items: center;
     height: var(--strip-h);
     padding-inline: var(--pad-x);
-    background: var(--paper);
+    color: var(--ink);
     font-size: var(--fs-0);
     font-weight: 500;
+    mix-blend-mode: difference;
+    pointer-events: none;
+  }
+
+  html.js .strip a {
+    pointer-events: auto;
   }
 
   .strip__progress {

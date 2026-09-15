@@ -69,8 +69,6 @@ export default function TrackController() {
               else a.removeAttribute("aria-current");
             }
             if (label && name) label.textContent = name;
-            // Nav y franja en noche mientras el contacto está en el centro (styles/contact.css).
-            document.documentElement.classList.toggle("on-night", entry.target.classList.contains("contact"));
           }
         },
         { rootMargin: mq.matches ? "0px -50% 0px -50%" : "-40% 0px -59% 0px" },
@@ -153,7 +151,6 @@ export default function TrackController() {
     return () => {
       io?.disconnect();
       reveal.disconnect();
-      document.documentElement.classList.remove("on-night");
       cancelAnimationFrame(raf);
       removeEventListener("scroll", onScroll);
       removeEventListener("resize", onScroll);

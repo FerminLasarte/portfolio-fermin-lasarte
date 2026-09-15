@@ -72,10 +72,8 @@ export default function Cursor() {
     const onOver = (e) => {
       const target = e.target.closest?.("[data-cursor], a, button");
       cursor.dataset.mode = target ? target.dataset.cursor || "link" : "";
-      // Claro sobre noche: el contacto y, cuando pasan a noche, el nav y la franja.
-      const night =
-        e.target.closest?.(".contact") || (html.classList.contains("on-night") && e.target.closest?.(".nav, .strip"));
-      cursor.dataset.tone = night ? "night" : "";
+      // Claro sobre el cierre.
+      cursor.dataset.tone = e.target.closest?.(".contact") ? "night" : "";
       text.textContent = target?.dataset.cursorLabel ?? "";
     };
     const onDown = () => cursor.classList.add("is-down");
