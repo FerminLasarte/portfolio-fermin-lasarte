@@ -10,10 +10,10 @@
   --ink: #101214;
   --ink-muted: #4e5358;
   --line: #7e838a;
-  --accent: #1d3fd8;
-  --accent-soft: #dce2fb;
-  --on-accent: #f4f6ff;
-  --on-accent-muted: #c8d1ff;
+  --accent: #6224f0;
+  --accent-soft: #ece6ff;
+  --on-accent: #f6f3ff;
+  --on-accent-muted: #e2d9ff;
   --focus: var(--accent);
   --cursor-ink: var(--ink);
   color-scheme: light;
@@ -85,9 +85,9 @@ html.dark-mode {
   --ink: #ecede9;
   --ink-muted: #a3a8ad;
   --line: #6b7076;
-  --accent: #8ca3ff;
-  --accent-soft: #1b2240;
+  --accent: #a57bff;
+  --accent-soft: #221840;
   --on-accent: #0e1012;
-  --on-accent-muted: #26304f;
+  --on-accent-muted: #2a1d55;
   color-scheme: dark;
 }

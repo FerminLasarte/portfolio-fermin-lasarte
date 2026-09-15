@@ -17,7 +17,7 @@
 
 | | douglus.site | Este portfolio |
 |---|---|---|
-| Fondo y acento | Crema `#fefff8` con naranja `rgb(255,100,50)` | Papel frío `#F1F2EE` con cobalto `#1D3FD8` (y tema oscuro) |
+| Fondo y acento | Crema `#fefff8` con naranja `rgb(255,100,50)` | Papel frío `#F1F2EE` con violeta eléctrico `#6224F0` (y tema oscuro) |
 | Tipografía | Neue Montreal y FK Screamer (comerciales) | Archivo variable: angosta y pesada para los títulos, ancho normal para el texto |
 | Scroll | Lenis intercepta la rueda; el `body` tiene `overflow: hidden` | Scroll nativo del documento; `sticky` más `translate` atado al scroll |
 | Proyectos | Capturas en marcos de escritorio | Placas del color de cada app, con capturas verticales de teléfono |
@@ -43,7 +43,7 @@ Todo el texto es HTML real. Nada se dibuja en canvas.
 
 ## 2. Paleta
 
-Estrategia **restringida con un bloque comprometido**: neutros fríos más un solo acento, cobalto, que aparece en los botones principales, los estados y el progreso, y que llena un panel completo, el de contacto, como cierre. No hay verdes, ámbar ni grises sueltos: el estado de un proyecto se dice con texto, no con un punto de color.
+Estrategia **restringida con un bloque comprometido**: neutros fríos más un solo acento, violeta eléctrico, que aparece en los botones principales, los estados y el progreso, y que llena un panel completo, el de contacto, como cierre. No hay verdes, ámbar ni grises sueltos: el estado de un proyecto se dice con texto, no con un punto de color.
 
 Los tokens van en `:root` y se redefinen bajo `html.dark-mode` (se mantiene el mecanismo actual de `lib/theme.js`, que respeta `prefers-color-scheme` y guarda la elección). `THEME_COLORS` pasa a `--paper` de cada tema.
 
@@ -54,10 +54,12 @@ Los tokens van en `:root` y se redefinen bajo `html.dark-mode` (se mantiene el m
 | `--ink` | `#101214` | `#ECEDE9` | Texto principal |
 | `--ink-muted` | `#4E5358` | `#A3A8AD` | Texto secundario, nav sin activar |
 | `--line` | `#7E838A` | `#6B7076` | Bordes de botón, reglas del timeline, riel del progreso |
-| `--accent` | `#1D3FD8` | `#8CA3FF` | Botón principal, texto de acento, panel de contacto |
-| `--accent-soft` | `#DCE2FB` | `#1B2240` | Placas tipográficas de proyecto |
-| `--on-accent` | `#F4F6FF` | `#0E1012` | Texto y foco sobre `--accent` |
-| `--on-accent-muted` | `#C8D1FF` | `#26304F` | Texto secundario sobre `--accent` |
+| `--accent` | `#6224F0` | `#A57BFF` | Botón principal, texto de acento, relleno de botones |
+| `--accent-soft` | `#ECE6FF` | `#221840` | Placas tipográficas de proyecto |
+| `--on-accent` | `#F6F3FF` | `#0E1012` | Texto y foco sobre `--accent` |
+| `--on-accent-muted` | `#E2D9FF` | `#2A1D55` | Texto secundario sobre `--accent` |
+
+El acento empezó en cobalto (`#1D3FD8` / `#8CA3FF`). El 2026-09-14 Fermin lo cambió por un violeta más vivo: el cobalto se sentía insulso y no transmitía confianza.
 | `--focus` | `= --accent` | `= --accent` | Anillo de foco (sobre el panel de contacto pasa a `--on-accent`) |
 
 **Contraste medido** (WCAG 2.x, luminancia relativa; script en el anexo B). Texto: mínimo 4,5:1. Bordes y controles: mínimo 3:1.
@@ -68,12 +70,12 @@ Los tokens van en `:root` y se redefinen bajo `html.dark-mode` (se mantiene el m
 | `--ink` sobre `--surface` | 15,21 | 14,69 |
 | `--ink-muted` sobre `--paper` | 6,91 | 7,95 |
 | `--ink-muted` sobre `--surface` | 6,30 | 7,21 |
-| `--accent` (texto) sobre `--paper` | 6,78 | 7,99 |
-| `--accent` (texto) sobre `--surface` | 6,18 | 7,24 |
-| `--accent` (texto) sobre `--accent-soft` | 5,92 | 6,52 |
-| `--ink` sobre `--accent-soft` | 14,58 | 13,23 |
-| `--on-accent` sobre `--accent` (botón, panel de contacto) | 7,07 | 7,99 |
-| `--on-accent-muted` sobre `--accent` | 5,09 | 5,44 |
+| `--accent` (texto) sobre `--paper` | 6,16 | 6,24 |
+| `--accent` (texto) sobre `--surface` | 5,62 | 5,66 |
+| `--accent` (texto) sobre `--accent-soft` | 5,72 | 5,40 |
+| `--ink` sobre `--accent-soft` | 15,49 | 14,03 |
+| `--on-accent` sobre `--accent` (botón) | 6,33 | 6,24 |
+| `--on-accent-muted` sobre `--accent` | 5,15 | 4,89 |
 | `--line` sobre `--paper` (borde, 3:1) | 3,40 | 3,82 |
 | `--line` sobre `--surface` (borde, 3:1) | 3,09 | 3,46 |
 

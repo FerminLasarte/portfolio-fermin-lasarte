@@ -23,7 +23,7 @@ const COLOR = {
   paper: "#F1F2EE", // --paper
   ink: "#101214", // --ink
   inkMuted: "#4E5358", // --ink-muted
-  accent: "#1D3FD8", // --accent
+  accent: "#6224F0", // --accent
 };
 
 // Archivo, leída del repo para que el build no dependa de la red. Son instancias
