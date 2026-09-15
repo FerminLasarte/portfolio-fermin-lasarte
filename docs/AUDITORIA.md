@@ -25,6 +25,8 @@
 
 **Estado (2026-09-15):** las fases 0 a 3 están hechas. La Fase 3 está en la rama `fase-3-rediseno`, todavía sin merge a `main` (que publica en producción). El diseño final, con todo lo que cambió respecto del brief a pedido de Fermin, está en `docs/DISENO.md`. Sigue la Fase 4, conviene hacerla sobre el deploy de preview de Vercel de la rama. Quedan abiertos I12 y N4 (contenido que tiene que conseguir Fermin), M13 (decidir si se unifica `.js`/`.jsx`) y N5 a N8.
 
+**Estado (2026-09-15, Fase 4):** la re-auditoría está hecha, sobre `a9eeb81` y el preview de la rama. Está al final de este archivo, en "Re-auditoría (Fase 4)": 9 puntos importantes (R-I1 a R-I9), 38 menores (R-M1 a R-M38), los 7 criterios verificados, Lighthouse y el movimiento en un navegador visible. No se arregló nada todavía: falta decidir qué se arregla y en qué orden. N7 está hecho, N6 quedó fuera y N8 pasó a R-I3.
+
 Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual**: se usan como requisitos del diseño nuevo.
 
 ---
@@ -367,21 +369,26 @@ _(Agregá aquí lo que aparezca durante las fases.)_
   - **Dónde:** `public/assets/foto_perfil.webp` (560×715).
   - **Problema:** en horizontal la foto se dibuja a unos 550×740px, así que en una pantalla 2x haría falta una imagen de unos 1100×1480. La original se borró por el GPS (C1).
   - **Solución:** conseguir una foto de al menos 1200px de alto, sin metadatos (`scripts/strip-metadata.mjs`), y actualizar `width` y `height` en `Hero.jsx`.
+  - **Fase 4:** desde que la foto se achicó (7.2), en horizontal se dibuja a 320×459. Con `cover` ocupa 360px de ancho, así que en 2x alcanzaría una de unos 720×920. La actual (560×715) sigue quedando corta.
 
 - [ ] **N5. `npx eslint .` también revisa `.claude/worktrees/`** · Fase 4 (hallado en la Fase 3)
   - **Problema:** una sesión de Claude Code dejó un worktree en `.claude/worktrees/`, y como `eslint.config.mjs` no ignora esa carpeta, `npx eslint .` da 241 errores que no son del proyecto. `npx eslint app components lib` da 0.
   - **Solución:** sumar `.claude/**` a los `ignores` de `eslint.config.mjs` (y revisar si ese worktree todavía hace falta).
+  - **Fase 4:** `npx eslint .` da 0 errores, pero solo porque la carpeta quedó vacía. `--print-config` muestra que todavía no se ignora. Sigue en R-M35.
 
-- [ ] **N6. El respaldo para Firefox no se probó en Firefox** · Fase 4
+- [~] **N6. El respaldo para Firefox no se probó en Firefox** · Fase 4
+  - **Fase 4 (2026-09-15):** Fermin decidió dejar Firefox fuera de la re-auditoría. El código del respaldo se revisó leyéndolo: las cuentas coinciden con las del CSS, y en Chrome no corre.
   - **Dónde:** `components/TrackController.jsx` (`paint`): sin `animation-timeline`, escribe el `translate` de la pista, el progreso, la transición al cierre (`scale` del degradado) y la línea de Trayectoria (`--rail`). El muro de Habilidades queda en su estado final.
   - **Problema:** las cuentas replican las del CSS y se revisaron leyendo el código, pero nunca corrieron en un Firefox real.
   - **Solución:** probar en Firefox a 1440×900 y 1024×680: recorrido, anclas del nav, foco con teclado, degradado y línea.
 
-- [ ] **N7. Movimiento sin verse en un navegador visible; LCP con el preloader** · Fase 4
+- [x] **N7. Movimiento sin verse en un navegador visible; LCP con el preloader** · Fase 4
+  - **Hecho (Fase 4):** se revisó en un Chrome visible y se corrió Lighthouse sobre el preview, con y sin preloader. Todo lo que se pudo capturar funciona como está documentado. El LCP sigue siendo la foto aunque el preloader la tape; lo que sube es el Speed Index. Los detalles están en "Re-auditoría (Fase 4)": las secciones "Movimiento en un navegador visible" y "Lighthouse".
   - **Problema:** durante la Fase 3 el panel del navegador de las pruebas estaba oculto, y ahí no avanzan ni las animaciones atadas al scroll ni las de CSS. Por eso el recorrido, el degradado, la línea de Trayectoria, el muro, la ola de la franja, el preloader, las entradas por elemento y Lenis se verificaron midiendo sus tramos calculados (`animation-range`), sus clases y sus retrasos, no mirándolos. Además, el preloader tapa unos 5 s la primera visita y puede cambiar qué elemento cuenta como LCP.
   - **Solución:** revisar todo en un navegador visible y correr Lighthouse (rendimiento, LCP, accesibilidad, SEO) sobre el deploy de preview, con y sin preloader (primera visita y siguientes de la sesión).
 
-- [ ] **N8. Contraste del nav y la franja con `difference`; texto en contorno** · Fase 4
+- [~] **N8. Contraste del nav y la franja con `difference`; texto en contorno** · Fase 4
+  - **Medido (Fase 4):** sobre la transición al cierre, el contraste baja a entre 1,0 y 1,5:1 en claro y a 2,6:1 en oscuro, durante unos 1.800px de scroll; en el resto del recorrido da 4,5:1 o más. El texto en contorno se lee bien. Sigue como R-I3, a decidir con Fermin.
   - **Problema:** en horizontal, el nav y la franja inferior son blancos con `mix-blend-mode: difference` (como douglus): sobre el papel y sobre el cierre se leen bien, pero al pasar sobre tonos medios (un botón violeta, el degradado) el inverso contrasta cerca de 2:1 por un momento. Aparte, hay texto en contorno (`-webkit-text-stroke`): el fin de los rangos de años y las tecnologías intermedias del muro. Es decorativo (`aria-hidden`, la información está en texto), pero conviene mirar que se lea.
   - **Solución:** medirlo en la Fase 4 y decidir con Fermin (por ejemplo, que el nav no pase sobre esos tonos o que el contorno sea más grueso).
 
@@ -402,3 +409,504 @@ _(Agregá aquí lo que aparezca durante las fases.)_
   - Se agregaron `AGENTS.md` y `CLAUDE.md`, que `next dev` crea solo y que apuntan a la documentación de la versión instalada.
   - `experimental.globalNotFound` sigue siendo necesario: en la 16 todavía está documentado como experimental. Un 404 por idioma tampoco se renderiza en el servidor en la 16 (ver I16).
   - **Verificado:** en el HTML solo cambian los nombres de los archivos generados, la clase de la fuente y los `srcset` (sin 16w, que ya no está entre los tamaños por defecto). En el navegador, posición, tamaño, color y fuente de los 516 elementos coinciden exactamente con Next 15, en ES y EN, a 1024px (claro) y 375px (oscuro). Las rutas, los 404, el sitemap, robots, el apple-icon y las imágenes OG responden igual.
+
+---
+
+# Re-auditoría (Fase 4)
+
+- **Fecha:** 2026-09-15
+- **Commit auditado:** `a9eeb81` (rama `fase-3-rediseno`, sin merge a `main`). Los números de línea se refieren a ese commit.
+- **Sitio probado:** el deploy de preview de la rama, https://portfolio-fermin-lasarte-git-fase-3-rediseno-ferminlasarte.vercel.app. No pidió login. Manda `x-robots-tag: noindex`, que lo pone Vercel en los previews.
+- **Método:**
+  - **Código:** 5 subagentes, uno por categoría (incoherencias, eficiencia, código muerto, flujo y accesibilidad, y mejoras), con un build en una copia aislada. Cada hallazgo se volvió a verificar contra el código, con curl sobre el preview o en el navegador antes de anotarlo.
+  - **Navegador:** scripts de Puppeteer con el Chrome instalado, fuera del repo:
+    - **Matriz de 84 casos:** 375×812 y 768×1024 (táctiles), 900×900, 1024×680, 1024×768 y 1440×900, en claro y oscuro, sobre `/`, `/en`, `/trayectoria`, `/en/experience`, `/habilidades`, `/en/skills` y el 404. En cada caso se miraron los desbordes contra `clientWidth`, lo que se sale de su panel en horizontal, el texto que queda invisible y los errores de consola, y a 375 y 1440 se corrió axe-core.
+    - **Interacción:** teclado (Tab y Shift+Tab, menú móvil), anclas, cambio de idioma, sin JS, reduce motion, colores forzados (emulados con CDP, en claro y oscuro) e impresión.
+    - **N7, en una ventana de Chrome visible** (con perfil aparte). La extensión Claude in Chrome no estaba conectada y el panel del navegador de la app suele estar oculto, así que se usó una ventana real, donde las animaciones corren.
+    - **N8:** el contraste medido cada 120px de scroll, a lo largo de toda la pista y en los dos temas.
+  - **Lighthouse 13.4.1 sobre el preview,** en móvil y escritorio, en tres situaciones:
+    - **A:** primera visita, con preloader y caché vacía.
+    - **B:** sin preloader (la marca de `sessionStorage` puesta antes del script del tema) y con caché vacía.
+    - **C:** la visita siguiente real, en la misma pestaña y con caché.
+    - La home en ES y EN se corrió tres veces (se da la mediana) y las páginas propias, una.
+  - **[nav]** marca lo que se confirmó en el navegador.
+- **Fuera de la auditoría:** Firefox (N6), por decisión de Fermin del 2026-09-15.
+- **Descartados:**
+  - `/trayectoria` a 320px no desborda: el h1 termina en 313px.
+  - Recargar después de scrollear no vuelve al `#hash`: Chrome restaura la posición.
+  - "Ver el proyecto" desde `/trayectoria` deja la tarjeta en el borde izquierdo.
+  - Tabulando hacia adelante, ningún foco queda debajo del nav ni de la franja una vez que terminan la entrada del panel y el scroll suave. Lo que se veía al principio era la animación de entrada (R-I4).
+  - axe marca 39 fallos de contraste en el nav a 1440 en claro. Es un falso positivo: no entiende `difference` y calcula blanco sobre el papel. La medición real está en R-I3.
+  - Una de las tres corridas de Lighthouse (escritorio, A, `/en`) marcó `color-contrast`. No se repitió; seguramente midió en medio de una animación.
+  - **Cosas que se revisaron y están bien:** el respaldo de TrackController no corre en Chrome; las 10 copias de la media query horizontal son idénticas; ES y EN tienen las mismas 106 claves; todos los `target="_blank"` llevan `rel="noopener noreferrer"`; el `sizes` de la foto es correcto en los tres anchos, y la estela no vuelve a pedir la imagen.
+- **Sin confirmar:** Safari, lectores de pantalla reales, pantallas táctiles y portátiles híbridos reales, el relleno y el imán de los botones (no quedaron en ninguna captura) y la ola del muro de Habilidades en un cuadro intermedio.
+
+## Resumen
+
+No hay nada crítico. Los problemas más visibles son cuatro:
+- **R-I1:** dos nombres de proyecto quedan cortados en su placa.
+- **R-I2:** con el mouse, un clic en un botón cortado por el borde se pierde.
+- **R-I3:** el nav y la franja se vuelven ilegibles sobre la transición al cierre (era N8).
+- **R-I4:** al tabular, el foco cae en botones que todavía no se ven.
+
+Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En rendimiento da entre 93 y 100; el preloader es lo único que lo baja. Los 7 criterios se cumplen, con excepciones en el 1, el 4, el 6 y el 7 (la tabla está más abajo).
+
+## 🟠 Importante
+
+- [ ] **R-I1. El nombre de Compilador y el de ClubSystem quedan cortados en su placa** **[nav]**
+  - **Dónde:** `styles/projects.css:82-89` (`.card__plate--type span { font-size: clamp(2rem, 4.6cqi, 4.5rem) }`) y `:61` (`overflow: clip` en `.card__plate`).
+  - **Problema:** el tamaño de letra sale del ancho de la ventana (el `cqi` es el de `main` o `.h-sticky`), pero la tarjeta chica mide `--w-card: clamp(22rem, 28cqi, 28rem)`, que deja de crecer antes. Medido:
+    - a 1440×900 la placa mide 317px: "COMPILADOR" mide 348px (se cortan 55px) y "CLUBSYSTEM", 342px (49px);
+    - a 1920×1080 se cortan 51px y 43px;
+    - en EN solo pasa con ClubSystem, porque "Compiler" entra;
+    - a 1024px y en vertical entra todo.
+  - Se lee "CLUBSYSTE". Es un desborde tapado (criterio 1), justo lo que la Fase 3 aprendió a evitar en la pista.
+  - **Solución:** que la placa sea el contenedor (`container-type: inline-size` en `.card__plate--type`) y medir la letra contra ella, por ejemplo `clamp(2rem, 18cqi, 4.5rem)`. La palabra más larga mide unos 5,3em, así que eso deja margen. Probar los ocho nombres en los dos idiomas.
+
+- [ ] **R-I2. Con el mouse, un clic en un botón cortado por el borde derecho se pierde** **[nav]**
+  - **Dónde:** `components/TrackController.jsx:87-91` (`onFocus`).
+  - **Problema:** en Chrome, los enlaces toman el foco en el `mousedown`. Si el botón está cortado por el borde derecho, el listener de `focusin` lo trae a la vista con un `scrollBy` sin animación: la pista salta, el `mouseup` cae en otro lado y el clic no llega al enlace. Medido a 1440×900 con el botón "Visitar" cortado a la mitad: en el `mousedown` el scroll pasó de 530 a 1.865 y el `click` fue a la sección `projects`, no al enlace.
+  - **Solución:** atender solo el foco de teclado, con `if (!e.target.matches(":focus-visible")) return;` al principio de `onFocus`.
+
+- [ ] **R-I3. El nav y la franja se vuelven ilegibles sobre la transición al cierre (era N8)** **[nav]**
+  - **Dónde:** `styles/nav.css:246-259` y `styles/track.css:111-132` (blanco con `mix-blend-mode: difference`). El tramo es `.bleed` (`styles/contact.css`).
+  - **Problema:** se midió cada 120px de scroll, en 84 posiciones por tema, a 1440×900. Fuera del cierre, el texto del nav y de la franja da 4,5:1 o más en todo el recorrido. Mientras pasa la transición (de 7.800 a 9.600px de un recorrido de 10.038, unos 1.800px de scroll):
+    - **En claro:**
+      - los enlaces del nav bajan a entre 1,03 y 1,18:1;
+      - las herramientas, a entre 1,06 y 1,43:1;
+      - el nombre, a 1,13:1;
+      - la franja, a entre 1,26 y 1,54:1.
+      - No se leen: el blanco invertido sobre `--wash-2` da un verde oliva casi del mismo brillo que el fondo.
+    - **En oscuro:** los enlaces bajan a 2,57:1 y el resto queda entre 4,0 y 4,2:1.
+    - **Riel de la barra de progreso:** es blanco al 40% y en claro da 2,6:1 sobre el papel durante todo el recorrido, por debajo del 3:1 de 1.4.11. Es decorativo (`aria-hidden`).
+    - **Anillo de foco del nav** (`--focus: var(--blend-ink)`, `nav.css:252`): pasa por el mismo `difference`.
+    - **Por qué no lo ven las herramientas:** axe da falsos positivos y Lighthouse mide al cargar, con el nav sobre el papel.
+  - **Solución:** decidir con Fermin. En 7.1 se aceptó que el contraste bajara "un momento" sobre tonos medios, pero lo medido es casi 1:1 durante unos 1.800px de scroll. Opciones:
+    - (a) mientras el cierre está debajo del nav, pasarlo a `--on-night` sin `difference`, con una clase desde el `IntersectionObserver` que ya existe o con un tramo de `animation-range` sobre `--pan`;
+    - (b) darle al nav un fondo en ese tramo;
+    - (c) dejarlo como está.
+
+- [ ] **R-I4. Al tabular, el foco cae en botones que todavía no se ven** **[nav]**
+  - **Dónde:** `components/TrackController.jsx:185-200` (paneles `.is-waiting`) y `styles/motion.css:45-87`.
+  - **Problema:** al tabular hacia un panel que todavía no se reveló, el foco llega antes que la entrada. Cada elemento tarda hasta 720ms de retraso más 1,1 s de animación en aparecer. Tabulando rápido desde el hero, 17 elementos recibieron el foco con opacidad 0: los botones de las tarjetas, los de Trayectoria y Habilidades, y las píldoras del contacto. El anillo de foco rodea algo que no se ve (2.4.7).
+  - **Solución:** en `onFocus`, si el foco entra a un panel `.is-waiting`, revelarlo sin animación. Es lo mismo que ya pide DISENO 8.7: lo que se hace con teclado es instantáneo.
+
+- [ ] **R-I5. `/en/skills` dice "Compilador" en español**
+  - **Dónde:** `components/SkillsPage.jsx:51` y `:73` (`p.name`).
+  - **Problema:** usa el nombre de `PROJECTS` sin traducir, así que "Compilador" sale 4 veces en `/en/skills` (en la columna de la tabla y en "Used in"). Verificado en el HTML del preview. `ProjectCard` ya usa `t(\`projects.${id}.name\`, name)`.
+  - **Solución:** usar lo mismo en SkillsPage, o un helper compartido.
+
+- [ ] **R-I6. Las páginas propias no tienen imagen de Open Graph ni de X**
+  - **Dónde:** `app/[lang]/[page]/page.js:40-55`.
+  - **Problema:** `/trayectoria`, `/habilidades`, `/en/experience` y `/en/skills` no tienen `og:image` ni `twitter:image`, aunque declaran `summary_large_image` (verificado en el HTML del preview). El `openGraph` de la página reemplaza entero al del layout, porque la metadata se combina de forma superficial, y con eso se pierde la imagen de `opengraph-image.js`. Compartida en LinkedIn o WhatsApp, la tarjeta sale sin imagen.
+  - **Solución:** crear `app/[lang]/[page]/opengraph-image.js` con el título de la página. Como mínimo, sumar la imagen de la home a `openGraph.images` y `twitter.images`.
+
+- [ ] **R-I7. "2 apps publicadas en App Store y Google Play" no se sostiene mientras TravelPic esté fuera de las tiendas**
+  - **Dónde:** `lib/translations.js:7` y `:151` (`meta.description`), `:143` y `:287` (`meta.ogTagline`), y `lib/site.js:159-163`.
+  - **Problema:** la descripción, la imagen OG y el JSON-LD dicen que las dos apps están publicadas, pero el propio `site.js` dice que TravelPic "se está volviendo a publicar" (I4). Quien la busque en las tiendas no la va a encontrar.
+  - **Solución:** que decida Fermin. Se puede cambiar la copia a "apps en producción" o "apps lanzadas", o contar solo las que tienen enlace a una tienda (hoy daría 1).
+
+- [ ] **R-I8. Con colores forzados se pierde información** **[nav]**
+  - **Dónde:** no hay ningún `@media (forced-colors: active)` en `styles/`. Afecta a `styles/page.css:201-219` (los puntos de la tabla), `nav.css:246-259` y `track.css:111-132`.
+  - **Problema:** con la emulación de CDP:
+    - **La tabla "Dónde las usé" queda vacía:** los puntos son `background` y el "Sí"/"No" es `sr-only`.
+    - **Con el tema claro, el nav y la franja siguen con `difference`:** el texto sale amarillo sobre una placa negra, GitHub y LinkedIn salen en amarillo claro sobre blanco y el botón de tema desaparece. Con el tema oscuro se leen bien.
+    - **La línea de Trayectoria y el contorno del muro se pierden.** Lo segundo borra el nivel de las tecnologías en la home (R-M4).
+  - **Solución:** con `forced-colors: active`, sacar el `mix-blend-mode` del nav y la franja y darles fondo `Canvas`. Los puntos de la tabla, con `forced-color-adjust: none` y `CanvasText`, o como un glifo "●" en texto.
+
+- [ ] **R-I9. Al imprimir en apaisado sale solo el hero y después páginas en blanco** **[nav]**
+  - **Dónde:** las 10 copias de la media query del modo horizontal (`styles/track.css:46` y las demás) no piden `screen`. `styles/motion.css` (`.is-waiting`) tampoco. No hay ningún `@media print`.
+  - **Problema:** en A4 apaisado (1123×794) se cumplen las condiciones del modo horizontal. El PDF sale con el hero en la primera página y 10 páginas en blanco, con el nav, la franja y el enlace de salto repetidos en cada una. En vertical, los paneles que todavía no se vieron se imprimirían con `opacity: 0`. DISENO 6.2 dice que la impresión es vertical.
+  - **Solución:** agregar `screen and` en las 10 copias de la media query y en la regla de `.is-waiting`, y un `@media print` que esconda el nav, la franja, el cursor, el preloader, el enlace de salto y `.bleed`.
+
+## 🟡 Menor
+
+### Accesibilidad y flujo
+
+- [ ] **R-M1. La tabla de `/habilidades` no tiene nombre y su caja con scroll no se puede enfocar** **[nav]**
+  - **Dónde:** `components/SkillsPage.jsx:66-97` y `styles/page.css:171-174`.
+  - **Problema:** `.matrix-scroll` se desplaza a lo ancho: a 375px mide 343px con una tabla de 757px, y también se desplaza a 768 y a 1024 en vertical. Pero no tiene nada enfocable, y axe lo marca como serio (`scrollable-region-focusable`). Además, la tabla no tiene `<caption>` ni `aria-labelledby`.
+  - **Solución:** poner `tabindex="0" role="region" aria-labelledby="donde-t"` en la caja, y `aria-labelledby="donde-t"` (o un `<caption>` con `sr-only`) en la tabla.
+
+- [ ] **R-M2. En vertical, Shift+Tab puede dejar el foco debajo del nav (2.4.11)** **[nav]**
+  - **Dónde:** `styles/nav.css:7-18` (el nav es `sticky`) y `styles/track.css:31-34` (solo `.panel` tiene `scroll-margin-top`).
+  - **Problema:** en la home a 390×844, con Shift+Tab, el botón "Código" quedó con 39 de sus 57px debajo del nav. En `/trayectoria` y `/habilidades` a 1280×800 no se reprodujo.
+  - **Solución:** `html { scroll-padding-block-start: var(--nav-h) }` y sacar el `scroll-margin-top` de `.panel`.
+
+- [ ] **R-M3. El preloader tapa el enlace de salto, no se puede saltear y se gasta en otras páginas** **[nav]**
+  - **Dónde:** `styles/tokens.css:81-82`, `styles/preloader.css:20-30` y `lib/theme.js:14-17`.
+  - **Problema:**
+    - El enlace de salto (`--z-skip: 30`) queda debajo del velo (`--z-preloader: 35`), así que con Tab se enfoca algo que no se ve.
+    - No hay forma de saltear los 5,35 s.
+    - La marca de `sessionStorage` se pone en cualquier página. Si la primera visita entra por `/trayectoria` o por el 404, la home ya no muestra el preloader, y DISENO 7.11 dice "primera visita de la sesión".
+  - **Solución:** `--z-skip` por encima del preloader; sacar `html.pl` con el primer `keydown`, `pointerdown` o `wheel`, con un fundido corto; y poner la marca solo si la página tiene `.preloader`.
+
+- [ ] **R-M4. El muro de la home no dice el nivel en texto** **[nav]**
+  - **Dónde:** `components/Skills.jsx:44-72`.
+  - **Problema:** el muro es `aria-hidden` y la lista en texto de abajo tiene los nombres pero no el nivel, aunque DISENO 7.7 dice que es "la misma información". En colores forzados, las intermedias además se ven llenas y la leyenda no distingue nada. El detalle está en `/habilidades`.
+  - **Solución:** sumar el nivel a la lista (visible o `sr-only`), o corregir DISENO.
+
+- [ ] **R-M5. La ola de la franja se repite sin fin y el teclado no la corta**
+  - **Dónde:** `components/WaveText.jsx:23-45`.
+  - **Problema:** se repite cada 5 s mientras no se mueva el mouse ni se scrollee. Quien navega con teclado la ve siempre (2.2.2), y choca con "nada se mueve en loop" (DISENO 8.2). También corre en móvil, donde la franja está oculta.
+  - **Solución:** reiniciar la espera también con `keydown` y `focusin`, limitarla a una o dos repeticiones y activarla solo en horizontal.
+
+- [ ] **R-M6. El tachado se anima igual con reduce motion**
+  - **Dónde:** `styles/base.css:279-290`: la `transition` de `.strike::after` está fuera de `no-preference`.
+  - **Solución:** moverla dentro de `@media (prefers-reduced-motion: no-preference)`, como dice la tabla de DISENO 8.
+
+- [ ] **R-M7. Sin JS hay controles que no hacen nada** **[nav]**
+  - **Dónde:** `components/ThemeToggle.jsx:22-33` y `styles/hero.css:137-141`.
+  - **Problema:**
+    - Sin JS, el botón de tema se ve y se puede enfocar, pero no hace nada.
+    - La foto muestra `cursor: grab` y tiene `touch-action: none`. Con eso, en un portátil táctil tocar la foto no scrollea (sospecha).
+  - **Solución:** `html:not(.js) .theme-toggle { display: none }` y poner el `cursor` y el `touch-action` de `.drag` bajo `html.js` y con puntero fino.
+
+- [ ] **R-M8. El botón de idioma: su nombre no incluye "EN" y desde una tarjeta vuelve a la entrada de Proyectos** **[nav]**
+  - **Dónde:** `components/Nav.jsx:40-44` y `:120-128`.
+  - **Problema:**
+    - El texto visible es "EN" y el nombre accesible es "Cambiar idioma: English" (2.5.3).
+    - Desde la tarjeta de Vault, el cambio lleva a `/en#proyectos` y la tarjeta queda a 2.794px, porque las 8 tarjetas tienen `data-section="proyectos"`.
+  - **Solución:** que el nombre empiece con lo visible ("EN, English") y que el enlace guarde el `id` del panel visible, no el de la sección.
+
+- [ ] **R-M9. Con el menú móvil abierto, el Tab sale del menú** **[nav]**
+  - **Dónde:** `components/Nav.jsx:47-66` y `:131-143`.
+  - **Problema:**
+    - Después de LinkedIn, el foco pasa al enlace de salto, que lleva a un `main` inerte, y después al nombre y a "EN", que quedan detrás del menú.
+    - El nombre del botón cambia de "Menú" a "Cerrar" al mismo tiempo que `aria-expanded`, así que se anuncia de más ("Cerrar, expandido").
+  - **Solución:** poner `inert` también en el enlace de salto y en lo que queda del nav detrás del panel, o atrapar el foco. Dejar el nombre accesible fijo en "Menú" y el cambio de palabra solo como algo visual.
+
+- [ ] **R-M10. Enlaces con el mismo nombre y pestañas nuevas sin aviso**
+  - **Dónde:** `components/ProjectCard.jsx:86-97` (en la home hay 5 "Código" y 3 "Visitar"), `components/ExperiencePage.jsx:68-72` y los `target="_blank"` (25 de los 43 enlaces de la home).
+  - **Solución:** agregar un `sr-only` con el proyecto ("Código de Vault") y otro con "(abre en una pestaña nueva)".
+
+- [ ] **R-M11. "Buscar en la página" no llega a los paneles de la derecha**
+  - **Dónde:** `styles/track.css:55-60` y lo que dicen DISENO 6.1 y 7.10.
+  - **Problema:** en horizontal, el navegador no puede traer una coincidencia que está en un panel de la derecha, porque el documento no tiene scroll horizontal. Con el modo exploración de los lectores de pantalla y con los enlaces `#:~:text=` pasa lo mismo.
+  - **Solución:** documentarlo como limitación y corregir DISENO. Como mitigación parcial, un listener de `selectionchange` que traiga la selección a la vista.
+
+- [ ] **R-M12. Lenis y las anclas se comportan distinto según la página**
+  - **Dónde:** `components/SmoothScroll.jsx:18-22` y `components/TrackController.jsx:72`.
+  - **Problema:**
+    - En `/trayectoria` y `/habilidades`, Lenis también toma el gesto de costado del trackpad (`gestureOrientation: "both"` depende solo de la media query), aunque ahí no hay pista.
+    - En vertical con puntero fino, las anclas no pasan por Lenis, cuando DISENO 7.10 dice que sí.
+  - **Solución:** que el gesto de costado dependa de que haya `.h-scroll`, y que `goTo` use `smoothScrollTo` también en vertical (o corregir el documento).
+
+- [ ] **R-M13. El cargo en inglés no lleva `lang="en"` en la página en español** (sospecha)
+  - **Dónde:** `components/Hero.jsx:26`.
+  - **Problema:** "iOS & Cross-Platform Mobile Engineer" se lee con fonética española (3.1.2). Es discutible, porque puede entrar en la excepción de términos técnicos.
+  - **Solución:** usar `<strong lang="en">`.
+
+### Eficiencia
+
+- [ ] **R-M14. La fuente es lo más pesado de la página** (el ahorro es una sospecha)
+  - **Dónde:** `components/Document.jsx:14-19`.
+  - **Problema:** el archivo latin precargado pesa 90 KB, seis veces el JS propio de la home. Se piden `wght` de 100 a 900 y `wdth` de 62 a 125, pero se usan pesos de 400 a 800 y anchos de 68%, 75% y 100%.
+  - **Solución:** `weight: "400 800"` en `Archivo()`, o una instancia local recortada con `fonttools varLib.instancer`.
+
+- [ ] **R-M15. next/image manda JS de cliente que no aporta nada**
+  - **Dónde:** `components/Hero.jsx:55-64`, `ProjectCard.jsx:39-45` y `SkillsPage.jsx:39-43`.
+  - **Problema:** son 5,6 KB gz, casi un tercio del JS propio de la home. `/trayectoria` también los baja, aunque no tiene imágenes. No se usa `placeholder` ni `onLoad`.
+  - **Solución:** usar `getImageProps()` en los server components y un `<img>` común, y confirmar que se mantenga el preload de la foto.
+
+- [ ] **R-M16. Trabajo que corre de más: Lenis, Magnet y WaveText**
+  - **Dónde:** `components/SmoothScroll.jsx:26`, `components/Magnet.jsx:93-117` y `components/WaveText.jsx:23-40`.
+  - **Problema:**
+    - Con `autoRaf: true`, el `requestAnimationFrame` de Lenis corre en cada frame aunque la página esté quieta.
+    - Lenis (5,4 KB gz) se descarga también en táctil, donde no se usa.
+    - Magnet mide las 7 píldoras del cierre en cada `pointermove`, en toda la home.
+    - WaveText corre en móvil (R-M5).
+  - **Solución:**
+    - Un rAF propio que arranque con la rueda y pare cuando Lenis se detiene.
+    - `import("lenis")` solo con puntero fino.
+    - Un `IntersectionObserver` que active Magnet solo cuando se ve el contacto.
+
+- [ ] **R-M17. El muro de Habilidades anima el color en el hilo principal** (sospecha)
+  - **Dónde:** `styles/skills.css:114-155`.
+  - **Problema:** son 27 animaciones de `color` y `-webkit-text-stroke-color`, que no pasan por el compositor, sobre texto de unos 80px mientras dura su tramo.
+  - **Solución:** si una traza lo confirma, usar dos capas por palabra y animar solo la `opacity` de la capa llena.
+
+- [ ] **R-M18. El icono de GitHub se repite 12 veces en el HTML de la home**
+  - **Dónde:** `components/Icon.jsx`, `ProjectCard.jsx:10` y `:92`, y `Nav.jsx:79-88`.
+  - **Problema:** son 1,6 KB de los 17,4 KB gz del HTML.
+  - **Solución:** un `<symbol>` en `Document` y `<use href>` en `Icon`.
+
+- [ ] **R-M19. Lo de `public/` se revalida en cada visita**
+  - **Dónde:** `next.config.mjs` (no tiene `headers()`).
+  - **Problema:** los SVG de Devicon y los CV salen con `max-age=0`. Se midió en `next start`; en Vercel no se verificó.
+  - **Solución:** `immutable` para `/icons/:path*` y un `max-age` con `stale-while-revalidate` para `/assets/:path*`.
+
+- [ ] **R-M20. La fuente mueve el layout en `/trayectoria`**
+  - **Dónde:** Lighthouse, escritorio, primera visita: CLS de 0,028 en `ol.chapters`, causado por "Web font loaded".
+  - **Solución:** revisar el ajuste de métricas de la fuente de respaldo con `wdth` angosto, o reservar el alto de los años.
+
+### SEO, robustez y seguridad
+
+- [ ] **R-M21. Cualquier `/<algo>/opengraph-image` da 500, y no hay `global-error.js`**
+  - **Dónde:** `app/[lang]/opengraph-image.js:16-18` y `lib/i18n.js:28-31`.
+  - **Problema:** `/xx/opengraph-image` y `/habilidades/opengraph-image` responden 500 (verificado con curl) con la página de error de Next en inglés, porque `getT("xx")` rompe. Tampoco hay un `app/global-error.js` para los errores de cliente.
+  - **Solución:** que `getT` caiga en el idioma por defecto (o que la ruta llame a `notFound()`), y crear un `global-error.js` bilingüe, como el 404.
+
+- [ ] **R-M22. No hay cabeceras de seguridad, salvo HSTS**
+  - **Solución:** un `headers()` con `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` y una CSP mínima: `frame-ancestors 'none'; base-uri 'self'; object-src 'none'`. Una CSP completa choca con los scripts inline de Next y del tema.
+
+- [ ] **R-M23. `SITE_URL` es frágil**
+  - **Dónde:** `lib/site.js:7-11`.
+  - **Problema:**
+    - Con `NEXT_PUBLIC_SITE_URL=""`, el build se rompe.
+    - Con una barra final salen URLs con `//`.
+    - Un build de producción fuera de Vercel publica `localhost` sin avisar.
+  - **Solución:** usar `||` en lugar de `??`, quitar la barra final y avisar cuando el resultado sea localhost.
+
+- [ ] **R-M24. Sitemap: `lastModified` sale del build y falta `x-default`**
+  - **Dónde:** `app/sitemap.js:7-22`.
+  - **Solución:** poner una fecha por página en los datos (o no poner ninguna) y sumar `x-default` como en el `<head>`.
+
+- [ ] **R-M25. El JSON-LD es solo `Person`, igual en todas las páginas, y la descripción en inglés es larga**
+  - **Dónde:** `app/[lang]/layout.js:66-85` y `lib/translations.js:7` y `:151`.
+  - **Problema:**
+    - Faltan `ProfilePage` y `WebSite`, y `BreadcrumbList` en las páginas propias.
+    - A `Person` le faltan `alumniOf`, `homeLocation` y `knowsLanguage`.
+    - La descripción en EN mide 177 caracteres y se corta en los buscadores.
+  - **Solución:** agregar esos tipos y campos, y dejar las descripciones en unos 155 caracteres.
+
+- [ ] **R-M26. `/favicon.ico` da 404 y devuelve la página entera del 404 (18,7 KB)**
+  - **Solución:** agregar un `public/favicon.ico` de 32×32.
+
+- [ ] **R-M27. Detalles de robustez**
+  - **Años:** el © y el "en curso" quedan con el año del build (`Strip.jsx:12`, `Footer.jsx:9`, `Preloader.jsx:43` y `ExperiencePage.jsx:14`).
+  - **Tema:** si no hay tema guardado, la página no sigue al sistema cuando cambia con la página abierta (`lib/theme.js`).
+  - **Imagen OG:** pesa 394 KB, y WhatsApp podría no mostrarla si pasa de unos 300 KB (sospecha: probarlo compartiendo el enlace).
+
+### Código muerto y coherencia
+
+- [ ] **R-M28. Tokens sin uso y restos de diseños anteriores**
+  - **Dónde:**
+    - Tokens: `styles/tokens.css:16` y `:117` (`--on-accent-muted`), `:52` (`--fs-mega`), `:57` (`--radius-0`), `:59` (`--radius-device`, reservado para I12) y `:77` (`--z-track`).
+    - Restos del CV en la franja: `styles/track.css:118` (`--focus`) y `:134-136` (`.strip a`).
+    - `styles/nav.css:250`: el `--line` del nav, que en horizontal no pinta nada.
+    - `styles/contact.css:67`: `--cursor-ink`, sin efecto; el cursor cambia con `data-tone`.
+  - **Solución:** borrarlos y dejar `--radius-device` con un comentario.
+
+- [ ] **R-M29. Datos, claves y props sin uso**
+  - **Dónde y problema:**
+    - `projects.screenshotAlt` (`translations.js:93` y `:237`);
+    - `PERSON.firstName` y `PERSON.location` (`site.js:15-16`); "Buenos Aires" está escrito a mano en `strip.credit`;
+    - `CV[].label` y `EXPERIENCE[].label` (`site.js:55-56` y `:237-238`);
+    - el prop `title` de `Icon`, que viaja en el JS del cliente;
+    - `.strip` en el `inert` del menú (`Nav.jsx:50`), cuando ya está dentro de `main`;
+    - `reactStrictMode: true`, que ya es el valor por defecto;
+    - el `notFound()` inalcanzable en `app/[lang]/[page]/page.js:62`.
+  - **Solución:** borrarlos, o usar `PERSON.location` en el crédito.
+
+- [ ] **R-M30. Lógica y CSS duplicados**
+  - **Dónde:**
+    - `twoDigits` y el armado de etapas (`Trajectory.jsx` y `ExperiencePage.jsx`);
+    - `EXTERNAL` (`Contact.jsx` y `ProjectCard.jsx`);
+    - los bloques `openGraph` y `twitter` (layout y `[page]`);
+    - `starts` (`Hero.jsx` y `Preloader.jsx`);
+    - los años grandes (`.stage__years` y `.chapter__years`);
+    - el estilo de título de proyecto, repetido tres veces;
+    - `.skills__lead` y `.trajectory__intro`.
+  - **Solución:** helpers en `lib/` y clases compartidas (`.years`, `.lead`).
+
+- [ ] **R-M31. La media query horizontal está copiada 10 veces y hay tres criterios de "puntero fino"**
+  - **Dónde:**
+    - Las 9 hojas de CSS y `lib/track.js:4-5`. El comentario de `track.js` solo nombra `track.css`.
+    - Los tres criterios: `(pointer: fine)` en `track.js` y `SmoothScroll`; `(hover: hover) and (pointer: fine)` en `Cursor` y `Magnet`; `pointerType === "mouse"` en otros tres lugares.
+    - Reduce motion escrito a mano en 8 lugares.
+  - **Problema:** hoy las copias son idénticas, pero nada lo verifica. El umbral ya cambió una vez.
+  - **Solución:**
+    - Un `scripts/check.mjs` en `prebuild` que compare las copias, las claves ES/EN y los colores de la imagen OG con los tokens.
+    - Constantes `FINE_POINTER` y `REDUCED_MOTION` en `lib/`.
+    - Como alternativa de fondo: una clase `html.h` que ponga el script del tema.
+
+- [ ] **R-M32. Valores escritos a mano, cuando `tokens.css` dice que todo sale de ahí**
+  - **Dónde:**
+    - **Duraciones:** 500, 400 y 350ms en `base.css`; 1100ms repetido en `motion.css` y `page.css`; todo `preloader.css`.
+    - **Curvas:** `cubic-bezier(0.55, 0, 1, 0.45)` tres veces.
+    - **Radios y capas:** `border-radius: 50%` en 7 lugares y `z-index: -1` en `base.css:171`.
+    - **Tipografía:** 5 tamaños de letra sueltos y el peso 650.
+    - **En el JS:** `DraggablePhoto.jsx:74` y `:102` copian curvas y duraciones.
+  - **Solución:** sumar `--ease-in`, `--dur-reveal`, `--dur-fill` y `--radius-round` y usarlos. Si no, suavizar la frase de `tokens.css` y de DISENO 9.4.
+
+- [ ] **R-M33. Tres cosas que se comportan distinto de lo documentado**
+  - La foto vuelve a su lugar sin animación cuando cambia el tamaño de la ventana (`DraggablePhoto.jsx:162-168`); DISENO dice 700ms.
+  - `Magnet.jsx:10` espera 420ms, pero la transición dura 400ms (`base.css:220`), y el comentario dice que son el mismo valor.
+  - En colores forzados, el `.strike` y otros detalles no tienen un estilo propio (ver R-I8).
+
+- [ ] **R-M34. Diferencias de copia entre ES y EN**
+  - **EN:**
+    - "Back to start" (`contact.back`) contra "Back to home" (`page.back`, `notFound.back`).
+    - "View Projects" en Title Case, contra "See all skills".
+  - **ES:**
+    - "de esta página" en `skills.pageLead` y `skills.matrixLead`, cuando los proyectos están en la home; EN dice "on this site".
+    - "end-to-end" en `exp.intro`, contra "de punta a punta" en el hero.
+    - "Backend" con mayúscula en `meta.description`.
+    - Conviven "mobile" y "móvil".
+  - **ES y EN:**
+    - Comillas rectas y tipográficas mezcladas.
+    - `exp.*.company` guarda el rol más "| Argentina" y el código lo parte con `split(" | ")` (`Trajectory.jsx:26-27`); en la home queda "Desarrollador" dos veces.
+    - Guion corto entre las fechas y raya en los años grandes.
+    - "Mentalidad orientada al producto en entornos de alto crecimiento" es relleno que la trayectoria no respalda.
+  - **Solución:** unificar cada caso. Lo del relleno lo decide Fermin.
+
+- [ ] **R-M35. El lint: N5 pasa solo por casualidad y no detecta variables sin usar**
+  - **Dónde:** `eslint.config.mjs:7-8`.
+  - **Problema:**
+    - `npx eslint .` da 0 errores solo porque `.claude/worktrees/` quedó vacía: `--print-config` muestra que esa carpeta todavía no se ignora.
+    - `core-web-vitals` no activa `no-unused-vars`. Con la regla prendida, solo aparece `lib/theme.js:36` (un `catch (e)`).
+  - **Solución:** sumar `.claude/**` a `globalIgnores`, agregar `"no-unused-vars": "warn"` y cambiar ese `catch (e)` por `catch {}`.
+
+- [ ] **R-M36. El README describe el diseño anterior y hay comentarios viejos**
+  - **Dónde:**
+    - `README.md:9`: "CSS plano (`app/globals.css`), diseño Apple minimal + glassmorphism + bento grid". La estructura (`:43-65`) no tiene `styles/`, `app/[lang]/[page]`, `lib/pages.mjs`, `lib/track.js`, `lib/scroll.js`, `docs/` ni Lenis.
+    - Comentarios viejos:
+      - `SkillsPage.jsx:5` habla de la "marquesina";
+      - `motion.css:44` habla de las "barras del eje";
+      - `site.js:132` y `:235`;
+      - `global-not-found.js:13` dice "Next 15";
+      - `scripts/strip-metadata.mjs:2` no menciona WebP;
+      - `lib/scroll.js:2` dice "Volver arriba".
+  - **Solución:** reescribir el Stack y la Estructura del README, enlazar `docs/`, y actualizar esos comentarios.
+
+### Documentación
+
+- [ ] **R-M37. DISENO.md quedó desactualizado**
+  - **Sección 1:** la cortina "con el nombre del destino" contradice la sección 8, que dice "sin el nombre", y ya no se usa solo al cambiar de idioma.
+  - **Sección 2:**
+    - `--line` no es el color de la línea de Trayectoria, que usa `--ink`.
+    - `--on-accent-muted` no se usa.
+  - **Sección 3:**
+    - La fila "Mega (email)" y `--fs-mega` ya no se usan.
+    - La fila "Título (h2 en vertical)" no existe: los h2 son `.display--section` en los dos modos.
+    - "Destacado" pesa 400, no 500.
+    - Falta el peso 650.
+    - `--fs-stage` y `--fs-wall` no están en la escala.
+  - **Sección 4:**
+    - Hay otras esquinas (`50%`) y otro `z-index` (`-1`).
+    - El corte de 30rem no se usa.
+    - Faltan los cortes de alto (42,5rem y 50rem), el de 100rem y `--tap`.
+  - **Sección 5:** "hay que aprobarlo" ya se aprobó.
+  - **Sección 6.1:**
+    - El ejemplo de `--track-w` no suma `--w-bleed`. El código arma `--x-timeline`, `--x-skills` y `--x-bleed` y termina en `--x-bleed + --w-bleed + 100cqi` (`styles/track.css:23-28`).
+    - En el HTML del ejemplo faltan las clases `panel--*` y el panel `.bleed`.
+    - En el CSS del ejemplo falta el `padding-block` de `.panel`.
+    - "El único recorte de la página" exagera: también llevan `overflow: clip` `.btn`, `.card__plate`, `.drag__frame`, las líneas del nombre, `.swap` y `.brand__last`. Lo mismo dice 9.1.
+    - "Buscar en la página funciona como siempre" no es cierto en horizontal (R-M11).
+  - **Sección 6.3:**
+    - Dice que se usa `window.scrollTo` y que escucha `popstate`. El código usa `smoothScrollTo` (Lenis) y no escucha `popstate`.
+    - Dice `offsetTop`; el código usa `getBoundingClientRect().top + scrollY`.
+  - **Sección 6.6:**
+    - El hero no tiene `min-height: 100svh`.
+    - Trayectoria pone los años arriba por debajo de 48rem, no de 30rem.
+    - Proyectos va en dos columnas desde 48rem siempre que la página esté en vertical, no solo hasta 64rem.
+  - **Sección 7.1:** sin JS el código oculta con `html.js`, no con `html:not(.js)`.
+  - **Sección 7.2:**
+    - El nombre ocupa 9 columnas, no 8.
+    - `priority` está deprecado; el código usa `loading="eager"`.
+    - `hero.description` pasó a llamarse `exp.intro`.
+  - **Sección 7.3:**
+    - La tarjeta no tiene iconos de plataforma.
+    - Los textos ya tienen 25 palabras o menos.
+    - `card--lg` usa 16:9 en vertical, no 4:3.
+    - Las etiquetas del ejemplo ("4+ años") no son las del código.
+  - **Sección 7.6 y la tabla de la sección 8:** no mencionan el imán del 50% de las píldoras grandes.
+  - **Sección 7.8:**
+    - `--cursor-size` no existe (es un `--size` local).
+    - Sobre el cierre, el color lo cambia `data-tone`, no `--cursor-ink`.
+  - **Sección 7.9:**
+    - La estela dura 400ms, no 300ms.
+    - Al cambiar el tamaño de la ventana, la foto vuelve sin animación.
+  - **Sección 7.10:**
+    - La curva `1 − (1 − t)³` no es la de douglus (el anexo A dice `1 − 2^(−10t)`).
+    - En vertical, las anclas no pasan por Lenis.
+    - "Volver arriba" se llama "Volver al inicio".
+  - **Sección 8, principios:** la ola se repite en loop (2); el nombre del nav anima `grid-template-columns` y el muro anima `color` (3); `btn-in`, `brand-in` y `wave` son `@keyframes` que corren en hover o en loop (6); el menú abre en 420ms aunque se lo active con teclado (7).
+  - **Sección 8, tabla:**
+    - Contacto ya no tiene tachado.
+    - Con reduce motion, el tachado se anima igual (R-M6).
+    - Las "barras del eje" ya no existen.
+    - La cortina también aplica a las páginas propias.
+    - El cambio de tema tiene transiciones de color.
+  - **Sección 9:**
+    - 9.1: no hay `overflow-wrap: anywhere` en el email.
+    - 9.4: la afirmación de que todo son tokens (R-M32).
+    - 9.7: ya no hay "filas de contacto".
+  - **Sección 10:**
+    - D1, D2, D3, D4 y D7 ya están implementados. El único abierto es D5 (I12).
+    - La lista del orden de implementación describe algo que ya pasó.
+    - D10 está entre D6 y D7.
+  - **Solución:** actualizarlo en un solo commit, después de decidir los arreglos, para que quede la versión final.
+
+- [ ] **R-M38. Textos viejos en esta misma auditoría**
+  - I15 dice que el CV también está "en la franja inferior".
+  - I16 habla de "cobalto" y de un título del 404 con "—".
+  - I4 dice "8+ proyectos"; se muestra "8".
+  - I7 menciona "el texto secundario sobre el panel de contacto".
+  - **Solución:** agregar una nota en cada uno, sin reescribir la historia.
+
+## Criterios del rediseño, verificados
+
+| # | Criterio | Estado | Evidencia |
+|---|---|---|---|
+| 1 | Sin desbordes tapados | Cumple, salvo R-I1 | `html` y `body` sin `overflow`. En los 84 casos de la matriz, `scrollWidth` es igual a `clientWidth`, y en horizontal ningún panel se pasa de su caja. La tabla de `/habilidades` se desplaza en su caja, a propósito. La excepción es la placa tipográfica, que recorta el nombre con `overflow: clip`. **[nav]** |
+| 2 | Contenido visible sin JS | Cumple | Sin JS la página es vertical: 0 textos ocultos, los 4 enlaces del nav visibles, 43 enlaces y el h1 completo en la home, y lo mismo en `/trayectoria` y el 404. Solo sobra el botón de tema (R-M7). **[nav]** |
+| 3 | Nav | Cumple | El menú cambia `aria-expanded` y deja `main` y el pie inertes; Escape lo cierra y devuelve el foco. Las anclas desde la home y desde `/trayectoria` dejan el panel en el borde izquierdo, con `aria-current` y el nombre de la franja correctos. El idioma conserva la sección y la página propia. Detalles en R-M8 y R-M9. **[nav]** |
+| 4 | Tokens | Cumple en color, parcial en el resto | Todos los colores son tokens (las placas de marca y la imagen OG son excepciones documentadas). Hay duraciones, curvas, radios, un `z-index` y tamaños escritos a mano, y 5 tokens sin uso (R-M28, R-M32). |
+| 5 | Assets | Cumple | `next/image` para la foto, los logos y Devicon; iconos SVG inline; un solo CSS propio de 8,4 KB gz y nada externo. La fuente pesa 90 KB (R-M14). |
+| 6 | Proyectos | Parcial | Los enlaces directos y los datos salen de `PROJECTS`. Faltan capturas reales: 6 de las 8 placas son tipográficas y 2 muestran el logo (I12). |
+| 7 | Accesibilidad | Parcial | Cumple: `<main>` y enlace de salto; `:focus-visible` de 2px con 3px de separación en todos los focos recorridos; axe sin violaciones a 375px y en las páginas verticales a 1440, en los dos temas; zonas táctiles de 44px o más; niveles en texto en `/habilidades`. Fallan R-I3, R-I4, R-I8, R-M1, R-M2 y R-M4. **[nav]** |
+
+## Lighthouse (preview, 13.4.1)
+
+**SEO** da entre 66 y 69 solo por `is-crawlable`: es el `noindex` del preview. En producción ese punto no cuenta. **Accesibilidad** y **buenas prácticas** dan 100 en todas las corridas. Los tiempos están en segundos.
+
+| Página | Dispositivo | Visita | Rendimiento | FCP | LCP | Speed Index | TBT | CLS |
+|---|---|---|---|---|---|---|---|---|
+| `/` | Móvil | A (preloader) | 98 | 1,57 | 1,61 | 2,97 | 0,02 | 0 |
+| `/` | Móvil | B (sin preloader) | 100 | 1,16 | 1,69 | 1,67 | 0,01 | 0 |
+| `/` | Móvil | C (siguiente) | 100 | 0,78 | 0,85 | 0,78 | 0 | 0 |
+| `/en` | Móvil | A | 98 | 1,19 | 1,79 | 3,84 | 0 | 0 |
+| `/en` | Móvil | B | 100 | 1,10 | 1,73 | 1,35 | 0,01 | 0 |
+| `/` | Escritorio | A | 93 | 0,95 | 1,36 | 1,50 | 0 | 0 |
+| `/` | Escritorio | B | 100 | 0,28 | 0,35 | 0,50 | 0 | 0 |
+| `/` | Escritorio | C | 100 | 0,22 | 0,24 | 0,22 | 0 | 0 |
+| `/en` | Escritorio | A | 97 | 0,73 | 1,02 | 1,47 | 0 | 0 |
+| `/en` | Escritorio | B | 100 | 0,36 | 0,44 | 0,56 | 0 | 0 |
+| Páginas propias (4) | Móvil | A y B | 100 | 0,90–1,24 | 1,24–1,55 | 1,02–1,96 | ≤ 0,02 | 0 |
+| Páginas propias (4) | Escritorio | A y B | 96–100 | 0,43–1,04 | 0,57–1,04 | 0,58–1,04 | 0 | 0–0,028 (R-M20) |
+
+- **El elemento LCP de la home es la foto** (`.drag__frame > img`) en todas las corridas, con preloader y sin él. En las páginas propias es texto: la entrada de `/trayectoria`, un capítulo o el título de un grupo.
+- **El LCP no ve el preloader.** La API de LCP no tiene en cuenta que el velo tapa la página. En un Chrome sin límite de red, el LCP llega a los 0,44 s (el párrafo) y a los 0,56 s (la foto) aunque el preloader tape todo hasta los 5,35 s. Lo que sí lo muestra es el **Speed Index**: en móvil, 3,0 s (ES) y 3,8 s (EN) contra 1,7 y 1,4 s sin preloader; en escritorio, 1,5 s contra 0,5 s. En escritorio el LCP también sube: 1,36 y 1,02 s contra 0,35 y 0,44 s.
+- **Lo que queda afuera:** Lighthouse no ve R-I3 (mide al cargar, con el nav sobre el papel) ni R-I4.
+
+## Movimiento en un navegador visible (N7)
+
+Se revisó en Chrome visible a 1440×900, en claro y en oscuro.
+
+| Qué | Resultado |
+|---|---|
+| Recorrido con la rueda (Lenis) | En 9 muestras por tema, el `translate` de la pista es igual a −(scroll − inicio de la pista), con 1px de diferencia como mucho. **[nav]** |
+| Barra de progreso, nombre de la sección y `aria-current` | Van juntos: 0,12 en Proyectos, 0,60 en Trayectoria y 1,0 en Contacto. **[nav]** |
+| Línea de Trayectoria | Pasa de 0 a 0,86 y termina en 1. **[nav]** |
+| Transición al cierre | El `scale` va de 0,05 a 1,02, y el borde izquierdo nunca deja ver papel. **[nav]** |
+| Preloader | Las palabras suben de a una; después aparecen el nombre letra por letra, la línea y el cargo; el velo se va y queda con `visibility: hidden`. **[nav]** |
+| Nombre del hero y entradas de cada panel | Se ven; ver R-I4. **[nav]** |
+| Nombre del nav | Con el mouse encima, "Lasarte" se abre. **[nav]** |
+| Cursor | El círculo y "ARRASTRAME" sobre la foto. Sobre los botones no quedó capturado. **[nav]** |
+| Foto arrastrable | Estela de copias; queda donde cae (−360px, −144px) y vuelve a 0 cuando el foco del teclado entra al hero. **[nav]** |
+| Ola de la franja | Letras girando en "Hecho a mano" después de 5 s quieta. **[nav]** |
+| Muro de Habilidades | Se ve el estado final (llenas, contorno y acento). Ningún cuadro intermedio de la ola quedó capturado. |
+| Reduce motion | Vertical, sin preloader, 0 animaciones corriendo, nada esperando y sin cursor propio. **[nav]** |
+| Relleno e imán de los botones | Sin confirmar: no quedaron en ninguna captura. |
+
+## Pendientes anteriores
+
+- **I12** (capturas verticales): sigue abierto. Seis de las ocho tarjetas muestran solo el nombre en una placa, y dos de esas placas cortan el nombre (R-I1).
+- **M13** (`.js` y `.jsx`): sin cambios.
+- **N4** (foto blanda en 2x): sigue. A 1440×900 la foto se dibuja a 320×459 (360px de ancho con `cover`), así que en 2x haría falta una de al menos 720×920. La actual mide 560×715.
+- **N5:** sigue abierto en la configuración (R-M35).
+- **N6:** fuera de la auditoría, por decisión de Fermin.
+- **N7:** hecho (tabla de arriba y Lighthouse).
+- **N8:** medido; sigue como R-I3. El texto en contorno se lee bien sobre el papel y sobre el oscuro (los años de Trayectoria y las intermedias del muro, con 1px de `--ink`), pero en colores forzados pierde el contorno (R-I8).
