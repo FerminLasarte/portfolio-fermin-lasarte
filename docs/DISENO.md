@@ -1,7 +1,7 @@
 # Diseño del portfolio (Fase 3)
 
 - **Fecha:** 2026-09-14
-- **Estado:** aprobado por Fermin el 2026-09-14 e implementado en la rama `fase-3-rediseno`, un commit por paso (sección 10). Donde la implementación se apartó del brief, este documento ya lo dice. Es la versión final: se puso al día con el código después de la re-auditoría (2026-09-15, R-M37), incluidos los cambios de la limpieza (R-M28 a R-M36).
+- **Estado:** aprobado por Fermin el 2026-09-14 e implementado en la rama `fase-3-rediseno`, un commit por paso (sección 10). Esa rama se mergeó a `main` el 2026-09-15 (`006bdf0`) y se borró: el diseño está en producción. Donde la implementación se apartó del brief, este documento ya lo dice. Es la versión final: se puso al día con el código después de la re-auditoría (2026-09-15, R-M37), incluidos los cambios de la limpieza (R-M28 a R-M36).
 - **Fuentes, en orden de prioridad:** los "Criterios del rediseño" de `docs/AUDITORIA.md`; [douglus.site](https://douglus.site) (navegación horizontal y sus animaciones); las skills `design-taste-frontend`, `impeccable` y `emil-design-eng`. Si dos fuentes chocan, manda la de más arriba.
 - **Cómo se analizó douglus.site:** en el panel del navegador a 1440×900 (modo horizontal) y a 390×844 (modo vertical), leyendo el DOM, su CSS y su JS publicado. Los datos concretos están en el anexo A.
 
