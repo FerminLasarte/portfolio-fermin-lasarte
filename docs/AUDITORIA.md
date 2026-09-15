@@ -25,7 +25,13 @@
 
 **Estado (2026-09-15):** las fases 0 a 3 están hechas. La Fase 3 está en la rama `fase-3-rediseno`, todavía sin merge a `main` (que publica en producción). El diseño final, con todo lo que cambió respecto del brief a pedido de Fermin, está en `docs/DISENO.md`. Sigue la Fase 4, conviene hacerla sobre el deploy de preview de Vercel de la rama. Quedan abiertos I12 y N4 (contenido que tiene que conseguir Fermin), M13 (decidir si se unifica `.js`/`.jsx`) y N5 a N8.
 
-**Estado (2026-09-15, Fase 4):** la re-auditoría está hecha, sobre `a9eeb81` y el preview de la rama. Está al final de este archivo, en "Re-auditoría (Fase 4)": 9 puntos importantes (R-I1 a R-I9), 38 menores (R-M1 a R-M38), los 7 criterios verificados, Lighthouse y el movimiento en un navegador visible. No se arregló nada todavía: falta decidir qué se arregla y en qué orden. N7 está hecho, N6 quedó fuera y N8 pasó a R-I3.
+**Estado (2026-09-15, Fase 4):** la re-auditoría está hecha, sobre `a9eeb81` y el preview de la rama. Está al final de este archivo, en "Re-auditoría (Fase 4)": 9 puntos importantes (R-I1 a R-I9), 38 menores (R-M1 a R-M38), los 7 criterios verificados, Lighthouse y el movimiento en un navegador visible. N7 está hecho, N6 quedó fuera y N8 pasó a R-I3.
+
+**Estado (2026-09-15, fin del día):**
+- **Importantes:** los 9 están cerrados, cada uno en su commit. Se arreglaron R-I1, R-I2, R-I4, R-I5, R-I6, R-I7, R-I8 y R-I9. R-I3 se deja como está, por decisión de Fermin.
+- **Rama:** los commits están pusheados en `fase-3-rediseno` (el último es `0601232`) y todavía no hay merge a `main`.
+- **Sigue:** los menores (R-M1 a R-M38), en una conversación nueva. El orden propuesto es accesibilidad (R-M1 a R-M13), SEO y robustez (R-M21 a R-M27), eficiencia (R-M14 a R-M20), limpieza (R-M28 a R-M36) y, al final, la documentación (R-M37 y R-M38), para que DISENO.md quede en su versión definitiva.
+- **Siguen abiertos de antes:** I12 y N4 (contenido que tiene que conseguir Fermin), M13 y N5 (este último está en R-M35).
 
 Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual**: se usan como requisitos del diseño nuevo.
 
@@ -388,7 +394,7 @@ _(Agregá aquí lo que aparezca durante las fases.)_
   - **Solución:** revisar todo en un navegador visible y correr Lighthouse (rendimiento, LCP, accesibilidad, SEO) sobre el deploy de preview, con y sin preloader (primera visita y siguientes de la sesión).
 
 - [~] **N8. Contraste del nav y la franja con `difference`; texto en contorno** · Fase 4
-  - **Medido (Fase 4):** sobre la transición al cierre, el contraste baja a entre 1,0 y 1,5:1 en claro y a 2,6:1 en oscuro, durante unos 1.800px de scroll; en el resto del recorrido da 4,5:1 o más. El texto en contorno se lee bien. Sigue como R-I3, a decidir con Fermin.
+  - **Medido (Fase 4):** sobre la transición al cierre, el contraste baja a entre 1,0 y 1,5:1 en claro y a 2,6:1 en oscuro, durante unos 1.800px de scroll; en el resto del recorrido da 4,5:1 o más. El texto en contorno se lee bien. Pasó a R-I3, y Fermin decidió dejarlo como está (2026-09-15).
   - **Problema:** en horizontal, el nav y la franja inferior son blancos con `mix-blend-mode: difference` (como douglus): sobre el papel y sobre el cierre se leen bien, pero al pasar sobre tonos medios (un botón violeta, el degradado) el inverso contrasta cerca de 2:1 por un momento. Aparte, hay texto en contorno (`-webkit-text-stroke`): el fin de los rangos de años y las tecnologías intermedias del muro. Es decorativo (`aria-hidden`, la información está en texto), pero conviene mirar que se lea.
   - **Solución:** medirlo en la Fase 4 y decidir con Fermin (por ejemplo, que el nav no pase sobre esos tonos o que el contorno sea más grueso).
 
@@ -442,6 +448,13 @@ _(Agregá aquí lo que aparezca durante las fases.)_
 - **Sin confirmar:** Safari, lectores de pantalla reales, pantallas táctiles y portátiles híbridos reales, el relleno y el imán de los botones (no quedaron en ninguna captura) y la ola del muro de Habilidades en un cuadro intermedio.
 
 ## Resumen
+
+**Estado de los arreglos (2026-09-15):**
+- **Importantes:** los 9 están cerrados, cada uno en su commit.
+  - R-I1 (`03bbd6a`), R-I2 (`e9b12f0`) y R-I4 (`02b1ee3`);
+  - R-I5 (`6ac71a9`), R-I6 (`bd6c925`) y R-I9 (`c893007`);
+  - R-I8 (`df28bec`), R-I3 (`0d52325`, se deja como está) y R-I7 (`0601232`).
+- **Menores:** todavía abiertos. Solo el detalle de "Backend" en `meta.description` de R-M34 quedó hecho, con R-I7.
 
 No hay nada crítico. Los problemas más visibles son cuatro:
 - **R-I1:** dos nombres de proyecto quedan cortados en su placa.
@@ -957,4 +970,4 @@ Se revisó en Chrome visible a 1440×900, en claro y en oscuro.
 - **N5:** sigue abierto en la configuración (R-M35).
 - **N6:** fuera de la auditoría, por decisión de Fermin.
 - **N7:** hecho (tabla de arriba y Lighthouse).
-- **N8:** medido; sigue como R-I3. El texto en contorno se lee bien sobre el papel y sobre el oscuro (los años de Trayectoria y las intermedias del muro, con 1px de `--ink`), pero en colores forzados pierde el contorno (R-I8).
+- **N8:** medido; pasó a R-I3, que Fermin decidió dejar como está. El texto en contorno se lee bien sobre el papel y sobre el oscuro (los años de Trayectoria y las intermedias del muro, con 1px de `--ink`), pero en colores forzados pierde el contorno (R-I8).
