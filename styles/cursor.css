@@ -72,9 +72,15 @@
   transition: opacity var(--dur-hover) var(--ease-out);
 }
 
-/* Sobre enlaces y botones el cursor propio se va y queda la mano del sistema
-   (pedido de Fermin, 2026-09-14): nunca hay dos cursores a la vez. */
-.cursor.is-on[data-mode="link"] {
+/* Sobre enlaces y botones aparece la mano del sistema y el círculo sigue, más grande
+   y con un relleno suave; el punto se esconde para no competir con la mano (pedido de
+   Fermin, 2026-09-15: sin el círculo se perdía el efecto). */
+.cursor[data-mode="link"] .cursor__shape {
+  scale: 1.7;
+  background-color: color-mix(in srgb, var(--c) 8%, transparent);
+}
+
+.cursor[data-mode="link"] .cursor__dot {
   opacity: 0;
 }
 
@@ -99,7 +105,7 @@
 }
 
 /* Sin cursor del sistema mientras el propio está activo, salvo la mano sobre los
-   enlaces y los botones (y lo que tienen adentro), donde el propio se esconde. */
+   enlaces y los botones (y lo que tienen adentro), junto al círculo agrandado. */
 html.has-cursor,
 html.has-cursor * {
   cursor: none !important;
