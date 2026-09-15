@@ -1,107 +1,70 @@
 import Image from "next/image";
-import Dropdown from "@/components/Dropdown";
-import HeroParallax from "@/components/HeroParallax";
-import { CV, DEVICON, HERO_BADGES, PERSON, ROLE_TAGLINE, STATS } from "@/lib/site";
-import Icon from "@/components/Icon";
-import { faDownload, faFilePdf, faLocationDot } from "@/lib/icons";
+import DraggablePhoto from "@/components/DraggablePhoto";
+import Roll from "@/components/Roll";
+import { CV, PERSON, ROLE } from "@/lib/site";
 
-export default function Hero({ t }) {
+// Hero (docs/DISENO.md, 7.2). En horizontal es un panel de una pantalla. El nombre va
+// en el <h1> como texto real; las letras sueltas son solo visuales, para la entrada
+// letra por letra (styles/motion.css). La foto es el LCP: sin animación de entrada.
+export default function Hero({ t, lang }) {
+  const cv = CV.find((c) => c.lang === lang) ?? CV[0];
+  const words = PERSON.name.split(" ");
+  // Índice de la primera letra de cada palabra, para el retraso de la entrada.
+  const starts = words.map((_, w) => words.slice(0, w).join("").length);
+
   return (
-    <header id="sobre-mi">
-      <HeroParallax />
-      <div className="hero-content">
-        <div className="hero-badges">
-          <div className="availability-badge">
-            <div className="status-dot" />
-            <span>{t("hero.availability")}</span>
-          </div>
-          <div className="location-badge">
-            <Icon icon={faLocationDot} />
-            <span>{PERSON.location}</span>
-          </div>
-        </div>
+    <section
+      id="sobre-mi"
+      className="panel panel--screen hero"
+      data-section="sobre-mi"
+      data-label={t("nav.about")}
+      aria-labelledby="hero-name"
+    >
+      <p className="hero__avail meta">{t("hero.availability")}</p>
 
-        <h1>
-          <span>{t("hero.greeting")}</span>
-          <span className="hero-name"> {PERSON.firstName}</span>
-        </h1>
-
-        <p className="hero-role">{ROLE_TAGLINE}</p>
-
-        <p className="hero-desc">{t("hero.description")}</p>
-
-        <div className="hero-stats">
-          <div className="stat">
-            <span className="stat-number">{STATS.appsLive}</span>
-            <span className="stat-label">{t("hero.stat1")}</span>
-          </div>
-          <div className="stat-divider" aria-hidden="true" />
-          <div className="stat">
-            <span className="stat-number">{STATS.years}+</span>
-            <span className="stat-label">{t("hero.stat2")}</span>
-          </div>
-          <div className="stat-divider" aria-hidden="true" />
-          <div className="stat">
-            <span className="stat-number">{STATS.projects}+</span>
-            <span className="stat-label">{t("hero.stat3")}</span>
-          </div>
-        </div>
-
-        <div className="hero-buttons">
-          <a href="#proyectos" className="btn">
-            {t("hero.projectsBtn")}
+      <div className="hero__copy">
+        <p className="hero__lead">
+          <strong>{ROLE}.</strong> {t("hero.lead")}
+        </p>
+        <div className="hero__ctas">
+          <a className="btn btn--primary" href="#proyectos">
+            <Roll>{t("hero.projectsBtn")}</Roll>
           </a>
-          <a href="#contacto" className="btn btn-outline">
-            {t("hero.contactBtn")}
+          <a className="btn" href={cv.href} download={cv.download}>
+            <Roll>{t("hero.cvBtn")}</Roll>
           </a>
-          <Dropdown
-            triggerClassName="btn btn-ghost"
-            triggerContent={
-              <>
-                <Icon icon={faDownload} />
-                <span>{t("hero.cvBtn")}</span>
-              </>
-            }
-          >
-            {CV.map((cv) => (
-              <a key={cv.lang} href={cv.href} download={cv.download}>
-                <Icon icon={faFilePdf} /> {cv.label}
-              </a>
-            ))}
-          </Dropdown>
         </div>
       </div>
 
-      {/* La foto es el LCP: sin animación de entrada y con prioridad alta. */}
-      <div className="hero-image">
-        <div className="hero-image-frame">
+      <h1 className="hero__name display" id="hero-name">
+        <span className="sr-only">{PERSON.name}</span>
+        <span aria-hidden="true">
+          {words.map((word, w) => (
+            <span key={word} className="line">
+              {[...word].map((ch, k) => (
+                <span key={k} className="ch" style={{ "--i": starts[w] + k }}>
+                  {ch}
+                </span>
+              ))}
+            </span>
+          ))}
+        </span>
+      </h1>
+
+      <div className="hero__photo">
+        <DraggablePhoto label={t("hero.dragCursor")}>
           <Image
             src="/assets/foto_perfil.webp"
             width={560}
             height={715}
-            sizes="(max-width: 25rem) 8.5rem, (max-width: 48rem) 10rem, (max-width: 56.25rem) 12rem, 17rem"
-            priority
+            sizes="(min-width: 48rem) 42vw, 100vw"
+            loading="eager"
             fetchPriority="high"
+            draggable={false}
             alt={t("hero.photoAlt")}
           />
-        </div>
-        {HERO_BADGES.map((b) => (
-          <div key={b.alt} className={`hero-badge-float hero-badge-float--${b.pos}`} aria-hidden="true">
-            <Image src={`${DEVICON}/${b.icon}.svg`} width={16} height={16} alt="" loading="eager" />
-            <span>{b.alt}</span>
-          </div>
-        ))}
+        </DraggablePhoto>
       </div>
-
-      {/* Horizontal tech strip — visible only on mobile (floating badges hide ≤768px). */}
-      <div className="hero-badges-mobile" aria-hidden="true">
-        {HERO_BADGES.map((b) => (
-          <div key={b.alt} className="mobile-badge">
-            <Image src={`${DEVICON}/${b.icon}.svg`} width={14} height={14} alt="" loading="eager" />
-            <span>{b.alt}</span>
-          </div>
-        ))}
-      </div>
-    </header>
+    </section>
   );
 }

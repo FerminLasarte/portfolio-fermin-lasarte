@@ -1,0 +1,172 @@
+/*
+ * Hero (docs/DISENO.md, 7.2): disponibilidad, el nombre enorme abajo a la
+ * izquierda, un párrafo con dos botones y la foto arrastrable a la derecha.
+ */
+
+.hero {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-areas:
+    "avail"
+    "name"
+    "copy"
+    "photo";
+  padding-top: var(--space-6);
+}
+
+.hero__avail {
+  grid-area: avail;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* El único punto de estado de la página: la disponibilidad es real. */
+.hero__avail::before {
+  content: "";
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.hero__copy {
+  grid-area: copy;
+}
+
+.hero__lead {
+  max-width: 28ch;
+  font-size: var(--fs-2);
+  line-height: 1.35;
+}
+
+.hero__lead strong {
+  font-weight: 650;
+}
+
+.hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+.hero__name {
+  grid-area: name;
+}
+
+/* Cada línea es una máscara: las letras entran desde abajo (styles/motion.css). */
+.hero__name .line {
+  display: block;
+  overflow: clip;
+  padding-bottom: 0.04em;
+}
+
+.hero__name .ch {
+  display: inline-block;
+}
+
+.hero__photo {
+  grid-area: photo;
+  position: relative;
+  min-block-size: 0;
+}
+
+.hero__photo img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
+}
+
+/* ---------- Foto arrastrable (7.9) ---------- */
+
+.drag {
+  position: relative;
+  block-size: 100%;
+}
+
+.drag__frame {
+  block-size: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: clip;
+  transition: scale var(--dur-ui) var(--ease-out);
+}
+
+.drag img,
+.drag__trail {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.drag__frame img {
+  transition: scale var(--dur-ui) var(--ease-out);
+}
+
+.drag.is-down {
+  z-index: 1;
+}
+
+.drag.is-down .drag__frame {
+  scale: 0.8;
+}
+
+.drag.is-down .drag__frame img {
+  scale: 1.5;
+}
+
+.drag__trail {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  scale: 0.8;
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .drag {
+    cursor: grab;
+    touch-action: none;
+  }
+
+  .drag.is-down {
+    cursor: grabbing;
+  }
+}
+
+/* ---------- Tablet (vertical, dos columnas) ---------- */
+
+@media (min-width: 48rem) {
+  .hero {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    grid-template-areas:
+      "avail photo"
+      "name photo"
+      "copy photo";
+    align-content: start;
+    column-gap: var(--pad-x);
+  }
+}
+
+/* ---------- Horizontal: una pantalla, en 12 columnas ---------- */
+
+@media (min-width: 64rem) and (min-height: 37.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html.js .hero {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      "avail avail avail avail avail avail avail photo photo photo photo photo"
+      "copy  copy  copy  copy  copy  .     .     photo photo photo photo photo"
+      "name  name  name  name  name  name  name  photo photo photo photo photo";
+    column-gap: var(--space-5);
+    align-content: stretch;
+  }
+
+  html.js .hero__copy {
+    align-self: center;
+  }
+
+  html.js .drag__frame {
+    aspect-ratio: auto;
+  }
+}
