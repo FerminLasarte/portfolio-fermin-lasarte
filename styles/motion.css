@@ -28,6 +28,12 @@
     animation-delay: calc(var(--i) * 28ms + 120ms);
   }
 
+  /* Con el preloader (html.pl, styles/preloader.css), el nombre entra cuando se va
+     el velo. */
+  html.pl .hero__name .ch {
+    animation-delay: calc(var(--i) * 28ms + 5000ms);
+  }
+
   /* Entrada de los paneles que no se ven al cargar: TrackController les pone
      .is-waiting y se la saca cuando entran a la vista (una vez). La placa se destapa
      desde el lado por donde entra y el resto llega 60ms después. */

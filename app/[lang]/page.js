@@ -1,5 +1,6 @@
 import { getT } from "@/lib/i18n";
 import { PROJECTS, isFeatured } from "@/lib/site";
+import Preloader from "@/components/Preloader";
 import Track from "@/components/Track";
 import Strip from "@/components/Strip";
 import Hero from "@/components/Hero";
@@ -17,6 +18,7 @@ export default async function Home({ params }) {
 
   return (
     <>
+      <Preloader words={t("preloader.words")} />
       <Track cards={PROJECTS.length - cardsLg} cardsLg={cardsLg}>
         <Hero t={t} lang={lang} />
         <Projects t={t} />

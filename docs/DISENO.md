@@ -27,7 +27,7 @@
 
 | Se toma | No se toma, y por qué |
 |---|---|
-| Recorrido horizontal en PC, vertical en móvil | **Preloader** ("BUILD THINGS THAT MATTER"): tapa el contenido y retrasa el LCP (criterio 2). Del preloader queda solo la entrada letra por letra del nombre. |
+| Recorrido horizontal en PC, vertical en móvil | **Preloader** ("BUILD THINGS THAT MATTER"): al principio no se tomó, porque tapa el contenido y puede retrasar el LCP. Fermin lo pidió el 2026-09-14 y ahora está, con palabras propias (7.11). |
 | Nav de tres zonas: marca a la izquierda, secciones al centro, redes a la derecha | **Números de sección ("01/", "02/")**: no son navegación y la ubicación ya la da la barra de progreso. |
 | Tachado al pasar el mouse por los enlaces del nav | **Mancha de fluido en WebGL detrás del cursor:** es un canvas a pantalla completa que corre siempre; queda para después (D10). |
 | Barra fina de progreso abajo, al centro, con franja inferior fija | **Stickers** (el disco y la carita) y el **efecto de celdas en canvas** sobre las imágenes: opcionales para después. |
@@ -136,7 +136,7 @@ Solo hay un tamaño Display por panel. Las mayúsculas se reservan para Display 
 - **Esquinas:** los paneles, las placas y las imágenes van rectos (`--radius-0: 0`). Los botones son píldora (`--radius-pill: 999px`). Las capturas de teléfono usan el radio de un iPhone (`--radius-device: 12%` del ancho). No hay otras esquinas.
 - **Espaciado:** base de 4px (`--space-1` = 0,25rem … `--space-9` = 8rem). Margen lateral de panel `--pad-x: clamp(1rem, 3cqi, 3rem)`: nunca menos de 16px.
 - **Alturas fijas:** `--nav-h: 4rem` (64px), `--strip-h: 3rem` (la franja inferior del modo horizontal).
-- **Capas:** `--z-track: 0`, `--z-nav: 10`, `--z-strip: 10`, `--z-menu: 20`, `--z-skip: 30`, `--z-cursor: 40`. La foto que se está arrastrando usa `z-index: 1` dentro del hero. No hay otros `z-index`.
+- **Capas:** `--z-track: 0`, `--z-nav: 10`, `--z-strip: 10`, `--z-menu: 20`, `--z-skip: 30`, `--z-preloader: 35`, `--z-cursor: 40`. La foto que se está arrastrando usa `z-index: 1` dentro del hero. No hay otros `z-index`.
 - **Cortes:** 30rem (480), 48rem (768), 64rem (1024; umbral del modo horizontal), 90rem (1440; ancho máximo del texto en vertical).
 
 ## 5. Orden de las secciones
@@ -443,6 +443,16 @@ Pedido por Fermin el 2026-09-14. Hasta entonces el diseño decía que el scroll 
 - **Anclas y "Volver arriba":** usan `smoothScrollTo` de `lib/scroll.js`, que pasa por Lenis (1,2 s, con la curva `1 − (1 − t)³` de douglus) o, sin Lenis, por el `scrollTo` nativo. El foco con teclado sigue siendo inmediato (6.5).
 - **Costo:** una dependencia (`lenis`) y el `requestAnimationFrame` de Lenis mientras la página está abierta.
 
+### 7.11 Preloader
+
+Pedido por Fermin el 2026-09-14. Al principio no se tomaba, porque tapa el contenido unos segundos. Es el de douglus ("BUILD THINGS THAT MATTER"), con palabras propias.
+- **Qué muestra:** sobre `--night`, cuatro palabras gigantes que suben de a una dentro de una máscara: "HAGO SOFTWARE QUE INNOVA" / "BUILDING SOFTWARE THAT INNOVATES" (`preloader.words`). La última entra creciendo (de 0,88 a 1) y queda en `--night-accent`. Después aparecen "FERMIN LASARTE" letra por letra, una línea que se dibuja y "iOS & Mobile Engineer · 2026". Al final las letras suben, empezando por la última, el bloque crece a 1,04 y el velo se desvanece.
+- **Tiempos:** cada palabra entra en 380ms, queda 220ms y sale en 260ms (una cada 900ms); el nombre tarda 550ms, con 30ms entre letras; el velo se va entre los 4,8 y los 5,35 s, y ahí entra el nombre del hero. douglus tarda algo más (unos 6 s).
+- **Solo CSS:** la secuencia son `@keyframes` con retrasos (`styles/preloader.css`), así que termina sola aunque el JS falle. Al final queda con `visibility: hidden` y deja de recibir clics. Como red de seguridad (por ejemplo, si el navegador no corre las animaciones), el script del tema saca `html.pl` a los 8 s.
+- **Cuándo:** solo bajo `html.pl`. Esa clase la pone el script del tema antes del primer pintado, si es la primera visita de la sesión (`sessionStorage`) y no hay reduce motion. No aparece sin JS, con reduce motion, con el almacenamiento bloqueado ni en las visitas siguientes (tampoco al cambiar de idioma).
+- **Accesibilidad:** es `aria-hidden` y el contenido real ya está debajo. El enlace para saltar al contenido sigue siendo el primero.
+- **Costo:** unos 5 s de espera la primera vez. El LCP puede pasar a ser el texto del preloader (se pinta enseguida) en vez de la foto.
+
 ## 8. Movimiento
 
 Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
@@ -468,6 +478,7 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
 |---|---|---|---|---|
 | Pista horizontal | Scroll | `translate` | Lineal, 1:1 | Modo vertical |
 | Scroll con la rueda | Rueda o trackpad, con puntero fino | Scroll del documento, con Lenis | `lerp: 0.1` por frame; anclas y "Volver arriba" en 1,2 s con `1 − (1 − t)³` | Scroll nativo, sin suavizar |
+| Preloader | Primera carga de la sesión | `translate` Y y `scale` de palabras y letras, `scale` X de la línea, `opacity` del velo | Unos 5,3 s en total (7.11) | No existe |
 | Barra de progreso | Scroll | `scale` X | Lineal | No existe (vertical) |
 | Transición al cierre | Scroll | `scale` del degradado de 0,05 a 1: en X en horizontal, en Y en vertical | Lineal, atada al scroll: en horizontal, mientras el borde izquierdo del panel va del 90% al 35% del ancho de la ventana (misma línea de tiempo que la pista; en Firefox, TrackController); en vertical, `view()` de `entry 0%` a `cover 55%` | Quieta y dibujada |
 | Nav y franja en noche | El contacto cruza el centro (horizontal) | `background-color` y `color` | 420ms `--ease-out` | Igual |
@@ -476,7 +487,7 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
 | Botón: salto del texto | Hover | `translate` Y y `opacity` de `.btn__label` | 350ms `--ease-out` | Sin movimiento |
 | Botón: imán | Mouse encima | `translate` del botón, 30% de la distancia al centro | Retraso de 0,1 por frame | No existe |
 | Presionar botón | `:active` | `scale: 0.97` | 140ms `--ease-out` | Igual (no desplaza) |
-| Nombre del hero, letra por letra | Carga | `translate` Y desde 105%, dentro de una máscara | 700ms `--ease-expo`, 28ms entre letras | Sin animación |
+| Nombre del hero, letra por letra | Carga (con el preloader, cuando se va el velo, a los 5 s) | `translate` Y desde 105%, dentro de una máscara | 700ms `--ease-expo`, 28ms entre letras | Sin animación |
 | Entrada de cada panel | El panel entra en la vista (`IntersectionObserver`, una vez) | Placa: `clip-path: inset(0 0 0 100%) → inset(0)`, desde el lado por donde entra; texto: `opacity` y `translate` de 12px | 700ms `--ease-expo`; texto 60ms después | Sin animación |
 | Menú móvil | Botón | Panel: `clip-path` desde arriba; enlaces: `translate` Y 16px y `opacity`, 40ms entre cada uno; `@starting-style` | Abre en 420ms `--ease-out`; cierra en 200ms | Fundido de 150ms |
 | "Menú" / "Cerrar" | Botón | `translate` Y | 260ms `--ease-out` | Cambio directo |
@@ -539,7 +550,7 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
 | D3 | Textos de solución | Acortar cada uno a 25 palabras o menos | Aprobar la copia en la implementación |
 | D4 | Rayas largas en textos visibles | "Vault — Finanzas personales", "Bookit — …", "ClubSystem — …" y el `<title>` usan "—", que la skill prohíbe. Pasan a ":" ("Vault: finanzas personales") y el `<title>` a "Fermin Lasarte · iOS & Mobile Engineer" | Aprobación |
 | D5 | Capturas (I12) | Capturas verticales de TravelPic y DeporTurnos, idealmente también del juego iOS, chatbot-ai, Vault, Bookit y ClubSystem. Mientras no estén: placa con logo o placa tipográfica | Que Fermin las consiga |
-| D6 | Cursor propio y foto arrastrable | **Decidido por Fermin (2026-09-14):** se hacen como en douglus (7.8 y 7.9). `PremiumCursor` se reemplaza. El preloader y los números "01/" no se toman | Nada |
+| D6 | Cursor propio y foto arrastrable | **Decidido por Fermin (2026-09-14):** se hacen como en douglus (7.8 y 7.9). `PremiumCursor` se reemplaza. Los números "01/" no se toman. El preloader tampoco se tomaba, pero Fermin lo pidió después (7.11) | Nada |
 | D10 | Mancha de fluido en WebGL detrás del cursor | Queda fuera de esta fase: es un canvas a pantalla completa que corre siempre | Opcional |
 | D7 | Firefox | Respaldo de JS (6.4), en vez de dejarlo en vertical | Aprobación |
 | D8 | Efecto de celdas en las imágenes | Queda fuera de esta fase | Opcional |
