@@ -77,8 +77,9 @@
   - R-M37 (`644f890`): DISENO.md queda en su versión final. Seis puntos ya no aplicaban y quedaron anotados. `--wdth-mega` se documentó en vez de borrarse.
   - R-M38 (`4ca37e7`): notas en I4, I7, I15, I16 y en cuatro líneas de la re-auditoría que se leían como estado actual.
   - Aparte, `c20c6bc`: el comentario de `lib/scroll.js` ya no atribuye la curva de los saltos a douglus.
-  - **Rama:** la limpieza y N10 se pushearon (`b29bca9`). Estos tres commits y el de este estado están locales, sin push.
-  - **Queda por mirar en Vercel:** que el log del build muestre la línea `✓ scripts/check.mjs` (R-M31). Si no aparece, el comando de build de Vercel se saltea el `prebuild`.
+  - **Rama:** la limpieza y N10 se pushearon (`b29bca9`). Estos commits también se pushearon, con autorización de Fermin (2026-09-15). Sigue sin merge a `main`.
+  - **Vercel (confirmado por Fermin, 2026-09-15):** el log del build del preview muestra la línea `✓ scripts/check.mjs`, así que el control de R-M31 también corre en Vercel.
+  - Aparte: el comentario de `styles/track.css` ya no dice que el recorte de la pista es "el único de la página" (lo mismo que se corrigió en DISENO 6.1).
   - **Sigue:** I12 y N4 (las capturas y la foto nueva, que tiene que conseguir Fermin) y el merge a `main`.
 - **Siguen abiertos de antes:** I12 y N4 (contenido que tiene que conseguir Fermin), y M13. N10 quedó cerrado: en el preview, el tachado del nav cruza la palabra entera (ver R-M33).
 
@@ -518,7 +519,7 @@ _(Agregá aquí lo que aparezca durante las fases.)_
   - limpieza (R-M28 a R-M36), de `677d961` a `1361fb4`. Solo R-M34 (los textos, con la copia que aprobó Fermin) y R-M33 (la foto al cambiar la ventana y el tachado con colores forzados) cambian algo a la vista.
   - documentación (R-M37 y R-M38): `644f890` y `4ca37e7`. DISENO.md queda en su versión final.
 - N10, el tachado del nav, quedó cerrado: en el preview cruza la palabra entera (ver R-M33).
-- **La re-auditoría no tiene más puntos abiertos.** Falta confirmar en el log de Vercel la línea `✓ scripts/check.mjs`. Sigue lo que no es de esta fase: I12 y N4 (contenido de Fermin), M13, y el merge a `main`.
+- **La re-auditoría no tiene más puntos abiertos.** El log de Vercel muestra la línea `✓ scripts/check.mjs`. Sigue lo que no es de esta fase: I12 y N4 (contenido de Fermin), M13, y el merge a `main`.
 
 No hay nada crítico. Los problemas más visibles son cuatro:
 - **R-I1:** dos nombres de proyecto quedan cortados en su placa.
