@@ -93,6 +93,25 @@ export default function TrackController() {
       if (r.left < 0 || r.right > innerWidth) scrollBy({ top: r.left - 48, behavior: "instant" });
     };
 
+    // "Buscar en la página" y la selección (R-M11): el navegador no puede traer a la
+    // vista un texto de un panel que está a la derecha (el documento no tiene scroll
+    // horizontal). Si la selección cae fuera de la ventana, se la trae como al foco.
+    // Es una mitigación parcial: sirve para window.find, para seleccionar con el
+    // teclado y, en Chrome, cuando se cierra la barra de búsqueda (recién ahí la
+    // coincidencia pasa a ser la selección). Solo si la selección está en un panel y
+    // entra en la ventana: Cmd+A no manda la pista al final.
+    const onSelection = () => {
+      if (!mq.matches) return;
+      const sel = document.getSelection();
+      if (!sel?.rangeCount || !track.contains(sel.focusNode)) return;
+      const panel = sel.focusNode.parentElement?.closest(".panel");
+      if (!panel || !panel.contains(sel.anchorNode)) return;
+      const r = sel.getRangeAt(0).getBoundingClientRect();
+      if (!r.width && !r.height) return;
+      if (r.width > innerWidth - 96) return;
+      if (r.left < 0 || r.right > innerWidth) scrollBy({ top: r.left - 48, behavior: "instant" });
+    };
+
     // Sección actual: en horizontal, la que cruza la línea vertical del centro; en
     // vertical, la que cruza una franja horizontal al 40% del alto.
     let io;
@@ -171,6 +190,7 @@ export default function TrackController() {
     document.addEventListener("click", onClick);
     addEventListener("hashchange", onHash);
     track.addEventListener("focusin", onFocus);
+    document.addEventListener("selectionchange", onSelection);
     mq.addEventListener("change", onModeChange);
 
     // Entradas (docs/DISENO.md, sección 8), como en douglus: cada elemento de un panel
@@ -226,6 +246,7 @@ export default function TrackController() {
       document.removeEventListener("click", onClick);
       removeEventListener("hashchange", onHash);
       track.removeEventListener("focusin", onFocus);
+      document.removeEventListener("selectionchange", onSelection);
       mq.removeEventListener("change", onModeChange);
     };
   }, []);

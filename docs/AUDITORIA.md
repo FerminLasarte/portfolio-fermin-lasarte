@@ -716,7 +716,20 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
   - **Dónde:** `components/ProjectCard.jsx:86-97` (en la home hay 5 "Código" y 3 "Visitar"), `components/ExperiencePage.jsx:68-72` y los `target="_blank"` (25 de los 43 enlaces de la home).
   - **Solución:** agregar un `sr-only` con el proyecto ("Código de Vault") y otro con "(abre en una pestaña nueva)".
 
-- [ ] **R-M11. "Buscar en la página" no llega a los paneles de la derecha**
+- [x] **R-M11. "Buscar en la página" no llega a los paneles de la derecha** **[nav]**
+  - **Hecho (decidido por Fermin, 2026-09-15: arreglarlo y anotarlo):**
+    - `TrackController` escucha `selectionchange`. En horizontal, si la selección está dentro de un solo panel, entra en la ventana (ancho menor que la ventana menos 96px) y está fuera de la vista, la trae con `scrollBy` sin animación, igual que al foco (a 48px del borde).
+    - Con esas condiciones, seleccionar todo no manda la pista al final.
+    - Se corrigió DISENO: 6.1 y 7.10 decían que "buscar en la página" funcionaba como siempre.
+  - **Es una mitigación parcial:**
+    - Sirve para `window.find`, para la selección con el teclado o con la navegación con cursor y, en Chrome, para Cmd+F cuando se cierra la barra de búsqueda: recién ahí la coincidencia pasa a ser la selección.
+    - Mientras la barra está abierta, Chrome resalta la coincidencia sin cambiar la selección, así que la pista no se mueve. Esto no se pudo probar: la barra de búsqueda no se puede manejar desde Puppeteer.
+    - Tampoco sirve para el modo exploración de los lectores de pantalla ni para los enlaces `#:~:text=`.
+  - **Verificado** sobre el servidor local, con `window.find` desde el principio de la página:
+    - A 1440×900 y a 1024×680, "Bookit", "UNICEN", "WhatsApp" y "Compilador" quedan a la vista, a 48px del borde izquierdo.
+    - Seleccionar todo (`selectAllChildren`, 4.528 caracteres) no mueve la pista, y una selección que ya estaba a la vista (en el hero) tampoco.
+    - En vertical (900×900), la búsqueda sigue funcionando sola.
+  - DISENO.md, 6.1, 6.5 y 7.10.
   - **Dónde:** `styles/track.css:55-60` y lo que dicen DISENO 6.1 y 7.10.
   - **Problema:** en horizontal, el navegador no puede traer una coincidencia que está en un panel de la derecha, porque el documento no tiene scroll horizontal. Con el modo exploración de los lectores de pantalla y con los enlaces `#:~:text=` pasa lo mismo.
   - **Solución:** documentarlo como limitación y corregir DISENO. Como mitigación parcial, un listener de `selectionchange` que traiga la selección a la vista.

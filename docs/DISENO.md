@@ -160,7 +160,7 @@ En vertical, después del último panel va un `<footer>` corto (© y derechos). 
 
 ### 6.1 Cómo funciona
 
-El documento se scrollea en vertical, como cualquier página. Una sección alta contiene un panel `sticky` del alto de la ventana, y adentro va la pista con los paneles en fila. El scroll vertical, mientras dura esa sección alta, se traduce en un `translate` horizontal de la pista: 1px de scroll mueve 1px la pista. La rueda llega suavizada por Lenis (7.10), pero lo que se scrollea sigue siendo el documento: la barra de scroll del navegador, el teclado, "buscar en la página" y la restauración del scroll al volver atrás funcionan como siempre.
+El documento se scrollea en vertical, como cualquier página. Una sección alta contiene un panel `sticky` del alto de la ventana, y adentro va la pista con los paneles en fila. El scroll vertical, mientras dura esa sección alta, se traduce en un `translate` horizontal de la pista: 1px de scroll mueve 1px la pista. La rueda llega suavizada por Lenis (7.10), pero lo que se scrollea sigue siendo el documento: la barra de scroll del navegador, el teclado y la restauración del scroll al volver atrás funcionan como siempre. "Buscar en la página" no, del todo: ver 6.5.
 
 ```html
 <main id="contenido">
@@ -252,6 +252,9 @@ Si `CSS.supports("animation-timeline: view()")` da falso y el modo horizontal es
 
 - Flechas, `Re Pág`/`Av Pág`, `Espacio`, `Inicio` y `Fin` scrollean el documento, así que mueven la pista.
 - **Foco fuera de la vista:** al tabular hasta un elemento de un panel que todavía está a la derecha, el navegador no puede mostrarlo (no hay scroll horizontal). Un listener de `focusin` en la pista mide el elemento y, si queda fuera de la ventana, hace `scrollBy({ top: rect.left − margen })` **sin animación**: con teclado, el movimiento tiene que ser inmediato. Solo reacciona al foco del teclado (`:focus-visible`; 2026-09-15, R-I2 de la re-auditoría). Con el mouse, Chrome enfoca el enlace en el `mousedown`, y en un botón cortado por el borde el salto hacía que el `mouseup` cayera en otro lado y el clic se perdiera.
+- **"Buscar en la página" y la selección (limitación; 2026-09-15, R-M11 de la re-auditoría):**
+  - En horizontal, el navegador no puede traer a la vista una coincidencia que está en un panel de la derecha, por la misma razón que el foco. Con el modo exploración de los lectores de pantalla y con los enlaces `#:~:text=` pasa lo mismo.
+  - Como mitigación, TrackController escucha `selectionchange`. Si la selección está dentro de un panel, entra en la ventana y está fuera de la vista, la trae sin animación. Sirve para `window.find`, para la selección con el teclado y, en Chrome, para Cmd+F al cerrar la barra de búsqueda (mientras está abierta, la coincidencia se resalta sin ser la selección). Seleccionar todo no mueve la pista.
 - El orden del DOM es el orden visual, así que la lectura lineal es la misma en los dos modos.
 - **Enlace para saltar al contenido** (`#contenido`, el `<main>`), primero en el orden de foco.
 - **Trackpad:** en horizontal, Lenis también toma el gesto de costado (`gestureOrientation: "both"`), así deslizar hacia un lado mueve la pista. En vertical solo cuenta el gesto vertical.
@@ -440,7 +443,7 @@ La foto del hero se puede arrastrar con el mouse, como en douglus.
 
 Pedido por Fermin el 2026-09-14. Hasta entonces el diseño decía que el scroll no se suavizaba.
 - **Qué:** [Lenis](https://github.com/darkroomengineering/lenis) 1.3, lo mismo que usa douglus, con `lerp: 0.1` (douglus usa 0,12). Lo monta `components/SmoothScroll.jsx`.
-- **Sobre el documento:** a diferencia de douglus, no hay `overflow: hidden` ni pista fija. Lenis solo interpola la rueda y escribe el scroll del documento (con `behavior: "instant"`, así no choca con `scroll-behavior: smooth`). La barra, el teclado, "buscar en la página" y las anclas siguen siendo nativos, y la pista la sigue moviendo el CSS (6.1). Si el scroll no lo empieza la rueda, Lenis lo adopta cuando termina.
+- **Sobre el documento:** a diferencia de douglus, no hay `overflow: hidden` ni pista fija. Lenis solo interpola la rueda y escribe el scroll del documento (con `behavior: "instant"`, así no choca con `scroll-behavior: smooth`). La barra, el teclado, "buscar en la página" (con su límite en horizontal, 6.5) y las anclas siguen siendo nativos, y la pista la sigue moviendo el CSS (6.1). Si el scroll no lo empieza la rueda, Lenis lo adopta cuando termina.
 - **Cuándo:** solo con puntero fino y sin reduce motion. En táctil queda el scroll nativo (`syncTouch` apagado). Sin JS no cambia nada.
 - **Anclas y "Volver arriba":** usan `smoothScrollTo` de `lib/scroll.js`, que pasa por Lenis (1,2 s, con la curva `1 − (1 − t)³` de douglus) o, sin Lenis, por el `scrollTo` nativo. El foco con teclado sigue siendo inmediato (6.5).
 - **Costo:** una dependencia (`lenis`) y el `requestAnimationFrame` de Lenis mientras la página está abierta.
