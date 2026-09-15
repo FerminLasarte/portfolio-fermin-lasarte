@@ -36,6 +36,11 @@
   - R-M25: la descripción de la página, de unos 155 caracteres (la de EN tiene 177).
   - R-M27: si el tema tiene que seguir al del sistema cuando cambia con la página abierta.
   - R-M27: la imagen OG pesa 394 KB, y para saber si WhatsApp la muestra hay que compartir un enlace real.
+  - **Respuestas de Fermin (2026-09-15):**
+    - R-M21: hacer `global-error.js`, proponiéndole antes los textos.
+    - R-M25: acortar las descripciones a unos 155 caracteres, proponiéndole antes la copia.
+    - R-M27: sí, el tema sigue al del sistema cuando cambia, si no hay uno guardado.
+    - R-M27: bajar el peso de la imagen OG y probarla compartiendo el enlace.
 - **Siguen abiertos de antes:** I12 y N4 (contenido que tiene que conseguir Fermin), M13 y N5 (este último está en R-M35).
 
 Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual**: se usan como requisitos del diseño nuevo.
