@@ -43,7 +43,11 @@
     - R-M27: bajar el peso de la imagen OG y probarla compartiendo el enlace.
 - **Actualización (2026-09-15, noche):** SEO, robustez y seguridad (R-M21 a R-M27) está cerrado, un commit por punto (de `5ff662b` a `b1bede4`). Después se arregló N9 (el relleno de los botones asomaba por abajo) y la rama se pusheó, con autorización de Fermin. Fermin aprobó los textos de `global-error`, dejar las descripciones como están (ya medían 130 y 144 caracteres) y pasar el favicon al violeta del acento.
   - **Queda para después del push, en el preview de Vercel:** las cabeceras de seguridad (R-M22), la caché de ISR (R-M27) y compartir el enlace por WhatsApp para ver la imagen OG (R-M27).
-  - **Sigue:** eficiencia (R-M14 a R-M20), en otra conversación.
+  - **Sigue (decidido por Fermin, 2026-09-15):** primero, en una conversación nueva, **una paleta cálida, tirando a naranja**, en lugar del violeta frío ("transmite más confianza y cercanía"). Empieza con una propuesta de dos o tres opciones aplicadas al hero, una tarjeta y el contacto, en claro y oscuro, y recién después se implementa. Condiciones:
+    - contraste AA medido: un naranja vivo con texto blanco no llega a 4,5:1, así que hace falta un naranja quemado o texto oscuro sobre el naranja;
+    - que no sea el naranja de douglus: DISENO.md, sección 1, marca el color como lo que diferencia al portfolio de una copia.
+    - Toca `styles/tokens.css` (32 valores), `lib/og.js`, `lib/theme.js` (si cambia el papel), el favicon y el apple-icon (el script de R-M26), y DISENO.md, sección 2.
+  - **Después:** eficiencia (R-M14 a R-M20), limpieza (R-M28 a R-M36), documentación (R-M37 y R-M38), I12, N4 (Fermin va a sacar una foto nueva) y el merge a `main`. Dos commits de docs (`cba32e7` y `8592b65`) quedan locales y se pushean con el próximo grupo.
 - **Siguen abiertos de antes:** I12 y N4 (contenido que tiene que conseguir Fermin), M13 y N5 (este último está en R-M35).
 
 Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual**: se usan como requisitos del diseño nuevo.
