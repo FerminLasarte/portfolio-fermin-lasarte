@@ -317,7 +317,7 @@ Copia propuesta para el párrafo (hoy `hero.description` tiene 45 palabras y pas
 3. **Título** (`<h3>`) con el título traducido, en el estilo de título de proyecto.
 4. **Problema** (si hay) y **solución:** dos párrafos de hasta 25 palabras cada uno. Sin etiquetas "Problema" y "Solución técnica": el orden ya lo dice. Varios textos actuales son más largos y hay que acortarlos (sección 10).
 5. **Tecnologías:** en una línea de texto Meta, separadas por comas.
-6. **Enlaces directos:** un botón por destino ("App Store", "Google Play", "Código", "Visitar"). El primero es el principal y el resto van con borde. Se van el dropdown de "Descargar" y el botón deshabilitado "Próximamente" (M16).
+6. **Enlaces directos:** un botón por destino ("App Store", "Google Play", "Código", "Visitar"). El primero es el principal y el resto van con borde. "Código" y "Visitar" se repiten entre tarjetas, así que su nombre accesible suma el proyecto en un `sr-only` ("Código de Vault", "Vault code"; 2026-09-15, R-M10 de la re-auditoría). Se van el dropdown de "Descargar" y el botón deshabilitado "Próximamente" (M16).
 
 - **Tamaños:** `card--lg` para las apps móviles en producción; el resto, `card`.
 - **Sin cortes entre paneles** (pedido de Fermin, 2026-09-14): los paneles no llevan bordes que los separen, ni en horizontal ni en vertical, y el pie tampoco. Los separa el aire (el margen lateral de cada panel), así el recorrido se lee como una sola tira. Las líneas que son parte del contenido (el eje de años, el título de cada grupo de habilidades) se quedan.
@@ -554,6 +554,7 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
    - Zonas táctiles de 44px en el nav, los botones y las filas de contacto, y de al menos 24px en los enlaces dentro del texto.
    - Los niveles de skills se ven sin hover (M4) y el estado de un proyecto va en texto, no solo en color.
    - Un solo `<h1>` (el nombre), un `<h2>` por sección y un `<h3>` por proyecto. Se quita la etiqueta que repetía el h2 (M6).
+   - Los enlaces que abren una pestaña nueva lo dicen ("(abre en una pestaña nueva)", en `sr-only` o en el `aria-label`), y dos enlaces con el mismo nombre llevan al mismo lugar (R-M10).
    - El foco con teclado mueve la pista (6.5) y reduce motion da el modo vertical.
    - El cursor propio (7.8) no aparece con táctil, reduce motion ni colores forzados, y nunca deja la pantalla sin cursor.
    - **Colores forzados** (`styles/forced-colors.css`; 2026-09-15, R-I8 de la re-auditoría):

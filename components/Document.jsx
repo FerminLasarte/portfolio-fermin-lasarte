@@ -54,6 +54,7 @@ export default function Document({ lang, head, children }) {
             menu: t("nav.menu"),
             close: t("nav.close"),
             theme: t("nav.themeToggle"),
+            newTab: t("link.newTab"),
           }}
           social={{ github: SOCIAL.github, linkedin: SOCIAL.linkedin }}
         />

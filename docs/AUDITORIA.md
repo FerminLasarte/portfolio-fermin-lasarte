@@ -703,7 +703,16 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
     - El nombre del botón cambia de "Menú" a "Cerrar" al mismo tiempo que `aria-expanded`, así que se anuncia de más ("Cerrar, expandido").
   - **Solución:** poner `inert` también en el enlace de salto y en lo que queda del nav detrás del panel, o atrapar el foco. Dejar el nombre accesible fijo en "Menú" y el cambio de palabra solo como algo visual.
 
-- [ ] **R-M10. Enlaces con el mismo nombre y pestañas nuevas sin aviso**
+- [x] **R-M10. Enlaces con el mismo nombre y pestañas nuevas sin aviso** **[nav]**
+  - **Hecho (textos aprobados por Fermin, 2026-09-15):**
+    - **Botones de las tarjetas:** "Código" y "Visitar" llevan el proyecto en `sr-only` con una plantilla por idioma (`projects.codeOf`, `projects.visitOf`): "Código de Vault" / "Vault code" y "Visitar Bookit" / "Visit Bookit". Lo visible queda al principio o al final según el idioma. "App Store" y "Google Play" no se tocaron: aparecen una sola vez cada uno.
+    - **"Ver el proyecto" de `/trayectoria`:** suma el nombre traducido del proyecto ("Ver el proyecto TravelPic").
+    - **Pestañas nuevas:** cada `target="_blank"` dice "(abre en una pestaña nueva)" / "(opens in a new tab)" (`link.newTab`): en `sr-only` en los botones de las tarjetas y en las píldoras de WhatsApp, LinkedIn y GitHub del contacto, y dentro del `aria-label` en GitHub y LinkedIn del nav, que `Document` le pasa a `Nav`.
+  - **Verificado** sobre el servidor local, con el árbol de accesibilidad de Chrome:
+    - En `/` y `/en` a 1440, `/` a 375, `/trayectoria` y `/en/experience`, los únicos nombres repetidos son GitHub y LinkedIn del nav y del contacto, que llevan al mismo lugar. axe no marca `identical-links-same-purpose`, `link-name` ni `label-content-name-mismatch`.
+    - Los 15 enlaces a pestaña nueva del árbol, a 1440, lo avisan. Los otros 2 del DOM son los del menú móvil, que está oculto.
+    - Los 16 botones de la home y los 2 de `/trayectoria` miden lo mismo con y sin los `sr-only`, y en la captura de Vault se sigue viendo "Visitar" y "Código". Sin desbordes.
+  - DISENO.md, 7.3 y 9.7.
   - **Dónde:** `components/ProjectCard.jsx:86-97` (en la home hay 5 "Código" y 3 "Visitar"), `components/ExperiencePage.jsx:68-72` y los `target="_blank"` (25 de los 43 enlaces de la home).
   - **Solución:** agregar un `sr-only` con el proyecto ("Código de Vault") y otro con "(abre en una pestaña nueva)".
 

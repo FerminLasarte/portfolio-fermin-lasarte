@@ -13,7 +13,7 @@ const twoDigits = (year) => String(year).slice(-2);
 export default function ExperiencePage({ t, lang }) {
   const now = new Date().getFullYear();
   const home = homePath(lang);
-  const projectIds = new Set(PROJECTS.map((p) => p.id));
+  const projects = Object.fromEntries(PROJECTS.map((p) => [p.id, p]));
   const chapters = [
     ...EXPERIENCE.map((e) => {
       const [title, where] = t(`exp.${e.id}.company`).split(" | ");
@@ -65,9 +65,11 @@ export default function ExperiencePage({ t, lang }) {
                   {t("page.techs")}: {c.tags.join(", ")}
                 </p>
               )}
-              {projectIds.has(c.id) && (
+              {projects[c.id] && (
                 <a className="chapter__link strike" href={`${home}#proyecto-${c.id}`}>
                   {t("page.seeProject")}
+                  {/* Se repite en cada etapa: el nombre suma el proyecto (R-M10). */}
+                  <span className="sr-only"> {t(`projects.${c.id}.name`, projects[c.id].name)}</span>
                 </a>
               )}
             </div>

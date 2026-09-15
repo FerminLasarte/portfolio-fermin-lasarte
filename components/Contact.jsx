@@ -60,7 +60,10 @@ export default function Contact({ t }) {
                 href={pill.href}
                 {...(pill.external ? EXTERNAL : {})}
               >
-                <span className="btn__label">{pill.label}</span>
+                <span className="btn__label">
+                  {pill.label}
+                  {pill.external && <span className="sr-only"> {t("link.newTab")}</span>}
+                </span>
               </a>
             ))}
           </div>

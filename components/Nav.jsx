@@ -15,7 +15,7 @@ const MOBILE = "(max-width: 47.99rem)";
 //    "/en#proyectos"); la sección actual (aria-current) la marca TrackController.
 //  - switchTo: el otro idioma, { lang, href, name, pages }. `pages` lleva cada página
 //    propia de este idioma a la del otro ("trayectoria" → "/en/experience").
-//  - labels: { sections, menu, close, theme }.
+//  - labels: { sections, menu, close, theme, newTab }.
 //  - social: { github, linkedin }.
 // En móvil las secciones van en un menú a pantalla completa (I1): un <button> con
 // aria-expanded y aria-controls que cierra con Escape. Sin JS no hay botón y la lista
@@ -86,10 +86,22 @@ export default function Nav({ brand, links, switchTo, labels, social }) {
 
   const socialLinks = (className) => (
     <>
-      <a className={className} href={social.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+      <a
+        className={className}
+        href={social.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`GitHub ${labels.newTab}`}
+      >
         <Icon icon={faGithub} />
       </a>
-      <a className={className} href={social.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+      <a
+        className={className}
+        href={social.linkedin}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`LinkedIn ${labels.newTab}`}
+      >
         <Icon icon={faLinkedin} />
       </a>
     </>
