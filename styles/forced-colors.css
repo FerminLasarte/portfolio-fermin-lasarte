@@ -16,10 +16,8 @@
 
   /* Lleno y contorno: el muro, su leyenda y los años (en la home y en /trayectoria). */
   .wall__word,
-  .stage__end,
-  .stage--edu .stage__years > :first-child,
-  .chapter__end,
-  .chapter--edu .chapter__years > :first-child {
+  .years__end,
+  :is(.stage--edu, .chapter--edu) .years > :first-child {
     forced-color-adjust: none;
     color: transparent;
     -webkit-text-stroke-color: CanvasText;

@@ -30,7 +30,7 @@ export default function SkillsPage({ t, lang }) {
 
       {SKILL_GROUPS.map((group) => (
         <section key={group.id} className="skill-group" aria-labelledby={`grupo-${group.id}`}>
-          <h2 id={`grupo-${group.id}`} className="chapter__title">
+          <h2 id={`grupo-${group.id}`} className="chapter__title poster">
             {t(group.titleKey)}
           </h2>
           <ul className="skill-list">
@@ -67,7 +67,7 @@ export default function SkillsPage({ t, lang }) {
       {/* Sin aria-labelledby en la sección: el nombre lo lleva la caja de la tabla, y
           dos regiones con el mismo nombre se confunden (axe, landmark-unique). */}
       <section className="skill-group">
-        <h2 id="donde-t" className="chapter__title">
+        <h2 id="donde-t" className="chapter__title poster">
           {t("skills.matrixTitle")}
         </h2>
         <p className="skill-group__lead">{t("skills.matrixLead")}</p>
@@ -109,7 +109,7 @@ export default function SkillsPage({ t, lang }) {
       </section>
 
       <section className="skill-group" aria-labelledby="tambien-t">
-        <h2 id="tambien-t" className="chapter__title">
+        <h2 id="tambien-t" className="chapter__title poster">
           {t("skills.other")}
         </h2>
         <p className="skill-group__lead">{OTHER_SKILLS.join(", ")}</p>

@@ -36,7 +36,7 @@ export default function Skills({ t, lang }) {
         <h2 id="habilidades-t" className="display display--section">
           {t("skills.title")}
         </h2>
-        <p className="skills__lead">{t("skills.lead")}</p>
+        <p className="lead skills__lead">{t("skills.lead")}</p>
         <a className="btn skills__more" href={pagePath(lang, "skills")}>
           <span className="btn__label">{t("skills.more")}</span>
         </a>

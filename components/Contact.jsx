@@ -1,7 +1,5 @@
-import { PERSON, SOCIAL } from "@/lib/site";
+import { EXTERNAL, PERSON, SOCIAL } from "@/lib/site";
 import CopyEmail from "@/components/CopyEmail";
-
-const EXTERNAL = { target: "_blank", rel: "noopener noreferrer" };
 
 // Cierre (docs/DISENO.md, 7.5), como el final de douglus. Primero, la transición: un
 // panel decorativo con un degradado que se dibuja con el scroll y termina en el color

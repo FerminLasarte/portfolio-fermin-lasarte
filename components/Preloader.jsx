@@ -1,4 +1,5 @@
 import { PERSON, ROLE_SHORT } from "@/lib/site";
+import { wordStarts } from "@/lib/text";
 
 // Preloader (docs/DISENO.md, 7.11), el de douglus: las palabras de `words`, de a una,
 // y después el nombre letra por letra con el cargo. Es solo visual (aria-hidden): el
@@ -8,7 +9,7 @@ export default function Preloader({ words }) {
   const list = words.split(" ");
   const names = PERSON.name.toUpperCase().split(" ");
   // Índice de la primera letra de cada palabra del nombre, para el escalonado.
-  const starts = names.map((_, w) => names.slice(0, w).join("").length);
+  const starts = wordStarts(names);
   const letters = names.join("").length;
 
   return (

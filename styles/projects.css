@@ -89,10 +89,7 @@
 
 .card__plate--type span {
   font-size: min(clamp(2rem, 4.6vw, 4.5rem), 18cqi);
-  font-weight: 800;
-  font-stretch: var(--wdth-display);
   line-height: 0.86;
-  text-transform: uppercase;
   hyphens: manual;
 }
 
@@ -108,10 +105,7 @@
 
 .card__title {
   font-size: var(--fs-4);
-  font-weight: 800;
-  font-stretch: var(--wdth-display);
   line-height: 0.9;
-  text-transform: uppercase;
 }
 
 .card__text {

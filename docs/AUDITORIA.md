@@ -1038,7 +1038,22 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
     - el `notFound()` inalcanzable en `app/[lang]/[page]/page.js:62`.
   - **Solución:** borrarlos, o usar `PERSON.location` en el crédito.
 
-- [ ] **R-M30. Lógica y CSS duplicados**
+- [x] **R-M30. Lógica y CSS duplicados**
+  - **Hecho:**
+    - **En `lib/`:**
+      - `lib/text.js` (nuevo): `twoDigits`, que usan Trayectoria y su página, y `wordStarts`, el `starts` del hero y el del preloader.
+      - `lib/site.js` suma `STAGES`, las etapas con años con su `kind` (cada vista las ordena y arma sus textos); `EDUCATION_NOTES`, los idiomas; y `EXTERNAL`, que usan `Contact` y `ProjectCard`.
+      - `lib/i18n.js` suma `shareMeta(lang, { url, title, description })`: los bloques `openGraph` y `twitter`, que el layout y `[page]` repetían.
+    - **CSS, en `base.css`:**
+      - `.display, .poster, .years` comparten el peso, el ancho y las mayúsculas. `.poster` es el título de proyecto y de capítulo (la placa tipográfica, `.card__title` y `.chapter__title`), que ahora solo ponen su tamaño y su interlineado.
+      - `.years` y `.years__end` reúnen `.stage__years` y `.chapter__years`, con `var(--stroke, var(--ink))` para el acento de la etapa más reciente.
+      - `.lead` reúne `.skills__lead` y `.trajectory__intro`, que conservan su ancho.
+      - `forced-colors.css` usa los selectores nuevos. Las clases viejas quedan donde las usan los cortes de pantalla y `TrackController`.
+  - **Verificado:**
+    - **Contra el build de R-M34 (`8a5e34f`),** con toda la pista: 0% en todas las vistas, salvo la home y `/en` a 1440, que dan 0,059% a 0,071%, dentro del ruido.
+    - **Con colores forzados emulados,** en `/` y `/trayectoria`, en claro y oscuro: 0%, con los contornos en el color del sistema.
+    - **Las 22 etiquetas `og:` y `twitter:`** de `/`, `/en`, `/trayectoria` y `/en/skills` son idénticas.
+    - La foto sigue siendo el LCP; el scroll suave, la ola, el ancla, el cierre y el imán funcionan, sin errores de consola, y el lint da 0.
   - **Dónde:**
     - `twoDigits` y el armado de etapas (`Trajectory.jsx` y `ExperiencePage.jsx`);
     - `EXTERNAL` (`Contact.jsx` y `ProjectCard.jsx`);

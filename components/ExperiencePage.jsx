@@ -1,8 +1,6 @@
-import { EDUCATION, EXPERIENCE, PROJECTS } from "@/lib/site";
+import { EDUCATION_NOTES, PROJECTS, STAGES } from "@/lib/site";
 import { homePath } from "@/lib/i18n";
-
-// Los dos últimos dígitos del año de fin: 2025 → "25".
-const twoDigits = (year) => String(year).slice(-2);
+import { twoDigits } from "@/lib/text";
 
 // Página de Trayectoria (docs/DISENO.md, 7.12): el detalle de la vista previa de la
 // home, en vertical y con el texto completo. Un capítulo por etapa, de la más nueva a
@@ -14,23 +12,16 @@ export default function ExperiencePage({ t, lang }) {
   const now = new Date().getFullYear();
   const home = homePath(lang);
   const projects = Object.fromEntries(PROJECTS.map((p) => [p.id, p]));
-  const chapters = [
-    ...EXPERIENCE.map((e) => ({
-      ...e,
-      kind: "work",
-      title: t(`exp.${e.id}.company`),
-      place: [t(`exp.${e.id}.title`), e.where].filter(Boolean).join(" · "),
-      desc: t(`exp.${e.id}.desc`),
-    })),
-    ...EDUCATION.filter((e) => e.start).map((e) => ({
-      ...e,
-      kind: "edu",
-      title: t(`edu.${e.id}.title`),
-      place: t(`edu.${e.id}.company`),
-      desc: t(`edu.${e.id}.desc`),
-    })),
-  ].sort((a, b) => b.start - a.start);
-  const notes = EDUCATION.filter((e) => !e.start);
+  const chapters = STAGES.map((s) =>
+    s.kind === "work"
+      ? {
+          ...s,
+          title: t(`exp.${s.id}.company`),
+          place: [t(`exp.${s.id}.title`), s.where].filter(Boolean).join(" · "),
+          desc: t(`exp.${s.id}.desc`),
+        }
+      : { ...s, title: t(`edu.${s.id}.title`), place: t(`edu.${s.id}.company`), desc: t(`edu.${s.id}.desc`) },
+  ).sort((a, b) => b.start - a.start);
 
   return (
     <article className="page" aria-labelledby="page-t">
@@ -44,9 +35,9 @@ export default function ExperiencePage({ t, lang }) {
       <ol className="chapters">
         {chapters.map((c) => (
           <li key={c.id} id={c.id} className={`chapter chapter--${c.kind}`}>
-            <p className="chapter__years" aria-hidden="true">
+            <p className="years chapter__years" aria-hidden="true">
               <span>{c.start}</span>
-              <span className="chapter__end">–{twoDigits(c.end)}</span>
+              <span className="years__end">–{twoDigits(c.end)}</span>
             </p>
             <div className="chapter__body">
               <p className="meta">
@@ -54,7 +45,7 @@ export default function ExperiencePage({ t, lang }) {
                 <time dateTime={String(c.end)}>{c.end}</time>
                 {c.end >= now && ` · ${t("exp.ongoing")}`}
               </p>
-              <h2 className="chapter__title">{c.title}</h2>
+              <h2 className="chapter__title poster">{c.title}</h2>
               <p className="chapter__place">{c.place}</p>
               <p className="chapter__desc">{c.desc}</p>
               {c.tags && (
@@ -74,13 +65,13 @@ export default function ExperiencePage({ t, lang }) {
         ))}
       </ol>
 
-      {notes.map((note) => (
+      {EDUCATION_NOTES.map((note) => (
         <section key={note.id} className="chapter chapter--note" aria-labelledby={`${note.id}-t`}>
           <p className="chapter__label meta">
             {t(`edu.${note.id}.label`)} · {t(`edu.${note.id}.period`)}
           </p>
           <div className="chapter__body">
-            <h2 id={`${note.id}-t`} className="chapter__title">
+            <h2 id={`${note.id}-t`} className="chapter__title poster">
               {t(`edu.${note.id}.title`)}
             </h2>
             <p className="chapter__desc">{t(`edu.${note.id}.desc`)}</p>

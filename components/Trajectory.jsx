@@ -1,8 +1,6 @@
-import { EDUCATION, EXPERIENCE } from "@/lib/site";
+import { EDUCATION_NOTES, STAGES } from "@/lib/site";
 import { pagePath } from "@/lib/i18n";
-
-// Los dos últimos dígitos del año de fin: 2025 → "25".
-const twoDigits = (year) => String(year).slice(-2);
+import { twoDigits } from "@/lib/text";
 
 // Trayectoria (docs/DISENO.md, 7.4): vista previa en etapas, como el "Process" de
 // douglus. Una columna por etapa, en orden, con el rango de años enorme, una línea que
@@ -12,24 +10,12 @@ const twoDigits = (year) => String(year).slice(-2);
 // de la sección vieja. El detalle completo está en su página (7.12).
 export default function Trajectory({ t, lang }) {
   const now = new Date().getFullYear();
-  const stages = [
-    ...EDUCATION.filter((e) => e.start).map((e) => ({
-      ...e,
-      kind: "edu",
-      title: t(`edu.${e.id}.title`),
-      place: e.label,
-      line: t(`edu.${e.id}.short`),
-    })),
-    ...EXPERIENCE.map((e) => ({
-      ...e,
-      kind: "work",
-      title: t(`exp.${e.id}.company`),
-      place: t(`exp.${e.id}.title`),
-      line: t(`exp.${e.id}.short`),
-    })),
-  ].sort((a, b) => a.start - b.start);
+  const stages = STAGES.map((s) =>
+    s.kind === "work"
+      ? { ...s, title: t(`exp.${s.id}.company`), place: t(`exp.${s.id}.title`), line: t(`exp.${s.id}.short`) }
+      : { ...s, title: t(`edu.${s.id}.title`), place: s.label, line: t(`edu.${s.id}.short`) },
+  ).sort((a, b) => a.start - b.start);
   const latest = Math.max(...stages.map((s) => s.start));
-  const notes = EDUCATION.filter((e) => !e.start);
 
   return (
     <section
@@ -43,8 +29,8 @@ export default function Trajectory({ t, lang }) {
         <h2 id="experiencia-t" className="display display--section">
           {t("exp.title")}
         </h2>
-        <p className="trajectory__intro">{t("exp.lead")}</p>
-        {notes.map((note) => (
+        <p className="lead trajectory__intro">{t("exp.lead")}</p>
+        {EDUCATION_NOTES.map((note) => (
           <p key={note.id} className="trajectory__note">
             <span className="meta">{t(`edu.${note.id}.label`)}</span>
             <strong>{t(`edu.${note.id}.title`)}</strong>
@@ -63,9 +49,9 @@ export default function Trajectory({ t, lang }) {
             className={`stage stage--${s.kind}${s.start === latest ? " stage--latest" : ""}`}
             style={{ "--col": i + 1 }}
           >
-            <p className="stage__years" aria-hidden="true">
+            <p className="years stage__years" aria-hidden="true">
               <span>{s.start}</span>
-              <span className="stage__end">–{twoDigits(s.end)}</span>
+              <span className="years__end">–{twoDigits(s.end)}</span>
             </p>
             <span className="stage__dot" aria-hidden="true" />
             <div className="stage__body">

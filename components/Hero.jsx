@@ -2,6 +2,7 @@ import { preload } from "react-dom";
 import { getImageProps } from "@/lib/image";
 import DraggablePhoto from "@/components/DraggablePhoto";
 import { CV, PERSON, ROLE } from "@/lib/site";
+import { wordStarts } from "@/lib/text";
 
 // Hero (docs/DISENO.md, 7.2). En horizontal es un panel de una pantalla. El nombre va
 // en el <h1> como texto real; las letras sueltas son solo visuales, para la entrada
@@ -10,7 +11,7 @@ export default function Hero({ t, lang }) {
   const cv = CV.find((c) => c.lang === lang) ?? CV[0];
   const words = PERSON.name.split(" ");
   // Índice de la primera letra de cada palabra, para el retraso de la entrada.
-  const starts = words.map((_, w) => words.slice(0, w).join("").length);
+  const starts = wordStarts(words);
 
   // La foto con getImageProps (lib/image.js) y un <img> común (R-M15): los mismos
   // atributos que <Image>, armados en el servidor, sin el componente de cliente de

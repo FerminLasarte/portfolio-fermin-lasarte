@@ -1,6 +1,6 @@
 import { getImageProps } from "@/lib/image";
 import Icon from "@/components/Icon";
-import { isFeatured } from "@/lib/site";
+import { EXTERNAL, isFeatured } from "@/lib/site";
 import { faApple, faGithub, faGooglePlay, faUpRightFromSquare } from "@/lib/icons";
 
 // Un botón por destino (I15): las tiendas directo, sin dropdown. "Código" y "Visitar"
@@ -31,8 +31,6 @@ function Named({ template, label, name, icon }) {
 
 const PLATFORMS = { ios: "iOS", android: "Android" };
 
-const EXTERNAL = { target: "_blank", rel: "noopener noreferrer" };
-
 // Tarjeta de proyecto (docs/DISENO.md, 7.3). De arriba a abajo: la placa, el estado y
 // las plataformas en texto, el título, el problema (si hay) y la solución, las
 // tecnologías y los enlaces. Las apps móviles en producción van en un panel más ancho.
@@ -52,7 +50,7 @@ function Plate({ project, t, featured }) {
       {...EXTERNAL}
     >
       {media.type === "type" ? (
-        <span>{t(`projects.${id}.name`, name)}</span>
+        <span className="poster">{t(`projects.${id}.name`, name)}</span>
       ) : (
         // eslint-disable-next-line @next/next/no-img-element -- los atributos salen de getImageProps (R-M15)
         <img
@@ -95,7 +93,7 @@ export default function ProjectCard({ project, t }) {
         </p>
       )}
 
-      <h3 className="card__title" id={titleId}>
+      <h3 className="card__title poster" id={titleId}>
         {t(`projects.${id}.title`, name)}
       </h3>
 

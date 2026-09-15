@@ -19,9 +19,6 @@
 
 .trajectory__intro {
   max-width: 34ch;
-  font-size: var(--fs-2);
-  line-height: 1.4;
-  color: var(--ink-muted);
 }
 
 .trajectory__note {
@@ -54,24 +51,6 @@
 
 .stage--latest {
   --stroke: var(--accent);
-}
-
-.stage__years {
-  display: flex;
-  align-items: baseline;
-  font-size: min(var(--fs-stage), 22vw);
-  font-weight: 800;
-  font-stretch: var(--wdth-display);
-  line-height: 0.84;
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-  color: var(--stroke);
-}
-
-.stage__end,
-.stage--edu .stage__years > :first-child {
-  color: transparent;
-  -webkit-text-stroke: 0.01em var(--stroke);
 }
 
 .stage__dot {

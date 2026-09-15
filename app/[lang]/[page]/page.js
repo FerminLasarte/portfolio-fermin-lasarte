@@ -1,16 +1,16 @@
 import {
   DEFAULT_LOCALE,
   LOCALES,
-  OG_LOCALES,
   PAGE_TEXT,
   getT,
   homeUrl,
   pageId,
   pagePath,
   pageUrl,
+  shareMeta,
 } from "@/lib/i18n";
 import { PAGES } from "@/lib/pages.mjs";
-import { PERSON, SOCIAL } from "@/lib/site";
+import { PERSON } from "@/lib/site";
 import ExperiencePage from "@/components/ExperiencePage";
 import SkillsPage from "@/components/SkillsPage";
 import JsonLd from "@/components/JsonLd";
@@ -48,22 +48,7 @@ export async function generateMetadata({ params }) {
         "x-default": pagePath(DEFAULT_LOCALE, id),
       },
     },
-    openGraph: {
-      type: "website",
-      siteName: PERSON.name,
-      locale: OG_LOCALES[lang],
-      alternateLocale: LOCALES.filter((l) => l !== lang).map((l) => OG_LOCALES[l]),
-      url: pageUrl(lang, id),
-      title,
-      description,
-    },
-    twitter: {
-      card: "summary_large_image",
-      site: SOCIAL.twitter,
-      creator: SOCIAL.twitter,
-      title,
-      description,
-    },
+    ...shareMeta(lang, { url: pageUrl(lang, id), title, description }),
   };
 }
 
