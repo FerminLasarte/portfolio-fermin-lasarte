@@ -19,7 +19,7 @@
 |---|---|---|
 | Fondo y acento | Crema `#fefff8` con naranja `rgb(255,100,50)` | Papel frío `#F1F2EE` con violeta eléctrico `#6224F0` (y tema oscuro) |
 | Tipografía | Neue Montreal y FK Screamer (comerciales) | Archivo variable: angosta y pesada para los títulos, ancho normal para el texto |
-| Scroll | Lenis intercepta la rueda; el `body` tiene `overflow: hidden` | Scroll nativo del documento; `sticky` más `translate` atado al scroll |
+| Scroll | Lenis mueve una pista fija; el `body` tiene `overflow: hidden` | Scroll del documento (Lenis solo suaviza la rueda); `sticky` más `translate` atado al scroll |
 | Proyectos | Capturas en marcos de escritorio | Placas del color de cada app, con capturas verticales de teléfono |
 | Cierre | Panel con degradado y nombre gigante | Panel de contacto lleno de cobalto, con el email como botón principal |
 
@@ -58,9 +58,9 @@ Los tokens van en `:root` y se redefinen bajo `html.dark-mode` (se mantiene el m
 | `--accent-soft` | `#ECE6FF` | `#221840` | Placas tipográficas de proyecto |
 | `--on-accent` | `#F6F3FF` | `#0E1012` | Texto y foco sobre `--accent` |
 | `--on-accent-muted` | `#E2D9FF` | `#2A1D55` | Texto secundario sobre `--accent` |
+| `--focus` | `= --accent` | `= --accent` | Anillo de foco (sobre el panel de contacto pasa a `--on-accent`) |
 
 El acento empezó en cobalto (`#1D3FD8` / `#8CA3FF`). El 2026-09-14 Fermin lo cambió por un violeta más vivo: el cobalto se sentía insulso y no transmitía confianza.
-| `--focus` | `= --accent` | `= --accent` | Anillo de foco (sobre el panel de contacto pasa a `--on-accent`) |
 
 **Contraste medido** (WCAG 2.x, luminancia relativa; script en el anexo B). Texto: mínimo 4,5:1. Bordes y controles: mínimo 3:1.
 
@@ -140,7 +140,7 @@ En vertical, después del último panel va un `<footer>` corto (© y derechos). 
 
 ### 6.1 Cómo funciona
 
-El documento se scrollea en vertical, como cualquier página. Una sección alta contiene un panel `sticky` del alto de la ventana, y adentro va la pista con los paneles en fila. El scroll vertical, mientras dura esa sección alta, se traduce en un `translate` horizontal de la pista: 1px de scroll mueve 1px la pista. No se intercepta la rueda, no hay suavizado ni inercia agregados, y la barra de scroll del navegador, el teclado, "buscar en la página" y la restauración del scroll al volver atrás funcionan como siempre.
+El documento se scrollea en vertical, como cualquier página. Una sección alta contiene un panel `sticky` del alto de la ventana, y adentro va la pista con los paneles en fila. El scroll vertical, mientras dura esa sección alta, se traduce en un `translate` horizontal de la pista: 1px de scroll mueve 1px la pista. La rueda llega suavizada por Lenis (7.10), pero lo que se scrollea sigue siendo el documento: la barra de scroll del navegador, el teclado, "buscar en la página" y la restauración del scroll al volver atrás funcionan como siempre.
 
 ```html
 <main id="contenido">
@@ -234,7 +234,7 @@ Si `CSS.supports("animation-timeline: view()")` da falso y el modo horizontal es
 - **Foco fuera de la vista:** al tabular hasta un elemento de un panel que todavía está a la derecha, el navegador no puede mostrarlo (no hay scroll horizontal). Un listener de `focusin` en la pista mide el elemento y, si queda fuera de la ventana, hace `scrollBy({ top: rect.left − margen })` **sin animación**: con teclado, el movimiento tiene que ser inmediato.
 - El orden del DOM es el orden visual, así que la lectura lineal es la misma en los dos modos.
 - **Enlace para saltar al contenido** (`#contenido`, el `<main>`), primero en el orden de foco.
-- **Opcional:** en trackpads, un gesto horizontal no hace nada (el documento no scrollea de costado). Un listener de `wheel` pasivo puede convertir `deltaX` en `scrollBy({ top: deltaX })`. Se decide al probarlo.
+- **Trackpad:** en horizontal, Lenis también toma el gesto de costado (`gestureOrientation: "both"`), así deslizar hacia un lado mueve la pista. En vertical solo cuenta el gesto vertical.
 
 ### 6.6 Móvil (vertical)
 
@@ -407,10 +407,19 @@ La foto del hero se puede arrastrar con el mouse, como en douglus.
 
 **Accesibilidad:** es decorativo. La foto no es enfocable, no tiene rol y conserva su `alt`. No se mueve con teclado ni hace falta: no muestra ni esconde información (criterio 7).
 
+### 7.10 Scroll suave
+
+Pedido por Fermin el 2026-09-14. Hasta entonces el diseño decía que el scroll no se suavizaba.
+- **Qué:** [Lenis](https://github.com/darkroomengineering/lenis) 1.3, lo mismo que usa douglus, con `lerp: 0.1` (douglus usa 0,12). Lo monta `components/SmoothScroll.jsx`.
+- **Sobre el documento:** a diferencia de douglus, no hay `overflow: hidden` ni pista fija. Lenis solo interpola la rueda y escribe el scroll del documento (con `behavior: "instant"`, así no choca con `scroll-behavior: smooth`). La barra, el teclado, "buscar en la página" y las anclas siguen siendo nativos, y la pista la sigue moviendo el CSS (6.1). Si el scroll no lo empieza la rueda, Lenis lo adopta cuando termina.
+- **Cuándo:** solo con puntero fino y sin reduce motion. En táctil queda el scroll nativo (`syncTouch` apagado). Sin JS no cambia nada.
+- **Anclas y "Volver arriba":** usan `smoothScrollTo` de `lib/scroll.js`, que pasa por Lenis (1,2 s, con la curva `1 − (1 − t)³` de douglus) o, sin Lenis, por el `scrollTo` nativo. El foco con teclado sigue siendo inmediato (6.5).
+- **Costo:** una dependencia (`lenis`) y el `requestAnimationFrame` de Lenis mientras la página está abierta.
+
 ## 8. Movimiento
 
 Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
-1. **El recorrido no se anima: sigue al scroll.** El `translate` de la pista es lineal y 1:1 con el scroll nativo. No se suaviza, que es lo que hace Lenis en douglus (con `lerp: 0.12`), porque suavizar el scroll es interceptarlo.
+1. **El recorrido sigue al scroll.** El `translate` de la pista es lineal y 1:1 con el scroll del documento. Lo que se suaviza es la rueda (Lenis, 7.10), como en douglus: el scroll llega con inercia y la pista lo acompaña.
 2. **Cada animación tiene un motivo:** orientar (progreso, sección actual), dar respuesta (presionar, hover) o acompañar un cambio de estado (menú, idioma). Nada se mueve en loop.
 3. **Solo `transform` (`translate`/`scale`), `opacity` y `clip-path`.** No se anima `filter: blur` ni el layout. `will-change` solo durante la animación.
 4. **Todo lo que oculta contenido de entrada va bajo `html.js`** (criterio 2), y todo movimiento, bajo `(prefers-reduced-motion: no-preference)`. Con reduce motion quedan los cambios de color y opacidad cortos; se van los desplazamientos.
@@ -431,6 +440,7 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
 | Animación | Disparador | Propiedades | Duración y curva | Con reduce motion |
 |---|---|---|---|---|
 | Pista horizontal | Scroll | `translate` | Lineal, 1:1 | Modo vertical |
+| Scroll con la rueda | Rueda o trackpad, con puntero fino | Scroll del documento, con Lenis | `lerp: 0.1` por frame; anclas y "Volver arriba" en 1,2 s con `1 − (1 − t)³` | Scroll nativo, sin suavizar |
 | Barra de progreso | Scroll | `scale` X | Lineal | No existe (vertical) |
 | Tachado del nav y de contacto | Hover o foco | `scale` X del pseudo-elemento | 220ms `--ease-out` | Aparece sin transición |
 | Botón: relleno | Hover | `translate` Y del `::before` (entra desde abajo, sale por arriba con JS) | 500ms entrada, 400ms salida, `--ease-out` | Fundido de `opacity` |

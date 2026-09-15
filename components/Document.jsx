@@ -6,6 +6,7 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Cursor from "@/components/Cursor";
 import Magnet from "@/components/Magnet";
+import SmoothScroll from "@/components/SmoothScroll";
 
 // Archivo variable: el eje de peso viene siempre; el de ancho (wdth, 62–125) hay que
 // pedirlo, y es el que da los títulos angostos (docs/DISENO.md, sección 3).
@@ -55,6 +56,7 @@ export default function Document({ lang, head, children }) {
         <Footer t={t} />
         <Cursor />
         <Magnet />
+        <SmoothScroll />
       </body>
     </html>
   );

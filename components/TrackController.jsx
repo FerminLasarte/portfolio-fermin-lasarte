@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { HORIZONTAL_QUERY } from "@/lib/track";
+import { smoothScrollTo } from "@/lib/scroll";
 
 // Mejora de JS de la pista (docs/DISENO.md, 6.3 a 6.5). No renderiza nada: se engancha
 // a los paneles que ya vienen en el HTML.
@@ -33,7 +34,9 @@ export default function TrackController() {
     const goTo = (hash, behavior) => {
       if (!mq.matches || !hash) return;
       const target = document.getElementById(decodeURIComponent(hash.slice(1)));
-      if (target && track.contains(target)) scrollTo({ top: topFor(target), behavior });
+      if (!target || !track.contains(target)) return;
+      if (behavior === "smooth") smoothScrollTo(topFor(target));
+      else scrollTo({ top: topFor(target), behavior });
     };
 
     // Un clic a otra sección dispara hashchange; un clic al mismo #hash, no.
