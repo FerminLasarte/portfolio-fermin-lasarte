@@ -453,7 +453,9 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
 
 ## 🟠 Importante
 
-- [ ] **R-I1. El nombre de Compilador y el de ClubSystem quedan cortados en su placa** **[nav]**
+- [x] **R-I1. El nombre de Compilador y el de ClubSystem quedan cortados en su placa** **[nav]**
+  - **Hecho:** la placa tipográfica es un contenedor (`container-type: inline-size`) y el nombre usa `min(clamp(2rem, 4.6vw, 4.5rem), 18cqi)`. El tamaño de antes queda donde ya entraba, con un tope del 18% del ancho útil de la placa. Se usa `vw` porque dentro de la placa el `cqi` ya es el de la placa. Se probó primero con una variable registrada con `@property`, pero el CSS que genera Turbopack no incluía la regla `@property`.
+  - **Verificado** en 375, 768, 900, 1024×680, 1024×768, 1280, 1440, 1920 y 2560, en ES y EN, sobre el servidor local: los ocho nombres entran en una línea, con al menos 13px de margen. En vertical el tamaño no cambió (32, 35 y 41px); en horizontal pasó de 47 a 44px a 1024, de 66 a 48px a 1440 y de 72 a 55px a 1920.
   - **Dónde:** `styles/projects.css:82-89` (`.card__plate--type span { font-size: clamp(2rem, 4.6cqi, 4.5rem) }`) y `:61` (`overflow: clip` en `.card__plate`).
   - **Problema:** el tamaño de letra sale del ancho de la ventana (el `cqi` es el de `main` o `.h-sticky`), pero la tarjeta chica mide `--w-card: clamp(22rem, 28cqi, 28rem)`, que deja de crecer antes. Medido:
     - a 1440×900 la placa mide 317px: "COMPILADOR" mide 348px (se cortan 55px) y "CLUBSYSTEM", 342px (49px);

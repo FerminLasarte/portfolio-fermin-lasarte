@@ -72,7 +72,15 @@
   block-size: auto;
 }
 
+/* El nombre de la placa tipográfica no se puede cortar (R-I1): la placa recorta con
+   overflow: clip y la tarjeta chica deja de crecer antes que la ventana. El tamaño
+   sale del ancho de la ventana (4.6vw; acá vw y no cqi, porque dentro de la placa el
+   cqi ya es el de la placa, y en un tamaño de letra el sobrante de la barra de scroll
+   de Windows no se nota) y tiene como tope el 18% del ancho útil de la placa (18cqi,
+   contra la placa, que es contenedor). La palabra más larga ("COMPILADOR") mide 5,26
+   veces su tamaño de letra: con 18cqi ocupa el 95%. */
 .card__plate--type {
+  container-type: inline-size;
   place-items: end start;
   padding: var(--space-5);
   background: var(--accent-soft);
@@ -80,7 +88,7 @@
 }
 
 .card__plate--type span {
-  font-size: clamp(2rem, 4.6cqi, 4.5rem);
+  font-size: min(clamp(2rem, 4.6vw, 4.5rem), 18cqi);
   font-weight: 800;
   font-stretch: var(--wdth-display);
   line-height: 0.86;

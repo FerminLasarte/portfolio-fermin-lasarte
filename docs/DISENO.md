@@ -309,7 +309,7 @@ Copia propuesta para el párrafo (hoy `hero.description` tiene 45 palabras y pas
 1. **Placa** (alrededor del 55% del alto):
    - Si hay captura vertical real: la captura en proporción de teléfono, con `--radius-device`, sobre una placa del color de la app.
    - Si todavía no hay captura pero sí logo (TravelPic, DeporTurnos): el logo sobre su color de marca.
-   - Si no hay ninguno de los dos: placa tipográfica en `--accent-soft`, con el nombre del proyecto en Display y `--accent`.
+   - Si no hay ninguno de los dos: placa tipográfica en `--accent-soft`, con el nombre del proyecto en Display y `--accent`. El nombre nunca se corta (2026-09-15, R-I1 de la re-auditoría): su tamaño sale del ancho de la ventana (`clamp(2rem, 4.6vw, 4.5rem)`), con un tope del 18% del ancho útil de la placa, que es un contenedor (`18cqi`). Antes, a 1440px, "COMPILADOR" y "CLUBSYSTEM" se cortaban unos 50px, porque la tarjeta chica deja de crecer antes que la ventana.
    - No hay terminales falsos, degradados ni código decorativo: la skill los prohíbe y hoy eran relleno.
    - La placa es un enlace al destino principal (tienda o demo, I15), con `tabindex="-1"` y `aria-hidden`, para no duplicar el enlace en el orden de foco.
 2. **Meta:** estado en texto ("En producción" / "En desarrollo") y plataformas en texto ("iOS y Android"), con los iconos de `lib/icons.js` como apoyo y no como única información.
