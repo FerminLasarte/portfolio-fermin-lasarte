@@ -41,6 +41,9 @@
     - R-M25: acortar las descripciones a unos 155 caracteres, proponiéndole antes la copia.
     - R-M27: sí, el tema sigue al del sistema cuando cambia, si no hay uno guardado.
     - R-M27: bajar el peso de la imagen OG y probarla compartiendo el enlace.
+- **Actualización (2026-09-15, noche):** SEO, robustez y seguridad (R-M21 a R-M27) está cerrado, un commit por punto (de `5ff662b` a `b1bede4`), sin push. Fermin aprobó los textos de `global-error`, dejar las descripciones como están (ya medían 130 y 144 caracteres) y pasar el favicon al violeta del acento.
+  - **Queda para después del push, en el preview de Vercel:** las cabeceras de seguridad (R-M22), la caché de ISR (R-M27) y compartir el enlace por WhatsApp para ver la imagen OG (R-M27).
+  - **Sigue:** eficiencia (R-M14 a R-M20), en otra conversación.
 - **Siguen abiertos de antes:** I12 y N4 (contenido que tiene que conseguir Fermin), M13 y N5 (este último está en R-M35).
 
 Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual**: se usan como requisitos del diseño nuevo.
@@ -408,6 +411,11 @@ _(Agregá aquí lo que aparezca durante las fases.)_
   - **Problema:** en horizontal, el nav y la franja inferior son blancos con `mix-blend-mode: difference` (como douglus): sobre el papel y sobre el cierre se leen bien, pero al pasar sobre tonos medios (un botón violeta, el degradado) el inverso contrasta cerca de 2:1 por un momento. Aparte, hay texto en contorno (`-webkit-text-stroke`): el fin de los rangos de años y las tecnologías intermedias del muro. Es decorativo (`aria-hidden`, la información está en texto), pero conviene mirar que se lea.
   - **Solución:** medirlo en la Fase 4 y decidir con Fermin (por ejemplo, que el nav no pase sobre esos tonos o que el contorno sea más grueso).
 
+- [ ] **N9. El relleno de los botones asoma por abajo** · Fase 4 (hallado en R-M21; sospecha)
+  - **Dónde:** `.btn::before` en `styles/base.css`: en reposo queda con `translate: 0 75%`, justo en el borde de abajo del botón.
+  - **Problema:** en el 404 y en `global-error`, a 1440 en claro (en 1x y 2x), debajo de cada botón se ve un arco fino del relleno, en el color del relleno. No se revisó en el resto de las páginas, pero el estilo es el mismo en todos los botones.
+  - **Solución:** si se confirma, bajar el relleno un poco más (por ejemplo, `translate: 0 78%`) sin cambiar la animación. Es un detalle visual: lo decide Fermin.
+
 - [x] **N1. La foto con GPS sigue en el historial de git** · Fase 0
   - **Hecho (2026-09-13):** se reescribió el historial con `git filter-repo --invert-paths` (sobre un clon nuevo) y se hizo force-push. Cambiaron todos los hashes, así que los que se citan en este archivo son de antes de la reescritura. Ningún commit contiene ya la foto y el árbol final no cambió.
   - **Dónde:** blob `ee01416`, como `assets/foto_perfil.jpeg` desde `fc441bf` (2026-02-15) y como `public/assets/foto_perfil.jpeg` en `5b87af2`. Aparece en 34 commits y el repo es público.
@@ -464,7 +472,10 @@ _(Agregá aquí lo que aparezca durante las fases.)_
   - R-I1 (`03bbd6a`), R-I2 (`e9b12f0`) y R-I4 (`02b1ee3`);
   - R-I5 (`6ac71a9`), R-I6 (`bd6c925`) y R-I9 (`c893007`);
   - R-I8 (`df28bec`), R-I3 (`0d52325`, se deja como está) y R-I7 (`0601232`).
-- **Menores:** los de accesibilidad y flujo (R-M1 a R-M13) están cerrados, cada uno en su commit (de `bb6dc48` a R-M13). Siguen SEO y robustez (R-M21 a R-M27), eficiencia (R-M14 a R-M20), limpieza (R-M28 a R-M36) y documentación (R-M37 y R-M38). De R-M34, solo el detalle de "Backend" en `meta.description` quedó hecho, con R-I7.
+- **Menores:** están cerrados, cada uno en su commit:
+  - accesibilidad y flujo (R-M1 a R-M13), de `bb6dc48` a `98750b8`;
+  - SEO, robustez y seguridad (R-M21 a R-M27), de `5ff662b` a `b1bede4`.
+- **Siguen** eficiencia (R-M14 a R-M20), limpieza (R-M28 a R-M36) y documentación (R-M37 y R-M38). De R-M34, solo el detalle de "Backend" en `meta.description` quedó hecho, con R-I7. De R-M29, `PERSON.location` ya se usa, en el JSON-LD (R-M25).
 
 No hay nada crítico. Los problemas más visibles son cuatro:
 - **R-I1:** dos nombres de proyecto quedan cortados en su placa.
@@ -904,7 +915,7 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
 - [ ] **R-M29. Datos, claves y props sin uso**
   - **Dónde y problema:**
     - `projects.screenshotAlt` (`translations.js:93` y `:237`);
-    - `PERSON.firstName` y `PERSON.location` (`site.js:15-16`); "Buenos Aires" está escrito a mano en `strip.credit`;
+    - `PERSON.firstName` y `PERSON.location` (`site.js:15-16`); "Buenos Aires" está escrito a mano en `strip.credit`. Desde R-M25, `PERSON.location` se usa en el `homeLocation` del JSON-LD;
     - `CV[].label` y `EXPERIENCE[].label` (`site.js:55-56` y `:237-238`);
     - el prop `title` de `Icon`, que viaja en el JS del cliente;
     - `.strip` en el `inert` del menú (`Nav.jsx:50`), cuando ya está dentro de `main`;
