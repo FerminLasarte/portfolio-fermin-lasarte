@@ -1069,7 +1069,16 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
     - **En el JS:** `DraggablePhoto.jsx:74` y `:102` copian curvas y duraciones.
   - **Solución:** sumar `--ease-in`, `--dur-reveal`, `--dur-fill` y `--radius-round` y usarlos. Si no, suavizar la frase de `tokens.css` y de DISENO 9.4.
 
-- [ ] **R-M33. Tres cosas que se comportan distinto de lo documentado**
+- [x] **R-M33. Tres cosas que se comportan distinto de lo documentado**
+  - **Hecho:**
+    - **La foto** (decidido por Fermin, 2026-09-15: con animación, como dice DISENO 7.9): al cambiar el tamaño de la ventana, `DraggablePhoto` llama a `goHome`, la misma vuelta de 700ms con `--ease-expo` que cuando entra el foco del teclado. Si se está arrastrando, no hace nada. Con reduce motion sigue volviendo sin animación.
+    - **El imán:** los 420ms de `Magnet.jsx` son a propósito, los 400ms de la salida del relleno (`.btn.is-out`) más 20 de margen para que no se corte. Se corrigió el comentario, que decía que eran el mismo valor.
+    - **Colores forzados:** el tachado (`.strike::after`) es un fondo y el sistema lo pintaba con el color del fondo. Ahora va con `forced-color-adjust: none` y `LinkText` (`styles/forced-colors.css`). Lo demás que dice R-I8 (el riel de la barra de progreso) sigue como limitación documentada.
+  - **Verificado** con Puppeteer contra el build anterior:
+    - **La foto,** a 1440: se arrastró a (−150px, 20px) y se cambió la ventana a 1300×900 (sigue en horizontal). Antes, a los 120ms ya estaba en 0, sin transición. Ahora, a los 120ms va por (−40px, 5px), con `translate 700ms`, y al segundo está en 0.
+    - **El tachado con colores forzados emulados** (CDP), en claro y oscuro, con el mouse encima: antes el `::after` salía blanco sobre blanco (o negro sobre negro); ahora sale del color de los enlaces (`rgb(0, 0, 159)` y amarillo). En "Ver el proyecto" de `/trayectoria` la fila del medio queda cubierta al 100%, contra el 58% de antes, que es solo el texto.
+    - Sin colores forzados no cambia nada: las capturas de las 16 combinaciones dan 0%, salvo la home a 1440, dentro del ruido (0,065% a 0,067%). La foto sigue siendo el LCP; el scroll suave, la ola, el ancla, el cierre y el imán funcionan, sin errores de consola.
+  - **Nuevo (N10), sin confirmar:** en las capturas sin ventana, el tachado de los enlaces del nav en horizontal queda dibujado hasta la mitad ("Trayec" de "Trayectoria"), aunque el estilo calculado dice `scale: 1`; con la transición apagada, la línea es completa. Pasa igual en el build anterior, así que no viene de este cambio. En "Ver el proyecto", que está en la página y no en el nav fijo, la línea sale completa. Una ventana visible de Chrome no sirvió para medirlo. Falta mirarlo a ojo, pasando el mouse por el nav.
   - La foto vuelve a su lugar sin animación cuando cambia el tamaño de la ventana (`DraggablePhoto.jsx:162-168`); DISENO dice 700ms.
   - `Magnet.jsx:10` espera 420ms, pero la transición dura 400ms (`base.css:220`), y el comentario dice que son el mismo valor.
   - En colores forzados, el `.strike` y otros detalles no tienen un estilo propio (ver R-I8).

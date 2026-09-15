@@ -159,12 +159,10 @@ export default function DraggablePhoto({ label, children }) {
       glide = requestAnimationFrame(coast);
     };
 
+    // Con otro tamaño de ventana cambian los límites: vuelve a su lugar con la misma
+    // animación que al entrar el foco (R-M33 de la re-auditoría; antes volvía de golpe).
     const onResize = () => {
-      cancelAnimationFrame(glide);
-      drag.style.transition = "";
-      x = 0;
-      y = 0;
-      place();
+      if (!down) goHome();
     };
 
     drag.addEventListener("pointerdown", onDown);

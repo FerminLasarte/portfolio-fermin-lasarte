@@ -67,4 +67,11 @@
     forced-color-adjust: none;
     background: GrayText;
   }
+
+  /* El tachado de los enlaces (.strike, en base.css) es un fondo: el sistema lo pintaba
+     con el color del fondo y no se veía (R-M33). Va en el color de los enlaces. */
+  .strike::after {
+    forced-color-adjust: none;
+    background: LinkText;
+  }
 }
