@@ -50,7 +50,9 @@ body {
 
   /* overflow: clip y no hidden: hidden crea un contenedor de scroll, y el navegador
      lo scrollearía de costado al enfocar o saltar a un ancla, desarmando la pista.
-     Es el único recorte de la página y está donde nace el desborde (criterio 1). */
+     Es el único recorte que esconde contenido y está donde nace el desborde
+     (criterio 1); los otros overflow: clip son máscaras de un solo elemento
+     (docs/DISENO.md, 6.1). */
   html.js .h-sticky {
     position: sticky;
     top: 0;
