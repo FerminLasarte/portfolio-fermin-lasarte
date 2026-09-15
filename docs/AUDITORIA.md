@@ -835,7 +835,11 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
   - **Queda:** confirmarlas en el preview de Vercel después del push.
   - **Solución:** un `headers()` con `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` y una CSP mínima: `frame-ancestors 'none'; base-uri 'self'; object-src 'none'`. Una CSP completa choca con los scripts inline de Next y del tema.
 
-- [ ] **R-M23. `SITE_URL` es frágil**
+- [x] **R-M23. `SITE_URL` es frágil**
+  - **Hecho** en `lib/site.js`: `||` en lugar de `??`, se le quita la barra final, y un build de producción que termina en localhost avisa en la consola (solo en el servidor; ningún componente de cliente importa `site.js`).
+  - **Verificado:**
+    - con `node` y las variables de entorno: vacía da localhost; `https://ferminlasarte.dev//` da `https://ferminlasarte.dev`; vacía con `VERCEL_PROJECT_PRODUCTION_URL` da la de Vercel; el aviso sale solo en producción y sin dominio;
+    - con dos builds aislados: con `NEXT_PUBLIC_SITE_URL=""` el build termina (antes se rompía) y avisa (una vez por proceso, 9 en total); con `https://example.com/`, el canonical, `og:url`, `og:image`, el JSON-LD, el sitemap y robots no tienen ningún `//`.
   - **Dónde:** `lib/site.js:7-11`.
   - **Problema:**
     - Con `NEXT_PUBLIC_SITE_URL=""`, el build se rompe.
