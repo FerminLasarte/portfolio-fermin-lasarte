@@ -73,6 +73,13 @@
   - **Herramienta:** la comparación de capturas que venía de eficiencia salteaba, en horizontal, el panel de Trayectoria a 1440, porque buscaba el id "trayectoria" y no "experiencia". Ahora recorre toda la pista. En eficiencia, la maquetación de ese panel se había verificado aparte, midiendo los 513 textos de `/` y `/trayectoria` (R-M14).
   - **Rama:** estos commits están locales, sin push.
   - **Sigue:** la documentación (R-M37 y R-M38), para que DISENO.md quede en su versión definitiva; después, I12, N4 y el merge a `main`.
+- **Actualización (2026-09-15, documentación):** R-M37 y R-M38 están cerrados, así que la re-auditoría no tiene más puntos abiertos.
+  - R-M37 (`644f890`): DISENO.md queda en su versión final. Seis puntos ya no aplicaban y quedaron anotados. `--wdth-mega` se documentó en vez de borrarse.
+  - R-M38 (`4ca37e7`): notas en I4, I7, I15, I16 y en cuatro líneas de la re-auditoría que se leían como estado actual.
+  - Aparte, `c20c6bc`: el comentario de `lib/scroll.js` ya no atribuye la curva de los saltos a douglus.
+  - **Rama:** la limpieza y N10 se pushearon (`b29bca9`). Estos tres commits y el de este estado están locales, sin push.
+  - **Queda por mirar en Vercel:** que el log del build muestre la línea `✓ scripts/check.mjs` (R-M31). Si no aparece, el comando de build de Vercel se saltea el `prebuild`.
+  - **Sigue:** I12 y N4 (las capturas y la foto nueva, que tiene que conseguir Fermin) y el merge a `main`.
 - **Siguen abiertos de antes:** I12 y N4 (contenido que tiene que conseguir Fermin), y M13. N10 quedó cerrado: en el preview, el tachado del nav cruza la palabra entera (ver R-M33).
 
 Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual**: se usan como requisitos del diseño nuevo.
@@ -509,7 +516,9 @@ _(Agregá aquí lo que aparezca durante las fases.)_
   - SEO, robustez y seguridad (R-M21 a R-M27), de `5ff662b` a `b1bede4`;
   - eficiencia (R-M14 a R-M20), de `5e35694` a `f5ed6db`: R-M17 y R-M18 sin cambios, porque la medición dijo que no valía la pena;
   - limpieza (R-M28 a R-M36), de `677d961` a `1361fb4`. Solo R-M34 (los textos, con la copia que aprobó Fermin) y R-M33 (la foto al cambiar la ventana y el tachado con colores forzados) cambian algo a la vista.
-- **Sigue** la documentación (R-M37 y R-M38). N10, el tachado del nav, quedó cerrado: en el preview cruza la palabra entera (ver R-M33).
+  - documentación (R-M37 y R-M38): `644f890` y `4ca37e7`. DISENO.md queda en su versión final.
+- N10, el tachado del nav, quedó cerrado: en el preview cruza la palabra entera (ver R-M33).
+- **La re-auditoría no tiene más puntos abiertos.** Falta confirmar en el log de Vercel la línea `✓ scripts/check.mjs`. Sigue lo que no es de esta fase: I12 y N4 (contenido de Fermin), M13, y el merge a `main`.
 
 No hay nada crítico. Los problemas más visibles son cuatro:
 - **R-I1:** dos nombres de proyecto quedan cortados en su placa.
