@@ -1,0 +1,164 @@
+/*
+ * Proyectos (docs/DISENO.md, 7.3): un panel de entrada con las cifras y un panel
+ * por proyecto. En horizontal, cada tarjeta es un panel de la pista; en vertical,
+ * una grilla de una o dos columnas.
+ */
+
+.projects {
+  display: grid;
+}
+
+.projects > .panel {
+  padding-block: var(--space-6);
+}
+
+/* ---------- Entrada ---------- */
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-6);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+  gap: var(--space-4);
+}
+
+.stats > div {
+  display: grid;
+}
+
+.stats dt {
+  order: 2;
+}
+
+.stats dd {
+  font-size: var(--fs-4);
+  font-weight: 700;
+  font-stretch: var(--wdth-mega);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Tarjeta ---------- */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  border-top: 1px solid var(--line);
+}
+
+/* Placa: la captura o el logo sobre el color de la app, o el nombre en grande.
+   Es un enlace al destino principal, fuera del orden de foco (los botones ya lo
+   tienen). */
+.card__plate {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  overflow: clip;
+  background: var(--plate, var(--surface));
+  text-decoration: none;
+}
+
+.card--lg .card__plate {
+  aspect-ratio: 16 / 9;
+}
+
+.card__plate img {
+  inline-size: 78%;
+  block-size: auto;
+}
+
+.card__plate--type {
+  place-items: end start;
+  padding: var(--space-5);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.card__plate--type span {
+  font-size: clamp(2rem, 4.6cqi, 4.5rem);
+  font-weight: 800;
+  font-stretch: var(--wdth-display);
+  line-height: 0.86;
+  text-transform: uppercase;
+  hyphens: manual;
+}
+
+.card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+}
+
+.card__meta .is-live {
+  color: var(--ink);
+}
+
+.card__title {
+  font-size: var(--fs-4);
+  font-weight: 800;
+  font-stretch: var(--wdth-display);
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.card__text {
+  display: grid;
+  gap: var(--space-2);
+  max-width: 46ch;
+}
+
+.card__problem {
+  color: var(--ink-muted);
+}
+
+.card__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
+  margin-top: auto;
+}
+
+/* ---------- Vertical: dos columnas desde tablet ---------- */
+
+@media (min-width: 48rem) {
+  .projects {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--pad-x);
+  }
+
+  .intro,
+  .card--lg {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---------- Horizontal: cada tarjeta es un panel ---------- */
+
+@media (min-width: 64rem) and (min-height: 37.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html.js .projects {
+    display: contents;
+  }
+
+  html.js .projects > .panel {
+    padding-block: calc(var(--nav-h) + var(--space-5)) calc(var(--strip-h) + var(--space-5));
+  }
+
+  html.js .intro,
+  html.js .card {
+    border-top: 0;
+    border-inline-start: 1px solid var(--line);
+  }
+
+  /* La placa toma el alto que sobra; el texto manda. */
+  html.js .card__plate {
+    aspect-ratio: auto;
+    flex: 1 1 0;
+    min-block-size: 5rem;
+  }
+}

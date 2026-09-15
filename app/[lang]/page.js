@@ -1,5 +1,5 @@
 import { getT } from "@/lib/i18n";
-import { PROJECTS } from "@/lib/site";
+import { PROJECTS, isFeatured } from "@/lib/site";
 import Track from "@/components/Track";
 import Strip from "@/components/Strip";
 import Hero from "@/components/Hero";
@@ -14,7 +14,7 @@ import Contact from "@/components/Contact";
 export default async function Home({ params }) {
   const { lang } = await params;
   const t = getT(lang);
-  const cardsLg = PROJECTS.filter((p) => p.status === "live" && p.platforms?.length).length;
+  const cardsLg = PROJECTS.filter(isFeatured).length;
 
   return (
     <>

@@ -118,6 +118,11 @@ ol {
   text-transform: uppercase;
 }
 
+/* Título de sección: el mismo afiche, a una escala que entra en los paneles angostos. */
+.display--section {
+  font-size: var(--fs-section);
+}
+
 .meta {
   font-size: var(--fs-0);
   font-weight: 500;
