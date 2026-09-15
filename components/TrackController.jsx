@@ -18,6 +18,8 @@ const REVEAL = [
   ".trajectory__note",
   ".stage__years",
   ".stage__body",
+  ".skills__lead",
+  ".marquee",
   ".skills__group",
   ".contact__rule",
   ".contact__pills > .btn",
