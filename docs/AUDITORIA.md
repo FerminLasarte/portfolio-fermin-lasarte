@@ -519,7 +519,10 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
   - **Problema:** `/trayectoria`, `/habilidades`, `/en/experience` y `/en/skills` no tienen `og:image` ni `twitter:image`, aunque declaran `summary_large_image` (verificado en el HTML del preview). El `openGraph` de la página reemplaza entero al del layout, porque la metadata se combina de forma superficial, y con eso se pierde la imagen de `opengraph-image.js`. Compartida en LinkedIn o WhatsApp, la tarjeta sale sin imagen.
   - **Solución:** crear `app/[lang]/[page]/opengraph-image.js` con el título de la página. Como mínimo, sumar la imagen de la home a `openGraph.images` y `twitter.images`.
 
-- [ ] **R-I7. "2 apps publicadas en App Store y Google Play" no se sostiene mientras TravelPic esté fuera de las tiendas**
+- [x] **R-I7. "2 apps publicadas en App Store y Google Play" no se sostiene mientras TravelPic esté fuera de las tiendas**
+  - **Hecho (decidido por Fermin, 2026-09-15: "que tenga coherencia"):** la descripción de la página (que también va en el JSON-LD) y la línea de la imagen OG dicen ahora "{apps} apps en producción" / "{apps} apps in production", lo mismo que las cifras de Proyectos y el estado de las tarjetas. En la misma frase, "Backend" pasó a minúscula, como en la línea de la imagen OG (parte de R-M34).
+  - **Qué no cambió:** el hero ("publicación en App Store y Google Play") describe lo que hace Fermin, y la experiencia en TravelPic ("disponibilidad en tiendas") cuenta cuando la app estaba publicada; las dos cosas siguen siendo ciertas.
+  - **Verificado** sobre el servidor local: la `<meta name="description">` y el JSON-LD de `/` y `/en` ya no dicen "publicadas" ni "published", y la imagen OG se regeneró con la línea nueva.
   - **Dónde:** `lib/translations.js:7` y `:151` (`meta.description`), `:143` y `:287` (`meta.ogTagline`), y `lib/site.js:159-163`.
   - **Problema:** la descripción, la imagen OG y el JSON-LD dicen que las dos apps están publicadas, pero el propio `site.js` dice que TravelPic "se está volviendo a publicar" (I4). Quien la busque en las tiendas no la va a encontrar.
   - **Solución:** que decida Fermin. Se puede cambiar la copia a "apps en producción" o "apps lanzadas", o contar solo las que tienen enlace a una tienda (hoy daría 1).
