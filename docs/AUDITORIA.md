@@ -850,7 +850,17 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
     - `import("lenis")` solo con puntero fino.
     - Un `IntersectionObserver` que active Magnet solo cuando se ve el contacto.
 
-- [ ] **R-M17. El muro de Habilidades anima el color en el hilo principal** (sospecha)
+- [x] **R-M17. El muro de Habilidades anima el color en el hilo principal** (sospecha)
+  - **Se cierra sin cambios**, con el acuerdo de Fermin (2026-09-15): la traza dice que no vale la pena.
+  - **Medición:** una traza de Chrome (Puppeteer, build de producción, 1440×900) mientras se recorre el tramo entero de la ola a 14px por frame (102 frames, como una rueda con Lenis), tres veces cada variante, en tres versiones: la actual, el muro sin animación (el control) y la propuesta (dos capas por palabra, animando solo la `opacity` de la llena).
+
+    | Variante | CPU normal: hilo principal · Paint | CPU 4× más lenta: hilo principal · Paint | Frames de más de 20ms |
+    |---|---|---|---|
+    | Actual | 157 ms · 49,7 ms | 220 ms · 72,9 ms | 0 |
+    | Sin animación | 163 ms · 15,2 ms | 165 ms · 18,2 ms | 0 |
+    | Dos capas con `opacity` | 182 ms · 14,0 ms | 255 ms · 21,8 ms | 0 |
+
+  - **Lectura:** la ola suma unos 35 ms de pintado en todo el recorrido con la CPU normal (0,3 ms por frame) y unos 55 ms con la CPU 4× más lenta (0,5 ms por frame), sobre los 16,7 ms que tiene cada frame, y ningún frame se atrasa. La propuesta pinta menos, pero el hilo principal trabaja más (la capa extra suma estilo y commit), así que no mejora.
   - **Dónde:** `styles/skills.css:114-155`.
   - **Problema:** son 27 animaciones de `color` y `-webkit-text-stroke-color`, que no pasan por el compositor, sobre texto de unos 80px mientras dura su tramo.
   - **Solución:** si una traza lo confirma, usar dos capas por palabra y animar solo la `opacity` de la capa llena.
