@@ -166,8 +166,9 @@ ol {
     scale var(--dur-press) var(--ease-out);
 }
 
-/* El relleno: 150% de ancho y 200% de alto, con borde curvo. En reposo queda justo
-   debajo del botón (translate 75% de su alto) y el overflow lo esconde. */
+/* El relleno: 150% de ancho y 200% de alto, con borde curvo. En reposo queda debajo
+   del botón y el overflow lo esconde. Con 75% quedaba justo en el borde y el suavizado
+   de la curva asomaba como una línea fina (N9 de la auditoría), así que baja a 78%. */
 .btn::before {
   content: "";
   position: absolute;
@@ -175,7 +176,7 @@ ol {
   z-index: -1;
   border-radius: 50%;
   background: var(--btn-fill);
-  translate: 0 75%;
+  translate: 0 78%;
   pointer-events: none;
 }
 
@@ -220,7 +221,7 @@ ol {
   /* Salida con JS: el relleno sigue hacia arriba y el texto vuelve desde arriba.
      Después Magnet.jsx lo baja otra vez sin transición (.is-reset). */
   .btn.is-out::before {
-    translate: 0 -75%;
+    translate: 0 -78%;
     transition-duration: 400ms;
   }
 

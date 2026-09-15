@@ -41,7 +41,7 @@
     - R-M25: acortar las descripciones a unos 155 caracteres, proponiéndole antes la copia.
     - R-M27: sí, el tema sigue al del sistema cuando cambia, si no hay uno guardado.
     - R-M27: bajar el peso de la imagen OG y probarla compartiendo el enlace.
-- **Actualización (2026-09-15, noche):** SEO, robustez y seguridad (R-M21 a R-M27) está cerrado, un commit por punto (de `5ff662b` a `b1bede4`), sin push. Fermin aprobó los textos de `global-error`, dejar las descripciones como están (ya medían 130 y 144 caracteres) y pasar el favicon al violeta del acento.
+- **Actualización (2026-09-15, noche):** SEO, robustez y seguridad (R-M21 a R-M27) está cerrado, un commit por punto (de `5ff662b` a `b1bede4`). Después se arregló N9 (el relleno de los botones asomaba por abajo) y la rama se pusheó, con autorización de Fermin. Fermin aprobó los textos de `global-error`, dejar las descripciones como están (ya medían 130 y 144 caracteres) y pasar el favicon al violeta del acento.
   - **Queda para después del push, en el preview de Vercel:** las cabeceras de seguridad (R-M22), la caché de ISR (R-M27) y compartir el enlace por WhatsApp para ver la imagen OG (R-M27).
   - **Sigue:** eficiencia (R-M14 a R-M20), en otra conversación.
 - **Siguen abiertos de antes:** I12 y N4 (contenido que tiene que conseguir Fermin), M13 y N5 (este último está en R-M35).
@@ -411,7 +411,9 @@ _(Agregá aquí lo que aparezca durante las fases.)_
   - **Problema:** en horizontal, el nav y la franja inferior son blancos con `mix-blend-mode: difference` (como douglus): sobre el papel y sobre el cierre se leen bien, pero al pasar sobre tonos medios (un botón violeta, el degradado) el inverso contrasta cerca de 2:1 por un momento. Aparte, hay texto en contorno (`-webkit-text-stroke`): el fin de los rangos de años y las tecnologías intermedias del muro. Es decorativo (`aria-hidden`, la información está en texto), pero conviene mirar que se lea.
   - **Solución:** medirlo en la Fase 4 y decidir con Fermin (por ejemplo, que el nav no pase sobre esos tonos o que el contorno sea más grueso).
 
-- [ ] **N9. El relleno de los botones asoma por abajo** · Fase 4 (hallado en R-M21; sospecha)
+- [x] **N9. El relleno de los botones asoma por abajo** · Fase 4 (hallado en R-M21) **[nav]**
+  - **Hecho (pedido por Fermin, 2026-09-15):** en `styles/base.css`, el relleno en reposo baja de `translate: 0 75%` a `78%`, y la salida por arriba pasa de `-75%` a `-78%`. La animación no cambió. DISENO.md, 7.6.
+  - **Verificado** con Puppeteer en 2x, midiendo la franja de 1px justo encima del borde de abajo de cada botón visible, en la home (1440 claro y oscuro, 375 claro), `/trayectoria`, el 404 y `/en/skills` (768, oscuro): antes, la línea asomaba en 16 de 30 botones (44% del camino del fondo al color del relleno); después, en 0. Con el mouse encima, el relleno sigue cubriendo el botón de arriba a abajo (hero, principal y con borde).
   - **Dónde:** `.btn::before` en `styles/base.css`: en reposo queda con `translate: 0 75%`, justo en el borde de abajo del botón.
   - **Problema:** en el 404 y en `global-error`, a 1440 en claro (en 1x y 2x), debajo de cada botón se ve un arco fino del relleno, en el color del relleno. No se revisó en el resto de las páginas, pero el estilo es el mismo en todos los botones.
   - **Solución:** si se confirma, bajar el relleno un poco más (por ejemplo, `translate: 0 78%`) sin cambiar la animación. Es un detalle visual: lo decide Fermin.
