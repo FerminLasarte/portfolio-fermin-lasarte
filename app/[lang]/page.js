@@ -26,7 +26,7 @@ export default async function Home({ params }) {
         <Skills t={t} />
         <Contact t={t} />
       </Track>
-      <Strip t={t} lang={lang} />
+      <Strip t={t} />
     </>
   );
 }

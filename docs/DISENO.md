@@ -278,7 +278,7 @@ Si `CSS.supports("animation-timeline: view()")` da falso y el modo horizontal es
 **Franja inferior (solo en horizontal):** fija, `--strip-h`, con tres zonas, como el pie de douglus. Igual que el nav: sin fondo, en blanco con `difference` (la barra de progreso de douglus también lo usa).
 - Izquierda: "© 2026 Fermin Lasarte".
 - Centro: riel de 10rem × 1px en `--line` con el relleno en `--accent` (`scale` en X, con la línea de tiempo `--pan`), y a su lado el nombre de la sección actual (`aria-hidden`: la información útil ya está en `aria-current`).
-- Derecha: "Descargar CV", enlace directo al PDF del idioma de la página (I15, sin dropdown).
+- Derecha: al principio iba "Descargar CV"; Fermin lo sacó el 2026-09-15 (el CV sigue en el hero, I15).
 
 **Móvil:** botón `<button aria-expanded aria-controls="menu">` con el texto "Menú" / "Cerrar", que rueda de uno al otro (7.6).
 - Abre un panel fijo a pantalla completa con los cuatro enlaces en tamaño Display, y abajo el tema y las redes.
