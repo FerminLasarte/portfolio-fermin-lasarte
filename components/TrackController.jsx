@@ -84,8 +84,11 @@ export default function TrackController() {
     };
     const onHash = () => goTo(location.hash, "smooth");
 
+    // Solo el foco del teclado (R-I2): con el mouse, Chrome enfoca el enlace en el
+    // mousedown, y si el botón estaba cortado por el borde, el salto de la pista
+    // hacía que el mouseup cayera en otro lado y el clic se perdiera.
     const onFocus = (e) => {
-      if (!mq.matches) return;
+      if (!mq.matches || !e.target.matches(":focus-visible")) return;
       const r = e.target.getBoundingClientRect();
       if (r.left < 0 || r.right > innerWidth) scrollBy({ top: r.left - 48, behavior: "instant" });
     };

@@ -465,7 +465,9 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
   - Se lee "CLUBSYSTE". Es un desborde tapado (criterio 1), justo lo que la Fase 3 aprendió a evitar en la pista.
   - **Solución:** que la placa sea el contenedor (`container-type: inline-size` en `.card__plate--type`) y medir la letra contra ella, por ejemplo `clamp(2rem, 18cqi, 4.5rem)`. La palabra más larga mide unos 5,3em, así que eso deja margen. Probar los ocho nombres en los dos idiomas.
 
-- [ ] **R-I2. Con el mouse, un clic en un botón cortado por el borde derecho se pierde** **[nav]**
+- [x] **R-I2. Con el mouse, un clic en un botón cortado por el borde derecho se pierde** **[nav]**
+  - **Hecho:** `onFocus` sale si el foco no es `:focus-visible`, así que solo el teclado mueve la pista.
+  - **Verificado** sobre el servidor local, a 1440×900. Con el mouse, en tres botones cortados a la mitad ("Visitar", "App Store" y "Código"), el scroll no se mueve en el `mousedown` y el clic llega al enlace. Con Tab, a 1440×900 y a 1024×680, las 21 paradas dentro de la pista quedan a la vista y la pista avanza. DISENO.md, 6.5.
   - **Dónde:** `components/TrackController.jsx:87-91` (`onFocus`).
   - **Problema:** en Chrome, los enlaces toman el foco en el `mousedown`. Si el botón está cortado por el borde derecho, el listener de `focusin` lo trae a la vista con un `scrollBy` sin animación: la pista salta, el `mouseup` cae en otro lado y el clic no llega al enlace. Medido a 1440×900 con el botón "Visitar" cortado a la mitad: en el `mousedown` el scroll pasó de 530 a 1.865 y el `click` fue a la sección `projects`, no al enlace.
   - **Solución:** atender solo el foco de teclado, con `if (!e.target.matches(":focus-visible")) return;` al principio de `onFocus`.

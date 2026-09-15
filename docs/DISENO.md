@@ -251,7 +251,7 @@ Si `CSS.supports("animation-timeline: view()")` da falso y el modo horizontal es
 ### 6.5 Teclado y lectores de pantalla
 
 - Flechas, `Re Pág`/`Av Pág`, `Espacio`, `Inicio` y `Fin` scrollean el documento, así que mueven la pista.
-- **Foco fuera de la vista:** al tabular hasta un elemento de un panel que todavía está a la derecha, el navegador no puede mostrarlo (no hay scroll horizontal). Un listener de `focusin` en la pista mide el elemento y, si queda fuera de la ventana, hace `scrollBy({ top: rect.left − margen })` **sin animación**: con teclado, el movimiento tiene que ser inmediato.
+- **Foco fuera de la vista:** al tabular hasta un elemento de un panel que todavía está a la derecha, el navegador no puede mostrarlo (no hay scroll horizontal). Un listener de `focusin` en la pista mide el elemento y, si queda fuera de la ventana, hace `scrollBy({ top: rect.left − margen })` **sin animación**: con teclado, el movimiento tiene que ser inmediato. Solo reacciona al foco del teclado (`:focus-visible`; 2026-09-15, R-I2 de la re-auditoría). Con el mouse, Chrome enfoca el enlace en el `mousedown`, y en un botón cortado por el borde el salto hacía que el `mouseup` cayera en otro lado y el clic se perdiera.
 - El orden del DOM es el orden visual, así que la lectura lineal es la misma en los dos modos.
 - **Enlace para saltar al contenido** (`#contenido`, el `<main>`), primero en el orden de foco.
 - **Trackpad:** en horizontal, Lenis también toma el gesto de costado (`gestureOrientation: "both"`), así deslizar hacia un lado mueve la pista. En vertical solo cuenta el gesto vertical.
