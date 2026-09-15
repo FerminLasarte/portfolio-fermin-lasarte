@@ -1064,7 +1064,23 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
     - `.skills__lead` y `.trajectory__intro`.
   - **Solución:** helpers en `lib/` y clases compartidas (`.years`, `.lead`).
 
-- [ ] **R-M31. La media query horizontal está copiada 10 veces y hay tres criterios de "puntero fino"**
+- [x] **R-M31. La media query horizontal está copiada 10 veces y hay tres criterios de "puntero fino"**
+  - **Hecho** (decidido por Fermin, 2026-09-15: las dos cosas, en chico):
+    - **`scripts/check.mjs`,** sin dependencias, corre en `prebuild`: `npm run build` lo corre antes de `next build`, también en Vercel, y se puede correr solo con `npm run check`. Controla tres cosas y, si algo no coincide, detiene el build con el archivo, la línea y lo que esperaba:
+      - que cada `@media` con el ancho del modo horizontal y el puntero fino en `styles/*.css` sea igual a `HORIZONTAL_QUERY` (hoy, 9 copias);
+      - que ES y EN tengan las mismas claves (hoy, 108);
+      - que los 4 colores de `lib/og.js` y los 2 de `THEME_COLORS` (`lib/theme.js`) sean iguales a sus tokens.
+    - **`lib/media.js`:** `FINE_POINTER`, `HOVER_POINTER`, `REDUCED_MOTION` y `MOTION_OK` reemplazan las consultas escritas a mano en SmoothScroll, Cursor, Magnet, DraggablePhoto, WaveText, TrackController, `lib/scroll.js` y el script del tema.
+    - **Los criterios siguen siendo tres,** a propósito, y el comentario de `lib/media.js` explica por qué: el puntero fino decide el modo horizontal y el scroll suave; con hover además, el cursor y el imán; `pointerType === "mouse"` se mira en cada evento. Unificarlos cambiaría qué pasa en una portátil táctil.
+    - **Queda descartada la alternativa de fondo** (una clase `html.h` que ponga el script del tema), porque tocaba todas las hojas.
+  - **Verificado:**
+    - `node scripts/check.mjs` pasa sobre el repo. En una copia con tres errores a propósito (una copia con `min-height: 40rem`, una clave borrada en inglés y un color de la OG cambiado), falla con los tres mensajes y sale con código 1.
+    - `npm run build` corre el control antes de compilar.
+    - Contra el build de R-M32 (`46e48ba`):
+      - capturas en el ruido (≤ 0,071%);
+      - el script del tema idéntico en el HTML (1606 caracteres);
+      - en cuatro casos, lo que se activa es igual en los dos: horizontal, Lenis, cursor propio e imán con mouse a 1440, y nada de eso con reduce motion, a 390 táctil ni a 1024×768 táctil;
+      - la foto sigue siendo el LCP, el scroll suave, la ola, el ancla, el cierre y el imán funcionan, sin errores de consola, y el lint da 0.
   - **Dónde:**
     - Las 9 hojas de CSS y `lib/track.js:4-5`. El comentario de `track.js` solo nombra `track.css`.
     - Los tres criterios: `(pointer: fine)` en `track.js` y `SmoothScroll`; `(hover: hover) and (pointer: fine)` en `Cursor` y `Magnet`; `pointerType === "mouse"` en otros tres lugares.

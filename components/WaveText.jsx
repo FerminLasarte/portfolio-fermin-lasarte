@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { HORIZONTAL_QUERY } from "@/lib/track";
+import { REDUCED_MOTION } from "@/lib/media";
 
 const IDLE = 5000; // ms quieto (sin mouse, scroll ni teclado) antes de la ola
 const STEP = 50; // ms entre letras
@@ -20,7 +21,7 @@ export default function WaveText({ text }) {
 
   useEffect(() => {
     const el = ref.current;
-    const calm = matchMedia("(prefers-reduced-motion: reduce)");
+    const calm = matchMedia(REDUCED_MOTION);
     const horizontal = matchMedia(HORIZONTAL_QUERY);
     const length = (text.length - 1) * STEP + LETTER;
     let timer = 0;

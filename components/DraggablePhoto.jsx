@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { REDUCED_MOTION } from "@/lib/media";
 
 const TRAILS = 8; // copias de la estela (douglus usa 10)
 const TRAIL_STEP = 30; // px de arrastre entre una copia y la siguiente
@@ -23,7 +24,7 @@ export default function DraggablePhoto({ label, children }) {
     const box = drag.parentElement;
     const hero = drag.closest(".hero");
     const img = drag.querySelector("img");
-    const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+    const reduce = matchMedia(REDUCED_MOTION);
     // La curva de la estela sale del token (R-M32): la Web Animations API no lee var().
     const easeOut = getComputedStyle(drag).getPropertyValue("--ease-out").trim();
 

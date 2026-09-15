@@ -3,8 +3,9 @@
 import { useEffect } from "react";
 import { setLenis } from "@/lib/scroll";
 import { HORIZONTAL_QUERY } from "@/lib/track";
+import { FINE_POINTER, MOTION_OK } from "@/lib/media";
 
-const WANTED = "(pointer: fine) and (prefers-reduced-motion: no-preference)";
+const WANTED = `${FINE_POINTER} and ${MOTION_OK}`;
 const FRAME = 1000 / 60; // el primer paso de cada movimiento: un frame común
 
 // Scroll suave con la rueda (docs/DISENO.md, 7.10): Lenis, como en douglus, pero sobre

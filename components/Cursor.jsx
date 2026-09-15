@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { HOVER_POINTER, REDUCED_MOTION } from "@/lib/media";
 
-const FINE = "(hover: hover) and (pointer: fine)";
-const CALM = "(prefers-reduced-motion: reduce), (forced-colors: active)";
+const FINE = HOVER_POINTER;
+const CALM = `${REDUCED_MOTION}, (forced-colors: active)`;
 
 // Cursor propio (docs/DISENO.md, 7.8), el de douglus: un círculo y un punto que siguen
 // al mouse con retraso (0,2 y 0,35 por frame). Sobre enlaces y botones aparece la mano

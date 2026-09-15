@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { HORIZONTAL_QUERY } from "@/lib/track";
 import { hasLenis, smoothScrollTo } from "@/lib/scroll";
+import { REDUCED_MOTION } from "@/lib/media";
 
 // Lo que entra por separado en cada panel (styles/motion.css), en el orden del HTML.
 const REVEAL = [
@@ -219,7 +220,7 @@ export default function TrackController() {
       },
       { rootMargin: mq.matches ? "0px -20% 0px 0px" : "0px 0px -15% 0px" },
     );
-    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (!matchMedia(REDUCED_MOTION).matches) {
       for (const panel of panels) {
         const r = panel.getBoundingClientRect();
         if (r.left < innerWidth && r.top < innerHeight) continue;

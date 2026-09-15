@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
+import { HOVER_POINTER, MOTION_OK } from "@/lib/media";
 
-const WANTED = "(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)";
+const WANTED = `${HOVER_POINTER} and ${MOTION_OK}`;
 const PULL = 0.3; // qué parte de la distancia al centro se corre el botón hacia el mouse
 const PULL_LG = 0.5; // las píldoras del cierre (.btn--lg): más imán
 const REACH = 0.7; // las del cierre atraen desde 0,7× su ancho del centro, como douglus
