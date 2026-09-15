@@ -194,12 +194,12 @@ ol {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .btn:hover {
+  .btn:is(:hover, .is-on) {
     border-color: var(--btn-fill);
     color: var(--btn-fill-ink);
   }
 
-  .btn:hover::before {
+  .btn:is(:hover, .is-on)::before {
     translate: 0 0;
   }
 }
@@ -209,7 +209,7 @@ ol {
     transition: translate 500ms var(--ease-out);
   }
 
-  .btn:hover .btn__label {
+  .btn:is(:hover, .is-on) .btn__label {
     animation: btn-in 350ms var(--ease-out);
   }
 
@@ -238,7 +238,7 @@ ol {
   }
 
   @media (hover: hover) and (pointer: fine) {
-    .btn:hover::before {
+    .btn:is(:hover, .is-on)::before {
       opacity: 1;
     }
   }

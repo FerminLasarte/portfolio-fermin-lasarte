@@ -4,25 +4,39 @@ import { useEffect } from "react";
 
 const WANTED = "(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)";
 const PULL = 0.3; // qué parte de la distancia al centro se corre el botón hacia el mouse
+const PULL_LG = 0.5; // las píldoras del cierre (.btn--lg): más imán
+const REACH = 0.7; // las del cierre atraen desde 0,7× su ancho del centro, como douglus
 const EASE = 0.1; // por frame, como en douglus
 const OUT = 420; // ms que tarda el relleno en salir por arriba (styles/base.css)
 
 // Botones de douglus (docs/DISENO.md, 7.6). El relleno que sube y el salto del texto
-// los hace el CSS con :hover; esto suma dos cosas que el CSS no puede:
-//  - el imán: mientras el mouse está sobre un botón, el botón se corre hacia él (30%
-//    de la distancia al centro) y al salir vuelve a su lugar, con retraso;
-//  - la salida por arriba: al irse el mouse, el relleno sigue subiendo (.is-out) en
-//    vez de volver a bajar, y después vuelve abajo sin transición (.is-reset).
-// Solo con mouse y sin reduce motion. Un solo listener con delegación; el
-// requestAnimationFrame se detiene cuando ningún botón se está moviendo.
+// los hace el CSS con :hover; esto suma lo que el CSS no puede:
+//  - el imán: el botón activo se corre hacia el mouse y al soltarlo vuelve a su
+//    lugar, con retraso. Los botones comunes se activan con el mouse encima; las
+//    píldoras del cierre, desde antes de tocarlas (a 0,7× su ancho del centro), y se
+//    corren más;
+//  - .is-on: el relleno del botón activo, aunque el mouse todavía no esté encima;
+//  - la salida por arriba: al soltarlo, el relleno sigue subiendo (.is-out) en vez de
+//    volver a bajar, y después vuelve abajo sin transición (.is-reset).
+// Solo con mouse y sin reduce motion. Listeners delegados; el requestAnimationFrame se
+// detiene cuando ningún botón se está moviendo.
 export default function Magnet() {
   useEffect(() => {
     const mq = matchMedia(WANTED);
     const moving = new Map(); // botón → { x, y }: el corrimiento actual
-    let current = null; // el botón que tiene el mouse encima
+    const reachable = document.getElementsByClassName("btn--lg");
+    let current = null; // el botón activo
+    let over = null; // el botón que está debajo del mouse
     let mx = 0;
     let my = 0;
     let raf = 0;
+
+    // Centro y ancho del botón en su lugar real (el rect ya incluye el corrimiento).
+    const home = (el) => {
+      const r = el.getBoundingClientRect();
+      const s = moving.get(el);
+      return { x: r.left - (s?.x ?? 0) + r.width / 2, y: r.top - (s?.y ?? 0) + r.height / 2, w: r.width };
+    };
 
     const frame = () => {
       raf = 0;
@@ -30,10 +44,10 @@ export default function Magnet() {
         let tx = 0;
         let ty = 0;
         if (el === current) {
-          // El rect ya incluye el corrimiento: se lo resta para medir desde el lugar real.
-          const r = el.getBoundingClientRect();
-          tx = (mx - (r.left - s.x + r.width / 2)) * PULL;
-          ty = (my - (r.top - s.y + r.height / 2)) * PULL;
+          const c = home(el);
+          const pull = el.classList.contains("btn--lg") ? PULL_LG : PULL;
+          tx = (mx - c.x) * pull;
+          ty = (my - c.y) * pull;
         }
         s.x += (tx - s.x) * EASE;
         s.y += (ty - s.y) * EASE;
@@ -52,10 +66,12 @@ export default function Magnet() {
 
     const enter = (el) => {
       el.classList.remove("is-out", "is-reset");
+      el.classList.add("is-on");
       if (!moving.has(el)) moving.set(el, { x: 0, y: 0 });
       kick();
     };
     const leave = (el) => {
+      el.classList.remove("is-on");
       el.classList.add("is-out");
       kick();
       setTimeout(() => {
@@ -73,17 +89,41 @@ export default function Magnet() {
       if (el) enter(el);
     };
 
+    // La píldora del cierre más cercana que esté a su alcance.
+    const nearest = () => {
+      let best = null;
+      let bestD = Infinity;
+      for (const el of reachable) {
+        const c = home(el);
+        const d = Math.hypot(mx - c.x, my - c.y);
+        if (d < REACH * c.w && d < bestD) {
+          best = el;
+          bestD = d;
+        }
+      }
+      return best;
+    };
+    const update = () => {
+      if (!mq.matches) return set(null);
+      set(over && !over.classList.contains("btn--lg") ? over : (nearest() ?? over));
+    };
+
     const onMove = (e) => {
       if (e.pointerType !== "mouse") return;
       mx = e.clientX;
       my = e.clientY;
+      update();
       if (current) kick();
     };
     const onOver = (e) => {
-      if (e.pointerType !== "mouse" || !mq.matches) return;
-      set(e.target.closest?.(".btn") ?? null);
+      if (e.pointerType !== "mouse") return;
+      over = e.target.closest?.(".btn") ?? null;
+      update();
     };
-    const onOut = () => set(null);
+    const onOut = () => {
+      over = null;
+      set(null);
+    };
     const onChange = () => {
       if (!mq.matches) set(null);
     };
