@@ -502,7 +502,9 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
   - **Problema:** al tabular hacia un panel que todavía no se reveló, el foco llega antes que la entrada. Cada elemento tarda hasta 720ms de retraso más 1,1 s de animación en aparecer. Tabulando rápido desde el hero, 17 elementos recibieron el foco con opacidad 0: los botones de las tarjetas, los de Trayectoria y Habilidades, y las píldoras del contacto. El anillo de foco rodea algo que no se ve (2.4.7).
   - **Solución:** en `onFocus`, si el foco entra a un panel `.is-waiting`, revelarlo sin animación. Es lo mismo que ya pide DISENO 8.7: lo que se hace con teclado es instantáneo.
 
-- [ ] **R-I5. `/en/skills` dice "Compilador" en español**
+- [x] **R-I5. `/en/skills` dice "Compilador" en español**
+  - **Hecho:** SkillsPage usa `projectName(p)`, que pasa por `t(\`projects.${id}.name\`, name)`, igual que ProjectCard, en "Usada en" y en la cabecera de la tabla.
+  - **Verificado** sobre el servidor local: `/en/skills` ya no tiene ningún "Compilador" y dice "Compiler" 4 veces; `/habilidades` sigue diciendo "Compilador".
   - **Dónde:** `components/SkillsPage.jsx:51` y `:73` (`p.name`).
   - **Problema:** usa el nombre de `PROJECTS` sin traducir, así que "Compilador" sale 4 veces en `/en/skills` (en la columna de la tabla y en "Used in"). Verificado en el HTML del preview. `ProjectCard` ya usa `t(\`projects.${id}.name\`, name)`.
   - **Solución:** usar lo mismo en SkillsPage, o un helper compartido.

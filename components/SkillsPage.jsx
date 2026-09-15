@@ -12,6 +12,8 @@ import { homePath } from "@/lib/i18n";
 export default function SkillsPage({ t, lang }) {
   const home = homePath(lang);
   const usedIn = (name) => PROJECTS.filter((p) => p.tags.includes(name));
+  // El nombre traducido, como en ProjectCard ("Compilador" / "Compiler").
+  const projectName = (p) => t(`projects.${p.id}.name`, p.name);
   const rows = SKILL_GROUPS.flatMap((g) => g.skills)
     .map((skill) => ({ name: skill.name, used: new Set(usedIn(skill.name).map((p) => p.id)) }))
     .filter((row) => row.used.size > 0)
@@ -48,7 +50,7 @@ export default function SkillsPage({ t, lang }) {
                   <span className="skill-row__level meta">{t(`skills.level.${skill.level}`)}</span>
                   {used.length > 0 && (
                     <span className="skill-row__used">
-                      {t("skills.usedIn")} {used.map((p) => p.name).join(", ")}
+                      {t("skills.usedIn")} {used.map(projectName).join(", ")}
                     </span>
                   )}
                 </li>
@@ -70,7 +72,7 @@ export default function SkillsPage({ t, lang }) {
                 <th scope="col">{t("skills.tech")}</th>
                 {PROJECTS.map((p) => (
                   <th key={p.id} scope="col">
-                    {p.name}
+                    {projectName(p)}
                   </th>
                 ))}
               </tr>
