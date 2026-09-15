@@ -1173,7 +1173,17 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
     - `core-web-vitals` no activa `no-unused-vars`. Con la regla prendida, solo aparece `lib/theme.js:36` (un `catch (e)`).
   - **Solución:** sumar `.claude/**` a `globalIgnores`, agregar `"no-unused-vars": "warn"` y cambiar ese `catch (e)` por `catch {}`.
 
-- [ ] **R-M36. El README describe el diseño anterior y hay comentarios viejos**
+- [x] **R-M36. El README describe el diseño anterior y hay comentarios viejos**
+  - **Hecho:**
+    - **El README** describe el diseño actual (la tira de pantallas, con enlaces a `docs/DISENO.md` y `docs/AUDITORIA.md`). El Stack nombra `styles/`, la pista en CSS con su respaldo en JS, Lenis, Archivo con `next/font/local`, las páginas propias y el tema que sigue al sistema. Los Scripts suman `npm run check` y el control antes del build, y la Estructura suma `app/[lang]/[page]`, `global-error.js`, `styles/`, `scripts/`, `docs/` y los módulos nuevos de `lib/` (`pages.mjs`, `track.js`, `media.js`, `scroll.js`, `fonts.js`, `og.js`, `text.js`…).
+    - **Comentarios:**
+      - `SkillsPage.jsx`: "muro de palabras" en vez de "marquesina";
+      - `motion.css`: `.rv--grow` es solo la línea del cierre, porque las barras del eje ya no existen;
+      - `site.js`: `OTHER_SKILLS` también va en "También" de `/habilidades`; el comentario de `label` ya se había corregido en R-M29;
+      - `global-not-found.js`: "probado en 15.5 y 16.3" en vez de "Next 15";
+      - `scripts/strip-metadata.mjs`: nombra WebP, que ya limpiaba;
+      - `lib/scroll.js`: "Volver al inicio".
+  - **Verificado** contra el build de R-M31 (`c544f73`): capturas en el ruido (≤ 0,071%), la foto sigue siendo el LCP, el scroll suave, la ola, el ancla, el cierre y el imán funcionan, sin errores de consola; el lint y `scripts/check.mjs` pasan.
   - **Dónde:**
     - `README.md:9`: "CSS plano (`app/globals.css`), diseño Apple minimal + glassmorphism + bento grid". La estructura (`:43-65`) no tiene `styles/`, `app/[lang]/[page]`, `lib/pages.mjs`, `lib/track.js`, `lib/scroll.js`, `docs/` ni Lenis.
     - Comentarios viejos:

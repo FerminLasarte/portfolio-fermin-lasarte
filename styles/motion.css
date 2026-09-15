@@ -50,7 +50,7 @@
      - .rv: sube 2rem con un fundido.
      - .rv--mask (títulos): sube dentro de su propia caja; el clip-path hace de máscara.
      - .rv--plate (placas): se destapa desde el lado por donde entra.
-     - .rv--grow (barras del eje, la línea del cierre): crece desde la izquierda. */
+     - .rv--grow (la línea del cierre): crece desde la izquierda. */
   html.js .is-waiting .rv {
     opacity: 0;
     translate: 0 2rem;

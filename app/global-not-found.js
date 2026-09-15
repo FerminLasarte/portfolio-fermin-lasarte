@@ -10,7 +10,7 @@ import NotFound from "@/components/NotFound";
 // defecto y el mensaje, en los dos.
 //
 // Un 404 por idioma (app/[lang]/[...rest] con notFound()) no sirve: con un root
-// layout por idioma, Next 15 no lo renderiza en el servidor (manda un documento de
+// layout por idioma, Next (probado en 15.5 y 16.3) no lo renderiza en el servidor (manda un documento de
 // error que se completa en el navegador, sin contenido sin JS ni el script del tema).
 const titles = LOCALES.map((lang) => getT(lang)("notFound.title")).join(" · ");
 

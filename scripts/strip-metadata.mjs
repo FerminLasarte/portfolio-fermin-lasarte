@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-// Quita los metadatos (EXIF, XMP, IPTC, comentarios, fechas) de JPEG y PNG sin
+// Quita los metadatos (EXIF, XMP, IPTC, comentarios, fechas) de JPEG, PNG y WebP sin
 // recomprimir la imagen. Conserva el perfil de color (ICC) y lo que hace falta
 // para decodificar.
 //
-// Uso: node scripts/strip-metadata.mjs public/assets/*.jpeg public/assets/*.png
+// Uso: node scripts/strip-metadata.mjs public/assets/*.jpeg public/assets/*.png public/assets/*.webp
 
 import { readFileSync, writeFileSync } from "node:fs";
 

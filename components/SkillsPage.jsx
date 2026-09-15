@@ -2,7 +2,7 @@ import { getImageProps } from "@/lib/image";
 import { DEVICON, OTHER_SKILLS, PROJECTS, SKILL_GROUPS } from "@/lib/site";
 import { homePath } from "@/lib/i18n";
 
-// Página de Habilidades (docs/DISENO.md, 7.12): el detalle de la marquesina de la home.
+// Página de Habilidades (docs/DISENO.md, 7.12): el detalle del muro de palabras de la home.
 //  - Cada grupo de SKILL_GROUPS con sus tecnologías: icono, nombre, nivel en texto (M4)
 //    y en qué proyectos de la home se usó (sale de los `tags` de PROJECTS).
 //  - "Dónde las usé": una tabla de tecnologías por proyecto, con cada celda dicha en
