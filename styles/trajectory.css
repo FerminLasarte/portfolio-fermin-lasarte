@@ -149,7 +149,7 @@
     align-self: center;
     inline-size: 0.75rem;
     block-size: 0.75rem;
-    border-radius: 50%;
+    border-radius: var(--radius-round);
     background: var(--accent);
   }
 

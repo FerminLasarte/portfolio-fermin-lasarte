@@ -1075,7 +1075,23 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
     - Constantes `FINE_POINTER` y `REDUCED_MOTION` en `lib/`.
     - Como alternativa de fondo: una clase `html.h` que ponga el script del tema.
 
-- [ ] **R-M32. Valores escritos a mano, cuando `tokens.css` dice que todo sale de ahí**
+- [x] **R-M32. Valores escritos a mano, cuando `tokens.css` dice que todo sale de ahí**
+  - **Hecho** (decidido por Fermin, 2026-09-15: las dos cosas):
+    - **Tokens nuevos para lo que se repite:**
+      - `--ease-in`, la curva de las salidas (el nombre del nav y dos del preloader);
+      - `--dur-reveal` (1100ms), las entradas de los paneles y de las páginas propias;
+      - `--dur-fill` (500ms), `--dur-fill-out` (400ms) y `--dur-jump` (350ms): el relleno y el salto del texto de los botones;
+      - `--radius-round` (50%), en los siete círculos;
+      - `--z-below` (−1), el relleno de los botones, y `--z-lift` (1), la foto mientras se arrastra.
+    - **En `DraggablePhoto`:** la vuelta usa `translate var(--dur-enter) var(--ease-expo)` y la estela lee `--ease-out` del CSS (la Web Animations API no acepta `var()`). Los 400ms de la estela pasan a una constante con nombre.
+    - **La frase de `tokens.css` y de DISENO 9.4 se suavizó:** todo lo que se repite es un token. Las coreografías de un solo uso (el preloader, la ola, el nombre del nav y el menú) y los tamaños de un solo lugar llevan sus valores en su hoja, con un comentario, y los pesos se escriben directo. La sección 4 de DISENO (esquinas y capas) se pone al día en R-M37.
+  - **Verificado** contra el build de R-M30 (`24b4034`):
+    - Capturas: 0% o ruido (≤ 0,071%) en las 16 combinaciones, con toda la pista.
+    - Valores calculados iguales en los dos, en 12 casos:
+      - el relleno de los botones en reposo (0,5s), saliendo (0,4s) y el salto del texto con el mouse encima y al salir (0,35s);
+      - la capa −1 y los círculos al 50% (cursor, etapas, tabla);
+      - las entradas de la home y de `/habilidades` (1,1s, con 0,12s de retraso en el título).
+    - La foto sigue volviendo a los 700ms al cambiar la ventana; la foto sigue siendo el LCP; el scroll suave, la ola, el ancla, el cierre y el imán funcionan, sin errores de consola, y el lint da 0.
   - **Dónde:**
     - **Duraciones:** 500, 400 y 350ms en `base.css`; 1100ms repetido en `motion.css` y `page.css`; todo `preloader.css`.
     - **Curvas:** `cubic-bezier(0.55, 0, 1, 0.45)` tres veces.

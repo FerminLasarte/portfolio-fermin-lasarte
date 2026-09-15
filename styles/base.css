@@ -206,8 +206,8 @@ ol {
   content: "";
   position: absolute;
   inset: -50% -25%;
-  z-index: -1;
-  border-radius: 50%;
+  z-index: var(--z-below);
+  border-radius: var(--radius-round);
   background: var(--btn-fill);
   translate: 0 78%;
   pointer-events: none;
@@ -244,22 +244,22 @@ ol {
 
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   .btn::before {
-    transition: translate 500ms var(--ease-out);
+    transition: translate var(--dur-fill) var(--ease-out);
   }
 
   .btn:is(:hover, .is-on) .btn__label {
-    animation: btn-in 350ms var(--ease-out);
+    animation: btn-in var(--dur-jump) var(--ease-out);
   }
 
   /* Salida con JS: el relleno sigue hacia arriba y el texto vuelve desde arriba.
      Después Magnet.jsx lo baja otra vez sin transición (.is-reset). */
   .btn.is-out::before {
     translate: 0 -78%;
-    transition-duration: 400ms;
+    transition-duration: var(--dur-fill-out);
   }
 
   .btn.is-out .btn__label {
-    animation: btn-out 350ms var(--ease-out);
+    animation: btn-out var(--dur-jump) var(--ease-out);
   }
 
   .btn.is-reset::before {

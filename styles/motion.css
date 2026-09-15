@@ -79,7 +79,7 @@
   }
 
   html.js .is-revealed .rv {
-    animation: rv-up 1100ms var(--ease-expo) backwards;
+    animation: rv-up var(--dur-reveal) var(--ease-expo) backwards;
     animation-delay: calc(var(--rv) * 60ms);
   }
 

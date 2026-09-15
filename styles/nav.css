@@ -77,7 +77,7 @@
   }
 
   html.js .nav__brand[data-brand="out"] .brand__ch {
-    animation: brand-out 350ms cubic-bezier(0.55, 0, 1, 0.45) both;
+    animation: brand-out 350ms var(--ease-in) both;
     animation-delay: calc((var(--n) - 1 - var(--i)) * 30ms);
   }
 }

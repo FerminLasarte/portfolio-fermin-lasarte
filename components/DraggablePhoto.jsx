@@ -7,6 +7,7 @@ const TRAIL_STEP = 30; // px de arrastre entre una copia y la siguiente
 const FRICTION = 0.92; // por frame, al soltar
 const BAND = 0.25; // pasado el borde, cuánto se mueve por cada px que se tira
 const PULL = 0.18; // fuerza con la que vuelve adentro del hero
+const TRAIL_FADE = 400; // ms que tarda en desvanecerse cada copia de la estela
 
 // Foto arrastrable del hero (docs/DISENO.md, 7.9), como la de douglus: al presionar, el
 // marco se achica y la imagen se agranda; al moverla deja una estela de copias; al
@@ -23,6 +24,8 @@ export default function DraggablePhoto({ label, children }) {
     const hero = drag.closest(".hero");
     const img = drag.querySelector("img");
     const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+    // La curva de la estela sale del token (R-M32): la Web Animations API no lee var().
+    const easeOut = getComputedStyle(drag).getPropertyValue("--ease-out").trim();
 
     const trails = Array.from({ length: TRAILS }, () => {
       const trail = document.createElement("img");
@@ -70,8 +73,8 @@ export default function DraggablePhoto({ label, children }) {
       const t = trails[next++ % trails.length];
       t.style.translate = `${x}px ${y}px`;
       t.animate([{ opacity: 1 }, { opacity: 1, offset: 0.25 }, { opacity: 0 }], {
-        duration: 400,
-        easing: "cubic-bezier(0.23, 1, 0.32, 1)",
+        duration: TRAIL_FADE,
+        easing: easeOut,
       });
     };
 
@@ -99,7 +102,7 @@ export default function DraggablePhoto({ label, children }) {
     const goHome = () => {
       cancelAnimationFrame(glide);
       if (!x && !y) return;
-      drag.style.transition = reduce.matches ? "" : "translate 700ms cubic-bezier(0.16, 1, 0.3, 1)";
+      drag.style.transition = reduce.matches ? "" : "translate var(--dur-enter) var(--ease-expo)";
       x = 0;
       y = 0;
       place();

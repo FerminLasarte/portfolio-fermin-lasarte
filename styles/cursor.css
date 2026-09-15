@@ -38,7 +38,7 @@
   position: absolute;
   inset: 0;
   border: 1px solid var(--c);
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   transition:
     scale var(--dur-ui) var(--ease-out),
     background-color var(--dur-ui) var(--ease-out);
@@ -51,7 +51,7 @@
   inline-size: 4px;
   block-size: 4px;
   margin: -2px 0 0 -2px;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   background: var(--c);
   transition: opacity var(--dur-hover) var(--ease-out);
 }

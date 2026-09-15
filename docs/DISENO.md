@@ -542,7 +542,7 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
    - `aria-current="location"` en la sección visible, en los dos modos.
    - Botón de tema con `aria-pressed`, idioma con `aria-label` y `hreflang`, iconos con `aria-label` o `aria-hidden` (M3).
 4. **Tokens.**
-   - Colores, esquinas, espacios, alturas, capas, fuentes, tamaños, duraciones, curvas y anchos de panel son tokens (secciones 2 a 6 y 8).
+   - Todo lo que se repite es un token: colores, esquinas, espacios, alturas, capas, fuentes, tamaños, duraciones, curvas y anchos de panel (secciones 2 a 6 y 8). Las coreografías de un solo uso (el preloader, la ola de la franja, el nombre del nav y el menú) y los tamaños de un solo lugar llevan sus valores en su propia hoja, con un comentario, y los pesos se escriben directo (sección 3). Así quedó el 2026-09-15 (R-M32 de la re-auditoría), cuando se sumaron `--ease-in`, `--dur-jump`, `--dur-fill-out`, `--dur-fill`, `--dur-reveal`, `--radius-round`, `--z-below` y `--z-lift`.
    - El único color fuera del tema es el de las placas de marca, y vive en los datos de `PROJECTS`, no en el CSS.
    - Se borran las tres pilas monoespaciadas, `#FBB124` y los comentarios sueltos (M14).
 5. **Assets.**

@@ -186,7 +186,7 @@ html.dark-mode .skill-row img[data-dark-invert] {
   display: inline-block;
   inline-size: 0.875rem;
   block-size: 0.875rem;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   background: var(--accent);
   vertical-align: middle;
 }
@@ -197,7 +197,7 @@ html.dark-mode .skill-row img[data-dark-invert] {
   display: inline-block;
   inline-size: 4px;
   block-size: 4px;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   background: var(--line);
   vertical-align: middle;
 }
@@ -225,10 +225,10 @@ html.dark-mode .skill-row img[data-dark-invert] {
 
 @media (prefers-reduced-motion: no-preference) {
   html.js .page__title {
-    animation: rv-mask 1100ms var(--ease-expo) both;
+    animation: rv-mask var(--dur-reveal) var(--ease-expo) both;
   }
 
   html.js .page__lead {
-    animation: rv-up 1100ms var(--ease-expo) 120ms both;
+    animation: rv-up var(--dur-reveal) var(--ease-expo) 120ms both;
   }
 }

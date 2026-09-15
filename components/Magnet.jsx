@@ -7,8 +7,9 @@ const PULL = 0.3; // qué parte de la distancia al centro se corre el botón hac
 const PULL_LG = 0.5; // las píldoras del cierre (.btn--lg): más imán
 const REACH = 0.7; // las del cierre atraen desde 0,7× su ancho del centro, como douglus
 const EASE = 0.1; // por frame, como en douglus
-// ms hasta bajar el relleno sin transición: los 400ms de su salida por arriba (.btn.is-out
-// en styles/base.css) más 20 de margen, para que no se corte antes de terminar.
+// ms hasta bajar el relleno sin transición: los 400ms de su salida por arriba
+// (--dur-fill-out en styles/tokens.css, .btn.is-out en base.css) más 20 de margen, para
+// que no se corte antes de terminar.
 const OUT = 420;
 
 // Botones de douglus (docs/DISENO.md, 7.6). El relleno que sube y el salto del texto
