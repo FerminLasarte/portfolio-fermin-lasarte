@@ -57,7 +57,7 @@ export default function Hero({ t, lang }) {
             src="/assets/foto_perfil.webp"
             width={560}
             height={715}
-            sizes="(min-width: 48rem) 42vw, 100vw"
+            sizes="(min-width: 64rem) 24vw, (min-width: 48rem) 18rem, 20rem"
             loading="eager"
             fetchPriority="high"
             draggable={false}

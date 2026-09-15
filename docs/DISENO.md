@@ -271,7 +271,7 @@ Un panel del ancho de la ventana, en una grilla de 12 columnas.
   - "Ver proyectos": principal, `--accent`, ancla a `#proyectos`;
   - "Descargar CV": secundario, borde `--line`, PDF directo del idioma actual.
 - **Abajo a la izquierda (columnas 1–8):** `<h1>` con el nombre completo (M16) en Display, en dos líneas: FERMIN / LASARTE.
-- **Derecha (columnas 8–12), a toda la altura útil:** la foto con `next/image`, `priority`, `fetchPriority="high"`, `object-fit: cover`, sin esquinas y **sin animación de entrada** (es el LCP, C5). Se puede arrastrar con el mouse (7.9).
+- **Derecha (columnas 10–12), abajo, con el 62% de la altura útil:** la foto (antes iba en las columnas 8–12 a toda la altura, 550×740px a 1440×900, y Fermin la pidió más chica el 2026-09-14; ahora mide unos 320×460). En tablet va a la derecha con un máximo de 18rem y en móvil, debajo, con un máximo de 20rem. Va con `next/image`, `priority`, `fetchPriority="high"`, `object-fit: cover`, sin esquinas y **sin animación de entrada** (es el LCP, C5). Se puede arrastrar con el mouse (7.9).
 - Se van los badges flotantes de tecnologías, las cifras (pasan a la entrada de Proyectos) y el botón "Contactame" (repetía la intención del enlace "Contacto" del nav).
 - **Móvil:** disponibilidad, nombre, párrafo y botones entran en la primera pantalla a 375×667 (M16); la foto va debajo, en 4:5.
 

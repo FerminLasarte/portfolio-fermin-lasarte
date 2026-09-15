@@ -71,9 +71,13 @@
   display: inline-block;
 }
 
+/* La foto acompaña al nombre, no compite con él: en móvil hasta 20rem de ancho, en
+   tablet hasta 18rem y en horizontal tres columnas y ~60% del alto, abajo. */
 .hero__photo {
   grid-area: photo;
   position: relative;
+  inline-size: 100%;
+  max-inline-size: 20rem;
   min-block-size: 0;
 }
 
@@ -145,13 +149,18 @@
 
 @media (min-width: 48rem) {
   .hero {
-    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
     grid-template-areas:
       "avail photo"
       "name photo"
       "copy photo";
     align-content: start;
     column-gap: var(--pad-x);
+  }
+
+  .hero__photo {
+    justify-self: end;
+    max-inline-size: 18rem;
   }
 }
 
@@ -162,15 +171,23 @@
     grid-template-columns: repeat(12, minmax(0, 1fr));
     grid-template-rows: auto 1fr auto;
     grid-template-areas:
-      "avail avail avail avail avail avail avail photo photo photo photo photo"
-      "copy  copy  copy  copy  copy  .     .     photo photo photo photo photo"
-      "name  name  name  name  name  name  name  photo photo photo photo photo";
+      "avail avail avail avail avail avail avail avail avail photo photo photo"
+      "copy  copy  copy  copy  copy  .     .     .     .     photo photo photo"
+      "name  name  name  name  name  name  name  name  name  photo photo photo";
     column-gap: var(--space-5);
     align-content: stretch;
   }
 
   html.js .hero__copy {
     align-self: center;
+  }
+
+  /* El % de alto de un ítem de grilla se mide contra su área (las tres filas). */
+  html.js .hero__photo {
+    align-self: end;
+    justify-self: stretch;
+    max-inline-size: none;
+    block-size: 62%;
   }
 
   html.js .drag,
