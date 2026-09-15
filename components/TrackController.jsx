@@ -15,9 +15,9 @@ const REVEAL = [
   ".card__links > .btn",
   ".stats > div",
   ".trajectory__intro",
-  ".chart__axis",
-  ".chart__bar",
-  ".entry",
+  ".trajectory__note",
+  ".stage__years",
+  ".stage__body",
   ".skills__group",
   ".contact__rule",
   ".contact__pills > .btn",
@@ -27,11 +27,11 @@ const REVEAL = [
 // Cómo entra cada uno: los títulos suben en su máscara, las placas se destapan y las
 // líneas crecen; el resto sube con un fundido.
 const variant = (el) =>
-  el.matches(".display, .card__title")
+  el.matches(".display, .card__title, .stage__years")
     ? ["rv--mask"]
     : el.matches(".card__plate")
       ? ["rv--plate"]
-      : el.matches(".chart__bar, .contact__rule")
+      : el.matches(".contact__rule")
         ? ["rv--grow"]
         : [];
 
@@ -54,6 +54,7 @@ export default function TrackController() {
     const panels = [...track.querySelectorAll(".panel")];
     const fill = document.querySelector(".strip__fill");
     const wash = track.querySelector(".bleed__wash");
+    const stages = track.querySelector(".stages");
     const label = document.querySelector("[data-strip-label]");
 
     // Scroll que deja el panel de `el` contra el borde izquierdo de la ventana.
@@ -125,6 +126,14 @@ export default function TrackController() {
         const t = Math.min(Math.max((x - start) / (0.5 * vw + 100), 0), 1);
         wash.style.scale = `${0.05 + 0.97 * t} 1`;
       }
+      // La línea de Trayectoria se dibuja desde que el panel llega al 60% de la ventana
+      // hasta que su borde derecho llega al de la ventana (styles/trajectory.css).
+      if (stages) {
+        const panel = stages.closest(".panel");
+        const start = panel.offsetLeft - 0.6 * vw;
+        const end = panel.offsetLeft + panel.offsetWidth - vw;
+        stages.style.setProperty("--rail", Math.min(Math.max((x - start) / (end - start), 0), 1));
+      }
     };
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(paint);
@@ -136,6 +145,7 @@ export default function TrackController() {
         track.style.translate = "";
         if (fill) fill.style.scale = "";
         if (wash) wash.style.scale = "";
+        stages?.style.removeProperty("--rail");
         return;
       }
       addEventListener("scroll", onScroll, { passive: true });

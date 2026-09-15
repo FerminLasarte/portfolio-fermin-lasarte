@@ -1,33 +1,34 @@
 import { EDUCATION, EXPERIENCE } from "@/lib/site";
 
-// Trayectoria (docs/DISENO.md, 7.4): experiencia y educación juntas, porque las dos
-// cuentan años y lugares. Arriba, un eje de años con una barra por ítem (es solo
-// visual: aria-hidden); abajo, las fichas, con las mismas fechas en texto. La ficha de
-// UNICEN lleva id="educacion", el ancla de la sección vieja.
+// Los dos últimos dígitos del año de fin: 2025 → "25".
+const twoDigits = (year) => String(year).slice(-2);
+
+// Trayectoria (docs/DISENO.md, 7.4): vista previa en etapas, como el "Process" de
+// douglus. Una columna por etapa, en orden, con el rango de años enorme, una línea que
+// las une (se dibuja con el scroll) y una sola línea de texto; los idiomas, que no
+// tienen años, van como nota. Los años grandes son visuales (aria-hidden): las fechas
+// también están en texto, con <time>. La etapa de UNICEN lleva id="educacion", el ancla
+// de la sección vieja.
 export default function Trajectory({ t }) {
-  const items = [
+  const now = new Date().getFullYear();
+  const stages = [
     ...EDUCATION.filter((e) => e.start).map((e) => ({
       ...e,
       kind: "edu",
       title: t(`edu.${e.id}.title`),
-      place: t(`edu.${e.id}.company`, null),
-      desc: t(`edu.${e.id}.desc`),
+      place: e.label,
+      line: t(`edu.${e.id}.short`),
     })),
     ...EXPERIENCE.map((e) => ({
       ...e,
       kind: "work",
-      title: t(`exp.${e.id}.title`),
-      place: t(`exp.${e.id}.company`),
-      desc: t(`exp.${e.id}.desc`),
+      title: t(`exp.${e.id}.company`).split(" | ")[0],
+      place: t(`exp.${e.id}.title`),
+      line: t(`exp.${e.id}.short`),
     })),
   ].sort((a, b) => a.start - b.start);
-
-  // Lo que no tiene años (los idiomas) cierra la lista como una nota.
+  const latest = Math.max(...stages.map((s) => s.start));
   const notes = EDUCATION.filter((e) => !e.start);
-
-  const first = Math.min(...items.map((i) => i.start));
-  const last = Math.max(...items.map((i) => i.end));
-  const years = Array.from({ length: last - first + 1 }, (_, k) => first + k);
 
   return (
     <section
@@ -37,48 +38,45 @@ export default function Trajectory({ t }) {
       data-label={t("nav.experience")}
       aria-labelledby="experiencia-t"
     >
-      <header className="trajectory__head">
+      <div className="trajectory__side">
         <h2 id="experiencia-t" className="display display--section">
           {t("exp.title")}
         </h2>
-        <p className="trajectory__intro">{t("exp.intro")}</p>
-      </header>
-
-      <div className="chart" aria-hidden="true" style={{ "--years": years.length }}>
-        <ol className="chart__axis">
-          {years.map((y) => (
-            <li key={y}>{y}</li>
-          ))}
-        </ol>
-        {items.map((item) => (
-          <div
-            key={item.id}
-            className={`chart__bar chart__bar--${item.kind}`}
-            style={{ "--from": item.start - first + 1, "--to": item.end - first + 1 }}
-          >
-            <span>{item.label}</span>
-          </div>
+        <p className="trajectory__intro">{t("exp.lead")}</p>
+        {notes.map((note) => (
+          <p key={note.id} className="trajectory__note">
+            <span className="meta">{t(`edu.${note.id}.label`)}</span>
+            <strong>{t(`edu.${note.id}.title`)}</strong>
+          </p>
         ))}
       </div>
 
-      <ol className="entries">
-        {items.map((item) => (
-          <li key={item.id} id={item.id === "unicen" ? "educacion" : undefined} className="entry">
-            <p className="meta">
-              {t(`exp.kind.${item.kind}`)} · <time dateTime={String(item.start)}>{item.start}</time>-
-              <time dateTime={String(item.end)}>{item.end}</time>
+      <ol className="stages">
+        {stages.map((s, i) => (
+          <li
+            key={s.id}
+            id={s.id === "unicen" ? "educacion" : undefined}
+            className={`stage stage--${s.kind}${s.start === latest ? " stage--latest" : ""}`}
+            style={{ "--col": i + 1 }}
+          >
+            <p className="stage__years" aria-hidden="true">
+              <span>{s.start}</span>
+              <span className="stage__end">–{twoDigits(s.end)}</span>
             </p>
-            <h3 className="entry__title">{item.title}</h3>
-            {item.place && <p className="entry__place">{item.place}</p>}
-            <p className="entry__desc">{item.desc}</p>
-            {item.tags && <p className="meta">{item.tags.join(", ")}</p>}
-          </li>
-        ))}
-        {notes.map((note) => (
-          <li key={note.id} className="entry">
-            <p className="meta">{t(`edu.${note.id}.period`)}</p>
-            <h3 className="entry__title">{t(`edu.${note.id}.title`)}</h3>
-            <p className="entry__desc">{t(`edu.${note.id}.desc`)}</p>
+            <span className="stage__dot" aria-hidden="true" />
+            <div className="stage__body">
+              <p className="meta">
+                {t(`exp.kind.${s.kind}`)} · <time dateTime={String(s.start)}>{s.start}</time>-
+                <time dateTime={String(s.end)}>{s.end}</time>
+              </p>
+              <h3 className="stage__title">{s.title}</h3>
+              <p className="stage__place">
+                {s.place}
+                {s.end >= now && ` · ${t("exp.ongoing")}`}
+              </p>
+              <p className="stage__line">{s.line}</p>
+              {s.tags && <p className="meta">{s.tags.join(", ")}</p>}
+            </div>
           </li>
         ))}
       </ol>

@@ -149,7 +149,7 @@ Proyectos pasa a estar justo después del hero (I15). Experiencia y Educación s
 | 1 | Hero | `sobre-mi` | `100cqi` (una pantalla) |
 | 2 | Proyectos: entrada con las cifras | `proyectos` | `--w-intro: clamp(22rem, 30cqi, 30rem)` (con 26rem, "PROYECTOS" no entraba) |
 | 3 | Un panel por proyecto, en el orden de `PROJECTS` | `proyecto-<id>` | `--w-card-lg: clamp(30rem, 40cqi, 42rem)` para las apps en producción con plataforma móvil; `--w-card: clamp(22rem, 28cqi, 28rem)` para el resto |
-| 4 | Trayectoria (experiencia y educación) | `experiencia`; la fila de UNICEN lleva `educacion` | `--w-timeline: clamp(96rem, 130cqi, 110rem)`: ancha también en 1024px, para que las cuatro fichas entren a lo alto |
+| 4 | Trayectoria (experiencia y educación), vista previa en etapas (7.4) | `experiencia`; la etapa de UNICEN lleva `educacion` | `--w-timeline: calc(40rem + 3 * 3.9 * var(--fs-stage))`: sale del tamaño de los años (unos 2160px a 1440×900) |
 | 5 | Habilidades | `habilidades` | `--w-skills: clamp(48rem, 80cqi, 80rem)` |
 | 6 | Transición al cierre: decorativa, `aria-hidden` (agregada el 2026-09-14) | | `--w-bleed: 65cqi` (70cqi desde 1600px, como douglus) |
 | 7 | Contacto | `contacto` | `100cqi` |
@@ -322,21 +322,19 @@ Copia propuesta para el párrafo (hoy `hero.description` tiene 45 palabras y pas
 - **Sin cortes entre paneles** (pedido de Fermin, 2026-09-14): los paneles no llevan bordes que los separen, ni en horizontal ni en vertical, y el pie tampoco. Los separa el aire (el margen lateral de cada panel), así el recorrido se lee como una sola tira. Las líneas que son parte del contenido (el eje de años, el título de cada grupo de habilidades) se quedan.
 - **En vertical:** las mismas tarjetas, en una grilla de una o dos columnas, con la placa en 4:3.
 
-### 7.4 Timeline (Trayectoria)
+### 7.4 Trayectoria
 
-**Horizontal:**
-- `<h2>` "Trayectoria" en Display y, al lado, el párrafo largo que hoy está en el hero (estudiante de Ingeniería de Sistemas, foco en mobile y backend).
-- Debajo, un eje de años de 2020 a 2026 con marcas cada año (`--line`, cifras `tabular-nums`). Cada ítem es una fila con una barra que va de su inicio a su fin:
-  - DeporTurnos 2021–2025;
-  - TravelPic 2024–2025;
-  - UNICEN 2020–2026.
-- La experiencia usa barra llena de `--accent` y la educación, barra con borde de `--ink`. Además, cada fila dice qué es ("Experiencia" o "Educación"), así que no depende del color.
-- Bajo cada barra van el título, el lugar, una descripción corta y las tecnologías.
-- Idiomas (sin años) cierra el panel como una nota aparte: "Inglés y francés (B2)".
+Rediseñada el 2026-09-15: Fermin eligió la propuesta "A · Etapas" del lienzo de propuestas. La anterior (un párrafo largo, un eje de años con barras y cuatro fichas) repetía las mismas fechas tres veces y no se entendía. En la home es una **vista previa**; el detalle completo va en su propia página (7.12).
 
-**Vertical:** `<ol>` de ítems. Las fechas van a la izquierda, con `<time datetime>`, y el contenido a la derecha.
+**Horizontal** (`--w-timeline: calc(40rem + 3 * 3.9 * var(--fs-stage))`, unos 2160px a 1440×900: el ancho sale del tamaño de los años, así el rango siempre entra):
+- A la izquierda (25rem): `<h2>` "Trayectoria" en Display, una frase corta (`exp.lead`) y, abajo, los idiomas como nota (no tienen años).
+- A la derecha, una columna por etapa, en orden: UNICEN (2020–26), DeporTurnos (2021–25) y TravelPic (2024–25). Las tres comparten filas (`subgrid`):
+  - arriba, el rango de años enorme (`--fs-stage: clamp(4rem, 15vmin, 11rem)`): el inicio lleno y el fin ("–25") en contorno. La educación lleva también el inicio en contorno y la etapa más nueva va en `--accent`. Es visual (`aria-hidden`): las fechas están en texto con `<time>`;
+  - al medio, una línea de 1px que une las etapas, con un punto en cada una (lleno de `--accent` para la experiencia, hueco para la educación). Se dibuja con el scroll, con la misma línea de tiempo que la pista: desde que el panel llega al 60% de la ventana hasta que su borde derecho llega al de la ventana (en Firefox, TrackController escribe `--rail`);
+  - abajo, qué es y las fechas (Meta), el título, el rol o el lugar (con "en curso" si todavía no terminó), una sola línea de texto (`*.short`) y las tecnologías.
+- Cada etapa dice qué es ("Experiencia" o "Educación"), así que no depende del color ni del contorno.
 
-Los rangos de años se escriben con guion corto normal ("2021-2025") en el texto visible, o con "a" en la lectura ("2021 a 2025").
+**Vertical:** las etapas una debajo de otra; desde tablet, los años a la izquierda y el texto a la derecha. Sin línea ni puntos.
 
 ### 7.5 Cierre: transición dibujada y contacto
 
@@ -482,6 +480,7 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
 | Preloader | Primera carga de la sesión | `translate` Y y `scale` de palabras y letras, `scale` X de la línea, `opacity` del velo | Unos 5,3 s en total (7.11) | No existe |
 | Nombre del nav | Hover o foco (puntero fino) | Ancho del apellido (`grid-template-columns` de 0fr a 1fr) y `translate` Y + `opacity` de cada letra | Entra en 550ms `--ease-out`, 40ms entre letras; sale en 350ms, 30ms entre letras desde la última | Nombre completo, quieto |
 | Ola de la franja | 5 s sin mover el mouse ni scrollear (se repite mientras siga quieta) | `transform: perspective(180px) translateZ() rotateY()` de cada letra | 400ms por letra, 50ms entre letras | No existe (la franja es solo del modo horizontal) |
+| Línea de Trayectoria | Scroll | `scale` X del `::before` de `.stages` | Lineal, atada al scroll: del 60% de la ventana al borde derecho del panel (en Firefox, `--rail` desde TrackController) | No existe (vertical) |
 | Barra de progreso | Scroll | `scale` X | Lineal | No existe (vertical) |
 | Transición al cierre | Scroll | `scale` del degradado: de 0,05 a 1,02 en X (horizontal) o de 0,05 a 1 en Y (vertical) | Lineal, atada al scroll: en horizontal, mientras el borde izquierdo del panel va del borde derecho de la ventana al centro menos 100px (misma línea de tiempo que la pista; en Firefox, TrackController); en vertical, `view()` de `entry 0%` a `entry 100%` | Quieta y dibujada |
 | Tachado del nav y de contacto | Hover o foco | `scale` X del pseudo-elemento | 220ms `--ease-out` | Aparece sin transición |

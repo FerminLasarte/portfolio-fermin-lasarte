@@ -50,6 +50,7 @@
   --fs-display: clamp(3.5rem, 17vmin, 13rem);
   --fs-section: clamp(2.5rem, 7.5vmin, 6rem);
   --fs-mega: clamp(2.25rem, 9vmin, 7.5rem);
+  --fs-stage: clamp(4rem, 15vmin, 11rem); /* los años de Trayectoria */
 
   /* Forma */
   --radius-0: 0;
@@ -95,7 +96,9 @@
   --w-intro: clamp(22rem, 30cqi, 30rem);
   --w-card-lg: clamp(30rem, 40cqi, 42rem);
   --w-card: clamp(22rem, 28cqi, 28rem);
-  --w-timeline: clamp(96rem, 130cqi, 110rem);
+  /* Trayectoria: la columna del título y tres etapas; cada etapa mide 3,9 veces el
+     tamaño de sus años, así "2021–25" siempre entra. */
+  --w-timeline: calc(40rem + 3 * 3.9 * var(--fs-stage));
   --w-skills: clamp(48rem, 80cqi, 80rem);
   --w-bleed: 65cqi; /* 70cqi desde 100rem, como douglus */
 }
