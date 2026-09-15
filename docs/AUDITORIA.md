@@ -490,7 +490,14 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
     - (b) darle al nav un fondo en ese tramo;
     - (c) dejarlo como está.
 
-- [ ] **R-I4. Al tabular, el foco cae en botones que todavía no se ven** **[nav]**
+- [x] **R-I4. Al tabular, el foco cae en botones que todavía no se ven** **[nav]**
+  - **Hecho:** un `focusin` en la pista (en los dos modos) revela al instante el panel que está esperando o todavía entrando: lo pasa a `.is-revealed`, le agrega `.is-instant` y deja de observarlo. En `styles/motion.css`, `.is-revealed.is-instant .rv` pone `animation: none`. Como las entradas solo rellenan hacia atrás, en un panel que ya entró no cambia nada.
+  - **Verificado** sobre el servidor local:
+    - tabulando cada 60ms a 1440×900, a 1024×680 y a 900×900 (vertical), ninguna de las 32 paradas tiene el foco en algo con opacidad menor a 0,95 (antes eran 17 con opacidad 0);
+    - un panel que entra por scroll se sigue animando;
+    - con reduce motion no cambia nada;
+    - las pruebas de R-I2 siguen pasando.
+  - DISENO.md, sección 8.
   - **Dónde:** `components/TrackController.jsx:185-200` (paneles `.is-waiting`) y `styles/motion.css:45-87`.
   - **Problema:** al tabular hacia un panel que todavía no se reveló, el foco llega antes que la entrada. Cada elemento tarda hasta 720ms de retraso más 1,1 s de animación en aparecer. Tabulando rápido desde el hero, 17 elementos recibieron el foco con opacidad 0: los botones de las tarjetas, los de Trayectoria y Habilidades, y las píldoras del contacto. El anillo de foco rodea algo que no se ve (2.4.7).
   - **Solución:** en `onFocus`, si el foco entra a un panel `.is-waiting`, revelarlo sin animación. Es lo mismo que ya pide DISENO 8.7: lo que se hace con teclado es instantáneo.

@@ -85,6 +85,12 @@
   html.js .is-revealed .rv--grow {
     animation-name: rv-grow;
   }
+
+  /* Un panel al que entró el foco del teclado se muestra sin entrada (R-I4): lo
+     marca TrackController, así el foco nunca cae en algo que todavía no se ve. */
+  html.js .is-revealed.is-instant .rv {
+    animation: none;
+  }
 }
 
 @keyframes rise {

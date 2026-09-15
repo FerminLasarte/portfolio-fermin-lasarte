@@ -202,7 +202,22 @@ export default function TrackController() {
       }
     }
 
+    // El foco nunca cae en algo invisible (R-I4): si el teclado entra a un panel que
+    // todavía espera su entrada, o que la está haciendo, el panel se muestra al
+    // instante (.is-instant corta las animaciones; como solo rellenan hacia atrás, en un
+    // panel que ya entró no cambia nada). Con teclado, el movimiento es inmediato
+    // (docs/DISENO.md, 8.7). En los dos modos: en vertical también hay entradas.
+    const onFocusReveal = (e) => {
+      const panel = e.target.closest(".is-waiting, .is-revealed");
+      if (!panel || panel.classList.contains("is-instant")) return;
+      panel.classList.replace("is-waiting", "is-revealed");
+      panel.classList.add("is-instant");
+      reveal.unobserve(panel);
+    };
+    track.addEventListener("focusin", onFocusReveal);
+
     return () => {
+      track.removeEventListener("focusin", onFocusReveal);
       io?.disconnect();
       reveal.disconnect();
       cancelAnimationFrame(raf);
