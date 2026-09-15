@@ -237,7 +237,7 @@ Las cinco condiciones a la vez: `html.js` (lo pone `themeInitScript` antes del p
 
 Los enlaces son anclas nativas, como hoy: `href="/#proyectos"` en ES y `/en#proyectos` en EN. La URL toma el `#hash` y funcionan desde cualquier página (el 404 incluido).
 
-- **En vertical (y sin JS),** el navegador hace todo: `scroll-behavior: smooth` y `scroll-margin-top: var(--nav-h)` en los paneles.
+- **En vertical (y sin JS),** el navegador hace todo: `scroll-behavior: smooth` y `scroll-padding-block-start: var(--nav-h)` en `html`, que también sirve para el foco: lo que el navegador trae a la vista con Tab o Shift+Tab queda debajo del nav y no tapado (2026-09-15, R-M2 de la re-auditoría; antes era un `scroll-margin-top` en los paneles, que solo servía para las anclas). En horizontal vale 0 (`html.js:has(.h-scroll)`): al enfocar algo cerca del borde de arriba, el navegador correría el documento, y con él la pista.
 - **En horizontal,** el panel destino está dentro de la pista y el navegador no sabe llevarlo a la vista (el documento no tiene scroll horizontal). Una mejora de JS, dentro del componente de la pista, lo resuelve sin cambiar el HTML:
   - al hacer clic en un enlace a una sección de la misma página, al cargar con un `#hash` y en `hashchange`/`popstate`, calcula `top = h-scroll.offsetTop + panel.offsetLeft` (limitado al máximo del recorrido) y hace `window.scrollTo({ top, behavior })`, con `smooth` salvo en carga inicial;
   - no hace `preventDefault` del clic en sí: el navegador igual actualiza la URL; el script solo corrige a dónde se scrollea.

@@ -591,7 +591,14 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
   - **Problema:** `.matrix-scroll` se desplaza a lo ancho: a 375px mide 343px con una tabla de 757px, y también se desplaza a 768 y a 1024 en vertical. Pero no tiene nada enfocable, y axe lo marca como serio (`scrollable-region-focusable`). Además, la tabla no tiene `<caption>` ni `aria-labelledby`.
   - **Solución:** poner `tabindex="0" role="region" aria-labelledby="donde-t"` en la caja, y `aria-labelledby="donde-t"` (o un `<caption>` con `sr-only`) en la tabla.
 
-- [ ] **R-M2. En vertical, Shift+Tab puede dejar el foco debajo del nav (2.4.11)** **[nav]**
+- [x] **R-M2. En vertical, Shift+Tab puede dejar el foco debajo del nav (2.4.11)** **[nav]**
+  - **Hecho:** `html { scroll-padding-block-start: var(--nav-h) }` en `styles/base.css`, y se sacó el `scroll-margin-top` de `.panel`. En horizontal vale 0 (`html.js:has(.h-scroll)`, en la media query de `track.css`): con el margen, al enfocar algo a menos de 64px del borde de arriba, Chrome correría el documento y con él la pista. Las páginas propias no tienen pista y lo conservan en todos los anchos.
+  - **Verificado** sobre el servidor local, recorriendo la página entera con Tab y con Shift+Tab (con reduce motion, para que el scroll sea inmediato):
+    - Antes: en la home a 390×844, "Código" quedaba 39px debajo del nav; a 900×900, "Código" y "Visitar" quedaban 46px. En `/habilidades` a 390, la caja de la tabla (R-M1, más alta que la pantalla) quedaba 64px.
+    - Después: 0 focos tapados en `/` a 390 y 900, `/en` a 768, y `/trayectoria` y `/habilidades` a 390, en los dos sentidos.
+    - En horizontal (1440×900), el `scrollY` de las 45 paradas de Tab es idéntico al de antes.
+    - Las anclas del nav siguen dejando el panel a 64px del borde, a 390 y a 900.
+  - DISENO.md, 6.3.
   - **Dónde:** `styles/nav.css:7-18` (el nav es `sticky`) y `styles/track.css:31-34` (solo `.panel` tiene `scroll-margin-top`).
   - **Problema:** en la home a 390×844, con Shift+Tab, el botón "Código" quedó con 39 de sus 57px debajo del nav. En `/trayectoria` y `/habilidades` a 1280×800 no se reprodujo.
   - **Solución:** `html { scroll-padding-block-start: var(--nav-h) }` y sacar el `scroll-margin-top` de `.panel`.

@@ -8,9 +8,13 @@
   padding: 0;
 }
 
+/* El nav está pegado arriba: las anclas y el foco que el navegador trae a la vista
+   quedan debajo de él, no tapados (R-M2 de la re-auditoría; WCAG 2.4.11). En
+   horizontal no aplica (styles/track.css): ahí la pista la mueve TrackController. */
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  scroll-padding-block-start: var(--nav-h);
 }
 
 @media (prefers-reduced-motion: no-preference) {

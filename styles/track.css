@@ -30,7 +30,6 @@ main,
 
 .panel {
   padding: var(--space-8) var(--pad-x);
-  scroll-margin-top: var(--nav-h);
 }
 
 /* La franja inferior solo existe en horizontal. Lee la línea de tiempo --pan, que se
@@ -69,6 +68,13 @@ body {
     flex: none;
     height: 100%;
     padding-block: calc(var(--nav-h) + var(--space-5)) calc(var(--strip-h) + var(--space-5));
+  }
+
+  /* Sin el margen del nav (styles/base.css): al enfocar algo cerca del borde de
+     arriba, el navegador corría el documento, y con él la pista. Las páginas propias
+     no tienen pista y lo conservan. */
+  html.js:has(.h-scroll) {
+    scroll-padding-block-start: 0;
   }
 
   /* Pantallas bajas: menos aire arriba y abajo, para que el contenido entre. */
