@@ -93,7 +93,7 @@
   - **Falta:** que Fermin comparta el enlace de producción por WhatsApp para ver la imagen OG (R-M27).
   - **Nota:** `next start` escribe `Error: Internal: NoFallbackError` en el log por cada 404 de `[lang]` o `[page]` que no existe (`dynamicParams = false`). Es la señal interna con la que Next manda al 404, y la respuesta es correcta.
   - **Sigue:** I12 y N4, cuando Fermin tenga las capturas y la foto nueva. Cada cambio en `main` publica en producción.
-- **Siguen abiertos de antes:** I12 y N4 (contenido que tiene que conseguir Fermin), y M13. N10 quedó cerrado: en el preview, el tachado del nav cruza la palabra entera (ver R-M33).
+- **Siguen abiertos de antes:** I12 y N4 (contenido que tiene que conseguir Fermin). M13 quedó cerrado sin cambios el 2026-09-15, por decisión de Fermin: la regla actual (`.jsx` para los componentes, `.js` para los archivos que Next busca por nombre) ya es coherente. N10 quedó cerrado: en el preview, el tachado del nav cruza la palabra entera (ver R-M33).
 
 Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual**: se usan como requisitos del diseño nuevo.
 
@@ -531,7 +531,7 @@ _(Agregá aquí lo que aparezca durante las fases.)_
   - limpieza (R-M28 a R-M36), de `677d961` a `1361fb4`. Solo R-M34 (los textos, con la copia que aprobó Fermin) y R-M33 (la foto al cambiar la ventana y el tachado con colores forzados) cambian algo a la vista.
   - documentación (R-M37 y R-M38): `644f890` y `4ca37e7`. DISENO.md queda en su versión final.
 - N10, el tachado del nav, quedó cerrado: en el preview cruza la palabra entera (ver R-M33).
-- **La re-auditoría no tiene más puntos abiertos.** El log de Vercel muestra la línea `✓ scripts/check.mjs`. Sigue lo que no es de esta fase: I12 y N4 (contenido de Fermin), M13, y el merge a `main`.
+- **La re-auditoría no tiene más puntos abiertos.** El log de Vercel muestra la línea `✓ scripts/check.mjs`. Sigue lo que no es de esta fase: I12 y N4 (contenido de Fermin). M13 se cerró sin cambios y el merge a `main` está hecho (`006bdf0`).
 
 No hay nada crítico. Los problemas más visibles son cuatro:
 - **R-I1:** dos nombres de proyecto quedan cortados en su placa.
@@ -1383,7 +1383,7 @@ Se revisó en Chrome visible a 1440×900, en claro y en oscuro.
 ## Pendientes anteriores
 
 - **I12** (capturas verticales): sigue abierto. Seis de las ocho tarjetas muestran solo el nombre en una placa, y dos de esas placas cortan el nombre (R-I1).
-- **M13** (`.js` y `.jsx`): sin cambios.
+- **M13** (`.js` y `.jsx`): cerrado sin cambios el 2026-09-15, por decisión de Fermin (ver M13).
 - **N4** (foto blanda en 2x): sigue. A 1440×900 la foto se dibuja a 320×459 (360px de ancho con `cover`), así que en 2x haría falta una de al menos 720×920. La actual mide 560×715.
 - **N5:** sigue abierto en la configuración (R-M35). *(Nota, R-M38: cerrado con R-M35.)*
 - **N6:** fuera de la auditoría, por decisión de Fermin.
