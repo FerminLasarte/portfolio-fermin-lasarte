@@ -147,7 +147,7 @@
 
 /* ---------- Horizontal: cada tarjeta es un panel ---------- */
 
-@media (min-width: 64rem) and (min-height: 42.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+@media screen and (min-width: 64rem) and (min-height: 42.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   html.js .projects {
     display: contents;
   }

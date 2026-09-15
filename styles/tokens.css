@@ -104,20 +104,24 @@
   --w-bleed: 65cqi; /* 70cqi desde 100rem, como douglus */
 }
 
-/* Tema oscuro: lo pone lib/theme.js en <html> antes del primer pintado. */
-html.dark-mode {
-  --paper: #0e1012;
-  --surface: #181b1f;
-  --ink: #ecede9;
-  --ink-muted: #a3a8ad;
-  --line: #6b7076;
-  --accent: #a57bff;
-  --accent-soft: #221840;
-  --on-accent: #0e1012;
-  --on-accent-muted: #2a1d55;
-  --wash-1: #2a1d55;
-  --wash-2: #5b3bc4;
-  color-scheme: dark;
+/* Tema oscuro: lo pone lib/theme.js en <html> antes del primer pintado. Solo en
+   pantalla: al imprimir (sin fondos, en papel blanco) va siempre el tema claro (R-I9,
+   styles/print.css). */
+@media screen {
+  html.dark-mode {
+    --paper: #0e1012;
+    --surface: #181b1f;
+    --ink: #ecede9;
+    --ink-muted: #a3a8ad;
+    --line: #6b7076;
+    --accent: #a57bff;
+    --accent-soft: #221840;
+    --on-accent: #0e1012;
+    --on-accent-muted: #2a1d55;
+    --wash-1: #2a1d55;
+    --wash-2: #5b3bc4;
+    color-scheme: dark;
+  }
 }
 
 /* La transición al cierre, como en douglus: 65% del ancho y 70% desde 1600px. */

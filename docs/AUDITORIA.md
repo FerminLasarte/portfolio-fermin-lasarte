@@ -531,7 +531,24 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
     - **La línea de Trayectoria y el contorno del muro se pierden.** Lo segundo borra el nivel de las tecnologías en la home (R-M4).
   - **Solución:** con `forced-colors: active`, sacar el `mix-blend-mode` del nav y la franja y darles fondo `Canvas`. Los puntos de la tabla, con `forced-color-adjust: none` y `CanvasText`, o como un glifo "●" en texto.
 
-- [ ] **R-I9. Al imprimir en apaisado sale solo el hero y después páginas en blanco** **[nav]**
+- [x] **R-I9. Al imprimir en apaisado sale solo el hero y después páginas en blanco** **[nav]**
+  - **Hecho:**
+    - Las 10 copias de la media query del modo horizontal (9 CSS y `lib/track.js`) piden `screen`, igual que las entradas animadas (`motion.css`) y la ola del muro en vertical (`skills.css`).
+    - El tema oscuro es solo de pantalla (`@media screen` en `tokens.css`).
+    - `styles/print.css`:
+      - esconde el nav, el menú, la franja, el cursor, el preloader, el enlace de salto, `.bleed`, la estela de la foto y "Copiar email";
+      - deja la foto en su lugar;
+      - le da al cierre la paleta clara;
+      - pone el botón principal sin fondo;
+      - imprime los rellenos que dicen algo (los puntos de la tabla y la leyenda del muro), con `print-color-adjust: exact`;
+      - evita que un título quede solo al pie de una hoja o que se parta una tarjeta.
+  - **Verificado** con PDF en A4 sobre el servidor local:
+    - La home sale vertical: 14 páginas en apaisado y 9 en vertical.
+    - `/trayectoria` sale en 3 páginas y `/habilidades` en 4.
+    - Siempre en el tema claro, aunque la página esté en oscuro. El cierre, el muro (en su estado final) y la tabla con sus puntos se leen.
+    - Ningún texto queda con opacidad baja.
+    - En pantalla no cambió nada: a 1440 sigue el modo horizontal, y el tema oscuro y el modo vertical en 375 siguen igual.
+  - DISENO.md, 6.2.
   - **Dónde:** las 10 copias de la media query del modo horizontal (`styles/track.css:46` y las demás) no piden `screen`. `styles/motion.css` (`.is-waiting`) tampoco. No hay ningún `@media print`.
   - **Problema:** en A4 apaisado (1123×794) se cumplen las condiciones del modo horizontal. El PDF sale con el hero en la primera página y 10 páginas en blanco, con el nav, la franja y el enlace de salto repetidos en cada una. En vertical, los paneles que todavía no se vieron se imprimirían con `opacity: 0`. DISENO 6.2 dice que la impresión es vertical.
   - **Solución:** agregar `screen and` en las 10 copias de la media query y en la regla de `.is-waiting`, y un `@media print` que esconda el nav, la franja, el cursor, el preloader, el enlace de salto y `.bleed`.

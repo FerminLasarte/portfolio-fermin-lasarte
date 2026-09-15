@@ -1,0 +1,73 @@
+/*
+ * Impresión (R-I9 de la re-auditoría; docs/DISENO.md, 6.2). El modo horizontal y las
+ * entradas animadas son solo de pantalla (sus media queries piden `screen`), así que al
+ * imprimir la página es vertical y se ve entera. El tema oscuro también es solo de
+ * pantalla (styles/tokens.css): en papel va el claro. Acá se esconde lo que no sirve
+ * en papel y el cierre toma la paleta clara, porque los fondos no se imprimen.
+ */
+@media print {
+  .skip,
+  .nav,
+  .menu,
+  .strip,
+  .cursor,
+  .preloader,
+  .bleed,
+  .drag__trail {
+    display: none !important;
+  }
+
+  /* La foto, en su lugar aunque se haya arrastrado. */
+  .drag {
+    translate: none !important;
+  }
+
+  /* El cierre es noche en los dos temas: en papel, los mismos tokens del tema claro. */
+  .contact {
+    --night: var(--paper);
+    --night-raised: var(--paper);
+    --on-night: var(--ink);
+    --on-night-muted: var(--ink-muted);
+    --night-accent: var(--accent);
+    --night-line: var(--line);
+    --night-line-strong: var(--line);
+  }
+
+  /* Los fondos no se imprimen: el botón principal va con el texto en el acento. */
+  .btn--primary {
+    --btn-bg: transparent;
+    --btn-ink: var(--accent);
+  }
+
+  /* "Copiar email" no sirve en papel (es el único <button> del contacto). */
+  .contact button {
+    display: none;
+  }
+
+  /* Un título no queda solo al pie de una hoja. */
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+
+  /* Lo que se dice con un relleno se imprime igual: los puntos de la tabla de
+     Habilidades y el cuadrado lleno de la leyenda del muro. */
+  .matrix__dot,
+  .matrix td:not(:has(.matrix__dot))::before,
+  .wall__key {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Iconos negros que en pantalla oscura se invierten (styles/page.css). */
+  .skill-row img[data-dark-invert] {
+    filter: none;
+  }
+
+  /* Que una tarjeta o una etapa no quede partida entre dos hojas. */
+  .card,
+  .stage,
+  .chapter {
+    break-inside: avoid;
+  }
+}

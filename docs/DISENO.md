@@ -231,7 +231,7 @@ Las cinco condiciones a la vez: `html.js` (lo pone `themeInitScript` antes del p
 | Móvil, tablet táctil, ventana baja o angosta | Vertical |
 | Reduce motion activado | Vertical: mover el contenido de costado mientras el usuario scrollea hacia abajo es justo lo que molesta con problemas vestibulares |
 | Sin JS | Vertical, con todo el contenido y todos los enlaces funcionando |
-| Impresión | Vertical |
+| Impresión | Vertical, en el tema claro y sin el nav, la franja, el cursor, el preloader, el enlace de salto, la transición al cierre ni "Copiar email" (2026-09-15, R-I9 de la re-auditoría). La media query del modo horizontal y la de las entradas animadas piden `screen`, el tema oscuro también es solo de pantalla, y `styles/print.css` le da al cierre la paleta clara. Antes, en A4 apaisado salía solo el hero y después hojas en blanco |
 
 ### 6.3 Anclas del nav
 
