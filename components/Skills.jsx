@@ -1,44 +1,83 @@
-import Image from "next/image";
-import { DEVICON, SKILL_GROUPS } from "@/lib/site";
-import Icon from "@/components/Icon";
-import { faLaptopCode } from "@/lib/icons";
+import { Fragment } from "react";
+import { SKILL_GROUPS } from "@/lib/site";
+import { pagePath } from "@/lib/i18n";
 
-export default function Skills({ t }) {
+// Grupos de SKILL_GROUPS en el orden del muro y de la lista de abajo. Los de mobile van
+// en --accent.
+const GROUPS = [
+  { key: "skills.mobile", ids: ["mobile"], accent: true },
+  { key: "skills.row.back", ids: ["backend", "data"] },
+  { key: "skills.row.web", ids: ["web", "tools"] },
+];
+
+// Habilidades (docs/DISENO.md, 7.7): vista previa en un muro de palabras. Todas las
+// tecnologías en mayúsculas gigantes, justificadas en líneas que llenan el ancho del
+// panel sin salirse. Empiezan en contorno y una ola atada al scroll las va llenando:
+// las de nivel avanzado quedan llenas y las intermedias, en contorno. El muro es visual
+// (aria-hidden): la información está debajo, en texto, con los mismos grupos. El nivel
+// en texto y dónde usé cada una van en la página de Habilidades (7.12).
+export default function Skills({ t, lang }) {
+  const byId = Object.fromEntries(SKILL_GROUPS.map((g) => [g.id, g]));
+  const groups = GROUPS.map((group) => ({
+    ...group,
+    skills: group.ids.flatMap((id) => byId[id].skills),
+  }));
+  const words = groups.flatMap((group) => group.skills.map((skill) => ({ ...skill, accent: group.accent })));
+
   return (
-    <section id="habilidades">
-      <p className="section-label premium-reveal">
-        <Icon icon={faLaptopCode} />
-        <span>{t("skills.title")}</span>
-      </p>
-      <h2 className="premium-reveal">{t("skills.title")}</h2>
+    <section
+      id="habilidades"
+      className="panel panel--skills skills"
+      data-section="habilidades"
+      data-label={t("nav.skills")}
+      aria-labelledby="habilidades-t"
+    >
+      <header className="skills__head">
+        <h2 id="habilidades-t" className="display display--section">
+          {t("skills.title")}
+        </h2>
+        <p className="lead skills__lead">{t("skills.lead")}</p>
+        <a className="btn skills__more" href={pagePath(lang, "skills")}>
+          <span className="btn__label">{t("skills.more")}</span>
+        </a>
+      </header>
 
-      <div className="skills-bento">
-        {SKILL_GROUPS.map((card) => (
-          <div key={card.id} className={`skill-card ${card.extraClass ?? ""} premium-reveal`.trim()}>
-            <div className="skill-card-header">
-              <span className="skill-card-icon">
-                <Icon icon={card.icon} />
-              </span>
-              <h3>{t(card.titleKey)}</h3>
-            </div>
-            <div className="skill-icons-grid">
-              {card.skills.map((s) => (
-                <div
-                  key={s.name}
-                  className="skill-icon"
-                  data-tooltip={`${s.name} · ${t(`skills.level.${s.level}`)}`}
-                >
-                  <Image
-                    src={`${DEVICON}/${s.icon}.svg`}
-                    alt={s.alt ?? s.name}
-                    width={30}
-                    height={30}
-                    style={s.style}
-                    {...(s.darkInvert ? { "data-dark-invert": "" } : {})}
-                  />
-                </div>
+      <div className="wall-wrap" aria-hidden="true">
+        <p className="wall">
+          {words.flatMap((word, i) => [
+            <span
+              key={word.name}
+              className={`wall__word${word.level === "advanced" ? " is-strong" : ""}${word.accent ? " is-accent" : ""}`}
+              style={{ "--i": i }}
+            >
+              {word.name}
+            </span>,
+            " ",
+          ])}
+        </p>
+        <p className="wall__legend meta">
+          <span className="wall__key is-strong" />
+          {t("skills.level.advanced")}
+          <span className="wall__key" />
+          {t("skills.level.intermediate")}
+        </p>
+      </div>
+
+      {/* El nivel va en texto para los lectores de pantalla (R-M4): el muro, que lo
+          muestra con lleno y contorno, es aria-hidden. En pantalla no cambia nada. */}
+      <div className="skills__groups">
+        {groups.map((group) => (
+          <div key={group.key} className="skills__group">
+            <h3 className="meta">{t(group.key)}</h3>
+            <p>
+              {group.skills.map((s, i) => (
+                <Fragment key={s.name}>
+                  {i > 0 && ", "}
+                  {s.name}
+                  <span className="sr-only"> ({t(`skills.level.${s.level}`).toLowerCase()})</span>
+                </Fragment>
               ))}
-            </div>
+            </p>
           </div>
         ))}
       </div>

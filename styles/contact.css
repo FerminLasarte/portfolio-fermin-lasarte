@@ -1,0 +1,162 @@
+/*
+ * Cierre (docs/DISENO.md, 7.5), como el final de douglus: antes del contacto, un
+ * panel con un degradado del acento que se "dibuja" con el scroll y termina en el
+ * color noche; después, el contacto en noche (el mismo en los dos temas), con el
+ * título gigante, una línea y las píldoras.
+ */
+
+/* ---------- Transición dibujada ---------- */
+
+/* Decorativa (aria-hidden). En vertical es una franja que baja hacia el contacto; en
+   horizontal, un panel que se dibuja de izquierda a derecha. */
+.bleed {
+  --wash-dir: 180deg;
+  --wash-mask: ellipse 140% 100% at 50% 100%;
+  --wash-origin: center top;
+  --wash-from: 1 0.05;
+  --wash-to: 1 1;
+  position: relative;
+  block-size: clamp(12rem, 45vh, 26rem);
+  padding: 0;
+}
+
+/* La máscara ovalada ablanda los bordes del lado claro, como la mancha de douglus. */
+.bleed__wash {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    var(--wash-dir),
+    transparent 0%,
+    var(--wash-1) 22%,
+    var(--wash-2) 42%,
+    var(--wash-3) 62%,
+    var(--wash-4) 82%,
+    var(--night) 100%
+  );
+  mask-image: radial-gradient(var(--wash-mask), #000 55%, transparent 100%);
+  transform-origin: var(--wash-origin);
+}
+
+/* En vertical se estira mientras la franja entra a la vista: lo dibujado nunca es más
+   corto que lo visible, así parece que ya estaba ahí. Sin soporte, sin JS o con reduce
+   motion queda dibujada, quieta. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    html.js .bleed__wash {
+      animation: draw linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 100%;
+    }
+  }
+}
+
+@keyframes draw {
+  from {
+    scale: var(--wash-from);
+  }
+
+  to {
+    scale: var(--wash-to);
+  }
+}
+
+/* ---------- Contacto ---------- */
+
+.contact {
+  --focus: var(--on-night);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--night);
+  color: var(--on-night);
+}
+
+.contact ::selection {
+  background: var(--on-night);
+  color: var(--night);
+}
+
+.contact__title {
+  font-size: min(var(--fs-display), 15vw);
+}
+
+.contact__title em {
+  font-style: normal;
+  color: var(--night-accent);
+}
+
+.contact__rule {
+  block-size: 2px;
+  margin-block: clamp(1.5rem, 3vh, 3rem) clamp(2rem, 4vh, 4rem);
+  background: var(--night-line);
+}
+
+.contact__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+}
+
+.contact__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  min-inline-size: 0;
+}
+
+.contact__back svg {
+  inline-size: 3.5rem;
+  block-size: auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: square;
+}
+
+/* Píldoras del cierre: más grandes (las de douglus miden 1.75rem 2.5rem) y sobre
+   noche; el relleno es claro y el texto pasa a noche. */
+.btn--night {
+  --btn-bg: var(--night-raised);
+  --btn-ink: var(--on-night);
+  --btn-line: var(--night-line-strong);
+  --btn-fill: var(--on-night);
+  --btn-fill-ink: var(--night);
+}
+
+.btn--lg {
+  padding: 1.5rem 2.5rem;
+  font-size: clamp(1rem, 1vw, 1.25rem);
+}
+
+/* ---------- Horizontal ---------- */
+
+@media screen and (min-width: 64rem) and (min-height: 42.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html.js .bleed {
+    --wash-dir: 90deg;
+    --wash-mask: ellipse 100% 140% at 100% 50%;
+    --wash-origin: left center;
+    --wash-from: 0.05 1;
+    --wash-to: 1.02 1;
+    block-size: 100%;
+  }
+
+  /* El tramo de douglus (ScrollTrigger de "center center" a "right+=100 center" del
+     panel anterior): se estira desde que el panel asoma por el borde derecho hasta que
+     su borde izquierdo llega al centro menos 100px, de 0,05 a 1,02. Así lo estirado
+     siempre es más ancho que lo visible y parece que ya estaba ahí. Usa la misma línea
+     de tiempo que mueve la pista; sin animation-timeline (Firefox) lo hace
+     TrackController. */
+  @supports (animation-timeline: view()) {
+    html.js .bleed__wash {
+      animation-timeline: --pan;
+      animation-range: contain calc(var(--x-bleed) - 100cqi) contain calc(var(--x-bleed) - 50cqi + 100px);
+    }
+  }
+
+  /* El título en una sola línea, como el "Let's have a chat" de douglus. */
+  html.js .contact__title {
+    font-size: min(var(--fs-display), 8.6cqi);
+    white-space: nowrap;
+  }
+}

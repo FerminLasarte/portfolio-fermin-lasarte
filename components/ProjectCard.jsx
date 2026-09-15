@@ -1,170 +1,128 @@
-import Image from "next/image";
-import Dropdown from "@/components/Dropdown";
-import Terminal from "@/components/Terminal";
-import { fill } from "@/lib/translations";
+import { getImageProps } from "@/lib/image";
 import Icon from "@/components/Icon";
-import { faApple, faDownload, faGithub, faGooglePlay, faLock, faUpRightFromSquare } from "@/lib/icons";
+import { EXTERNAL, isFeatured } from "@/lib/site";
+import { faApple, faGithub, faGooglePlay, faUpRightFromSquare } from "@/lib/icons";
 
-const STORES = {
-  appstore: { icon: faApple, label: "App Store" },
-  playstore: { icon: faGooglePlay, label: "Google Play" },
-};
-
-const PLATFORMS = {
-  ios: { icon: faApple, label: "iOS" },
-  android: { icon: faGooglePlay, label: "Android" },
-};
-
+// Un botón por destino (I15): las tiendas directo, sin dropdown. "Código" y "Visitar"
+// se repiten entre tarjetas, así que su nombre accesible suma el proyecto (`named`,
+// R-M10): "Código de Vault", "Vault code".
 const LINKS = {
-  repo: { icon: faGithub, labelKey: "projects.code" },
-  demo: { icon: faUpRightFromSquare, labelKey: "projects.visit" },
+  appstore: { icon: faApple, label: () => "App Store" },
+  playstore: { icon: faGooglePlay, label: () => "Google Play" },
+  repo: { icon: faGithub, label: (t) => t("projects.code"), named: "projects.codeOf" },
+  demo: { icon: faUpRightFromSquare, label: (t) => t("projects.visit"), named: "projects.visitOf" },
 };
 
-function ProjectMedia({ project, t }) {
-  const { id, media, status, name } = project;
-
-  if (media.type === "terminal") {
-    return (
-      <div className="bento-card__image" style={{ background: "#1e1e1e" }}>
-        <div className="engineer-terminal" style={{ height: "100%", border: "none", borderRadius: 0 }}>
-          <div className="terminal-header">
-            <div className="terminal-btn btn-close" />
-            <div className="terminal-btn btn-min" />
-            <div className="terminal-btn btn-max" />
-          </div>
-          <Terminal lines={t(`projects.${id}.terminal`)} />
-        </div>
-      </div>
-    );
-  }
-
-  // El fondo difuminado usa la miniatura: con blur(14px) no se nota la diferencia.
-  const bgStyle = media.thumb
-    ? { backgroundImage: `url('${media.thumb}')` }
-    : { background: media.background };
-
+// Arma el texto de un botón con una plantilla ("{label} de {name}"): lo que se ve es
+// `label`; lo que está antes y después va solo para los lectores de pantalla, así el
+// nombre empieza o termina con lo visible según el idioma.
+function Named({ template, label, name, icon }) {
+  const [before, after = ""] = template.split("{label}");
+  const fill = (s) => s.replace("{name}", name);
   return (
-    <div className="bento-card__image">
-      <div className="bento-card__bg" style={bgStyle} />
-      {status === "wip" && <div className="bento-wip-badge">{t("projects.soon")}</div>}
-      {media.type === "phone" && (
-        <div className={`phone-mockup${media.small ? " phone-mockup--sm" : ""}`}>
-          <div className="phone-mockup__screen">
-            {/* La captura llena la pantalla con object-fit: cover, así que se dibuja
-                más ancha que el teléfono: ~360px en el grande y ~290px en el chico. */}
-            <Image
-              src={media.image}
-              width={media.width}
-              height={media.height}
-              sizes={media.small ? "290px" : "360px"}
-              alt={fill(t("projects.screenshotAlt"), { name })}
-            />
-          </div>
-        </div>
+    <>
+      {before && <span className="sr-only">{fill(before)}</span>}
+      <Icon icon={icon} />
+      {label}
+      {after && <span className="sr-only">{fill(after)}</span>}
+    </>
+  );
+}
+
+const PLATFORMS = { ios: "iOS", android: "Android" };
+
+// Tarjeta de proyecto (docs/DISENO.md, 7.3). De arriba a abajo: la placa, el estado y
+// las plataformas en texto, el título, el problema (si hay) y la solución, las
+// tecnologías y los enlaces. Las apps móviles en producción van en un panel más ancho.
+function Plate({ project, t, featured }) {
+  const { id, name, media, links } = project;
+  const style = media.plate ? { "--plate": media.plate } : undefined;
+
+  // La placa lleva al destino principal, fuera del orden de foco: los botones de
+  // abajo ya tienen el mismo enlace.
+  return (
+    <a
+      className={`card__plate card__plate--${media.type}`}
+      href={links[0].url}
+      tabIndex={-1}
+      aria-hidden="true"
+      style={style}
+      {...EXTERNAL}
+    >
+      {media.type === "type" ? (
+        <span className="poster">{t(`projects.${id}.name`, name)}</span>
+      ) : (
+        // eslint-disable-next-line @next/next/no-img-element -- los atributos salen de getImageProps (R-M15)
+        <img
+          {...getImageProps({
+            src: media.image,
+            width: media.width,
+            height: media.height,
+            sizes: featured ? "(min-width: 64rem) 34vw, 80vw" : "(min-width: 64rem) 22vw, (min-width: 48rem) 36vw, 80vw",
+            alt: "",
+          }).props}
+          alt=""
+        />
       )}
-      {media.code && (
-        <div className="bento-code-decoration" aria-hidden="true">
-          {media.code.map((line, i) => (
-            <span key={i}>{line}</span>
-          ))}
-        </div>
-      )}
-    </div>
+    </a>
   );
 }
 
 export default function ProjectCard({ project, t }) {
-  const { id, name, size, status, platforms = [], badge, primary, tags, links } = project;
-
-  const stores = links.filter((l) => l.type in STORES);
-  const others = links.filter((l) => !(l.type in STORES));
-  const btnClass = `btn btn-sm${primary ? "" : " btn-outline"}`;
+  const { id, name, status, platforms = [], tags, links } = project;
+  const featured = isFeatured(project);
+  const projectName = t(`projects.${id}.name`, name);
   const problem = t(`projects.${id}.problem`, null);
-  const showMeta = status === "live" || platforms.length > 0 || badge;
-  const showLinks = links.length > 0 || status === "wip";
+  const platformText = platforms.map((p) => PLATFORMS[p]).join(` ${t("projects.and")} `);
+  const titleId = `proyecto-${id}-t`;
 
   return (
-    <article className={`bento-card${size ? ` bento-card--${size}` : ""} premium-reveal`}>
-      <ProjectMedia project={project} t={t} />
-      <div className="bento-card__content">
-        {showMeta && (
-          <div className="bento-card__meta">
-            {status === "live" && (
-              <div className="production-status">
-                <span className="status-dot-sm" />
-                <span>{t("projects.live")}</span>
-              </div>
-            )}
-            {platforms.length > 0 && (
-              <div className="bento-card__platform">
-                {platforms.map((p) => (
-                  <Icon key={p} icon={PLATFORMS[p].icon} title={PLATFORMS[p].label} />
-                ))}
-              </div>
-            )}
-            {badge && <div className="bento-saas-badge">{badge}</div>}
-          </div>
-        )}
-        <h3>{t(`projects.${id}.title`, name)}</h3>
-        <div className="project-story">
-          {problem && (
-            <div className="story-block">
-              <span className="story-label">{t("projects.problem")}</span>
-              <p>{problem}</p>
-            </div>
-          )}
-          <div className="story-block">
-            <span className="story-label story-label--accent">{t("projects.solution")}</span>
-            <p>{t(`projects.${id}.solution`)}</p>
-          </div>
-        </div>
-        <div className="project-tags">
-          {tags.map((tag) => (
-            <span key={tag} className="tag">
-              {tag}
-            </span>
-          ))}
-        </div>
-        {showLinks && (
-          <div className="project-links">
-            {stores.length > 0 && (
-              <Dropdown
-                up
-                triggerClassName={`${btnClass} dropdown-btn`}
-                triggerContent={
+    <article
+      id={`proyecto-${id}`}
+      className={`panel card ${featured ? "panel--card-lg card--lg" : "panel--card"}`}
+      data-section="proyectos"
+      data-label={t("nav.projects")}
+      aria-labelledby={titleId}
+    >
+      <Plate project={project} t={t} featured={featured} />
+
+      {(status || platformText) && (
+        <p className="card__meta meta">
+          {status && <span className={status === "live" ? "is-live" : undefined}>{t(`projects.${status}`)}</span>}
+          {platformText && <span>{platformText}</span>}
+        </p>
+      )}
+
+      <h3 className="card__title poster" id={titleId}>
+        {t(`projects.${id}.title`, name)}
+      </h3>
+
+      <div className="card__text">
+        {problem && <p className="card__problem">{problem}</p>}
+        <p>{t(`projects.${id}.solution`)}</p>
+      </div>
+
+      <p className="card__tags meta">{tags.join(", ")}</p>
+
+      <div className="card__links">
+        {links.map((link, i) => {
+          const { icon, label, named } = LINKS[link.type];
+          return (
+            <a key={link.url} className={i === 0 ? "btn btn--primary" : "btn"} href={link.url} {...EXTERNAL}>
+              <span className="btn__label">
+                {named ? (
+                  <Named template={t(named)} label={label(t)} name={projectName} icon={icon} />
+                ) : (
                   <>
-                    <Icon icon={faDownload} />
-                    <span>{t("projects.download")}</span>
+                    <Icon icon={icon} />
+                    {label(t)}
                   </>
-                }
-              >
-                {stores.map((l) => (
-                  <a key={l.type} href={l.url} target="_blank" rel="noopener noreferrer">
-                    <Icon icon={STORES[l.type].icon} /> {STORES[l.type].label}
-                  </a>
-                ))}
-              </Dropdown>
-            )}
-            {others.map((l) => (
-              <a
-                key={l.url}
-                href={l.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={btnClass}
-              >
-                <Icon icon={LINKS[l.type].icon} />
-                <span>{t(LINKS[l.type].labelKey)}</span>
-              </a>
-            ))}
-            {links.length === 0 && (
-              <button className="btn btn-sm btn-outline btn-private" disabled>
-                <Icon icon={faLock} />
-                <span>{t("projects.soon")}</span>
-              </button>
-            )}
-          </div>
-        )}
+                )}
+                <span className="sr-only"> {t("link.newTab")}</span>
+              </span>
+            </a>
+          );
+        })}
       </div>
     </article>
   );

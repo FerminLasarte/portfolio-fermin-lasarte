@@ -1,0 +1,155 @@
+/*
+ * Proyectos (docs/DISENO.md, 7.3): un panel de entrada con las cifras y un panel
+ * por proyecto. En horizontal, cada tarjeta es un panel de la pista; en vertical,
+ * una grilla de una o dos columnas.
+ */
+
+.projects {
+  display: grid;
+}
+
+.projects > .panel {
+  padding-block: var(--space-6);
+}
+
+/* ---------- Entrada ---------- */
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-6);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+  gap: var(--space-4);
+}
+
+.stats > div {
+  display: grid;
+}
+
+.stats dt {
+  order: 2;
+}
+
+.stats dd {
+  font-size: var(--fs-4);
+  font-weight: 700;
+  font-stretch: var(--wdth-mega);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Tarjeta ---------- */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* Placa: la captura o el logo sobre el color de la app, o el nombre en grande.
+   Es un enlace al destino principal, fuera del orden de foco (los botones ya lo
+   tienen). */
+.card__plate {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  overflow: clip;
+  background: var(--plate, var(--surface));
+  text-decoration: none;
+}
+
+.card--lg .card__plate {
+  aspect-ratio: 16 / 9;
+}
+
+.card__plate img {
+  inline-size: 78%;
+  block-size: auto;
+}
+
+/* El nombre de la placa tipográfica no se puede cortar (R-I1): la placa recorta con
+   overflow: clip y la tarjeta chica deja de crecer antes que la ventana. El tamaño
+   sale del ancho de la ventana (4.6vw; acá vw y no cqi, porque dentro de la placa el
+   cqi ya es el de la placa, y en un tamaño de letra el sobrante de la barra de scroll
+   de Windows no se nota) y tiene como tope el 18% del ancho útil de la placa (18cqi,
+   contra la placa, que es contenedor). La palabra más larga ("COMPILADOR") mide 5,26
+   veces su tamaño de letra: con 18cqi ocupa el 95%. */
+.card__plate--type {
+  container-type: inline-size;
+  place-items: end start;
+  padding: var(--space-5);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.card__plate--type span {
+  font-size: min(clamp(2rem, 4.6vw, 4.5rem), 18cqi);
+  line-height: 0.86;
+  hyphens: manual;
+}
+
+.card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+}
+
+.card__meta .is-live {
+  color: var(--ink);
+}
+
+.card__title {
+  font-size: var(--fs-4);
+  line-height: 0.9;
+}
+
+.card__text {
+  display: grid;
+  gap: var(--space-2);
+  max-width: 46ch;
+}
+
+.card__problem {
+  color: var(--ink-muted);
+}
+
+.card__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
+  margin-top: auto;
+}
+
+/* ---------- Vertical: dos columnas desde tablet ---------- */
+
+@media (min-width: 48rem) {
+  .projects {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--pad-x);
+  }
+
+  .intro,
+  .card--lg {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---------- Horizontal: cada tarjeta es un panel ---------- */
+
+@media screen and (min-width: 64rem) and (min-height: 42.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html.js .projects {
+    display: contents;
+  }
+
+  /* La placa toma el alto que sobra; el texto manda. */
+  html.js .card__plate {
+    aspect-ratio: auto;
+    flex: 1 1 0;
+    min-block-size: 5rem;
+  }
+}

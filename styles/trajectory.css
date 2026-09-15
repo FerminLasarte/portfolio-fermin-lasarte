@@ -1,0 +1,181 @@
+/*
+ * Trayectoria (docs/DISENO.md, 7.4): vista previa en etapas, como el "Process" de
+ * douglus. Una columna por etapa con el rango de años enorme (el inicio lleno y el fin
+ * en contorno), un punto sobre una línea que las une y una línea de texto. La
+ * educación va con el año de inicio también en contorno y el punto hueco; la etapa más
+ * nueva, en --accent. Cada etapa dice además qué es, así que no depende del color.
+ */
+
+.trajectory {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.trajectory__side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.trajectory__intro {
+  max-width: 34ch;
+}
+
+.trajectory__note {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.trajectory__more {
+  align-self: flex-start;
+}
+
+.trajectory__note strong {
+  font-size: var(--fs-3);
+  font-weight: 650;
+  line-height: 1.15;
+}
+
+/* ---------- Etapas ---------- */
+
+.stages {
+  display: grid;
+  gap: var(--space-7);
+}
+
+.stage {
+  --stroke: var(--ink);
+  display: grid;
+  gap: var(--space-3);
+}
+
+.stage--latest {
+  --stroke: var(--accent);
+}
+
+.stage__dot {
+  display: none;
+}
+
+.stage__body {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+}
+
+.stage__title {
+  font-size: var(--fs-3);
+  font-weight: 650;
+  line-height: 1.15;
+}
+
+.stage__place {
+  font-weight: 500;
+}
+
+.stage__line {
+  max-width: 40ch;
+  color: var(--ink-muted);
+}
+
+/* Tablet (vertical): los años a la izquierda y el texto a la derecha. */
+@media (min-width: 48rem) {
+  .stage {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: var(--pad-x);
+    align-items: start;
+  }
+
+  .stage__years {
+    font-size: min(var(--fs-stage), 10vw);
+  }
+}
+
+/* ---------- Horizontal: título a la izquierda y tres etapas sobre una línea ---------- */
+
+@media screen and (min-width: 64rem) and (min-height: 42.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  /* Una fila del alto del panel: así la lista de etapas tiene un alto definido y su
+     fila "1fr" reparte ese alto en vez de crecer con el contenido. */
+  html.js .trajectory {
+    grid-template-columns: 25rem minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    column-gap: var(--space-7);
+  }
+
+  html.js .trajectory__note {
+    margin-top: auto;
+  }
+
+  /* Las tres etapas comparten las filas (subgrid): los años abajo de todo en la
+     primera, la línea con los puntos en la segunda y el texto en la tercera. */
+  html.js .stages {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: minmax(0, 1fr) 1.5rem auto;
+    gap: 0 var(--space-7);
+  }
+
+  /* La línea que une las etapas. Es un pseudo-elemento, así la lista solo tiene <li>;
+     sin la línea de tiempo (Firefox), TrackController escribe --rail. */
+  html.js .stages::before {
+    content: "";
+    grid-column: 1 / -1;
+    grid-row: 2;
+    align-self: center;
+    block-size: 1px;
+    background: var(--ink);
+    transform-origin: left center;
+    scale: var(--rail, 1) 1;
+  }
+
+  /* Cada etapa en su columna (--col, desde Trajectory.jsx): la línea ocupa la fila 2
+     de todas, y sin columna explícita la grilla mandaría las etapas a columnas nuevas
+     para no superponerlas. */
+  html.js .stage {
+    grid-column: var(--col);
+    grid-row: 1 / -1;
+    grid-template-columns: none;
+    grid-template-rows: subgrid;
+    gap: 0;
+  }
+
+  html.js .stage__years {
+    align-self: end;
+    margin-bottom: var(--space-3);
+    font-size: var(--fs-stage);
+  }
+
+  html.js .stage__dot {
+    display: block;
+    align-self: center;
+    inline-size: 0.75rem;
+    block-size: 0.75rem;
+    border-radius: var(--radius-round);
+    background: var(--accent);
+  }
+
+  html.js .stage--edu .stage__dot {
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+  }
+
+  html.js .stage__body {
+    padding-top: var(--space-5);
+  }
+
+  /* Se dibuja con la misma línea de tiempo que mueve la pista: desde que el panel
+     llega al 60% de la ventana hasta que su borde derecho llega al de la ventana. */
+  @supports (animation-timeline: view()) {
+    html.js .stages::before {
+      animation: draw-rail linear both;
+      animation-timeline: --pan;
+      animation-range: contain calc(var(--x-timeline) - 60cqi) contain
+        calc(var(--x-timeline) + var(--w-timeline) - 100cqi);
+    }
+  }
+}
+
+@keyframes draw-rail {
+  from {
+    scale: 0 1;
+  }
+}

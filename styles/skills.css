@@ -1,0 +1,152 @@
+/*
+ * Habilidades (docs/DISENO.md, 7.7): vista previa en un muro de palabras. Las
+ * tecnologías en mayúsculas gigantes, justificadas en el ancho del panel (ninguna se
+ * sale ni se corta). Empiezan en contorno gris y una ola atada al scroll las va
+ * llenando: las de nivel avanzado se llenan de tinta y las intermedias quedan en
+ * contorno, más oscuro; las de mobile, en --accent. Debajo, lo mismo en texto.
+ */
+
+.skills {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.skills__head {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.skills__more {
+  justify-self: start;
+}
+
+.skills__lead {
+  max-width: 40ch;
+}
+
+/* ---------- Muro ---------- */
+
+.wall-wrap {
+  display: grid;
+  gap: var(--space-3);
+}
+
+/* Justificado, con la última línea a la izquierda: las palabras llenan el ancho. */
+.wall {
+  font-size: var(--fs-wall);
+  font-weight: 800;
+  font-stretch: var(--wdth-display);
+  line-height: 0.92;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  text-align: justify;
+  text-align-last: left;
+}
+
+/* El estado final (sin movimiento): las avanzadas llenas y las intermedias en contorno. */
+.wall__word {
+  --wall-ink: var(--ink);
+  display: inline-block;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 0.012em var(--wall-ink);
+}
+
+.wall__word.is-accent {
+  --wall-ink: var(--accent);
+}
+
+.wall__word.is-strong {
+  color: var(--wall-ink);
+}
+
+/* Leyenda: un cuadrado lleno para avanzado y uno en contorno para intermedio. */
+.wall__legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.wall__key {
+  inline-size: 0.75rem;
+  block-size: 0.75rem;
+  border: 1.5px solid var(--ink);
+}
+
+.wall__key.is-strong {
+  background: var(--ink);
+}
+
+.wall__key:not(:first-child) {
+  margin-inline-start: var(--space-4);
+}
+
+/* ---------- La misma información, en texto ---------- */
+
+.skills__groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+  gap: var(--space-4) var(--pad-x);
+}
+
+.skills__group {
+  display: grid;
+  align-content: start;
+  gap: var(--space-1);
+}
+
+.skills__group p {
+  max-width: 48ch;
+  line-height: 1.5;
+}
+
+/* ---------- La ola: cada palabra pasa del contorno gris a su estado final ----------
+   En vertical, cada palabra se llena mientras cruza la pantalla (su propio view()); en
+   horizontal, una detrás de otra, desde que el panel asoma (su borde izquierdo al 70%
+   de la ventana) hasta que entra entero. Sin soporte (Firefox), sin JS o con reduce
+   motion se ve el estado final. */
+
+@media screen and (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    html.js .wall__word {
+      animation: wall-fill linear both;
+      animation-timeline: view();
+      animation-range: cover 15% cover 40%;
+    }
+  }
+}
+
+@media screen and (min-width: 64rem) and (min-height: 42.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html.js .skills {
+    justify-content: space-between;
+  }
+
+  /* El título, la frase y el botón en una fila, así el muro tiene más alto. */
+  html.js .skills__head {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: end;
+    column-gap: var(--space-7);
+  }
+
+  /* El tamaño sale del ancho y del alto de la pantalla, así el muro siempre entra. */
+  html.js .wall {
+    font-size: min(5.6cqi, 7.8vmin);
+  }
+
+  @supports (animation-timeline: view()) {
+    html.js .wall__word {
+      animation-timeline: --pan;
+      animation-range: contain calc(var(--x-skills) - 70cqi + var(--i) * 2.3cqi) contain
+        calc(var(--x-skills) - 60cqi + var(--i) * 2.3cqi);
+    }
+  }
+}
+
+@keyframes wall-fill {
+  from {
+    color: transparent;
+    -webkit-text-stroke-color: var(--line);
+  }
+}

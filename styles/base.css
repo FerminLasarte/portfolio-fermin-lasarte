@@ -1,0 +1,346 @@
+/* Base: reset, tipografía, foco y piezas compartidas (botones, tachado). */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* El nav está pegado arriba: las anclas y el foco que el navegador trae a la vista
+   quedan debajo de él, no tapados (R-M2 de la re-auditoría; WCAG 2.4.11). En
+   horizontal no aplica (styles/track.css): ahí la pista la mueve TrackController. */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-block-start: var(--nav-h);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  font-family: var(--font);
+  font-size: var(--fs-1);
+  line-height: 1.55;
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Enlace para saltar al contenido: el primero en el orden de foco. */
+.skip {
+  position: fixed;
+  top: var(--space-4);
+  left: var(--space-4);
+  z-index: var(--z-skip);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--ink);
+  color: var(--paper);
+  text-decoration: none;
+  translate: 0 -200%;
+}
+
+.skip:focus-visible {
+  translate: 0 0;
+}
+
+.icon {
+  display: inline-block;
+  height: 1em;
+  width: auto;
+  fill: currentColor;
+  vertical-align: -0.125em;
+}
+
+/* Tipografía de afiche: Archivo angosta y pesada, en mayúsculas (R-M30). `.display` es
+   el título grande; `.poster`, lo mismo sin tamaño ni interlineado, para los títulos de
+   proyecto y de capítulo, que ponen los suyos; `.years`, los años grandes. */
+.display,
+.poster,
+.years {
+  font-weight: 800;
+  font-stretch: var(--wdth-display);
+  text-transform: uppercase;
+}
+
+.display {
+  font-size: var(--fs-display);
+  line-height: 0.86;
+  letter-spacing: -0.01em;
+}
+
+/* Título de sección: el mismo afiche, a una escala que entra en los paneles angostos. */
+.display--section {
+  font-size: var(--fs-section);
+}
+
+/* Años grandes de Trayectoria, en la home y en su página ("2021–25"): el fin va en
+   contorno y, en educación, también el inicio. La etapa más reciente de la home cambia
+   --stroke al acento (styles/trajectory.css). */
+.years {
+  display: flex;
+  align-items: baseline;
+  font-size: min(var(--fs-stage), 22vw);
+  line-height: 0.84;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  color: var(--stroke, var(--ink));
+}
+
+.years__end,
+:is(.stage--edu, .chapter--edu) .years > :first-child {
+  color: transparent;
+  -webkit-text-stroke: 0.01em var(--stroke, var(--ink));
+}
+
+/* La frase de entrada de una sección, debajo del título. Cada una pone su ancho. */
+.lead {
+  font-size: var(--fs-2);
+  line-height: 1.4;
+  color: var(--ink-muted);
+}
+
+.meta {
+  font-size: var(--fs-0);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--ink-muted);
+}
+
+/* Botones: la píldora de douglus (DISENO.md, 7.6). Al pasar el mouse, un relleno
+   ovalado sube desde abajo e invierte el color, y el texto da un salto. Sin JS alcanza
+   con :hover; components/Magnet.jsx suma el imán y hace que el relleno salga por
+   arriba (.is-out). Cada variante solo cambia las variables --btn-*. */
+.btn {
+  --btn-bg: transparent;
+  --btn-ink: var(--ink);
+  --btn-line: var(--line);
+  --btn-fill: var(--accent);
+  --btn-fill-ink: var(--on-accent);
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--tap);
+  padding: 1.125rem 2rem;
+  overflow: clip;
+  border: 1px solid var(--btn-line);
+  border-radius: var(--radius-pill);
+  background: var(--btn-bg);
+  color: var(--btn-ink);
+  font: 500 var(--fs-1) / 1.2 var(--font);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color var(--dur-ui) var(--ease-out),
+    border-color var(--dur-ui) var(--ease-out),
+    scale var(--dur-press) var(--ease-out);
+}
+
+/* El relleno: 150% de ancho y 200% de alto, con borde curvo. En reposo queda debajo
+   del botón y el overflow lo esconde. Con 75% quedaba justo en el borde y el suavizado
+   de la curva asomaba como una línea fina (N9 de la auditoría), así que baja a 78%. */
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: -50% -25%;
+  z-index: var(--z-below);
+  border-radius: var(--radius-round);
+  background: var(--btn-fill);
+  translate: 0 78%;
+  pointer-events: none;
+}
+
+.btn__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.btn--primary {
+  --btn-bg: var(--accent);
+  --btn-ink: var(--on-accent);
+  --btn-line: var(--accent);
+  --btn-fill: var(--ink);
+  --btn-fill-ink: var(--paper);
+}
+
+.btn:active {
+  scale: 0.97;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn:is(:hover, .is-on) {
+    border-color: var(--btn-fill);
+    color: var(--btn-fill-ink);
+  }
+
+  .btn:is(:hover, .is-on)::before {
+    translate: 0 0;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .btn::before {
+    transition: translate var(--dur-fill) var(--ease-out);
+  }
+
+  .btn:is(:hover, .is-on) .btn__label {
+    animation: btn-in var(--dur-jump) var(--ease-out);
+  }
+
+  /* Salida con JS: el relleno sigue hacia arriba y el texto vuelve desde arriba.
+     Después Magnet.jsx lo baja otra vez sin transición (.is-reset). */
+  .btn.is-out::before {
+    translate: 0 -78%;
+    transition-duration: var(--dur-fill-out);
+  }
+
+  .btn.is-out .btn__label {
+    animation: btn-out var(--dur-jump) var(--ease-out);
+  }
+
+  .btn.is-reset::before {
+    transition: none;
+  }
+}
+
+/* Con reduce motion, el relleno aparece con un fundido, sin desplazarse. */
+@media (prefers-reduced-motion: reduce) {
+  .btn::before {
+    translate: 0 0;
+    opacity: 0;
+    transition: opacity var(--dur-hover) var(--ease-out);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .btn:is(:hover, .is-on)::before {
+      opacity: 1;
+    }
+  }
+}
+
+/* El salto del texto: se va 10% hacia arriba y vuelve desde 30% abajo (al salir, al
+   revés). Son los tiempos de douglus: 100ms y 250ms. */
+@keyframes btn-in {
+  30% {
+    translate: 0 -10%;
+    opacity: 0;
+  }
+
+  31% {
+    translate: 0 30%;
+    opacity: 0;
+  }
+}
+
+@keyframes btn-out {
+  30% {
+    translate: 0 10%;
+    opacity: 0;
+  }
+
+  31% {
+    translate: 0 -30%;
+    opacity: 0;
+  }
+}
+
+/* Tachado de douglus: una línea de 2px a media altura que crece desde la izquierda. */
+.strike {
+  position: relative;
+  text-decoration: none;
+}
+
+.strike::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  background: currentColor;
+  scale: 0 1;
+  transform-origin: right center;
+}
+
+/* Con reduce motion, el tachado aparece sin transición (R-M6; DISENO.md, sección 8). */
+@media (prefers-reduced-motion: no-preference) {
+  .strike::after {
+    transition: scale var(--dur-hover) var(--ease-out);
+  }
+}
+
+.strike:focus-visible::after {
+  scale: 1 1;
+  transform-origin: left center;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .strike:hover::after {
+    scale: 1 1;
+    transform-origin: left center;
+  }
+}

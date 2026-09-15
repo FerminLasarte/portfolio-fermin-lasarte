@@ -1,0 +1,203 @@
+/*
+ * Hero (docs/DISENO.md, 7.2): disponibilidad, el nombre enorme abajo a la
+ * izquierda, un párrafo con dos botones y la foto arrastrable a la derecha.
+ */
+
+.hero {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-areas:
+    "avail"
+    "name"
+    "copy"
+    "photo";
+  padding-top: var(--space-6);
+}
+
+.hero__avail {
+  grid-area: avail;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* El único punto de estado de la página: la disponibilidad es real. */
+.hero__avail::before {
+  content: "";
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+  border-radius: var(--radius-round);
+  background: var(--accent);
+}
+
+.hero__copy {
+  grid-area: copy;
+}
+
+.hero__lead {
+  max-width: 28ch;
+  font-size: var(--fs-2);
+  line-height: 1.35;
+}
+
+.hero__lead strong {
+  font-weight: 650;
+}
+
+.hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+/* 14vw: en tablet el nombre va en una columna de ~57% del ancho y "LASARTE" tiene que
+   entrar en una sola línea. */
+.hero__name {
+  grid-area: name;
+  font-size: min(var(--fs-display), 14vw);
+}
+
+/* Cada línea es una máscara: las letras entran desde abajo (styles/motion.css). Las
+   letras son inline-block, así que sin nowrap la palabra podría cortarse entre ellas. */
+.hero__name .line {
+  display: block;
+  overflow: clip;
+  padding-bottom: 0.04em;
+  white-space: nowrap;
+}
+
+.hero__name .ch {
+  display: inline-block;
+}
+
+/* La foto acompaña al nombre, no compite con él: en móvil hasta 20rem de ancho, en
+   tablet hasta 18rem y en horizontal tres columnas y ~60% del alto, abajo. */
+.hero__photo {
+  grid-area: photo;
+  position: relative;
+  inline-size: 100%;
+  max-inline-size: 20rem;
+  min-block-size: 0;
+}
+
+.hero__photo img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
+}
+
+/* ---------- Foto arrastrable (7.9) ---------- */
+
+/* En vertical el marco se mide por el ancho de su columna (4:5); en horizontal toma
+   el alto de la pantalla (abajo). Si tomara el alto en tablet, el 4:5 le daría un
+   ancho mayor que la columna. */
+.drag {
+  position: relative;
+}
+
+.drag__frame {
+  inline-size: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: clip;
+  transition: scale var(--dur-ui) var(--ease-out);
+}
+
+.drag img,
+.drag__trail {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.drag__frame img {
+  transition: scale var(--dur-ui) var(--ease-out);
+}
+
+.drag.is-down {
+  z-index: var(--z-lift);
+}
+
+.drag.is-down .drag__frame {
+  scale: 0.8;
+}
+
+.drag.is-down .drag__frame img {
+  scale: 1.5;
+}
+
+.drag__trail {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  scale: 0.8;
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  /* Solo con JS, que es lo que la mueve (R-M7). Sin touch-action: el arrastre es solo
+     con mouse (DraggablePhoto), y en un portátil táctil tocar la foto sigue
+     scrolleando. */
+  html.js .drag {
+    cursor: grab;
+  }
+
+  html.js .drag.is-down {
+    cursor: grabbing;
+  }
+}
+
+/* ---------- Tablet (vertical, dos columnas) ---------- */
+
+@media (min-width: 48rem) {
+  .hero {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    grid-template-areas:
+      "avail photo"
+      "name photo"
+      "copy photo";
+    align-content: start;
+    column-gap: var(--pad-x);
+  }
+
+  .hero__photo {
+    justify-self: end;
+    max-inline-size: 18rem;
+  }
+}
+
+/* ---------- Horizontal: una pantalla, en 12 columnas ---------- */
+
+@media screen and (min-width: 64rem) and (min-height: 42.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html.js .hero {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      "avail avail avail avail avail avail avail avail avail photo photo photo"
+      "copy  copy  copy  copy  copy  .     .     .     .     photo photo photo"
+      "name  name  name  name  name  name  name  name  name  photo photo photo";
+    column-gap: var(--space-5);
+    align-content: stretch;
+  }
+
+  html.js .hero__copy {
+    align-self: center;
+  }
+
+  /* El % de alto de un ítem de grilla se mide contra su área (las tres filas). */
+  html.js .hero__photo {
+    align-self: end;
+    justify-self: stretch;
+    max-inline-size: none;
+    block-size: 62%;
+  }
+
+  html.js .drag,
+  html.js .drag__frame {
+    block-size: 100%;
+  }
+
+  html.js .drag__frame {
+    aspect-ratio: auto;
+  }
+}

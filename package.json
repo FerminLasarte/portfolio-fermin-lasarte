@@ -5,11 +5,14 @@
   "description": "Portfolio de Fermin Lasarte — iOS & Cross-Platform Mobile Engineer",
   "scripts": {
     "dev": "next dev",
+    "check": "node scripts/check.mjs",
+    "prebuild": "node scripts/check.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint ."
   },
   "dependencies": {
+    "lenis": "^1.3.26",
     "next": "^16.3.5",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"

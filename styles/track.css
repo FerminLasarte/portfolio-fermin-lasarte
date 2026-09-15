@@ -1,0 +1,218 @@
+/*
+ * Pista horizontal (docs/DISENO.md, sección 6).
+ *
+ * El documento scrollea en vertical como siempre. En PC, .h-scroll mide el recorrido
+ * horizontal más una pantalla; adentro, .h-sticky se queda pegado arriba y la pista
+ * (.h-track) se mueve con `translate` atado al scroll: 1px de scroll, 1px de pista.
+ * En cualquier otro caso (móvil, sin JS, reduce motion) los paneles se apilan.
+ */
+
+/* cqi = ancho sin la barra de scroll de Windows (con vw sobraría esa franja). */
+main,
+.h-sticky {
+  container-type: inline-size;
+}
+
+/* Largo de la pista: la suma de los anchos de los paneles (definidos abajo). Va en
+   .h-scroll y no en :root porque un var() se resuelve donde se declara la variable,
+   y --n-card y --n-card-lg los escribe el servidor recién en este elemento.
+   --x-timeline, --x-skills y --x-bleed son dónde empiezan Trayectoria, Habilidades y
+   la transición al cierre: los usan styles/trajectory.css, styles/skills.css y
+   styles/contact.css para saber en qué tramo del recorrido se mueven. */
+.h-scroll {
+  --x-timeline: calc(
+    100cqi + var(--w-intro) + var(--n-card-lg) * var(--w-card-lg) + var(--n-card) * var(--w-card)
+  );
+  --x-skills: calc(var(--x-timeline) + var(--w-timeline));
+  --x-bleed: calc(var(--x-skills) + var(--w-skills));
+  --track-w: calc(var(--x-bleed) + var(--w-bleed) + 100cqi);
+}
+
+.panel {
+  padding: var(--space-8) var(--pad-x);
+}
+
+/* La franja inferior solo existe en horizontal. Lee la línea de tiempo --pan, que se
+   define en .h-scroll; timeline-scope la hace visible desde fuera de esa sección. */
+body {
+  timeline-scope: --pan;
+}
+
+.strip {
+  display: none;
+}
+
+@media screen and (min-width: 64rem) and (min-height: 42.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html.js .h-scroll {
+    height: calc(var(--track-w) - 100cqi + 100dvh);
+    view-timeline: --pan block;
+  }
+
+  /* overflow: clip y no hidden: hidden crea un contenedor de scroll, y el navegador
+     lo scrollearía de costado al enfocar o saltar a un ancla, desarmando la pista.
+     Es el único recorte que esconde contenido y está donde nace el desborde
+     (criterio 1); los otros overflow: clip son máscaras de un solo elemento
+     (docs/DISENO.md, 6.1). */
+  html.js .h-sticky {
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    overflow: clip;
+  }
+
+  html.js .h-track {
+    display: flex;
+    width: max-content;
+    height: 100%;
+  }
+
+  html.js .panel {
+    flex: none;
+    height: 100%;
+    padding-block: calc(var(--nav-h) + var(--space-5)) calc(var(--strip-h) + var(--space-5));
+  }
+
+  /* Sin el margen del nav (styles/base.css): al enfocar algo cerca del borde de
+     arriba, el navegador corría el documento, y con él la pista. Las páginas propias
+     no tienen pista y lo conservan. */
+  html.js:has(.h-scroll) {
+    scroll-padding-block-start: 0;
+  }
+
+  /* Pantallas bajas: menos aire arriba y abajo, para que el contenido entre. */
+  @media (max-height: 50rem) {
+    html.js .panel {
+      padding-block: calc(var(--nav-h) + var(--space-3)) calc(var(--strip-h) + var(--space-3));
+    }
+  }
+
+  /* Ningún panel tiene un ancho que dependa de su contenido: así el largo de la pista
+     sale del CSS, exacto desde el primer pintado. */
+  html.js .panel--screen {
+    inline-size: 100cqi;
+  }
+
+  html.js .panel--intro {
+    inline-size: var(--w-intro);
+  }
+
+  html.js .panel--card {
+    inline-size: var(--w-card);
+  }
+
+  html.js .panel--card-lg {
+    inline-size: var(--w-card-lg);
+  }
+
+  html.js .panel--timeline {
+    inline-size: var(--w-timeline);
+  }
+
+  html.js .panel--skills {
+    inline-size: var(--w-skills);
+  }
+
+  html.js .panel--bleed {
+    inline-size: var(--w-bleed);
+  }
+
+  /* Como el nav (styles/nav.css): sin fondo, en blanco con difference, así se
+     invierte sobre cada sección. La barra de progreso de douglus hace lo mismo. */
+  html.js .strip {
+    --ink: var(--blend-ink);
+    --ink-muted: var(--blend-ink-muted);
+    --line: var(--blend-line);
+    --accent: var(--blend-ink);
+    position: fixed;
+    inset: auto 0 0;
+    z-index: var(--z-strip);
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    height: var(--strip-h);
+    padding-inline: var(--pad-x);
+    color: var(--ink);
+    font-size: var(--fs-0);
+    font-weight: 500;
+    mix-blend-mode: difference;
+    pointer-events: none;
+  }
+
+  .strip__progress {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--ink-muted);
+  }
+
+  .strip__rail {
+    display: block;
+    inline-size: 10rem;
+    block-size: 1px;
+    background: var(--line);
+  }
+
+  .strip__fill {
+    display: block;
+    block-size: 100%;
+    background: var(--accent);
+    scale: 0 1;
+    transform-origin: left center;
+  }
+
+  .strip__credit {
+    justify-self: end;
+  }
+
+  /* La ola del "Design & code by" de douglus (components/WaveText.jsx): cada letra
+     avanza 80px hacia la pantalla con perspectiva de 180px (casi el doble de grande)
+     y gira 35°, y vuelve; 50ms entre letras. */
+  .wave__ch {
+    display: inline-block;
+    white-space: pre;
+  }
+
+  .wave.is-waving .wave__ch {
+    animation: wave 400ms cubic-bezier(0.45, 0, 0.55, 1) both;
+    animation-delay: calc(var(--i) * 50ms);
+  }
+
+  /* Solo si el navegador tiene la línea de tiempo. Sin este @supports, la animación
+     correría por tiempo con duración 0 y saltaría al final. Sin soporte (Firefox),
+     el translate lo escribe components/TrackController.jsx. */
+  @supports (animation-timeline: view()) {
+    html.js .h-track {
+      animation: pan linear both;
+      animation-timeline: --pan;
+      animation-range: contain 0% contain 100%;
+    }
+
+    html.js .strip__fill {
+      animation: fill linear both;
+      animation-timeline: --pan;
+      animation-range: contain 0% contain 100%;
+    }
+  }
+}
+
+@keyframes pan {
+  to {
+    translate: calc(-1 * (var(--track-w) - 100cqi)) 0;
+  }
+}
+
+@keyframes fill {
+  to {
+    scale: 1 1;
+  }
+}
+
+@keyframes wave {
+  25% {
+    transform: perspective(180px) translateZ(45px) rotateY(35deg);
+  }
+
+  50% {
+    transform: perspective(180px) translateZ(80px);
+  }
+}

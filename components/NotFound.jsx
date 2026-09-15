@@ -9,24 +9,28 @@ export default function NotFound() {
   const [main, ...others] = texts;
 
   return (
-    <section id="no-encontrada" className="not-found">
-      <p className="section-label">404</p>
-      <h2>{main.t("notFound.title")}</h2>
-      <p className="not-found-text">{main.t("notFound.text")}</p>
+    <section id="no-encontrada" className="not-found" aria-labelledby="no-encontrada-t">
+      <p className="display not-found__code" aria-hidden="true">
+        404
+      </p>
+      <h1 id="no-encontrada-t" className="not-found__title">
+        {main.t("notFound.title")}
+      </h1>
+      <p>{main.t("notFound.text")}</p>
       {others.map(({ lang, t }) => (
-        <p key={lang} lang={lang} className="not-found-text">
+        <p key={lang} lang={lang}>
           <strong>{t("notFound.title")}.</strong> {t("notFound.text")}
         </p>
       ))}
-      <div className="not-found-actions">
+      <div className="not-found__actions">
         {texts.map(({ lang, t }, i) => (
           <a
             key={lang}
             href={homePath(lang)}
-            className={i === 0 ? "btn" : "btn btn-outline"}
+            className={i === 0 ? "btn btn--primary" : "btn"}
             {...(i > 0 ? { lang, hrefLang: lang } : {})}
           >
-            {t("notFound.back")}
+            <span className="btn__label">{t("notFound.back")}</span>
           </a>
         ))}
       </div>

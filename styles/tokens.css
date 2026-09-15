@@ -1,0 +1,152 @@
+/*
+ * Tokens del diseño (docs/DISENO.md, secciones 2 a 4, 6 y 8).
+ * Todo lo que se repite sale de acá: colores, tamaños, espacios, esquinas, capas,
+ * duraciones y curvas. Las coreografías de un solo uso (el preloader, la ola de la
+ * franja, el nombre del nav, el menú) y los tamaños de un solo lugar llevan sus valores
+ * en su propia hoja, con un comentario; los pesos se escriben directo (DISENO.md, 3).
+ * R-M32 de la re-auditoría.
+ */
+
+/* La fuente de respaldo mientras carga Archivo (lib/fonts.js): Arial ajustada para que
+   ocupe lo mismo que Archivo. Son las medidas que calculaba next/font/google; las que
+   calcula next/font/local desde el archivo recortado movían más el layout (R-M14). */
+@font-face {
+  font-family: "Archivo Fallback";
+  src: local("Arial");
+  ascent-override: 88.96%;
+  descent-override: 21.28%;
+  line-gap-override: 0%;
+  size-adjust: 98.7%;
+}
+
+:root {
+  /* Color, tema claro. Contraste medido en DISENO.md, sección 2. */
+  --paper: #f2eee8;
+  --surface: #e7e1d8;
+  --ink: #1a1411;
+  --ink-muted: #5a4f47;
+  --line: #8a7e74;
+  --accent: #a93c0b;
+  --accent-soft: #f8e3d4;
+  --on-accent: #fff6ef;
+  --focus: var(--accent);
+  --cursor-ink: var(--ink);
+  color-scheme: light;
+
+  /* Cierre (DISENO.md, 7.5): el color noche del contacto, igual en los dos temas, y el
+     degradado del acento que lleva hasta él. */
+  --night: #120b07;
+  --night-raised: #1e1510;
+  --on-night: #f7eee7;
+  --on-night-muted: #b3a395;
+  --night-accent: #ff9a62;
+  --night-line: #2e231c;
+  --night-line-strong: #74655a;
+  --wash-1: #fbd9c2;
+  --wash-2: #f0955e;
+  --wash-3: #a93c0b;
+  --wash-4: #5a1d06;
+
+  /* Nav y franja en horizontal (DISENO.md, 7.1): blanco con mix-blend-mode: difference,
+     que da el color inverso de lo que pasa debajo. */
+  --blend-ink: #fff;
+  --blend-ink-muted: rgb(255 255 255 / 0.72);
+  --blend-line: rgb(255 255 255 / 0.4);
+
+  /* Tipografía: Archivo variable (ejes wght y wdth), recortada y cargada con
+     next/font/local (lib/fonts.js). --font-archivo ya incluye "Archivo Fallback". */
+  --font: var(--font-archivo), "Helvetica Neue", Arial, system-ui, sans-serif;
+  --wdth-display: 68%;
+  --wdth-mega: 75%;
+  --fs-0: 0.8125rem;
+  --fs-1: 1rem;
+  --fs-2: clamp(1.125rem, 0.9rem + 0.6vw, 1.375rem);
+  --fs-3: clamp(1.375rem, 1rem + 1vw, 1.75rem);
+  --fs-4: clamp(2rem, 1rem + 4vmin, 4.25rem);
+  --fs-display: clamp(3.5rem, 17vmin, 13rem);
+  --fs-section: clamp(2.5rem, 7.5vmin, 6rem);
+  --fs-stage: clamp(4rem, 15vmin, 11rem); /* los años de Trayectoria */
+  --fs-wall: clamp(2.25rem, 11vw, 5rem); /* el muro de Habilidades, en vertical */
+
+  /* Forma */
+  --radius-pill: 999px;
+  --radius-round: 50%; /* círculos: los puntos, el cursor y el relleno de los botones */
+  --radius-device: 12%; /* reservado para las capturas verticales de las apps (I12); sin uso todavía */
+
+  /* Espacio (base de 4px) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: 8rem;
+  --pad-x: clamp(1rem, 3cqi, 3rem);
+  --nav-h: 4rem;
+  --strip-h: 3rem;
+  --tap: 2.75rem;
+
+  /* Capas */
+  --z-below: -1; /* el relleno de los botones, debajo de su texto */
+  --z-lift: 1; /* la foto mientras se arrastra, sobre el resto del hero */
+  --z-nav: 10;
+  --z-strip: 10;
+  --z-menu: 20;
+  --z-preloader: 35;
+  --z-skip: 36; /* sobre el preloader: el enlace de salto se ve aunque esté el velo (R-M3) */
+  --z-cursor: 40;
+
+  /* Movimiento */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.55, 0, 1, 0.45); /* salidas: lo que se va hacia arriba */
+  --dur-press: 140ms;
+  --dur-hover: 220ms;
+  --dur-ui: 260ms;
+  --dur-jump: 350ms; /* el salto del texto de los botones */
+  --dur-fill-out: 400ms; /* el relleno de los botones al salir por arriba (Magnet.jsx espera 420) */
+  --dur-menu: 420ms;
+  --dur-fill: 500ms; /* el relleno de los botones al subir */
+  --dur-enter: 700ms;
+  --dur-curtain: 800ms;
+  --dur-reveal: 1100ms; /* la entrada de cada elemento de un panel (motion.css, page.css) */
+
+  /* Anchos de panel en el modo horizontal (DISENO.md, sección 5). */
+  --w-intro: clamp(22rem, 30cqi, 30rem);
+  --w-card-lg: clamp(30rem, 40cqi, 42rem);
+  --w-card: clamp(22rem, 28cqi, 28rem);
+  /* Trayectoria: la columna del título y tres etapas; cada etapa mide 3,9 veces el
+     tamaño de sus años, así "2021–25" siempre entra. */
+  --w-timeline: calc(40rem + 3 * 3.9 * var(--fs-stage));
+  --w-skills: 100cqi;
+  --w-bleed: 65cqi; /* 70cqi desde 100rem, como douglus */
+}
+
+/* Tema oscuro: lo pone lib/theme.js en <html> antes del primer pintado. Solo en
+   pantalla: al imprimir (sin fondos, en papel blanco) va siempre el tema claro (R-I9,
+   styles/print.css). */
+@media screen {
+  html.dark-mode {
+    --paper: #14100d;
+    --surface: #1f1915;
+    --ink: #efe9e3;
+    --ink-muted: #b0a59b;
+    --line: #7a6e64;
+    --accent: #ff9a62;
+    --accent-soft: #3a1e10;
+    --on-accent: #14100d;
+    --wash-1: #4a2412;
+    --wash-2: #9a3a10;
+    color-scheme: dark;
+  }
+}
+
+/* La transición al cierre, como en douglus: 65% del ancho y 70% desde 1600px. */
+@media (min-width: 100rem) {
+  :root {
+    --w-bleed: 70cqi;
+  }
+}

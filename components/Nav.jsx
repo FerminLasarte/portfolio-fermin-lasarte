@@ -1,130 +1,183 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { toggleTheme } from "@/lib/theme";
+import { useEffect, useRef, useState } from "react";
+import { useSelectedLayoutSegment } from "next/navigation";
+import ThemeToggle from "@/components/ThemeToggle";
 import Icon from "@/components/Icon";
-import { faEnvelope, faGithub, faLinkedin, faMoon, faSun } from "@/lib/icons";
+import { faGithub, faLinkedin } from "@/lib/icons";
 
-// Recibe los textos ya traducidos desde el layout (así el diccionario no viaja al
-// navegador). `links`: [{ href, label }], con la home del idioma y el hash de la
-// sección ("/#proyectos", "/en#proyectos"): son anclas nativas, que funcionan desde
-// cualquier página, y el scroll suave y el margen del nav fijo salen del CSS
-// (`scroll-behavior` y `scroll-margin-top`). `switchTo`: el otro idioma, { lang, href }.
-// `social`: { github, linkedin, email }. Llega por props y no se importa de lib/site.js
-// para que los datos del sitio no terminen en el JS del navegador.
-export default function Nav({ links, switchTo, langLabel, themeLabel, social }) {
-  const navRef = useRef(null);
-  // Sección visible, para que el cambio de idioma vuelva a la misma sección.
-  const activeRef = useRef(null);
+const MOBILE = "(max-width: 47.99rem)";
 
+// Nav (docs/DISENO.md, 7.1). Recibe los textos ya traducidos desde Document, así el
+// diccionario no viaja al navegador.
+//  - brand: { href, label }. El nombre, que lleva al hero.
+//  - links: [{ id, href, label }]. Anclas nativas a la home del idioma ("/#proyectos",
+//    "/en#proyectos"); la sección actual (aria-current) la marca TrackController.
+//  - switchTo: el otro idioma, { lang, href, name, pages }. `pages` lleva cada página
+//    propia de este idioma a la del otro ("trayectoria" → "/en/experience").
+//  - labels: { sections, menu, close, theme, newTab }.
+//  - social: { github, linkedin }.
+// En móvil las secciones van en un menú a pantalla completa (I1): un <button> con
+// aria-expanded y aria-controls que cierra con Escape. Sin JS no hay botón y la lista
+// se ve directamente (styles/nav.css).
+export default function Nav({ brand, links, switchTo, labels, social }) {
+  const [open, setOpen] = useState(false);
+  const buttonRef = useRef(null);
+  // El nombre, como el logo de douglus: con mouse se ve el nombre y el apellido
+  // aparece letra por letra al pasar por encima o al enfocarlo (styles/nav.css).
+  const [brandState, setBrandState] = useState("");
+  const [first, ...rest] = brand.label.split(" ");
+  const last = rest.join(" ");
+  const showLast = () => setBrandState("in");
+  const hideLast = () => setBrandState("out");
+
+  // El cambio de idioma vuelve al panel visible (/en#proyecto-vault; R-M8): el que
+  // cruza la línea que usa TrackController para la sección actual (el centro de la
+  // ventana en horizontal; el 40% del alto en vertical). Si no hay ninguno (la
+  // transición al cierre no tiene id), la sección actual.
+  // En una página propia, el idioma lleva a la misma página en el otro idioma
+  // (useSelectedLayoutSegment da el segmento debajo del layout de [lang], igual en el
+  // servidor y en el navegador); en la home, a la otra home.
+  const segment = useSelectedLayoutSegment();
+  const langHref = (segment && switchTo.pages?.[segment]) || switchTo.href;
   const handleLangClick = (e) => {
-    if (activeRef.current) e.currentTarget.href = `${switchTo.href}#${activeRef.current}`;
+    if (segment) return;
+    const panel = document.elementFromPoint(innerWidth / 2, innerHeight * 0.4)?.closest("main .panel[id]");
+    const current = panel?.id ?? document.querySelector("a[data-section][aria-current]")?.dataset.section;
+    if (current) e.currentTarget.href = `${switchTo.href}#${current}`;
   };
 
-  // Active nav link highlight via IntersectionObserver.
+  // Con el menú abierto, el resto de la página queda inerte, también lo que el panel
+  // tapa del nav (el enlace de salto, el nombre y el idioma; R-M9): el foco no sale
+  // del botón y del menú. Escape lo cierra y devuelve el foco al botón, y se cierra
+  // solo si la ventana deja de ser de móvil.
   useEffect(() => {
-    const navLinks = navRef.current?.querySelectorAll(".nav-links a") ?? [];
-    const sections = document.querySelectorAll("header[id], section[id]");
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const id = entry.target.id;
-            activeRef.current = id;
-            navLinks.forEach((l) => l.classList.toggle("active", l.hash === `#${id}`));
-          }
-        });
-      },
-      { rootMargin: "-30% 0px -60% 0px", threshold: 0 },
+    if (!open) return;
+    const rest = document.querySelectorAll(
+      "main, body > footer, .skip, .nav__brand, .nav__tools > :not(.nav__menu)",
     );
-
-    sections.forEach((s) => observer.observe(s));
-    return () => observer.disconnect();
-  }, []);
-
-  // Collapsible nav on touch devices.
-  useEffect(() => {
-    const nav = navRef.current;
-    if (!nav) return;
-    const isTouch = () =>
-      !window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-
-    const onNavClick = (e) => {
-      if (!isTouch()) return;
-      if (e.target.closest(".nav-links a")) {
-        nav.classList.remove("nav-expanded");
-        return;
-      }
-      if (!e.target.closest(".dropdown-content")) {
-        nav.classList.toggle("nav-expanded");
-      }
+    rest.forEach((el) => (el.inert = true));
+    const mq = matchMedia(MOBILE);
+    const onKey = (e) => {
+      if (e.key !== "Escape") return;
+      setOpen(false);
+      buttonRef.current?.focus();
     };
-
-    const onDocClick = (e) => {
-      if (isTouch() && !e.target.closest("nav")) nav.classList.remove("nav-expanded");
+    const onResize = () => {
+      if (!mq.matches) setOpen(false);
     };
-
-    nav.addEventListener("click", onNavClick);
-    document.addEventListener("click", onDocClick);
+    document.addEventListener("keydown", onKey);
+    mq.addEventListener("change", onResize);
     return () => {
-      nav.removeEventListener("click", onNavClick);
-      document.removeEventListener("click", onDocClick);
+      rest.forEach((el) => (el.inert = false));
+      document.removeEventListener("keydown", onKey);
+      mq.removeEventListener("change", onResize);
     };
-  }, []);
+  }, [open]);
+
+  const sectionLinks = (className, onClick) =>
+    links.map((link, i) => (
+      <li key={link.id} style={{ "--i": i }}>
+        <a className={className} href={link.href} data-section={link.id} onClick={onClick}>
+          {link.label}
+        </a>
+      </li>
+    ));
+
+  const socialLinks = (className) => (
+    <>
+      <a
+        className={className}
+        href={social.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`GitHub ${labels.newTab}`}
+      >
+        <Icon icon={faGithub} />
+      </a>
+      <a
+        className={className}
+        href={social.linkedin}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`LinkedIn ${labels.newTab}`}
+      >
+        <Icon icon={faLinkedin} />
+      </a>
+    </>
+  );
 
   return (
-    <nav ref={navRef}>
-      <ul className="nav-links">
-        {links.map((link) => (
-          <li key={link.href}>
-            <a href={link.href}>{link.label}</a>
-          </li>
-        ))}
-      </ul>
-      <div className="nav-controls">
+    <>
+      <header className="nav">
         <a
-          id="lang-toggle"
-          className="icon-btn"
-          href={switchTo.href}
-          hrefLang={switchTo.lang}
-          title={langLabel}
-          onClick={handleLangClick}
+          className="nav__brand"
+          href={brand.href}
+          data-brand={brandState}
+          onMouseEnter={showLast}
+          onMouseLeave={hideLast}
+          onFocus={showLast}
+          onBlur={hideLast}
         >
-          {switchTo.lang.toUpperCase()}
+          {first}
+          {last && (
+            <span className="brand__last">
+              <span className="brand__chars" aria-hidden="true" style={{ "--n": last.length }}>
+                {[...last].map((ch, i) => (
+                  <span key={i} className="brand__ch" style={{ "--i": i }}>
+                    {ch}
+                  </span>
+                ))}
+              </span>
+              <span className="sr-only"> {last}</span>
+            </span>
+          )}
         </a>
-        <button
-          id="theme-toggle"
-          className="icon-btn"
-          title={themeLabel}
-          onClick={toggleTheme}
-          aria-label={themeLabel}
-        >
-          <Icon icon={faMoon} />
-          <Icon icon={faSun} />
-        </button>
-        <a
-          href={social.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="icon-btn"
-          title="GitHub"
-        >
-          <Icon icon={faGithub} />
-        </a>
-        <a
-          href={social.linkedin}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="icon-btn"
-          title="LinkedIn"
-        >
-          <Icon icon={faLinkedin} />
-        </a>
-        <a href={`mailto:${social.email}`} className="icon-btn" title="Email">
-          <Icon icon={faEnvelope} />
-        </a>
+        <nav className="nav__sections" aria-label={labels.sections}>
+          <ul className="nav__links">{sectionLinks("strike")}</ul>
+        </nav>
+        <div className="nav__tools">
+          <a
+            className="tool"
+            href={langHref}
+            hrefLang={switchTo.lang}
+            // El nombre empieza con lo que se ve ("EN, English"; R-M8, WCAG 2.5.3).
+            aria-label={`${switchTo.lang.toUpperCase()}, ${switchTo.name}`}
+            onClick={handleLangClick}
+          >
+            {switchTo.lang.toUpperCase()}
+          </a>
+          <ThemeToggle className="tool tool--wide" label={labels.theme} />
+          {socialLinks("tool tool--wide")}
+          <button
+            ref={buttonRef}
+            type="button"
+            className="btn nav__menu"
+            aria-expanded={open}
+            aria-controls="menu"
+            onClick={() => setOpen((o) => !o)}
+          >
+            {/* El nombre es siempre "Menú" y el estado lo da aria-expanded (R-M9): si
+                también cambiara a "Cerrar", se anunciaría de más ("Cerrar, expandido").
+                El cambio de palabra es solo visual. */}
+            <span className="sr-only">{labels.menu}</span>
+            <span className="swap" aria-hidden="true">
+              <span>{labels.menu}</span>
+              <span>{labels.close}</span>
+            </span>
+          </button>
+        </div>
+      </header>
+
+      <div id="menu" className="menu" hidden={!open}>
+        <nav aria-label={labels.sections}>
+          <ul className="menu__links">{sectionLinks(undefined, () => setOpen(false))}</ul>
+        </nav>
+        <div className="menu__foot">
+          <ThemeToggle className="tool" label={labels.theme} />
+          {socialLinks("tool")}
+        </div>
       </div>
-    </nav>
+    </>
   );
 }

@@ -1,0 +1,220 @@
+/*
+ * Preloader (docs/DISENO.md, 7.11), el de douglus: sobre noche, cuatro palabras
+ * gigantes que suben de a una dentro de una máscara (la última en acento), después el
+ * nombre letra por letra, una línea que se dibuja y el cargo; al final todo sube y el
+ * velo se desvanece.
+ *
+ * Es todo CSS: termina solo aunque el JS falle. Solo existe bajo html.pl, que pone el
+ * script del tema (lib/theme.js) antes del primer pintado en la primera visita de la
+ * sesión y sin reduce motion. Sin JS no hay html.pl, así que no hay preloader.
+ *
+ * Tiempos (ms): palabras cada 900 desde 150; la última entra en 2850 y queda hasta
+ * 3530; el nombre desde 3550; la línea en 3850; el cargo en 4000; salida en 4600; el
+ * velo se va de 4800 a 5350. El nombre del hero entra al final (styles/motion.css).
+ */
+
+.preloader {
+  display: none;
+}
+
+html.pl .preloader {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-preloader);
+  display: grid;
+  place-items: center;
+  padding-inline: var(--space-4);
+  background: var(--night);
+  color: var(--on-night);
+  animation: pl-exit 550ms var(--ease-in-out) 4800ms both;
+}
+
+.pl-stage,
+.pl-id {
+  grid-area: 1 / 1;
+}
+
+/* ---------- Palabras ---------- */
+
+.pl-stage {
+  display: grid;
+  animation: pl-fade 350ms ease-in 3530ms forwards;
+}
+
+.pl-mask {
+  grid-area: 1 / 1;
+  justify-self: center;
+  overflow: clip;
+  padding: 0.06em 0.08em;
+  font-size: clamp(3.5rem, 18vw, 16rem);
+}
+
+.pl-word {
+  display: block;
+  font-weight: 800;
+  font-stretch: var(--wdth-display);
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  animation: pl-word 860ms both;
+  animation-delay: calc(150ms + var(--i) * 900ms);
+}
+
+/* La última no sale: entra un poco más lenta, creciendo, y queda en acento. */
+.pl-word--last {
+  color: var(--night-accent);
+  animation: pl-last 480ms var(--ease-expo) both;
+  animation-delay: calc(150ms + var(--i) * 900ms);
+}
+
+/* Entra en 380ms, queda 220ms y sale hacia arriba en 260ms. */
+@keyframes pl-word {
+  0% {
+    translate: 0 105%;
+    animation-timing-function: var(--ease-out);
+  }
+
+  44%,
+  70% {
+    translate: 0 0;
+  }
+
+  70% {
+    animation-timing-function: var(--ease-in);
+  }
+
+  100% {
+    translate: 0 -105%;
+  }
+}
+
+@keyframes pl-last {
+  from {
+    translate: 0 105%;
+    scale: 0.88;
+  }
+}
+
+/* ---------- Nombre, línea y cargo ---------- */
+
+.pl-id {
+  display: grid;
+  justify-items: center;
+  animation: pl-grow 700ms ease-in 4600ms forwards;
+}
+
+.pl-name {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: 0.6em;
+  font-size: clamp(1.75rem, 7vw, 7rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* El tracking deja un espacio después de la última letra: se compensa para centrar. */
+.pl-name > span {
+  display: flex;
+  margin-inline-end: -0.2em;
+}
+
+.pl-ch-mask {
+  overflow: clip;
+  padding-bottom: 0.06em;
+}
+
+/* Dos animaciones: la entrada (con relleno hacia atrás, para esperar oculta) y la
+   salida, que solo rellena hacia adelante para no tapar a la primera. */
+.pl-ch {
+  display: inline-block;
+  animation:
+    pl-rise 550ms var(--ease-expo) both,
+    pl-leave 400ms var(--ease-in) forwards;
+  animation-delay: calc(3550ms + var(--i) * 30ms), calc(4600ms + (var(--n) - 1 - var(--i)) * 30ms);
+}
+
+.pl-rule {
+  justify-self: stretch;
+  block-size: 1px;
+  margin-block: clamp(0.75rem, 2vh, 1.25rem);
+  background: var(--night-line-strong);
+  transform-origin: left center;
+  animation:
+    pl-draw 500ms var(--ease-in-out) 3850ms both,
+    pl-fade 250ms ease-in 4600ms forwards;
+}
+
+.pl-sub {
+  overflow: clip;
+  padding-bottom: 0.04em;
+}
+
+.pl-sub span {
+  display: inline-block;
+  color: var(--on-night-muted);
+  font-size: var(--fs-0);
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  animation:
+    pl-rise 450ms var(--ease-out) 4000ms both,
+    pl-fade 250ms ease-in 4600ms forwards;
+}
+
+@keyframes pl-rise {
+  from {
+    translate: 0 110%;
+    opacity: 0;
+  }
+}
+
+@keyframes pl-leave {
+  to {
+    translate: 0 -110%;
+    opacity: 0;
+  }
+}
+
+@keyframes pl-draw {
+  from {
+    scale: 0 1;
+    opacity: 0;
+  }
+}
+
+@keyframes pl-fade {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes pl-grow {
+  to {
+    scale: 1.04;
+  }
+}
+
+/* Salteado con una tecla, un clic o la rueda (lib/theme.js, R-M3): el velo se
+   desvanece en 250ms. Otro nombre de animación, para que empiece de nuevo: con el
+   mismo (pl-exit), el navegador solo le cambia la duración y salta al final. */
+html.pl.pl-skip .preloader {
+  animation: pl-skip 250ms ease-out both;
+}
+
+/* visibility pasa a hidden recién al final: el velo deja de tapar y de recibir clics. */
+@keyframes pl-exit {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes pl-skip {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
