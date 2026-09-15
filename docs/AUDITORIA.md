@@ -92,7 +92,8 @@
     - en el navegador, a 1440×900 va en horizontal y a 375px en vertical, sin errores de consola.
   - **Falta:** que Fermin comparta el enlace de producción por WhatsApp para ver la imagen OG (R-M27).
   - **Nota:** `next start` escribe `Error: Internal: NoFallbackError` en el log por cada 404 de `[lang]` o `[page]` que no existe (`dynamicParams = false`). Es la señal interna con la que Next manda al 404, y la respuesta es correcta.
-  - **Sigue:** I12 y N4, cuando Fermin tenga las capturas y la foto nueva. Cada cambio en `main` publica en producción.
+  - **La rama se borró** (2026-09-15, pedido de Fermin), local y en GitHub, después de confirmar que `main` tenía todos sus commits. El historial está en `main`; si alguna vez hiciera falta, se recupera con `git checkout -b fase-3-rediseno <hash>`. Las menciones a la rama que quedan más arriba en este archivo son de cuando estaba viva.
+  - **Sigue:** I12 y N4, cuando Fermin tenga las capturas y la foto nueva. Se trabajan sobre `main` o sobre una rama nueva; ojo, que cada cambio en `main` publica en producción.
 - **Siguen abiertos de antes:** I12 y N4 (contenido que tiene que conseguir Fermin). M13 quedó cerrado sin cambios el 2026-09-15, por decisión de Fermin: la regla actual (`.jsx` para los componentes, `.js` para los archivos que Next busca por nombre) ya es coherente. N10 quedó cerrado: en el preview, el tachado del nav cruza la palabra entera (ver R-M33).
 
 Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual**: se usan como requisitos del diseño nuevo.
