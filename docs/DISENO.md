@@ -269,7 +269,7 @@ Si `CSS.supports("animation-timeline: view()")` da falso y el modo horizontal es
 ### 7.1 Nav
 
 **Escritorio:** barra fija de `--nav-h` y tres zonas. En horizontal no tiene fondo: como el de douglus, es transparente, con los tokens en blanco (`--blend-*`) y `mix-blend-mode: difference`, así el texto toma el color inverso de lo que pasa debajo (oscuro sobre el papel, claro sobre el cierre) y el nav es parte de cada sección. Lo transparente deja pasar los clics (`pointer-events`). Sobre tonos medios (un botón violeta, el degradado, una placa de color) el inverso contrasta poco mientras pasa: douglus lo acepta y Fermin también (2026-09-14). En vertical el contenido pasa por debajo del nav, así que ahí conserva el fondo `--paper`.
-- Izquierda: "Fermin Lasarte", enlace a `#sobre-mi`.
+- Izquierda: "Fermin Lasarte", enlace a `#sobre-mi`. Con mouse, como el logo de douglus (pedido de Fermin, 2026-09-15): se ve "Fermin" y, al pasar por encima o al enfocarlo, "Lasarte" se abre y sus letras suben de a una (40ms entre letras, 550ms); al salir se van hacia arriba desde la última. El nombre completo sigue en el texto accesible (`sr-only`). Sin JS, en táctil o con reduce motion se ve completo.
 - Centro: `<nav aria-label="Secciones">` con `<ul>` de cuatro enlaces en `--ink-muted`.
   - **Hover y foco (puntero fino):** el texto pasa a `--ink` y se dibuja un tachado de 2px a media altura, que crece desde la izquierda (`scale: 0 1 → 1 1`, 220ms, `--ease-out`) y se va hacia la derecha al salir. Es el efecto `menu--linethrough` de douglus, que allá aparece de golpe.
   - **Sección actual:** `aria-current="location"`, texto en `--ink` y subrayado de 1px abajo. El indicador no depende solo del color, y no usa el tachado (que se leería como "descartado").
@@ -480,6 +480,7 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
 | Pista horizontal | Scroll | `translate` | Lineal, 1:1 | Modo vertical |
 | Scroll con la rueda | Rueda o trackpad, con puntero fino | Scroll del documento, con Lenis | `lerp: 0.1` por frame; anclas y "Volver arriba" en 1,2 s con `1 − (1 − t)³` | Scroll nativo, sin suavizar |
 | Preloader | Primera carga de la sesión | `translate` Y y `scale` de palabras y letras, `scale` X de la línea, `opacity` del velo | Unos 5,3 s en total (7.11) | No existe |
+| Nombre del nav | Hover o foco (puntero fino) | Ancho del apellido (`grid-template-columns` de 0fr a 1fr) y `translate` Y + `opacity` de cada letra | Entra en 550ms `--ease-out`, 40ms entre letras; sale en 350ms, 30ms entre letras desde la última | Nombre completo, quieto |
 | Barra de progreso | Scroll | `scale` X | Lineal | No existe (vertical) |
 | Transición al cierre | Scroll | `scale` del degradado: de 0,05 a 1,02 en X (horizontal) o de 0,05 a 1 en Y (vertical) | Lineal, atada al scroll: en horizontal, mientras el borde izquierdo del panel va del borde derecho de la ventana al centro menos 100px (misma línea de tiempo que la pista; en Firefox, TrackController); en vertical, `view()` de `entry 0%` a `entry 100%` | Quieta y dibujada |
 | Tachado del nav y de contacto | Hover o foco | `scale` X del pseudo-elemento | 220ms `--ease-out` | Aparece sin transición |

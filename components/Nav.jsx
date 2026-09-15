@@ -21,6 +21,13 @@ const MOBILE = "(max-width: 47.99rem)";
 export default function Nav({ brand, links, switchTo, labels, social }) {
   const [open, setOpen] = useState(false);
   const buttonRef = useRef(null);
+  // El nombre, como el logo de douglus: con mouse se ve el nombre y el apellido
+  // aparece letra por letra al pasar por encima o al enfocarlo (styles/nav.css).
+  const [brandState, setBrandState] = useState("");
+  const [first, ...rest] = brand.label.split(" ");
+  const last = rest.join(" ");
+  const showLast = () => setBrandState("in");
+  const hideLast = () => setBrandState("out");
 
   // El cambio de idioma vuelve a la sección visible (/en#proyectos).
   const handleLangClick = (e) => {
@@ -75,8 +82,28 @@ export default function Nav({ brand, links, switchTo, labels, social }) {
   return (
     <>
       <header className="nav">
-        <a className="nav__brand" href={brand.href}>
-          {brand.label}
+        <a
+          className="nav__brand"
+          href={brand.href}
+          data-brand={brandState}
+          onMouseEnter={showLast}
+          onMouseLeave={hideLast}
+          onFocus={showLast}
+          onBlur={hideLast}
+        >
+          {first}
+          {last && (
+            <span className="brand__last">
+              <span className="brand__chars" aria-hidden="true" style={{ "--n": last.length }}>
+                {[...last].map((ch, i) => (
+                  <span key={i} className="brand__ch" style={{ "--i": i }}>
+                    {ch}
+                  </span>
+                ))}
+              </span>
+              <span className="sr-only"> {last}</span>
+            </span>
+          )}
         </a>
         <nav className="nav__sections" aria-label={labels.sections}>
           <ul className="nav__links">{sectionLinks("strike")}</ul>
