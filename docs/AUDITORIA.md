@@ -734,7 +734,18 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
   - **Problema:** en horizontal, el navegador no puede traer una coincidencia que está en un panel de la derecha, porque el documento no tiene scroll horizontal. Con el modo exploración de los lectores de pantalla y con los enlaces `#:~:text=` pasa lo mismo.
   - **Solución:** documentarlo como limitación y corregir DISENO. Como mitigación parcial, un listener de `selectionchange` que traiga la selección a la vista.
 
-- [ ] **R-M12. Lenis y las anclas se comportan distinto según la página**
+- [x] **R-M12. Lenis y las anclas se comportan distinto según la página** **[nav]**
+  - **Hecho:**
+    - `SmoothScroll` pone `gestureOrientation: "both"` solo si se cumple la media query horizontal y además hay `.h-scroll`.
+    - `lib/scroll.js` exporta `hasLenis()`.
+    - `goTo` de `TrackController` también actúa en vertical: si hay Lenis y el salto es animado (clic o `hashchange`), usa `smoothScrollTo` hasta el panel menos el `scroll-padding` del nav. No hace `preventDefault`: el navegador actualiza la URL y el scroll de Lenis reemplaza al nativo. Sin Lenis (táctil, reduce motion) y en la carga inicial sigue el scroll nativo.
+  - **Verificado** sobre el servidor local:
+    - **Rueda de costado:** mueve el documento 719px en la home a 1440 y 0px en `/trayectoria`, `/habilidades` y la home en vertical (1024×640).
+    - **Anclas en vertical con mouse** (1024×640 y 900×900), muestreadas cada 50ms: antes, el scroll nativo empezaba lento (0, 21, 100, 272…); ahora sigue la curva de Lenis (0, 576, 1101, 1583…), llega en unos 1,2 s, nunca retrocede y deja el panel a 64px. "Contacto" queda a 123px, porque es el final de la página.
+    - **Táctil (390):** la trayectoria es la misma que antes.
+    - **Horizontal:** los clics del nav (también dos veces al mismo ancla) y la carga con `#hash` siguen dejando el panel en el borde izquierdo.
+    - **Carga con `#hash` en vertical:** el panel queda a 64px (Chrome aplica el `scroll-behavior: smooth` también al salto inicial, así que llega en poco más de un segundo).
+  - DISENO.md, 6.3.
   - **Dónde:** `components/SmoothScroll.jsx:18-22` y `components/TrackController.jsx:72`.
   - **Problema:**
     - En `/trayectoria` y `/habilidades`, Lenis también toma el gesto de costado del trackpad (`gestureOrientation: "both"` depende solo de la media query), aunque ahí no hay pista.

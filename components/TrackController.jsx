@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { HORIZONTAL_QUERY } from "@/lib/track";
-import { smoothScrollTo } from "@/lib/scroll";
+import { hasLenis, smoothScrollTo } from "@/lib/scroll";
 
 // Lo que entra por separado en cada panel (styles/motion.css), en el orden del HTML.
 const REVEAL = [
@@ -43,7 +43,9 @@ const variant = (el) =>
 // a los paneles que ya vienen en el HTML.
 //  - Anclas: en horizontal el panel destino está dentro de la pista y el navegador no
 //    sabe llevarlo a la vista, así que se corrige el scroll vertical (1px de scroll
-//    mueve 1px la pista). La URL la sigue actualizando el navegador.
+//    mueve 1px la pista). En vertical con Lenis (puntero fino), el salto pasa por
+//    Lenis, con la misma inercia que la rueda (R-M12). La URL la sigue actualizando
+//    el navegador.
 //  - Foco: si el teclado enfoca algo fuera de la ventana, se lo trae sin animación.
 //  - Sección actual: aria-current en el nav y el nombre en la franja inferior.
 //  - Respaldo: donde no hay animation-timeline (Firefox), el translate lo escribe JS.
@@ -69,11 +71,19 @@ export default function TrackController() {
     };
 
     const goTo = (hash, behavior) => {
-      if (!mq.matches || !hash) return;
+      if (!hash) return;
       const target = document.getElementById(decodeURIComponent(hash.slice(1)));
       if (!target || !track.contains(target)) return;
-      if (behavior === "smooth") smoothScrollTo(topFor(target));
-      else scrollTo({ top: topFor(target), behavior });
+      if (mq.matches) {
+        if (behavior === "smooth") smoothScrollTo(topFor(target));
+        else scrollTo({ top: topFor(target), behavior });
+        return;
+      }
+      // En vertical el navegador ya sabe llegar (con el margen del nav, styles/base.css):
+      // solo se cambia el cómo, y solo si hay Lenis. Sin Lenis queda el scroll nativo.
+      if (behavior !== "smooth" || !hasLenis()) return;
+      const pad = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+      smoothScrollTo(Math.max(0, target.getBoundingClientRect().top + scrollY - pad));
     };
 
     // Un clic a otra sección dispara hashchange; un clic al mismo #hash, no.

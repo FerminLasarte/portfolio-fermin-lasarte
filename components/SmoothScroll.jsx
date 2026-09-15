@@ -11,7 +11,9 @@ const WANTED = "(pointer: fine) and (prefers-reduced-motion: no-preference)";
 // el scroll del documento. Solo interpola la rueda; la barra, el teclado, "buscar en la
 // página" y las anclas siguen siendo nativos, y la pista la sigue moviendo el CSS.
 //  - Solo con puntero fino y sin reduce motion; en táctil queda el scroll nativo.
-//  - En horizontal, el gesto de costado del trackpad también mueve la pista.
+//  - En horizontal, el gesto de costado del trackpad también mueve la pista. Solo
+//    donde hay pista (la home): en las páginas propias no hay nada que mover de
+//    costado (R-M12).
 export default function SmoothScroll() {
   useEffect(() => {
     const wanted = matchMedia(WANTED);
@@ -19,7 +21,9 @@ export default function SmoothScroll() {
     let lenis = null;
 
     const orient = () => {
-      if (lenis) lenis.options.gestureOrientation = horizontal.matches ? "both" : "vertical";
+      if (!lenis) return;
+      const track = horizontal.matches && document.querySelector(".h-scroll");
+      lenis.options.gestureOrientation = track ? "both" : "vertical";
     };
     const sync = () => {
       if (wanted.matches && !lenis) {
