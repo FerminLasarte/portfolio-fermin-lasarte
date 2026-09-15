@@ -81,6 +81,18 @@
   - **Vercel (confirmado por Fermin, 2026-09-15):** el log del build del preview muestra la línea `✓ scripts/check.mjs`, así que el control de R-M31 también corre en Vercel.
   - Aparte: el comentario de `styles/track.css` ya no dice que el recorte de la pista es "el único de la página" (lo mismo que se corrigió en DISENO 6.1).
   - **Sigue:** I12 y N4 (las capturas y la foto nueva, que tiene que conseguir Fermin) y el merge a `main`.
+- **Merge a `main` (2026-09-15, decidido por Fermin: sin esperar las fotos):** `006bdf0`, un merge `--no-ff` de `fase-3-rediseno`, con el mismo árbol que la rama. Si hiciera falta volver atrás, se revierte con `git revert -m 1 006bdf0`.
+  - **Antes:** el build de producción de la rama pasó en una copia aparte, y las rutas respondieron lo esperado.
+  - **Un intento fallido:** el primero no llegó a mergear (git no leyó el mensaje desde la entrada estándar), pero pusheó `976e02e`, un commit de docs que ya estaba en la rama. Fue un deploy extra, sin cambios visibles.
+  - **Verificado en producción** (https://portfolio-fermin-lasarte.vercel.app):
+    - las 6 páginas dan 200, `/es` redirige a `/` y las rutas desconocidas dan 404;
+    - el sitemap, robots, las imágenes OG (JPEG de 53 a 59 KB) y los íconos responden bien;
+    - están las cabeceras de seguridad, `x-vercel-cache: HIT` y sin `noindex`;
+    - canonical, `og:url`, `og:image` y el sitemap apuntan al dominio de producción;
+    - en el navegador, a 1440×900 va en horizontal y a 375px en vertical, sin errores de consola.
+  - **Falta:** que Fermin comparta el enlace de producción por WhatsApp para ver la imagen OG (R-M27).
+  - **Nota:** `next start` escribe `Error: Internal: NoFallbackError` en el log por cada 404 de `[lang]` o `[page]` que no existe (`dynamicParams = false`). Es la señal interna con la que Next manda al 404, y la respuesta es correcta.
+  - **Sigue:** I12 y N4, cuando Fermin tenga las capturas y la foto nueva. Cada cambio en `main` publica en producción.
 - **Siguen abiertos de antes:** I12 y N4 (contenido que tiene que conseguir Fermin), y M13. N10 quedó cerrado: en el preview, el tachado del nav cruza la palabra entera (ver R-M33).
 
 Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual**: se usan como requisitos del diseño nuevo.
