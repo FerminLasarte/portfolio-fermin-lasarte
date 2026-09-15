@@ -847,7 +847,9 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
     - Un build de producción fuera de Vercel publica `localhost` sin avisar.
   - **Solución:** usar `||` en lugar de `??`, quitar la barra final y avisar cuando el resultado sea localhost.
 
-- [ ] **R-M24. Sitemap: `lastModified` sale del build y falta `x-default`**
+- [x] **R-M24. Sitemap: `lastModified` sale del build y falta `x-default`**
+  - **Hecho:** `app/sitemap.js` ya no pone `lastModified`: no hay una fecha real por página, y la del build decía que todo cambiaba en cada deploy. Cada URL suma `x-default` a sus alternativas, con el mismo helper para la home y las páginas propias.
+  - **Verificado** sobre el servidor local: `/sitemap.xml` es XML válido (`xmllint`), con 6 URLs, 0 `<lastmod>` y 6 `x-default`. Las alternativas de `/` y `/trayectoria` coinciden con los `hreflang` de su `<head>`.
   - **Dónde:** `app/sitemap.js:7-22`.
   - **Solución:** poner una fecha por página en los datos (o no poner ninguna) y sumar `x-default` como en el `<head>`.
 
