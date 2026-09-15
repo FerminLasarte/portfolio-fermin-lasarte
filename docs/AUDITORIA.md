@@ -47,6 +47,8 @@
     - contraste AA medido: un naranja vivo con texto blanco no llega a 4,5:1, así que hace falta un naranja quemado o texto oscuro sobre el naranja;
     - que no sea el naranja de douglus: DISENO.md, sección 1, marca el color como lo que diferencia al portfolio de una copia.
     - Toca `styles/tokens.css` (32 valores), `lib/og.js`, `lib/theme.js` (si cambia el papel), el favicon y el apple-icon (el script de R-M26), y DISENO.md, sección 2.
+  - **Hecho (2026-09-15):** Fermin eligió "A · Teja" entre tres propuestas (teja, mandarina con texto oscuro, y naranja con cierre azul tinta). Acento `#A93C0B` / `#FF9A62`, papel arena `#F2EEE8` / `#14100D` y cierre café `#120B07`. Cambiaron `styles/tokens.css`, `lib/og.js`, `lib/theme.js` (el papel), el favicon, `favicon.ico` y el apple-icon. Los valores y el contraste están en DISENO.md, sección 2: el par más justo da 4,84.
+    - **Verificado con Puppeteer** en el servidor local, en claro y oscuro. A 390px se midió el contraste de los 164 textos visibles sobre los colores calculados, y ninguno queda debajo de 4,5:1 (el mínimo da 5,90 en claro y 7,84 en oscuro). A 1440×900 se revisaron a la vista el hero, las tarjetas, la transición al cierre y el contacto. También se revisaron `theme-color`, la imagen OG y los íconos. No hay errores de consola.
   - **Después:** eficiencia (R-M14 a R-M20), limpieza (R-M28 a R-M36), documentación (R-M37 y R-M38), I12, N4 (Fermin va a sacar una foto nueva) y el merge a `main`. Dos commits de docs (`cba32e7` y `8592b65`) quedan locales y se pushean con el próximo grupo.
 - **Siguen abiertos de antes:** I12 y N4 (contenido que tiene que conseguir Fermin), M13 y N5 (este último está en R-M35).
 

@@ -5,32 +5,32 @@
 
 :root {
   /* Color, tema claro. Contraste medido en DISENO.md, sección 2. */
-  --paper: #f1f2ee;
-  --surface: #e6e8e3;
-  --ink: #101214;
-  --ink-muted: #4e5358;
-  --line: #7e838a;
-  --accent: #6224f0;
-  --accent-soft: #ece6ff;
-  --on-accent: #f6f3ff;
-  --on-accent-muted: #e2d9ff;
+  --paper: #f2eee8;
+  --surface: #e7e1d8;
+  --ink: #1a1411;
+  --ink-muted: #5a4f47;
+  --line: #8a7e74;
+  --accent: #a93c0b;
+  --accent-soft: #f8e3d4;
+  --on-accent: #fff6ef;
+  --on-accent-muted: #ffe4d2;
   --focus: var(--accent);
   --cursor-ink: var(--ink);
   color-scheme: light;
 
   /* Cierre (DISENO.md, 7.5): el color noche del contacto, igual en los dos temas, y el
      degradado del acento que lleva hasta él. */
-  --night: #0b0912;
-  --night-raised: #17141f;
-  --on-night: #f3f0fa;
-  --on-night-muted: #a7a1b5;
-  --night-accent: #a57bff;
-  --night-line: #2a2632;
-  --night-line-strong: #6a6377;
-  --wash-1: #e4d6ff;
-  --wash-2: #a47cff;
-  --wash-3: #6224f0;
-  --wash-4: #2b1273;
+  --night: #120b07;
+  --night-raised: #1e1510;
+  --on-night: #f7eee7;
+  --on-night-muted: #b3a395;
+  --night-accent: #ff9a62;
+  --night-line: #2e231c;
+  --night-line-strong: #74655a;
+  --wash-1: #fbd9c2;
+  --wash-2: #f0955e;
+  --wash-3: #a93c0b;
+  --wash-4: #5a1d06;
 
   /* Nav y franja en horizontal (DISENO.md, 7.1): blanco con mix-blend-mode: difference,
      que da el color inverso de lo que pasa debajo. */
@@ -109,17 +109,17 @@
    styles/print.css). */
 @media screen {
   html.dark-mode {
-    --paper: #0e1012;
-    --surface: #181b1f;
-    --ink: #ecede9;
-    --ink-muted: #a3a8ad;
-    --line: #6b7076;
-    --accent: #a57bff;
-    --accent-soft: #221840;
-    --on-accent: #0e1012;
-    --on-accent-muted: #2a1d55;
-    --wash-1: #2a1d55;
-    --wash-2: #5b3bc4;
+    --paper: #14100d;
+    --surface: #1f1915;
+    --ink: #efe9e3;
+    --ink-muted: #b0a59b;
+    --line: #7a6e64;
+    --accent: #ff9a62;
+    --accent-soft: #3a1e10;
+    --on-accent: #14100d;
+    --on-accent-muted: #4a2412;
+    --wash-1: #4a2412;
+    --wash-2: #9a3a10;
     color-scheme: dark;
   }
 }

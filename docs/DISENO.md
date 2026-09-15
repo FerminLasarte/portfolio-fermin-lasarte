@@ -17,7 +17,7 @@
 
 | | douglus.site | Este portfolio |
 |---|---|---|
-| Fondo y acento | Crema `#fefff8` con naranja `rgb(255,100,50)` | Papel frío `#F1F2EE` con violeta eléctrico `#6224F0` (y tema oscuro) |
+| Fondo y acento | Crema `#fefff8` con naranja `rgb(255,100,50)` | Papel arena `#F2EEE8` con naranja teja `#A93C0B`, más oscuro y menos saturado (y tema oscuro) |
 | Tipografía | Neue Montreal y FK Screamer (comerciales) | Archivo variable: angosta y pesada para los títulos, ancho normal para el texto |
 | Scroll | Lenis mueve una pista fija; el `body` tiene `overflow: hidden` | Scroll del documento (Lenis solo suaviza la rueda); `sticky` más `translate` atado al scroll |
 | Proyectos | Capturas en marcos de escritorio | Placas del color de cada app, con capturas verticales de teléfono |
@@ -43,63 +43,65 @@ Todo el texto es HTML real. Nada se dibuja en canvas.
 
 ## 2. Paleta
 
-Estrategia **restringida con un bloque comprometido**: neutros fríos más un solo acento, violeta eléctrico, que aparece en los botones principales, los estados y el progreso. El cierre es un bloque de color noche, igual en los dos temas, al que se llega por un degradado del acento (7.5). No hay verdes, ámbar ni grises sueltos: el estado de un proyecto se dice con texto, no con un punto de color.
+Estrategia **restringida con un bloque comprometido**: neutros cálidos (un gris arena con un leve tinte marrón) más un solo acento, naranja teja, que aparece en los botones principales, los estados y el progreso. El cierre es un bloque de color noche, igual en los dos temas, al que se llega por un degradado del acento (7.5). No hay verdes, ámbar ni grises sueltos: el estado de un proyecto se dice con texto, no con un punto de color.
 
 Los tokens van en `:root` y se redefinen bajo `html.dark-mode` (se mantiene el mecanismo actual de `lib/theme.js`, que respeta `prefers-color-scheme` y guarda la elección). Sin una elección guardada, la página también sigue al sistema si cambia con la página abierta; desde que se usa el botón, manda lo guardado (2026-09-15, R-M27 de la re-auditoría). `THEME_COLORS` pasa a `--paper` de cada tema.
 
 | Token | Claro | Oscuro | Uso |
 |---|---|---|---|
-| `--paper` | `#F1F2EE` | `#0E1012` | Fondo de la página |
-| `--surface` | `#E6E8E3` | `#181B1F` | Placas sin imagen, zonas hundidas |
-| `--ink` | `#101214` | `#ECEDE9` | Texto principal |
-| `--ink-muted` | `#4E5358` | `#A3A8AD` | Texto secundario, nav sin activar |
-| `--line` | `#7E838A` | `#6B7076` | Bordes de botón, reglas del timeline, riel del progreso |
-| `--accent` | `#6224F0` | `#A57BFF` | Botón principal, texto de acento, relleno de botones |
-| `--accent-soft` | `#ECE6FF` | `#221840` | Placas tipográficas de proyecto |
-| `--on-accent` | `#F6F3FF` | `#0E1012` | Texto y foco sobre `--accent` |
-| `--on-accent-muted` | `#E2D9FF` | `#2A1D55` | Texto secundario sobre `--accent` |
+| `--paper` | `#F2EEE8` | `#14100D` | Fondo de la página |
+| `--surface` | `#E7E1D8` | `#1F1915` | Placas sin imagen, zonas hundidas |
+| `--ink` | `#1A1411` | `#EFE9E3` | Texto principal |
+| `--ink-muted` | `#5A4F47` | `#B0A59B` | Texto secundario, nav sin activar |
+| `--line` | `#8A7E74` | `#7A6E64` | Bordes de botón, reglas del timeline, riel del progreso |
+| `--accent` | `#A93C0B` | `#FF9A62` | Botón principal, texto de acento, relleno de botones |
+| `--accent-soft` | `#F8E3D4` | `#3A1E10` | Placas tipográficas de proyecto |
+| `--on-accent` | `#FFF6EF` | `#14100D` | Texto y foco sobre `--accent` |
+| `--on-accent-muted` | `#FFE4D2` | `#4A2412` | Texto secundario sobre `--accent` |
 | `--focus` | `= --accent` | `= --accent` | Anillo de foco (sobre el cierre pasa a `--on-night`) |
 
-El acento empezó en cobalto (`#1D3FD8` / `#8CA3FF`). El 2026-09-14 Fermin lo cambió por un violeta más vivo: el cobalto se sentía insulso y no transmitía confianza.
+El acento empezó en cobalto (`#1D3FD8` / `#8CA3FF`). El 2026-09-14 Fermin lo cambió por un violeta más vivo (`#6224F0` / `#A57BFF`): el cobalto se sentía insulso y no transmitía confianza. El 2026-09-15 la paleta entera pasó a cálida, porque Fermin quería que transmitiera más confianza y cercanía. Eligió "Teja" entre tres propuestas: la teja; una mandarina viva con texto oscuro; y un naranja con los neutros fríos y el cierre en azul tinta. Con el acento cambiaron también los neutros (de fríos a arena) y el cierre (de negro violeta a café). No es el naranja de douglus: el suyo, `#FF6432`, tiene tono 14° y luz 60%; la teja tiene tono 19° y luz 35%.
 
 **Cierre (7.5):** colores propios, iguales en los dos temas.
 
 | Token | Valor | Uso |
 |---|---|---|
-| `--night` | `#0B0912` | Fondo del contacto y final del degradado |
-| `--night-raised` | `#17141F` | Fondo de las píldoras |
-| `--on-night` | `#F3F0FA` | Texto, foco, cursor y relleno de las píldoras |
-| `--on-night-muted` | `#A7A1B5` | Texto secundario sobre noche (el cargo del preloader) |
-| `--night-accent` | `#A57BFF` | La última palabra del título |
-| `--night-line` | `#2A2632` | La línea bajo el título (decorativa) |
-| `--night-line-strong` | `#6A6377` | Borde de las píldoras |
+| `--night` | `#120B07` | Fondo del contacto y final del degradado |
+| `--night-raised` | `#1E1510` | Fondo de las píldoras |
+| `--on-night` | `#F7EEE7` | Texto, foco, cursor y relleno de las píldoras |
+| `--on-night-muted` | `#B3A395` | Texto secundario sobre noche (el cargo del preloader) |
+| `--night-accent` | `#FF9A62` | La última palabra del título |
+| `--night-line` | `#2E231C` | La línea bajo el título (decorativa) |
+| `--night-line-strong` | `#74655A` | Borde de las píldoras |
 | `--blend-ink`, `--blend-ink-muted`, `--blend-line` | `#FFF`, blanco al 72% y al 40% | Nav y franja en horizontal, con `mix-blend-mode: difference` (7.1) |
-| `--wash-1` a `--wash-4` | `#E4D6FF`, `#A47CFF`, `#6224F0`, `#2B1273` (en oscuro, los dos primeros pasan a `#2A1D55` y `#5B3BC4`) | Paradas del degradado |
+| `--wash-1` a `--wash-4` | `#FBD9C2`, `#F0955E`, `#A93C0B`, `#5A1D06` (en oscuro, los dos primeros pasan a `#4A2412` y `#9A3A10`) | Paradas del degradado |
 
 **Contraste medido** (WCAG 2.x, luminancia relativa; script en el anexo B). Texto: mínimo 4,5:1. Bordes y controles: mínimo 3:1.
 
 | Par | Claro | Oscuro |
 |---|---|---|
-| `--ink` sobre `--paper` | 16,69 | 16,21 |
-| `--ink` sobre `--surface` | 15,21 | 14,69 |
-| `--ink-muted` sobre `--paper` | 6,91 | 7,95 |
-| `--ink-muted` sobre `--surface` | 6,30 | 7,21 |
-| `--accent` (texto) sobre `--paper` | 6,16 | 6,24 |
-| `--accent` (texto) sobre `--surface` | 5,62 | 5,66 |
-| `--accent` (texto) sobre `--accent-soft` | 5,72 | 5,40 |
-| `--ink` sobre `--accent-soft` | 15,49 | 14,03 |
-| `--on-accent` sobre `--accent` (botón) | 6,33 | 6,24 |
-| `--on-accent-muted` sobre `--accent` | 5,15 | 4,89 |
-| `--line` sobre `--paper` (borde, 3:1) | 3,40 | 3,82 |
-| `--line` sobre `--surface` (borde, 3:1) | 3,09 | 3,46 |
-| `--on-night` sobre `--night` / `--night-raised` | 17,57 / 16,13 | igual |
-| `--on-night-muted` sobre `--night` | 7,92 | igual |
-| `--night-accent` sobre `--night` | 6,48 | igual |
-| `--night-line-strong` sobre `--night` (borde, 3:1) | 3,45 | igual |
-| `--night` sobre `--on-night` (píldora con el relleno) | 17,57 | igual |
+| `--ink` sobre `--paper` | 15,77 | 15,71 |
+| `--ink` sobre `--surface` | 14,03 | 14,43 |
+| `--ink-muted` sobre `--paper` | 6,87 | 7,84 |
+| `--ink-muted` sobre `--surface` | 6,11 | 7,20 |
+| `--accent` (texto) sobre `--paper` | 5,44 | 9,06 |
+| `--accent` (texto) sobre `--surface` | 4,84 | 8,32 |
+| `--accent` (texto) sobre `--accent-soft` | 5,07 | 7,32 |
+| `--ink` sobre `--accent-soft` | 14,69 | 12,70 |
+| `--on-accent` sobre `--accent` (botón) | 5,90 | 9,06 |
+| `--on-accent-muted` sobre `--accent` | 5,18 | 6,47 |
+| `--line` sobre `--paper` (borde, 3:1) | 3,42 | 3,82 |
+| `--line` sobre `--surface` (borde, 3:1) | 3,04 | 3,51 |
+| `--on-night` sobre `--night` / `--night-raised` | 17,03 / 15,67 | igual |
+| `--on-night-muted` sobre `--night` | 7,98 | igual |
+| `--night-accent` sobre `--night` | 9,34 | igual |
+| `--night-line-strong` sobre `--night` (borde, 3:1) | 3,48 | igual |
+| `--night` sobre `--on-night` (píldora con el relleno) | 17,03 | igual |
+
+El par más justo es el acento como texto sobre `--surface` en claro (4,84). Un naranja más vivo con texto blanco no llega a 4,5:1; por eso la teja es oscura en claro y, en oscuro, un naranja claro con texto oscuro encima.
 
 Reglas:
-- `--ink-muted` nunca va sobre `--accent` (da 1,02).
+- `--ink-muted` nunca va sobre `--accent` (da 1,26 en claro y 1,16 en oscuro).
 - Las placas de proyecto con el color de la marca (TravelPic negro, DeporTurnos blanco) son datos del proyecto (`media.plate` en `PROJECTS`), no tokens del tema; no llevan texto encima.
 - Sin sombras. Si un componente la necesita, se agrega como token (`--shadow-*`), teñida con el tono del fondo.
 
@@ -271,7 +273,7 @@ Si `CSS.supports("animation-timeline: view()")` da falso y el modo horizontal es
 
 ### 7.1 Nav
 
-**Escritorio:** barra fija de `--nav-h` y tres zonas. En horizontal no tiene fondo: como el de douglus, es transparente, con los tokens en blanco (`--blend-*`) y `mix-blend-mode: difference`, así el texto toma el color inverso de lo que pasa debajo (oscuro sobre el papel, claro sobre el cierre) y el nav es parte de cada sección. Lo transparente deja pasar los clics (`pointer-events`). Sobre tonos medios (un botón violeta, el degradado, una placa de color) el inverso contrasta poco mientras pasa: douglus lo acepta y Fermin también (2026-09-14). Se midió en la re-auditoría (R-I3): sobre la transición al cierre, durante unos 1.800px de scroll, el texto baja a entre 1,0 y 1,5:1 en claro y a 2,6:1 en oscuro; en el resto del recorrido da 4,5:1 o más. Con esos números, Fermin decidió dejarlo así (2026-09-15). En vertical el contenido pasa por debajo del nav, así que ahí conserva el fondo `--paper`.
+**Escritorio:** barra fija de `--nav-h` y tres zonas. En horizontal no tiene fondo: como el de douglus, es transparente, con los tokens en blanco (`--blend-*`) y `mix-blend-mode: difference`, así el texto toma el color inverso de lo que pasa debajo (oscuro sobre el papel, claro sobre el cierre) y el nav es parte de cada sección. Lo transparente deja pasar los clics (`pointer-events`). Sobre tonos medios (un botón del acento, el degradado, una placa de color) el inverso contrasta poco mientras pasa: douglus lo acepta y Fermin también (2026-09-14). Se midió en la re-auditoría (R-I3): sobre la transición al cierre, durante unos 1.800px de scroll, el texto baja a entre 1,0 y 1,5:1 en claro y a 2,6:1 en oscuro; en el resto del recorrido da 4,5:1 o más. Con esos números, Fermin decidió dejarlo así (2026-09-15). En vertical el contenido pasa por debajo del nav, así que ahí conserva el fondo `--paper`.
 - Izquierda: "Fermin Lasarte", enlace a `#sobre-mi`. Con mouse, como el logo de douglus (pedido de Fermin, 2026-09-15): se ve "Fermin" y, al pasar por encima o al enfocarlo, "Lasarte" se abre y sus letras suben de a una (40ms entre letras, 550ms); al salir se van hacia arriba desde la última. El nombre completo sigue en el texto accesible (`sr-only`). Sin JS, en táctil o con reduce motion se ve completo.
 - Centro: `<nav aria-label="Secciones">` con `<ul>` de cuatro enlaces en `--ink-muted`.
   - **Hover y foco (puntero fino):** el texto pasa a `--ink` y se dibuja un tachado de 2px a media altura, que crece desde la izquierda (`scale: 0 1 → 1 1`, 220ms, `--ease-out`) y se va hacia la derecha al salir. Es el efecto `menu--linethrough` de douglus, que allá aparece de golpe.
