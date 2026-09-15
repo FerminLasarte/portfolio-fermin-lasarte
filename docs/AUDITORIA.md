@@ -316,7 +316,8 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
   - Las cifras del hero tienen que salir de estos datos.
 - [~] **M12.** Hay dos sistemas de animación de entrada (`animate-*` y `premium-reveal`) → Rediseño: dejar uno solo.
   - **Fuera de los criterios (2026-09-14):** el movimiento lo definen las skills de diseño y douglus.site, no la auditoría.
-- [ ] **M13.** `app/*.js` usa `.js` y el resto de componentes `.jsx`. Los badges se numeran `--0,1,2,4,5` y se detecta Python por su clase (`Hero.jsx:61`).
+- [~] **M13.** `app/*.js` usa `.js` y el resto de componentes `.jsx`.
+  - **Cerrado sin cambios (decidido por Fermin, 2026-09-15):** unificar no cambia nada para quien visita el sitio, porque Next trata igual las dos extensiones. La regla que quedó es coherente: los componentes van en `.jsx` (25 archivos) y los archivos que Next busca por nombre (`page.js`, `layout.js`, `global-error.js`, `global-not-found.js`, `opengraph-image.js`), en `.js`. La única excepción es `lib/og.js`, que tiene JSX. Los badges se numeran `--0,1,2,4,5` y se detecta Python por su clase (`Hero.jsx:61`).
   - **Fase 3:** los badges ya no existen. Queda la mezcla de `.js` en `app/` y `.jsx` en `components/`.
 
 ### Estilos (→ Rediseño: tokens desde el inicio)
