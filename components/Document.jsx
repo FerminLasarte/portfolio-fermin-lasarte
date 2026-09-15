@@ -1,4 +1,4 @@
-import { Archivo } from "next/font/google";
+import { archivo } from "@/lib/fonts";
 import { THEME_COLORS, themeInitScript } from "@/lib/theme";
 import { LOCALES, getT, homePath, pagePath } from "@/lib/i18n";
 import { PAGES } from "@/lib/pages.mjs";
@@ -8,15 +8,6 @@ import Footer from "@/components/Footer";
 import Cursor from "@/components/Cursor";
 import Magnet from "@/components/Magnet";
 import SmoothScroll from "@/components/SmoothScroll";
-
-// Archivo variable: el eje de peso viene siempre; el de ancho (wdth, 62–125) hay que
-// pedirlo, y es el que da los títulos angostos (docs/DISENO.md, sección 3).
-const archivo = Archivo({
-  subsets: ["latin"],
-  axes: ["wdth"],
-  variable: "--font-archivo",
-  display: "swap",
-});
 
 // Estructura común de las páginas (la home de cada idioma y el 404 global): <html>
 // con el idioma, el script del tema, el enlace para saltar al contenido, el nav, el

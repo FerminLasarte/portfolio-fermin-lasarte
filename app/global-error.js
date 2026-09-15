@@ -2,7 +2,7 @@
 
 import "./globals.css";
 import { useSyncExternalStore } from "react";
-import { Archivo } from "next/font/google";
+import { archivo } from "@/lib/fonts";
 import { THEME_COLORS } from "@/lib/theme";
 import { ERROR_TEXT } from "@/lib/error-text";
 
@@ -11,13 +11,7 @@ import { ERROR_TEXT } from "@/lib/error-text";
 // pasa por Document, no hay nav ni pie. Es bilingüe como el 404: primero el idioma de
 // la URL y después el otro, con un botón a la home de cada uno. Next lo carga en todas
 // las páginas, así que no importa lib/translations.js ni lib/site.js (N2): sus textos
-// están en lib/error-text.js.
-const archivo = Archivo({
-  subsets: ["latin"],
-  axes: ["wdth"],
-  variable: "--font-archivo",
-  display: "swap",
-});
+// están en lib/error-text.js. La fuente es la misma de Document (lib/fonts.js).
 
 const NAME = "Fermin Lasarte"; // PERSON.name
 const LANGS = Object.keys(ERROR_TEXT);

@@ -791,7 +791,21 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
 
 ### Eficiencia
 
-- [ ] **R-M14. La fuente es lo más pesado de la página** (el ahorro es una sospecha)
+- [x] **R-M14. La fuente es lo más pesado de la página** (el ahorro es una sospecha)
+  - **Medido antes de tocar nada:** la solución propuesta no ahorraba nada. Google Fonts devuelve el mismo archivo "latin" de 90.096 bytes aunque se le pidan menos pesos o anchos (se probó `wght` 400..800 y `wdth` 68..100, juntos y por separado). El ahorro solo aparece recortando una copia propia.
+  - **Hecho** (con el acuerdo de Fermin, 2026-09-15: no cambia nada a la vista, pero ya no hay pesos fuera de 400–800 ni anchos fuera de 68%–100% sin regenerar el archivo):
+    - `assets/fonts/Archivo-web.woff2`: Archivo variable de google/fonts, recortada con `fonttools varLib.instancer` a `wght` 400–800 y `wdth` 68–100, con el rango de caracteres y las funciones tipográficas del archivo "latin" de Google (incluidas las cifras tabulares). El comando está en `assets/fonts/README.md`.
+    - `lib/fonts.js` la carga con `next/font/local` (`weight: "400 800"` y `font-stretch: 68% 100%` en `declarations`; sin ese rango, el navegador no aplica el ancho angosto). La usan `Document` y `app/global-error.js`.
+    - La fuente de respaldo es la de antes. `next/font/local` calculaba otra (`size-adjust: 102,8%` en vez de 98,7%) y el CLS de `/trayectoria` con la fuente demorada subía de 0,0102 a 0,0247 a 1440 y de 0,0043 a 0,0254 a 1024. Por eso va `adjustFontFallback: false` y el `@font-face` "Archivo Fallback" en `styles/tokens.css`, con las medidas que calculaba `next/font/google`.
+  - **Antes y después**, en el build de producción:
+    - **Fuente precargada en cada página:** 88,0 → 55,6 KB.
+    - **CSS:** 8,9 → 8,5 KB gz (una sola regla `@font-face` en vez de tres subconjuntos).
+    - **CLS con la fuente demorada 800ms,** a 1440 y 1024: igual que antes del cambio en las cuatro páginas (`/` 0,0138 y 0,0212; `/trayectoria` 0,0102 y 0,0043).
+  - **Verificado** con Puppeteer contra el build anterior, a 1440 y 390, en claro y oscuro, en `/`, `/en`, `/trayectoria` y `/habilidades`:
+    - **No es idéntico píxel por píxel:** en la peor vista difiere entre el 0,45% y el 1,65% de los píxeles, contra el 0,066% de ruido. Es redondeo. Al recortar los rangos de los ejes, los valores intermedios se recalculan en unidades enteras, y en los pesos y anchos que usa el sitio cada letra cambia su ancho 1/1000 de em como mucho (0 en los pesos 400 y 600). Eso es 0,15px por letra en el título más grande, que mide 153px. Los bordes de las letras se corren una fracción de píxel.
+    - **La maquetación es la misma:** en `/` y `/trayectoria`, los 513 textos conservan su alto y su cantidad de líneas, y el ancho cambia centésimas de píxel (por ejemplo, 71,94 → 71,97px en "Proyectos" y 811,78 → 812,13px en el título "Trayectoria"). A simple vista no se distingue.
+    - **Recortar desde el archivo de Google Fonts** en vez de desde google/fonts da exactamente los mismos anchos: el redondeo es del recorte.
+    - La foto sigue siendo el LCP con la precarga; el scroll suave, el ancla, el imán, el cierre y la ola funcionan, y no hay errores de consola. `global-error.js` comparte el módulo de la fuente y compila, pero esta vez no se forzó un error para verlo.
   - **Dónde:** `components/Document.jsx:14-19`.
   - **Problema:** el archivo latin precargado pesa 90 KB, seis veces el JS propio de la home. Se piden `wght` de 100 a 900 y `wdth` de 62 a 125, pero se usan pesos de 400 a 800 y anchos de 68%, 75% y 100%.
   - **Solución:** `weight: "400 800"` en `Archivo()`, o una instancia local recortada con `fonttools varLib.instancer`.

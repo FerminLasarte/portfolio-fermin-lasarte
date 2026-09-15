@@ -3,6 +3,18 @@
  * Ningún componente usa colores, tamaños o duraciones sueltos: todo sale de acá.
  */
 
+/* La fuente de respaldo mientras carga Archivo (lib/fonts.js): Arial ajustada para que
+   ocupe lo mismo que Archivo. Son las medidas que calculaba next/font/google; las que
+   calcula next/font/local desde el archivo recortado movían más el layout (R-M14). */
+@font-face {
+  font-family: "Archivo Fallback";
+  src: local("Arial");
+  ascent-override: 88.96%;
+  descent-override: 21.28%;
+  line-gap-override: 0%;
+  size-adjust: 98.7%;
+}
+
 :root {
   /* Color, tema claro. Contraste medido en DISENO.md, sección 2. */
   --paper: #f2eee8;
@@ -38,7 +50,8 @@
   --blend-ink-muted: rgb(255 255 255 / 0.72);
   --blend-line: rgb(255 255 255 / 0.4);
 
-  /* Tipografía: Archivo variable (ejes wght y wdth), cargada con next/font. */
+  /* Tipografía: Archivo variable (ejes wght y wdth), recortada y cargada con
+     next/font/local (lib/fonts.js). --font-archivo ya incluye "Archivo Fallback". */
   --font: var(--font-archivo), "Helvetica Neue", Arial, system-ui, sans-serif;
   --wdth-display: 68%;
   --wdth-mega: 75%;

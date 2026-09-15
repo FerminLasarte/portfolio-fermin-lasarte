@@ -107,7 +107,7 @@ Reglas:
 
 ## 3. Tipografía y escala
 
-**Familia:** [Archivo](https://fonts.google.com/specimen/Archivo), variable, con los ejes `wght` (100–900) y `wdth` (62–125). Un solo archivo sirve para los títulos angostos, que tienen la fuerza de un afiche, y para el texto de lectura. Se carga con `next/font/google`, con `axes: ["wdth"]`, `subsets: ["latin"]` y `display: "swap"` (el eje de ancho no viene por defecto; ver `node_modules/next/dist/docs/01-app/03-api-reference/02-components/font.md`). Se sirve desde el propio dominio y no hay CSS externo. Reemplaza a Inter, que la skill desaconseja como fuente por defecto. No hay monoespaciada: las cifras usan `font-variant-numeric: tabular-nums`.
+**Familia:** [Archivo](https://fonts.google.com/specimen/Archivo), variable, con los ejes `wght` (100–900) y `wdth` (62–125). Un solo archivo sirve para los títulos angostos, que tienen la fuerza de un afiche, y para el texto de lectura. Se carga con `next/font/local` desde `lib/fonts.js`, con `display: "swap"`: una copia recortada a lo que usa el sitio, pesos de 400 a 800 y anchos de 68% a 100%, solo latín (`assets/fonts/Archivo-web.woff2`, 57 KB; Google Fonts mandaba 88 KB con todos los pesos y anchos; 2026-09-15, R-M14 de la re-auditoría). Un peso o un ancho fuera de esos rangos obliga a regenerar el archivo (`assets/fonts/README.md`). Mientras carga, se ve Arial ajustada a las medidas de Archivo ("Archivo Fallback", en `styles/tokens.css`). Se sirve desde el propio dominio y no hay CSS externo. Reemplaza a Inter, que la skill desaconseja como fuente por defecto. No hay monoespaciada: las cifras usan `font-variant-numeric: tabular-nums`.
 
 | Rol | Ancho (`wdth`) | Peso | Tamaño | Interlineado y tracking |
 |---|---|---|---|---|
