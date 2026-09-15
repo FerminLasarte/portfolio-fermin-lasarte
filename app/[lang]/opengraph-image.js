@@ -17,33 +17,42 @@ export function generateStaticParams() {
   return LOCALES.map((lang) => ({ lang }));
 }
 
-// Inter con solo los glifos que se usan (parámetro `text` de Google Fonts). Si no se
-// puede bajar (por ejemplo, un build sin red), se usa la fuente por defecto de next/og.
-async function loadInter(text) {
-  try {
-    const url = `https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&text=${encodeURIComponent(text)}`;
-    const css = await fetch(url).then((r) => r.text());
-    const faces = [
-      ...css.matchAll(/font-weight: (\d+);[\s\S]*?src: url\((.+?)\) format\('(?:opentype|truetype)'\)/g),
-    ];
-    return await Promise.all(
-      faces.map(async ([, weight, src]) => ({
-        name: "Inter",
-        weight: Number(weight),
-        style: "normal",
-        data: await fetch(src).then((r) => r.arrayBuffer()),
-      })),
-    );
-  } catch {
-    return [];
-  }
-}
+// next/og no lee variables de CSS: estos son los valores del tema claro de
+// styles/tokens.css, copiados a mano. Si cambia un token, hay que cambiarlo acá.
+const COLOR = {
+  paper: "#F1F2EE", // --paper
+  ink: "#101214", // --ink
+  inkMuted: "#4E5358", // --ink-muted
+  accent: "#1D3FD8", // --accent
+};
+
+// Archivo, leída del repo para que el build no dependa de la red. Son instancias
+// estáticas (assets/fonts/README.md): Satori no aplica los ejes de la variable.
+// Si falta un archivo, el build falla con ENOENT en vez de usar otra fuente.
+const FONTS_DIR = join(process.cwd(), "assets/fonts");
+const fonts = await Promise.all(
+  [
+    // El nombre: angosta (wdth 68) y pesada, como .display en styles/base.css.
+    { name: "Archivo Display", weight: 800, file: "Archivo-Display-68-800.ttf" },
+    { name: "Archivo", weight: 600, file: "Archivo-SemiBold.ttf" },
+    { name: "Archivo", weight: 400, file: "Archivo-Regular.ttf" },
+  ].map(async ({ name, weight, file }) => ({
+    name,
+    weight,
+    style: "normal",
+    data: await readFile(join(FONTS_DIR, file)),
+  })),
+);
+
+const photo = await readFile(join(process.cwd(), "public/assets/foto_perfil.jpg"));
+const photoSrc = `data:image/jpeg;base64,${photo.toString("base64")}`;
+
+const PAD = 64;
+const PHOTO_W = 440;
 
 export default async function Image({ params }) {
   const { lang } = await params;
   const tagline = fill(getT(lang)("meta.ogTagline"), { apps: STATS.appsLive });
-  const fonts = await loadInter(`${ROLE}${PERSON.name}${tagline}`);
-  const photo = await readFile(join(process.cwd(), "public/assets/foto_perfil.jpg"));
 
   return new ImageResponse(
     (
@@ -52,42 +61,57 @@ export default async function Image({ params }) {
           width: "100%",
           height: "100%",
           display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "0 90px",
-          background: "#F5F5F7",
-          fontFamily: fonts.length ? "Inter" : undefined,
+          background: COLOR.paper,
+          fontFamily: "Archivo",
         }}
       >
-        <div style={{ display: "flex", flexDirection: "column", width: 640 }}>
-          <div style={{ fontSize: 26, fontWeight: 600, color: "#5B5BD6" }}>{ROLE}</div>
-          <div
-            style={{
-              fontSize: 84,
-              fontWeight: 800,
-              color: "#111111",
-              letterSpacing: -3,
-              lineHeight: 1.05,
-              marginTop: 18,
-            }}
-          >
-            {PERSON.name}
-          </div>
-          <div style={{ fontSize: 30, color: "#6B6B6B", lineHeight: 1.45, marginTop: 30 }}>
-            {tagline}
+        <div
+          style={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            padding: `${PAD - 8}px ${PAD}px ${PAD - 12}px`,
+          }}
+        >
+          <div style={{ fontSize: 26, fontWeight: 600, color: COLOR.accent }}>{ROLE}</div>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div
+              style={{
+                fontSize: 26,
+                lineHeight: 1.35,
+                color: COLOR.inkMuted,
+                maxWidth: 560,
+                marginBottom: 30,
+              }}
+            >
+              {tagline}
+            </div>
+            {/* Una palabra por línea, como el nombre del hero. */}
+            {PERSON.name.split(" ").map((word) => (
+              <div
+                key={word}
+                style={{
+                  fontFamily: "Archivo Display",
+                  fontSize: 176,
+                  fontWeight: 800,
+                  lineHeight: 0.86,
+                  letterSpacing: "-0.01em",
+                  textTransform: "uppercase",
+                  color: COLOR.ink,
+                }}
+              >
+                {word}
+              </div>
+            ))}
           </div>
         </div>
         <img
-          src={`data:image/jpeg;base64,${photo.toString("base64")}`}
-          width={330}
-          height={330}
+          src={photoSrc}
+          width={PHOTO_W}
+          height={size.height}
           alt=""
-          style={{
-            borderRadius: 9999,
-            objectFit: "cover",
-            border: "8px solid #FFFFFF",
-            boxShadow: "0 24px 60px rgba(0, 0, 0, 0.12)",
-          }}
+          style={{ objectFit: "cover" }}
         />
       </div>
     ),

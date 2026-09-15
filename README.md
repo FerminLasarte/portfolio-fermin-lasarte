@@ -58,6 +58,7 @@ lib/
   translations.js       # textos ES/EN
   icons.js              # iconos de Font Awesome como SVG
   theme.js              # lógica de tema (toggle + script anti-FOUC)
+assets/fonts/           # Archivo (OFL) para la imagen de Open Graph
 public/
   assets/               # imágenes y CVs
   icons/devicon/        # SVG de Devicon (2.17.0)
