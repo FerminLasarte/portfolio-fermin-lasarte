@@ -56,8 +56,13 @@
   transition: opacity var(--dur-hover) var(--ease-out);
 }
 
+/* Centrado sobre el círculo con posición absoluta: el texto es más ancho que la caja
+   de 28px y, como ítem de la grilla, se salía hacia la derecha. */
 .cursor__text {
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
   color: var(--c);
   font: 600 0.625rem / 1 var(--font);
   letter-spacing: 0.06em;
