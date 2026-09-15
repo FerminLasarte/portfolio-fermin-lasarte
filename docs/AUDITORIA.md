@@ -867,7 +867,12 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
     - La descripción en EN mide 177 caracteres y se corta en los buscadores.
   - **Solución:** agregar esos tipos y campos, y dejar las descripciones en unos 155 caracteres.
 
-- [ ] **R-M26. `/favicon.ico` da 404 y devuelve la página entera del 404 (18,7 KB)**
+- [x] **R-M26. `/favicon.ico` da 404 y devuelve la página entera del 404 (18,7 KB)**
+  - **Hecho:**
+    - `public/favicon.ico` con tres PNG (16, 32 y 48px) dentro, dibujados desde `favicon.svg` con Chrome (Puppeteer; no hay ImageMagick). Pesa 1,5 KB.
+    - Por decisión de Fermin (2026-09-15, opción b), el favicon pasó del violeta viejo (`#5B5BD6`) al acento (`#6224F0`, `--accent` del tema claro), el mismo de los botones. Con eso también se regeneró `public/apple-icon.png`, que sale del favicon: 180×180, opaco y sin esquinas.
+    - El `<head>` no cambió: sigue enlazando el SVG y el apple-icon (`ICONS`); el `.ico` es para quien lo pide por su cuenta.
+  - **Verificado** sobre el servidor local: `/favicon.ico` da 200, `image/x-icon`, 1.512 bytes (`file` lo reconoce como icono con 3 imágenes); `/apple-icon.png` da 200 (180×180, RGB opaco) y `/favicon.svg` también. Los dos PNG se revisaron a la vista. `#5B5BD6` ya no aparece en el repo.
   - **Solución:** agregar un `public/favicon.ico` de 32×32.
 
 - [ ] **R-M27. Detalles de robustez**
