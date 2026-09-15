@@ -814,7 +814,14 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
 
 ### SEO, robustez y seguridad
 
-- [ ] **R-M21. Cualquier `/<algo>/opengraph-image` da 500, y no hay `global-error.js`**
+- [x] **R-M21. Cualquier `/<algo>/opengraph-image` da 500, y no hay `global-error.js`** **[nav]**
+  - **Hecho:**
+    - `app/[lang]/opengraph-image.js` lleva `dynamicParams = false`, como la de las páginas propias: un idioma que no existe da el 404 global. `getT` no cambió: no hace falta que caiga en el idioma por defecto.
+    - `app/global-error.js`, bilingüe como el 404 y con los textos que aprobó Fermin (2026-09-15): "ERROR" en Display, "Algo salió mal" / "Something went wrong", un párrafo, "Reintentar" (llama a `retry()`) y un botón a la home de cada idioma. Primero va el idioma de la URL (`/en…`, inglés), sigue el tema guardado o el del sistema, y arma su propio `<html>` con la fuente y los estilos.
+    - Los textos están en `lib/error-text.js` y no en `translations.js`: Next carga `global-error` en todas las páginas, e importar el diccionario sumaba 5,9 KB gz al JS de cada una (medido en el build). Con el módulo aparte suma 1,4 KB gz.
+  - **Verificado:**
+    - **Rutas,** en `next start` sobre un build aislado: `/xx/opengraph-image`, `/habilidades/opengraph-image`, `/trayectoria/opengraph-image` y `/es/xx/opengraph-image` dan 404 con el 404 global; `/es/opengraph-image`, `/en/opengraph-image` y `/es/trayectoria/opengraph-image` siguen en 200. En `next dev` las inválidas muestran el 404 pero con estado 500: es cosa del modo dev.
+    - **Error forzado** (un componente temporal que rompe al hidratar con `?boom`; no quedó en el repo), con Puppeteer en dev y en producción: `/` a 1440 en claro, `/en` a 1440 en oscuro, `/trayectoria` a 375 en oscuro y `/en/skills` a 375 en claro. En cada caso, el idioma, el `<title>`, el `theme-color`, los colores del tema, Archivo angosta en el título, 0 desborde y "Reintentar" funcionando. En producción, sin errores de consola.
   - **Dónde:** `app/[lang]/opengraph-image.js:16-18` y `lib/i18n.js:28-31`.
   - **Problema:** `/xx/opengraph-image` y `/habilidades/opengraph-image` responden 500 (verificado con curl) con la página de error de Next en inglés, porque `getT("xx")` rompe. Tampoco hay un `app/global-error.js` para los errores de cliente.
   - **Solución:** que `getT` caiga en el idioma por defecto (o que la ruta llame a `notFound()`), y crear un `global-error.js` bilingüe, como el 404.

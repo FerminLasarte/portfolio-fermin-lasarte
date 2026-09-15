@@ -11,6 +11,11 @@ export const contentType = "image/png";
 export const alt = SITE_TITLE;
 
 // Una imagen por idioma, prerenderizada (sin esto el route handler es dinámico).
+// Cualquier otro segmento da 404: antes, /xx/opengraph-image o
+// /habilidades/opengraph-image llegaban acá con un idioma que no existe y daban 500
+// (R-M21 de la re-auditoría).
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return LOCALES.map((lang) => ({ lang }));
 }
