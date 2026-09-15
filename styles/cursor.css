@@ -67,9 +67,10 @@
   transition: opacity var(--dur-hover) var(--ease-out);
 }
 
-.cursor[data-mode="link"] .cursor__shape {
-  scale: 1.7;
-  background-color: color-mix(in srgb, var(--c) 8%, transparent);
+/* Sobre enlaces y botones el cursor propio se va y queda la mano del sistema
+   (pedido de Fermin, 2026-09-14): nunca hay dos cursores a la vez. */
+.cursor.is-on[data-mode="link"] {
+  opacity: 0;
 }
 
 .cursor[data-mode="drag"] .cursor__shape {
@@ -92,9 +93,14 @@
   scale: 2.8;
 }
 
-/* Sin cursor del sistema mientras el propio está activo (tampoco sobre enlaces:
-   nunca dos cursores a la vez). */
+/* Sin cursor del sistema mientras el propio está activo, salvo la mano sobre los
+   enlaces y los botones (y lo que tienen adentro), donde el propio se esconde. */
 html.has-cursor,
 html.has-cursor * {
   cursor: none !important;
+}
+
+html.has-cursor :is(a[href], button),
+html.has-cursor :is(a[href], button) * {
+  cursor: pointer !important;
 }

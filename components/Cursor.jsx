@@ -6,8 +6,9 @@ const FINE = "(hover: hover) and (pointer: fine)";
 const CALM = "(prefers-reduced-motion: reduce), (forced-colors: active)";
 
 // Cursor propio (docs/DISENO.md, 7.8), el de douglus: un círculo y un punto que siguen
-// al mouse con retraso (0,2 y 0,35 por frame). Crece sobre enlaces y botones, y sobre
-// lo que tenga data-cursor="drag" muestra el texto de data-cursor-label.
+// al mouse con retraso (0,2 y 0,35 por frame). Sobre enlaces y botones se esconde y
+// queda la mano del sistema; sobre lo que tenga data-cursor="drag" crece y muestra el
+// texto de data-cursor-label.
 //  - Solo con mouse, sin reduce motion y sin colores forzados: si no, queda el del
 //    sistema. Nada depende de él.
 //  - El cursor del sistema se oculta (html.has-cursor) recién cuando el propio ya está

@@ -34,7 +34,7 @@
 | Botón "Menú / Cerrar" con menú a pantalla completa en móvil | **Tooltip en grilla naranja con el email:** muestra información solo con hover (criterio 7). |
 | Cortina curva con el nombre del destino al cambiar de página (acá: al cambiar de idioma) | |
 | Botones píldora: relleno que sube, texto que salta e imán (7.6) | |
-| **Cursor propio:** un círculo que sigue al mouse con retraso y un punto; crece sobre enlaces e imágenes y sobre la foto dice "Arrastrame" (7.8) | |
+| **Cursor propio:** un círculo que sigue al mouse con retraso y un punto; sobre la foto crece y dice "Arrastrame", y sobre enlaces y botones deja la mano del sistema (7.8) | |
 | **Foto del hero arrastrable,** con inercia y estela de copias (7.9) | |
 
 El cursor propio y la foto arrastrable los pidió Fermin el 2026-09-14. La skill `design-taste-frontend` desaconseja los cursores propios, pero douglus.site va antes que las skills y el pedido de Fermin va antes que todo. Se rehacen sin los problemas de M7 y con las condiciones de 7.8 y 7.9.
@@ -386,7 +386,7 @@ Es el de douglus, rehecho sin los problemas de M7 (reemplaza a `PremiumCursor`).
 | Debajo del cursor | Círculo | Punto | Texto |
 |---|---|---|---|
 | Nada interactivo | 1× | Visible | |
-| Enlace o botón | 1,7×, relleno de `--cursor-ink` al 8% | Visible | |
+| Enlace o botón | Se esconde y queda la mano del sistema | Oculto | |
 | Foto del hero | 3,4× | Oculto | "Arrastrame" / "Drag me" (del diccionario) |
 | Al presionar | 0,78× (2,8× sobre la foto) | | |
 
@@ -397,7 +397,7 @@ El estado sale de `data-cursor` o, si no hay, de `a` y `button`. Se lee con un s
 **Cómo se arreglan los problemas de M7:**
 - **Nunca hay un momento sin cursor.** El cursor del sistema se oculta recién cuando llega el primer `pointermove` del mouse y el propio ya está en su lugar. Recién ahí se agrega `html.has-cursor`, que pone `cursor: none`.
 - **No aparece el punto en (0, 0) al cargar.** El cursor empieza con `opacity: 0` y aparece en la posición real del mouse.
-- **No hay dos cursores sobre los enlaces.** `cursor: none` vale para todo, enlaces y botones incluidos.
+- **No hay dos cursores sobre los enlaces.** Sobre enlaces y botones (y lo que tienen adentro) el cursor propio se desvanece y vuelve la mano del sistema (`cursor: pointer`). Lo pidió Fermin el 2026-09-14; antes el círculo crecía a 1,7× y la mano no aparecía. En el resto de la página, `cursor: none`.
 - **Se mueve con `translate`,** no con `left`/`top`.
 - **Un solo listener,** con delegación.
 - **El `requestAnimationFrame` no corre siempre:** se para cuando el círculo alcanzó al mouse (a menos de 0,2px), se reanuda con el próximo movimiento y se esconde cuando el mouse sale de la ventana.
