@@ -1,25 +1,27 @@
 import { SKILL_GROUPS } from "@/lib/site";
 import { pagePath } from "@/lib/i18n";
 
-// Filas de la marquesina, cada una con sus grupos de SKILL_GROUPS y su tono: llena,
-// en contorno y en --accent. La leyenda de abajo usa los mismos grupos.
-const ROWS = [
-  { key: "skills.mobile", groups: ["mobile"], tone: "fill" },
-  { key: "skills.row.back", groups: ["backend", "data"], tone: "outline" },
-  { key: "skills.row.web", groups: ["web", "tools"], tone: "accent" },
+// Grupos de SKILL_GROUPS en el orden del muro y de la lista de abajo. Los de mobile van
+// en --accent.
+const GROUPS = [
+  { key: "skills.mobile", ids: ["mobile"], accent: true },
+  { key: "skills.row.back", ids: ["backend", "data"] },
+  { key: "skills.row.web", ids: ["web", "tools"] },
 ];
 
-// Habilidades (docs/DISENO.md, 7.7): vista previa en marquesina, como la de douglus.
-// Tres filas de tecnologías gigantes que se corren de costado con el scroll, una hacia
-// cada lado. Son visuales (aria-hidden, y cada fila repite la lista para tener
-// recorrido): la información está debajo, en texto, con los mismos grupos. El nivel de
-// cada tecnología y dónde la usé van en la página de Habilidades (7.12).
+// Habilidades (docs/DISENO.md, 7.7): vista previa en un muro de palabras. Todas las
+// tecnologías en mayúsculas gigantes, justificadas en líneas que llenan el ancho del
+// panel sin salirse. Empiezan en contorno y una ola atada al scroll las va llenando:
+// las de nivel avanzado quedan llenas y las intermedias, en contorno. El muro es visual
+// (aria-hidden): la información está debajo, en texto, con los mismos grupos. El nivel
+// en texto y dónde usé cada una van en la página de Habilidades (7.12).
 export default function Skills({ t, lang }) {
   const byId = Object.fromEntries(SKILL_GROUPS.map((g) => [g.id, g]));
-  const rows = ROWS.map((row) => ({
-    ...row,
-    names: row.groups.flatMap((id) => byId[id].skills.map((s) => s.name)),
+  const groups = GROUPS.map((group) => ({
+    ...group,
+    skills: group.ids.flatMap((id) => byId[id].skills),
   }));
+  const words = groups.flatMap((group) => group.skills.map((skill) => ({ ...skill, accent: group.accent })));
 
   return (
     <section
@@ -39,23 +41,32 @@ export default function Skills({ t, lang }) {
         </a>
       </header>
 
-      <div className="marquee" aria-hidden="true">
-        {rows.map((row) => (
-          <p key={row.key} className={`marquee__row marquee__row--${row.tone}`}>
-            {[...row.names, ...row.names].map((name, k) => (
-              <span key={k} className="marquee__item">
-                {name}
-              </span>
-            ))}
-          </p>
-        ))}
+      <div className="wall-wrap" aria-hidden="true">
+        <p className="wall">
+          {words.flatMap((word, i) => [
+            <span
+              key={word.name}
+              className={`wall__word${word.level === "advanced" ? " is-strong" : ""}${word.accent ? " is-accent" : ""}`}
+              style={{ "--i": i }}
+            >
+              {word.name}
+            </span>,
+            " ",
+          ])}
+        </p>
+        <p className="wall__legend meta">
+          <span className="wall__key is-strong" />
+          {t("skills.level.advanced")}
+          <span className="wall__key" />
+          {t("skills.level.intermediate")}
+        </p>
       </div>
 
       <div className="skills__groups">
-        {rows.map((row) => (
-          <div key={row.key} className="skills__group">
-            <h3 className="meta">{t(row.key)}</h3>
-            <p>{row.names.join(", ")}</p>
+        {groups.map((group) => (
+          <div key={group.key} className="skills__group">
+            <h3 className="meta">{t(group.key)}</h3>
+            <p>{group.skills.map((s) => s.name).join(", ")}</p>
           </div>
         ))}
       </div>

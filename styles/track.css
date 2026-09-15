@@ -16,14 +16,15 @@ main,
 /* Largo de la pista: la suma de los anchos de los paneles (definidos abajo). Va en
    .h-scroll y no en :root porque un var() se resuelve donde se declara la variable,
    y --n-card y --n-card-lg los escribe el servidor recién en este elemento.
-   --x-timeline y --x-bleed son dónde empiezan Trayectoria y la transición al cierre:
-   los usan styles/trajectory.css y styles/contact.css para saber en qué tramo del
-   recorrido se dibujan sus líneas. */
+   --x-timeline, --x-skills y --x-bleed son dónde empiezan Trayectoria, Habilidades y
+   la transición al cierre: los usan styles/trajectory.css, styles/skills.css y
+   styles/contact.css para saber en qué tramo del recorrido se mueven. */
 .h-scroll {
   --x-timeline: calc(
     100cqi + var(--w-intro) + var(--n-card-lg) * var(--w-card-lg) + var(--n-card) * var(--w-card)
   );
-  --x-bleed: calc(var(--x-timeline) + var(--w-timeline) + var(--w-skills));
+  --x-skills: calc(var(--x-timeline) + var(--w-timeline));
+  --x-bleed: calc(var(--x-skills) + var(--w-skills));
   --track-w: calc(var(--x-bleed) + var(--w-bleed) + 100cqi);
 }
 

@@ -150,7 +150,7 @@ Proyectos pasa a estar justo después del hero (I15). Experiencia y Educación s
 | 2 | Proyectos: entrada con las cifras | `proyectos` | `--w-intro: clamp(22rem, 30cqi, 30rem)` (con 26rem, "PROYECTOS" no entraba) |
 | 3 | Un panel por proyecto, en el orden de `PROJECTS` | `proyecto-<id>` | `--w-card-lg: clamp(30rem, 40cqi, 42rem)` para las apps en producción con plataforma móvil; `--w-card: clamp(22rem, 28cqi, 28rem)` para el resto |
 | 4 | Trayectoria (experiencia y educación), vista previa en etapas (7.4) | `experiencia`; la etapa de UNICEN lleva `educacion` | `--w-timeline: calc(40rem + 3 * 3.9 * var(--fs-stage))`: sale del tamaño de los años (unos 2160px a 1440×900) |
-| 5 | Habilidades, vista previa en marquesina (7.7) | `habilidades` | `--w-skills: 100cqi` (una pantalla) |
+| 5 | Habilidades, vista previa en un muro de palabras (7.7) | `habilidades` | `--w-skills: 100cqi` (una pantalla) |
 | 6 | Transición al cierre: decorativa, `aria-hidden` (agregada el 2026-09-14) | | `--w-bleed: 65cqi` (70cqi desde 1600px, como douglus) |
 | 7 | Contacto | `contacto` | `100cqi` |
 
@@ -365,10 +365,11 @@ Rediseñados el 2026-09-14 como las píldoras de douglus (`.pill` e `initPillBut
 
 ### 7.7 Habilidades
 
-Rediseñada el 2026-09-15: Fermin eligió la propuesta "C · Marquesina" del lienzo de propuestas (la anterior, cinco listas de icono, nombre y nivel, se sentía muy básica). En la home es una **vista previa**; el nivel de cada tecnología y dónde la usé van en su propia página (7.12).
-- Arriba, `<h2>` "Habilidades" en Display y una frase corta (`skills.lead`).
-- **Marquesina:** tres filas de tecnologías gigantes (`--fs-marquee: clamp(3.5rem, 13vmin, 10rem)`, Archivo angosta en mayúsculas), de borde a borde del panel: Mobile llena, Backend con datos y nube en contorno, y Web con herramientas en `--accent`, con un cuadrado chico entre palabra y palabra. Cada fila repite su lista para tener recorrido. Es visual (`aria-hidden`); el `overflow: clip` está en la marquesina, donde nace el desborde intencional.
-- **Movimiento:** cada fila se corre de costado un 15% de su largo con el scroll, la del medio hacia el otro lado. En horizontal usa la línea de tiempo de la pista mientras el panel pasa; en vertical, `view()` mientras la fila cruza la pantalla. Sin soporte (Firefox), sin JS o con reduce motion, las filas quedan quietas.
+Rediseñada el 2026-09-15. Fermin eligió primero la propuesta "C · Marquesina" del lienzo de propuestas (la anterior, cinco listas de icono, nombre y nivel, se sentía muy básica), pero las filas eran más anchas que el panel y se cortaban en sus bordes, que en horizontal quedan en medio de la pantalla: las letras "se escondían en la nada". Quedó un **muro de palabras** que conserva la tipografía de afiche y el movimiento atado al scroll sin cortar nada. En la home es una **vista previa**; el nivel en texto y dónde usé cada tecnología van en su propia página (7.12).
+- Arriba, `<h2>` "Habilidades" en Display, una frase corta (`skills.lead`) y "Ver todas las habilidades" (en horizontal, en una fila).
+- **Muro:** las 27 tecnologías de `SKILL_GROUPS` en Archivo angosta y en mayúsculas, justificadas (`text-align: justify`, la última línea a la izquierda) en el ancho del panel. Ninguna se sale. El tamaño sale del ancho y del alto de la pantalla en horizontal (`min(5.6cqi, 7.8vmin)`: con 8,5vmin, a 1024×680 la lista de abajo se pasaba 22px) y de `--fs-wall` en vertical. Es visual (`aria-hidden`).
+- **Estado final:** las de nivel avanzado, llenas; las intermedias, en contorno (`-webkit-text-stroke`); las de mobile, en `--accent`. Una leyenda chica (cuadrado lleno: avanzado; en contorno: intermedio) lo explica.
+- **La ola:** todas empiezan en contorno gris (`--line`) y pasan a su estado final una detrás de otra. En horizontal, con la línea de tiempo de la pista, desde que el panel asoma (su borde izquierdo al 70% de la ventana) hasta que entra entero, con 2,3cqi de desfase entre palabra y palabra (`--x-skills` en `.h-scroll`); en vertical, cada palabra mientras cruza la pantalla (`view()`). Sin soporte (Firefox), sin JS o con reduce motion se ve el estado final.
 - **Debajo, la misma información en texto:** los tres grupos con sus tecnologías, que es lo que leen los lectores de pantalla.
 - En horizontal el panel ocupa una pantalla (`--w-skills: 100cqi`).
 
@@ -491,7 +492,7 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
 | Nombre del nav | Hover o foco (puntero fino) | Ancho del apellido (`grid-template-columns` de 0fr a 1fr) y `translate` Y + `opacity` de cada letra | Entra en 550ms `--ease-out`, 40ms entre letras; sale en 350ms, 30ms entre letras desde la última | Nombre completo, quieto |
 | Ola de la franja | 5 s sin mover el mouse ni scrollear (se repite mientras siga quieta) | `transform: perspective(180px) translateZ() rotateY()` de cada letra | 400ms por letra, 50ms entre letras | No existe (la franja es solo del modo horizontal) |
 | Línea de Trayectoria | Scroll | `scale` X del `::before` de `.stages` | Lineal, atada al scroll: del 60% de la ventana al borde derecho del panel (en Firefox, `--rail` desde TrackController) | No existe (vertical) |
-| Marquesina de Habilidades | Scroll | `translate` X de cada fila, un 15% de su largo (la del medio, al revés) | Lineal, atada al scroll: en horizontal, mientras el panel pasa; en vertical, `view()` de la fila | Quieta |
+| Muro de Habilidades | Scroll | `color` y `-webkit-text-stroke-color` de cada palabra, del contorno gris a su estado final | Lineal, atada al scroll: en horizontal, del 70% de la ventana a panel entero, 2,3cqi entre palabra y palabra; en vertical, `view()` de cada palabra (`cover 15%` a `cover 40%`) | Estado final, quieto |
 | Barra de progreso | Scroll | `scale` X | Lineal | No existe (vertical) |
 | Transición al cierre | Scroll | `scale` del degradado: de 0,05 a 1,02 en X (horizontal) o de 0,05 a 1 en Y (vertical) | Lineal, atada al scroll: en horizontal, mientras el borde izquierdo del panel va del borde derecho de la ventana al centro menos 100px (misma línea de tiempo que la pista; en Firefox, TrackController); en vertical, `view()` de `entry 0%` a `entry 100%` | Quieta y dibujada |
 | Tachado del nav y de contacto | Hover o foco | `scale` X del pseudo-elemento | 220ms `--ease-out` | Aparece sin transición |

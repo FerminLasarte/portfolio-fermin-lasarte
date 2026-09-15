@@ -51,7 +51,7 @@
   --fs-section: clamp(2.5rem, 7.5vmin, 6rem);
   --fs-mega: clamp(2.25rem, 9vmin, 7.5rem);
   --fs-stage: clamp(4rem, 15vmin, 11rem); /* los años de Trayectoria */
-  --fs-marquee: clamp(3.5rem, 13vmin, 10rem); /* las filas de Habilidades */
+  --fs-wall: clamp(2.25rem, 11vw, 5rem); /* el muro de Habilidades, en vertical */
 
   /* Forma */
   --radius-0: 0;

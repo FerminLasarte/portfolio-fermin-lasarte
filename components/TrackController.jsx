@@ -21,7 +21,7 @@ const REVEAL = [
   ".stage__body",
   ".skills__lead",
   ".skills__more",
-  ".marquee",
+  ".wall-wrap",
   ".skills__group",
   ".contact__rule",
   ".contact__pills > .btn",

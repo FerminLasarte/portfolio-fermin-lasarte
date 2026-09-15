@@ -1,7 +1,9 @@
 /*
- * Habilidades (docs/DISENO.md, 7.7): vista previa en marquesina, como la de douglus.
- * Tres filas de tecnologías gigantes (llena, en contorno y en --accent) que se corren
- * de costado con el scroll, una hacia cada lado; debajo, la misma información en texto.
+ * Habilidades (docs/DISENO.md, 7.7): vista previa en un muro de palabras. Las
+ * tecnologías en mayúsculas gigantes, justificadas en el ancho del panel (ninguna se
+ * sale ni se corta). Empiezan en contorno gris y una ola atada al scroll las va
+ * llenando: las de nivel avanzado se llenan de tinta y las intermedias quedan en
+ * contorno, más oscuro; las de mobile, en --accent. Debajo, lo mismo en texto.
  */
 
 .skills {
@@ -26,61 +28,62 @@
   color: var(--ink-muted);
 }
 
-/* ---------- Marquesina ---------- */
+/* ---------- Muro ---------- */
 
-/* Va de borde a borde del panel. El overflow: clip está donde nace el desborde, que
-   es intencional: las filas son más anchas que la pantalla (criterio 1). */
-.marquee {
+.wall-wrap {
   display: grid;
   gap: var(--space-3);
-  margin-inline: calc(-1 * var(--pad-x));
-  overflow: clip;
 }
 
-/* --from es dónde arranca cada fila: corridas distinto, para que no empiecen todas
-   con el mismo corte. */
-.marquee__row {
-  --from: -4%;
-  display: flex;
-  align-items: center;
-  width: max-content;
-  font-size: var(--fs-marquee);
+/* Justificado, con la última línea a la izquierda: las palabras llenan el ancho. */
+.wall {
+  font-size: var(--fs-wall);
   font-weight: 800;
   font-stretch: var(--wdth-display);
-  line-height: 0.84;
+  line-height: 0.92;
   letter-spacing: -0.01em;
   text-transform: uppercase;
+  text-align: justify;
+  text-align-last: left;
+}
+
+/* El estado final (sin movimiento): las avanzadas llenas y las intermedias en contorno. */
+.wall__word {
+  --wall-ink: var(--ink);
+  display: inline-block;
   white-space: nowrap;
-  translate: var(--from) 0;
-}
-
-.marquee__row--outline {
-  --from: -30%;
   color: transparent;
-  -webkit-text-stroke: 0.01em var(--ink);
+  -webkit-text-stroke: 0.012em var(--wall-ink);
 }
 
-.marquee__row--accent {
-  --from: -14%;
-  color: var(--accent);
+.wall__word.is-accent {
+  --wall-ink: var(--accent);
 }
 
-/* Entre palabra y palabra, un cuadrado chico. */
-.marquee__item {
-  display: inline-flex;
+.wall__word.is-strong {
+  color: var(--wall-ink);
+}
+
+/* Leyenda: un cuadrado lleno para avanzado y uno en contorno para intermedio. */
+.wall__legend {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  gap: var(--space-2);
 }
 
-.marquee__item::after {
-  content: "";
-  inline-size: 0.12em;
-  block-size: 0.12em;
-  margin-inline: 0.28em;
-  background: var(--accent);
+.wall__key {
+  inline-size: 0.75rem;
+  block-size: 0.75rem;
+  border: 1.5px solid var(--ink);
 }
 
-.marquee__row--accent .marquee__item::after {
+.wall__key.is-strong {
   background: var(--ink);
+}
+
+.wall__key:not(:first-child) {
+  margin-inline-start: var(--space-4);
 }
 
 /* ---------- La misma información, en texto ---------- */
@@ -102,54 +105,51 @@
   line-height: 1.5;
 }
 
-/* ---------- Movimiento: cada fila se corre un 15% de su largo con el scroll ----------
-   En vertical, mientras la fila cruza la pantalla (view()); en horizontal, mientras el
-   panel pasa (la misma línea de tiempo que la pista). Sin soporte (Firefox), sin JS o
-   con reduce motion, las filas quedan quietas. */
+/* ---------- La ola: cada palabra pasa del contorno gris a su estado final ----------
+   En vertical, cada palabra se llena mientras cruza la pantalla (su propio view()); en
+   horizontal, una detrás de otra, desde que el panel asoma (su borde izquierdo al 70%
+   de la ventana) hasta que entra entero. Sin soporte (Firefox), sin JS o con reduce
+   motion se ve el estado final. */
 
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
-    html.js .marquee__row {
-      animation: marquee-left linear both;
+    html.js .wall__word {
+      animation: wall-fill linear both;
       animation-timeline: view();
-      animation-range: cover;
-    }
-
-    html.js .marquee__row--outline {
-      animation-name: marquee-right;
+      animation-range: cover 15% cover 40%;
     }
   }
 }
 
 @media (min-width: 64rem) and (min-height: 42.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
-    html.js .marquee__row {
-      animation-timeline: --pan;
-      animation-range: contain calc(var(--x-timeline) + var(--w-timeline) - 100cqi) contain
-        calc(var(--x-timeline) + var(--w-timeline) + var(--w-skills));
-    }
-  }
-
   html.js .skills {
     justify-content: space-between;
   }
 
-  /* El título, la frase y el botón en una fila, así la marquesina tiene más alto. */
+  /* El título, la frase y el botón en una fila, así el muro tiene más alto. */
   html.js .skills__head {
     grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: end;
     column-gap: var(--space-7);
   }
-}
 
-@keyframes marquee-left {
-  to {
-    translate: calc(var(--from) - 15%) 0;
+  /* El tamaño sale del ancho y del alto de la pantalla, así el muro siempre entra. */
+  html.js .wall {
+    font-size: min(5.6cqi, 7.8vmin);
+  }
+
+  @supports (animation-timeline: view()) {
+    html.js .wall__word {
+      animation-timeline: --pan;
+      animation-range: contain calc(var(--x-skills) - 70cqi + var(--i) * 2.3cqi) contain
+        calc(var(--x-skills) - 60cqi + var(--i) * 2.3cqi);
+    }
   }
 }
 
-@keyframes marquee-right {
-  to {
-    translate: calc(var(--from) + 15%) 0;
+@keyframes wall-fill {
+  from {
+    color: transparent;
+    -webkit-text-stroke-color: var(--line);
   }
 }
