@@ -1,5 +1,6 @@
-import { getT } from "@/lib/i18n";
-import { PROJECTS, isFeatured } from "@/lib/site";
+import { getT, homeUrl } from "@/lib/i18n";
+import { LD_ID, PROJECTS, SITE_TITLE, isFeatured } from "@/lib/site";
+import JsonLd from "@/components/JsonLd";
 import Preloader from "@/components/Preloader";
 import Track from "@/components/Track";
 import Strip from "@/components/Strip";
@@ -16,8 +17,20 @@ export default async function Home({ params }) {
   const t = getT(lang);
   const cardsLg = PROJECTS.filter(isFeatured).length;
 
+  // La home es la página de perfil de la persona que define el layout (R-M25).
+  const profile = {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    url: homeUrl(lang),
+    name: SITE_TITLE,
+    inLanguage: lang,
+    isPartOf: { "@id": LD_ID.website },
+    mainEntity: { "@id": LD_ID.person },
+  };
+
   return (
     <>
+      <JsonLd data={profile} />
       <Preloader words={t("preloader.words")} />
       <Track cards={PROJECTS.length - cardsLg} cardsLg={cardsLg}>
         <Hero t={t} lang={lang} />

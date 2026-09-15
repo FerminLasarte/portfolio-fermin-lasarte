@@ -3,6 +3,7 @@ import { fill } from "@/lib/translations";
 import { DEFAULT_LOCALE, LOCALES, OG_LOCALES, getT, homePath, homeUrl } from "@/lib/i18n";
 import {
   ICONS,
+  LD_ID,
   OTHER_SKILLS,
   PERSON,
   ROLE,
@@ -13,6 +14,7 @@ import {
   STATS,
 } from "@/lib/site";
 import Document from "@/components/Document";
+import JsonLd from "@/components/JsonLd";
 
 // Se prerenderiza una página por idioma; cualquier otro segmento da 404.
 export const dynamicParams = false;
@@ -60,31 +62,43 @@ export async function generateMetadata({ params }) {
   };
 }
 
+// JSON-LD de todas las páginas: el sitio y la persona, con un `@id` que las páginas
+// referencian (la home suma ProfilePage y las propias, BreadcrumbList; R-M25 de la
+// re-auditoría).
 export default async function RootLayout({ children, params }) {
   const { lang } = await params;
+  const t = getT(lang);
 
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Person",
-    name: PERSON.name,
-    url: SITE_URL,
-    jobTitle: ROLE,
-    description: describe(getT(lang)),
-    knowsAbout: [...SKILLS.map((s) => s.name), ...OTHER_SKILLS],
-    image: `${SITE_URL}/assets/foto_perfil.jpg`,
-    sameAs: [SOCIAL.github, SOCIAL.linkedin],
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": LD_ID.website,
+        url: SITE_URL,
+        name: PERSON.name,
+        inLanguage: LOCALES,
+        publisher: { "@id": LD_ID.person },
+      },
+      {
+        "@type": "Person",
+        "@id": LD_ID.person,
+        name: PERSON.name,
+        url: SITE_URL,
+        jobTitle: ROLE,
+        description: describe(t),
+        image: `${SITE_URL}/assets/foto_perfil.jpg`,
+        knowsAbout: [...SKILLS.map((s) => s.name), ...OTHER_SKILLS],
+        knowsLanguage: PERSON.languages,
+        alumniOf: { "@type": "CollegeOrUniversity", name: t("edu.unicen.company") },
+        homeLocation: { "@type": "Place", name: PERSON.location },
+        sameAs: [SOCIAL.github, SOCIAL.linkedin],
+      },
+    ],
   };
 
   return (
-    <Document
-      lang={lang}
-      head={
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-      }
-    >
+    <Document lang={lang} head={<JsonLd data={jsonLd} />}>
       {children}
     </Document>
   );

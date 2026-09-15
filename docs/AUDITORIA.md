@@ -853,7 +853,13 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
   - **Dónde:** `app/sitemap.js:7-22`.
   - **Solución:** poner una fecha por página en los datos (o no poner ninguna) y sumar `x-default` como en el `<head>`.
 
-- [ ] **R-M25. El JSON-LD es solo `Person`, igual en todas las páginas, y la descripción en inglés es larga**
+- [x] **R-M25. El JSON-LD es solo `Person`, igual en todas las páginas, y la descripción en inglés es larga**
+  - **Hecho:**
+    - **Layout:** un `@graph` con `WebSite` y `Person`, cada uno con su `@id` (`LD_ID` en `lib/site.js`). `Person` suma `alumniOf` (UNICEN, con el nombre de `edu.unicen.company` en cada idioma), `homeLocation` (`PERSON.location`, que antes no se usaba; ver R-M29) y `knowsLanguage` (`PERSON.languages`: es, en y fr).
+    - **La home** suma `ProfilePage`, con la persona como `mainEntity`, y **las páginas propias**, `BreadcrumbList` ("Inicio" › la página; `page.home`, "Inicio" / "Home").
+    - `components/JsonLd.jsx` escapa el `<`, como indica la guía de Next.
+    - **Descripciones:** no se tocaron, por decisión de Fermin (2026-09-15). Desde R-I7 miden 130 (ES) y 144 (EN) caracteres; los 177 eran de la frase anterior ("published on the App Store and Google Play").
+  - **Verificado** sobre el servidor local, leyendo el JSON-LD de las 6 páginas: parsea bien, sin `<` sin escapar, con los `@id` que se referencian entre bloques y las migas en el idioma de cada página. El 404 no tiene JSON-LD. ES y EN tienen las mismas 109 claves. El `<script>` dentro de `<main>` no mueve nada: contra el build anterior, el alto del documento y las cajas de los paneles y títulos son idénticos (home a 1440, 375 y 1024; `/trayectoria` y `/en/skills`).
   - **Dónde:** `app/[lang]/layout.js:66-85` y `lib/translations.js:7` y `:151`.
   - **Problema:**
     - Faltan `ProfilePage` y `WebSite`, y `BreadcrumbList` en las páginas propias.

@@ -1,9 +1,20 @@
 import { notFound } from "next/navigation";
-import { DEFAULT_LOCALE, LOCALES, OG_LOCALES, PAGE_TEXT, getT, pageId, pagePath, pageUrl } from "@/lib/i18n";
+import {
+  DEFAULT_LOCALE,
+  LOCALES,
+  OG_LOCALES,
+  PAGE_TEXT,
+  getT,
+  homeUrl,
+  pageId,
+  pagePath,
+  pageUrl,
+} from "@/lib/i18n";
 import { PAGES } from "@/lib/pages.mjs";
 import { PERSON, SOCIAL } from "@/lib/site";
 import ExperiencePage from "@/components/ExperiencePage";
 import SkillsPage from "@/components/SkillsPage";
+import JsonLd from "@/components/JsonLd";
 
 // Páginas propias (docs/DISENO.md, 7.12): qué componente muestra cada una. Los textos
 // de su metadata están en PAGE_TEXT (lib/i18n.js), compartidos con su imagen de Open
@@ -62,5 +73,22 @@ export default async function Page({ params }) {
   const id = pageId(lang, page);
   if (!id) notFound();
   const Component = VIEWS[id];
-  return <Component t={getT(lang)} lang={lang} />;
+  const t = getT(lang);
+
+  // Migas de pan para los buscadores: Inicio › la página (R-M25).
+  const breadcrumbs = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: t("page.home"), item: homeUrl(lang) },
+      { "@type": "ListItem", position: 2, name: t(PAGE_TEXT[id].title), item: pageUrl(lang, id) },
+    ],
+  };
+
+  return (
+    <>
+      <JsonLd data={breadcrumbs} />
+      <Component t={t} lang={lang} />
+    </>
+  );
 }
