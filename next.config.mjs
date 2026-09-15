@@ -15,12 +15,25 @@ const securityHeaders = [
   { key: "Content-Security-Policy", value: "frame-ancestors 'none'; base-uri 'self'; object-src 'none'" },
 ];
 
+// Caché de lo que está en public/ (R-M19), que Next sirve con max-age=0:
+//  - los iconos de Devicon no cambian nunca: un año, sin revalidar. Si alguno cambia,
+//    va con otro nombre de archivo;
+//  - los CV y las imágenes de assets/ sí pueden cambiar: un día, y hasta una semana
+//    más se sirve la copia guardada mientras se busca la nueva.
+const cacheHeaders = [
+  { source: "/icons/:path*", headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }] },
+  {
+    source: "/assets/:path*",
+    headers: [{ key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" }],
+  },
+];
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [{ source: "/:path*", headers: securityHeaders }, ...cacheHeaders];
   },
   // app/global-not-found.js: el 404 de las URLs que no son de ningún idioma (con
   // varios root layouts, uno por idioma, no hay un layout raíz para app/not-found.js).

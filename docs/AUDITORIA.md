@@ -823,7 +823,16 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
   - **Problema:** son 1,6 KB de los 17,4 KB gz del HTML.
   - **Solución:** un `<symbol>` en `Document` y `<use href>` en `Icon`.
 
-- [ ] **R-M19. Lo de `public/` se revalida en cada visita**
+- [x] **R-M19. Lo de `public/` se revalida en cada visita**
+  - **Hecho:** `headers()` en `next.config.mjs` suma dos reglas a las de seguridad:
+    - `/icons/:path*` (Devicon): `public, max-age=31536000, immutable`. Si un icono cambia, va con otro nombre de archivo.
+    - `/assets/:path*` (los CV, la foto y los logos): `public, max-age=86400, stale-while-revalidate=604800`, porque pueden cambiar.
+  - **Antes y después**, con curl sobre `next start` (build aislado):
+    - **Iconos:** `public, max-age=0` → `public, max-age=31536000, immutable`.
+    - **CV y foto original:** `public, max-age=0` → `public, max-age=86400, stale-while-revalidate=604800`.
+    - **Foto optimizada** (`/_next/image`), que hereda el `max-age` del original: `max-age=14400` → `max-age=86400`.
+    - **En el preview de Vercel, antes:** `public, max-age=0, must-revalidate` en los iconos, los CV, la foto y el favicon. El favicon y el apple-icon quedan como están (Next y Vercel los sirven aparte).
+  - **Verificado** con Puppeteer, contra el build anterior, a 1440 y 390, en claro y oscuro, en `/`, `/en`, `/trayectoria` y `/habilidades`: las capturas son iguales salvo el ruido de las transiciones del nav y de la franja; la foto sigue siendo el LCP, con la precarga; el scroll suave, el ancla a Contacto, el imán y el cierre funcionan, y no hay errores de consola.
   - **Dónde:** `next.config.mjs` (no tiene `headers()`).
   - **Problema:** los SVG de Devicon y los CV salen con `max-age=0`. Se midió en `next start`; en Vercel no se verificó.
   - **Solución:** `immutable` para `/icons/:path*` y un `max-age` con `stale-while-revalidate` para `/assets/:path*`.
