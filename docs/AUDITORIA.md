@@ -837,7 +837,19 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
   - **Problema:** los SVG de Devicon y los CV salen con `max-age=0`. Se midió en `next start`; en Vercel no se verificó.
   - **Solución:** `immutable` para `/icons/:path*` y un `max-age` con `stale-while-revalidate` para `/assets/:path*`.
 
-- [ ] **R-M20. La fuente mueve el layout en `/trayectoria`**
+- [x] **R-M20. La fuente mueve el layout en `/trayectoria`**
+  - **Causa:** el párrafo de entrada (`.page__lead`) tenía `max-width: 52ch`. El `ch` sale del "0" de la fuente, y el de la de respaldo (Arial con `size-adjust`) es más angosto que el de Archivo: mientras cargaba, la caja medía 799px en vez de 834, el párrafo tenía 6 líneas en vez de 5 y todo lo de abajo subía 38px al llegar la fuente.
+  - **Hecho:** en `styles/page.css`, los tres anchos en `ch` de las páginas propias pasan a `em`, con el mismo valor en Archivo (1ch = 0,5727em): `.page__lead` 29,78em, y `.chapter__desc` y `.skill-group__lead` 34,36em. Con la fuente cargada miden lo mismo que antes.
+  - **Antes y después**, con Puppeteer y la fuente demorada 800ms (así se reproduce el 0,028 de Lighthouse), en claro y en oscuro:
+
+    | Página | 1440×900 | 1024×768 | 390×844 |
+    |---|---|---|---|
+    | `/trayectoria` | 0,0245 → 0,0102 | 0,0225 → 0,0043 | 0 → 0 |
+    | `/en/experience` | 0,0026 → 0,0026 | 0,0107 → 0,0107 | 0 → 0 |
+    | `/habilidades` | 0 → 0 | 0,0001 → 0,0001 | 0 → 0 |
+
+  - **Lo que queda** no se arregla con medidas: son los títulos de cada etapa, en Archivo al 68% de ancho. La fuente de respaldo no tiene ese ancho, así que un título puede ocupar dos líneas hasta que llega Archivo y bajar lo que sigue. Todo queda muy por debajo de 0,1, el límite de "bueno".
+  - **Verificado** con Puppeteer contra el build anterior, a 1440 y 390, en claro y oscuro, en `/`, `/en`, `/trayectoria` y `/habilidades`: las capturas difieren lo mismo que el build anterior comparado consigo mismo (0,066% como mucho, las transiciones del nav y de la franja). La foto sigue siendo el LCP con la precarga; el scroll suave, el ancla, el imán y el cierre funcionan, y no hay errores de consola.
   - **Dónde:** Lighthouse, escritorio, primera visita: CLS de 0,028 en `ol.chapters`, causado por "Web font loaded".
   - **Solución:** revisar el ajuste de métricas de la fuente de respaldo con `wdth` angosto, o reservar el alto de los años.
 
