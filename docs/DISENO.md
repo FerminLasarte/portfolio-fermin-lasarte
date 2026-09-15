@@ -242,7 +242,7 @@ Los enlaces son anclas nativas, como hoy: `href="/#proyectos"` en ES y `/en#proy
   - al hacer clic en un enlace a una sección de la misma página, al cargar con un `#hash` y en `hashchange`/`popstate`, calcula `top = h-scroll.offsetTop + panel.offsetLeft` (limitado al máximo del recorrido) y hace `window.scrollTo({ top, behavior })`, con `smooth` salvo en carga inicial;
   - no hace `preventDefault` del clic en sí: el navegador igual actualiza la URL; el script solo corrige a dónde se scrollea.
 - **`aria-current="location"`** en el enlace de la sección visible, con un `IntersectionObserver` sobre los paneles: en horizontal, con `rootMargin: "0px -50% 0px -50%"` (una línea vertical en el centro de la ventana; `IntersectionObserver` tiene en cuenta el `translate`); en vertical, `"-40% 0px -59% 0px"`. Se vuelve a crear si cambia el modo (`matchMedia` con `change`).
-- El botón de idioma conserva la sección visible, como hoy (`/en#proyectos`).
+- El botón de idioma conserva el panel visible: el que cruza la misma línea que usa la sección actual (`elementFromPoint`), así desde la tarjeta de Vault lleva a `/en#proyecto-vault` y no a la entrada de Proyectos (2026-09-15, R-M8 de la re-auditoría). Si ese punto cae en la transición al cierre, que no tiene `id`, usa la sección actual.
 
 ### 6.4 Respaldo para navegadores sin `animation-timeline`
 
@@ -273,7 +273,7 @@ Si `CSS.supports("animation-timeline: view()")` da falso y el modo horizontal es
 - Centro: `<nav aria-label="Secciones">` con `<ul>` de cuatro enlaces en `--ink-muted`.
   - **Hover y foco (puntero fino):** el texto pasa a `--ink` y se dibuja un tachado de 2px a media altura, que crece desde la izquierda (`scale: 0 1 → 1 1`, 220ms, `--ease-out`) y se va hacia la derecha al salir. Es el efecto `menu--linethrough` de douglus, que allá aparece de golpe.
   - **Sección actual:** `aria-current="location"`, texto en `--ink` y subrayado de 1px abajo. El indicador no depende solo del color, y no usa el tachado (que se leería como "descartado").
-- Derecha: botón de idioma (`<a hreflang>`, con `aria-label` "Cambiar idioma: English"), botón de tema (`<button aria-pressed>`, M3; sin JS no se muestra, porque no haría nada: R-M7 de la re-auditoría) y GitHub y LinkedIn, iconos con `aria-label`. Cada control mide al menos 44×44px. El email no va acá: tiene su lugar en Contacto.
+- Derecha: botón de idioma (`<a hreflang>`, con `aria-label` "EN, English" / "ES, Español": empieza con lo que se ve, WCAG 2.5.3; hasta R-M8 de la re-auditoría era "Cambiar idioma: English"), botón de tema (`<button aria-pressed>`, M3; sin JS no se muestra, porque no haría nada: R-M7 de la re-auditoría) y GitHub y LinkedIn, iconos con `aria-label`. Cada control mide al menos 44×44px. El email no va acá: tiene su lugar en Contacto.
 
 **Franja inferior (solo en horizontal):** fija, `--strip-h`, con tres zonas, como el pie de douglus. Igual que el nav: sin fondo, en blanco con `difference` (la barra de progreso de douglus también lo usa).
 - Izquierda: "© 2026 Fermin Lasarte".

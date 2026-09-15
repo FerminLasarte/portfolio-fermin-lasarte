@@ -53,7 +53,6 @@ export default function Document({ lang, head, children }) {
             sections: t("nav.sections"),
             menu: t("nav.menu"),
             close: t("nav.close"),
-            lang: t("nav.langToggle"),
             theme: t("nav.themeToggle"),
           }}
           social={{ github: SOCIAL.github, linkedin: SOCIAL.linkedin }}

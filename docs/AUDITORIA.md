@@ -670,7 +670,16 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
     - La foto muestra `cursor: grab` y tiene `touch-action: none`. Con eso, en un portátil táctil tocar la foto no scrollea (sospecha).
   - **Solución:** `html:not(.js) .theme-toggle { display: none }` y poner el `cursor` y el `touch-action` de `.drag` bajo `html.js` y con puntero fino.
 
-- [ ] **R-M8. El botón de idioma: su nombre no incluye "EN" y desde una tarjeta vuelve a la entrada de Proyectos** **[nav]**
+- [x] **R-M8. El botón de idioma: su nombre no incluye "EN" y desde una tarjeta vuelve a la entrada de Proyectos** **[nav]**
+  - **Hecho:**
+    - El `aria-label` del enlace de idioma pasó a "EN, English" / "ES, Español", como se aprobó en el plan. Se quitó `nav.langToggle` de los dos diccionarios y de `Document`, porque quedó sin uso; ES y EN siguen teniendo las mismas claves.
+    - Al hacer clic, `handleLangClick` busca el panel con `id` que está en el centro de la ventana y al 40% del alto (`elementFromPoint`), que es la línea que usa `TrackController` en los dos modos. Si ahí está la transición al cierre, que no tiene `id`, usa la sección actual, como antes.
+  - **Verificado** sobre el servidor local:
+    - El árbol de accesibilidad da "EN, English" en `/` y en `/trayectoria`, y "ES, Español" en `/en`.
+    - A 1440×900, desde la tarjeta de Vault se llega a `/en#proyecto-vault` con la tarjeta en el borde izquierdo (antes, `/en#proyectos`, con la tarjeta a 2.794px). Desde el hero y desde Habilidades se llega a su panel.
+    - A 390×844, desde la tarjeta de Vault y desde Trayectoria el panel queda a 64px del borde, debajo del nav.
+    - `/trayectoria` sigue llevando a `/en/experience`.
+  - DISENO.md, 6.3 y 7.1.
   - **Dónde:** `components/Nav.jsx:40-44` y `:120-128`.
   - **Problema:**
     - El texto visible es "EN" y el nombre accesible es "Cambiar idioma: English" (2.5.3).

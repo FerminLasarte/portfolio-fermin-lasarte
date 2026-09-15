@@ -15,7 +15,7 @@ const MOBILE = "(max-width: 47.99rem)";
 //    "/en#proyectos"); la sección actual (aria-current) la marca TrackController.
 //  - switchTo: el otro idioma, { lang, href, name, pages }. `pages` lleva cada página
 //    propia de este idioma a la del otro ("trayectoria" → "/en/experience").
-//  - labels: { sections, menu, close, lang, theme }.
+//  - labels: { sections, menu, close, theme }.
 //  - social: { github, linkedin }.
 // En móvil las secciones van en un menú a pantalla completa (I1): un <button> con
 // aria-expanded y aria-controls que cierra con Escape. Sin JS no hay botón y la lista
@@ -31,7 +31,10 @@ export default function Nav({ brand, links, switchTo, labels, social }) {
   const showLast = () => setBrandState("in");
   const hideLast = () => setBrandState("out");
 
-  // El cambio de idioma vuelve a la sección visible (/en#proyectos).
+  // El cambio de idioma vuelve al panel visible (/en#proyecto-vault; R-M8): el que
+  // cruza la línea que usa TrackController para la sección actual (el centro de la
+  // ventana en horizontal; el 40% del alto en vertical). Si no hay ninguno (la
+  // transición al cierre no tiene id), la sección actual.
   // En una página propia, el idioma lleva a la misma página en el otro idioma
   // (useSelectedLayoutSegment da el segmento debajo del layout de [lang], igual en el
   // servidor y en el navegador); en la home, a la otra home.
@@ -39,7 +42,8 @@ export default function Nav({ brand, links, switchTo, labels, social }) {
   const langHref = (segment && switchTo.pages?.[segment]) || switchTo.href;
   const handleLangClick = (e) => {
     if (segment) return;
-    const current = document.querySelector("a[data-section][aria-current]")?.dataset.section;
+    const panel = document.elementFromPoint(innerWidth / 2, innerHeight * 0.4)?.closest("main .panel[id]");
+    const current = panel?.id ?? document.querySelector("a[data-section][aria-current]")?.dataset.section;
     if (current) e.currentTarget.href = `${switchTo.href}#${current}`;
   };
 
@@ -121,7 +125,8 @@ export default function Nav({ brand, links, switchTo, labels, social }) {
             className="tool"
             href={langHref}
             hrefLang={switchTo.lang}
-            aria-label={`${labels.lang}: ${switchTo.name}`}
+            // El nombre empieza con lo que se ve ("EN, English"; R-M8, WCAG 2.5.3).
+            aria-label={`${switchTo.lang.toUpperCase()}, ${switchTo.name}`}
             onClick={handleLangClick}
           >
             {switchTo.lang.toUpperCase()}
