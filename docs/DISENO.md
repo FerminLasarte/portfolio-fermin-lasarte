@@ -45,7 +45,7 @@ Todo el texto es HTML real. Nada se dibuja en canvas.
 
 Estrategia **restringida con un bloque comprometido**: neutros fríos más un solo acento, violeta eléctrico, que aparece en los botones principales, los estados y el progreso. El cierre es un bloque de color noche, igual en los dos temas, al que se llega por un degradado del acento (7.5). No hay verdes, ámbar ni grises sueltos: el estado de un proyecto se dice con texto, no con un punto de color.
 
-Los tokens van en `:root` y se redefinen bajo `html.dark-mode` (se mantiene el mecanismo actual de `lib/theme.js`, que respeta `prefers-color-scheme` y guarda la elección). `THEME_COLORS` pasa a `--paper` de cada tema.
+Los tokens van en `:root` y se redefinen bajo `html.dark-mode` (se mantiene el mecanismo actual de `lib/theme.js`, que respeta `prefers-color-scheme` y guarda la elección). Sin una elección guardada, la página también sigue al sistema si cambia con la página abierta; desde que se usa el botón, manda lo guardado (2026-09-15, R-M27 de la re-auditoría). `THEME_COLORS` pasa a `--paper` de cada tema.
 
 | Token | Claro | Oscuro | Uso |
 |---|---|---|---|
@@ -518,7 +518,7 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
 | Foto: inercia y rebote | Soltar | `translate` con fricción de 0,92 por frame; vuelve adentro del hero si se pasó | Hasta frenar | Sin inercia: queda donde se suelta, dentro del hero |
 | Foto: estela | Cada 30px de arrastre | `opacity` de 8 copias reusadas | 400ms `--ease-out` | Sin estela |
 | Foto: vuelta a su lugar | Foco del teclado en el hero o cambio de tamaño (si no, queda donde cae) | `translate` a 0 | 700ms `--ease-expo` | Sin animación |
-| Tema | Botón | Ninguna (cambio instantáneo) | | |
+| Tema | Botón, o el tema del sistema si no hay uno guardado (R-M27) | Ninguna (cambio instantáneo) | | |
 
 - La cortina es la de douglus (un `path` SVG con curva que cubre la pantalla y muestra el destino), hecha con la API nativa. Donde no hay View Transitions entre documentos (Firefox, por ahora), el cambio de idioma es una navegación normal.
 - La entrada del nombre usa máscaras (`overflow: clip` en cada línea). El `<h1>` lleva el nombre como texto real en un `<span class="sr-only">` y las letras animadas van en `aria-hidden`. Si Lighthouse marca al `<h1>` como LCP en lugar de la foto, la entrada se acorta o se quita.

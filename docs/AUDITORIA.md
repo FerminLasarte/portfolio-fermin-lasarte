@@ -875,7 +875,18 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
   - **Verificado** sobre el servidor local: `/favicon.ico` da 200, `image/x-icon`, 1.512 bytes (`file` lo reconoce como icono con 3 imágenes); `/apple-icon.png` da 200 (180×180, RGB opaco) y `/favicon.svg` también. Los dos PNG se revisaron a la vista. `#5B5BD6` ya no aparece en el repo.
   - **Solución:** agregar un `public/favicon.ico` de 32×32.
 
-- [ ] **R-M27. Detalles de robustez**
+- [x] **R-M27. Detalles de robustez** **[nav]**
+  - **Hecho:**
+    - **Años:** `revalidate = 86400` en `app/[lang]/layout.js`. Las 6 páginas se regeneran como máximo una vez por día (ISR), así el © y el "en curso" cambian solos al pasar de año, sin JS en el cliente.
+    - **Tema:** sin un tema guardado, el script del tema (`lib/theme.js`) escucha el cambio del sistema y actualiza la clase, el `theme-color` y, con ellos, `aria-pressed`. Desde que se usa el botón, manda lo guardado. `global-error` hace lo mismo. DISENO.md, sección 2 y tabla de la 8.
+    - **Imagen OG:** `lib/og.js` pasa el PNG de `next/og` a JPEG con `sharp` (dependencia opcional de `next`, ya en el lockfile): calidad 85, mozjpeg y color sin submuestrear (4:4:4). `contentType` es `image/jpeg` en las dos rutas. El diseño no cambió.
+  - **Verificado:**
+    - **Años,** en un build aislado: las 6 páginas figuran con 86.400 s en el `prerender-manifest`, y `next start` manda `s-maxage=86400, stale-while-revalidate`. Con un build temporal a 5 s (solo en la copia), el pedido que llega después sale como `STALE`, la página se regenera (el HTML guardado se reescribió) y el siguiente es `HIT`.
+    - **Tema,** con Puppeteer en `/trayectoria`, cambiando `prefers-color-scheme` con la página abierta: sin tema guardado, sigue al sistema en los dos sentidos (clase, `theme-color`, fondo y `aria-pressed`); después de usar el botón, ya no; con "light" guardado, no se mueve.
+    - **Imagen OG:** las 6 pasan de unos 380 KB a entre 50 y 61 KB, en dev y prerenderizadas en el build. El `<head>` dice `og:image:type` `image/jpeg`. El texto violeta chico, comparado recortado contra el PNG, no cambia a la vista.
+  - **Queda:**
+    - Probar la tarjeta compartiendo el enlace del preview por WhatsApp, y ver las cabeceras de caché en Vercel (después del push).
+    - El 404 global (`/_not-found`) no revalida: su © queda con el año del último deploy.
   - **Años:** el © y el "en curso" quedan con el año del build (`Strip.jsx:12`, `Footer.jsx:9`, `Preloader.jsx:43` y `ExperiencePage.jsx:14`).
   - **Tema:** si no hay tema guardado, la página no sigue al sistema cuando cambia con la página abierta (`lib/theme.js`).
   - **Imagen OG:** pesa 394 KB, y WhatsApp podría no mostrarla si pasa de unos 300 KB (sospecha: probarlo compartiendo el enlace).

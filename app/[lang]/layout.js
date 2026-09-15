@@ -19,6 +19,11 @@ import JsonLd from "@/components/JsonLd";
 // Se prerenderiza una página por idioma; cualquier otro segmento da 404.
 export const dynamicParams = false;
 
+// Las páginas se regeneran como máximo una vez por día (ISR), así el año del © y el
+// "en curso" de Trayectoria cambian solos al pasar de año, sin esperar a un deploy
+// (R-M27 de la re-auditoría). Vale para todas las páginas de este layout.
+export const revalidate = 86400;
+
 export function generateStaticParams() {
   return LOCALES.map((lang) => ({ lang }));
 }

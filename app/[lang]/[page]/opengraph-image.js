@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { LOCALES, PAGE_TEXT, getT, pageId } from "@/lib/i18n";
-import { OG_SIZE, ogImage } from "@/lib/og";
+import { OG_SIZE, OG_TYPE, ogImage } from "@/lib/og";
 import { PAGES } from "@/lib/pages.mjs";
 import { PERSON, SITE_TITLE } from "@/lib/site";
 
@@ -9,7 +9,7 @@ import { PERSON, SITE_TITLE } from "@/lib/site";
 // título en grande. X usa la misma. Sin este archivo, el openGraph de la página
 // reemplazaba entero al del layout y la página quedaba sin imagen.
 export const size = OG_SIZE;
-export const contentType = "image/png";
+export const contentType = OG_TYPE;
 export const alt = SITE_TITLE;
 
 // Una imagen por página y por idioma, prerenderizada; cualquier otra ruta da 404.

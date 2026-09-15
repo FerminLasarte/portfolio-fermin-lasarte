@@ -1,13 +1,13 @@
 import { fill } from "@/lib/translations";
 import { LOCALES, getT } from "@/lib/i18n";
-import { OG_SIZE, ogImage } from "@/lib/og";
+import { OG_SIZE, OG_TYPE, ogImage } from "@/lib/og";
 import { PERSON, ROLE, SITE_TITLE, STATS } from "@/lib/site";
 
 // Imagen de Open Graph de cada idioma (1200×630, diseño en lib/og.js), generada en el
 // build. X (Twitter) usa la misma, porque no hay twitter-image. El texto alternativo
 // es el <title>, que es igual en los dos idiomas (así la imagen puede ser estática).
 export const size = OG_SIZE;
-export const contentType = "image/png";
+export const contentType = OG_TYPE;
 export const alt = SITE_TITLE;
 
 // Una imagen por idioma, prerenderizada (sin esto el route handler es dinámico).

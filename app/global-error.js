@@ -23,8 +23,14 @@ const NAME = "Fermin Lasarte"; // PERSON.name
 const LANGS = Object.keys(ERROR_TEXT);
 const texts = (lang) => ({ lang, ...ERROR_TEXT[lang] });
 
-// Idioma y tema salen del navegador; en el servidor, español y tema claro.
+// Idioma y tema salen del navegador; en el servidor, español y tema claro. Sin un
+// tema guardado, sigue al del sistema si cambia (como lib/theme.js).
 const subscribe = () => () => {};
+const onSystemTheme = (onChange) => {
+  const system = window.matchMedia("(prefers-color-scheme: dark)");
+  system.addEventListener("change", onChange);
+  return () => system.removeEventListener("change", onChange);
+};
 const langFromUrl = () => (/^\/en(\/|$)/.test(window.location.pathname) ? "en" : "es");
 const isDark = () => {
   try {
@@ -37,7 +43,7 @@ const isDark = () => {
 
 export default function GlobalError({ retry }) {
   const lang = useSyncExternalStore(subscribe, langFromUrl, () => "es");
-  const dark = useSyncExternalStore(subscribe, isDark, () => false);
+  const dark = useSyncExternalStore(onSystemTheme, isDark, () => false);
   const [main, ...others] = [lang, ...LANGS.filter((l) => l !== lang)].map(texts);
   const all = [main, ...others];
 
