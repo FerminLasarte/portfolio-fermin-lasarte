@@ -865,7 +865,12 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
   - **Problema:** son 27 animaciones de `color` y `-webkit-text-stroke-color`, que no pasan por el compositor, sobre texto de unos 80px mientras dura su tramo.
   - **Solución:** si una traza lo confirma, usar dos capas por palabra y animar solo la `opacity` de la capa llena.
 
-- [ ] **R-M18. El icono de GitHub se repite 12 veces en el HTML de la home**
+- [x] **R-M18. El icono de GitHub se repite 12 veces en el HTML de la home**
+  - **Se cierra sin cambios**, con el acuerdo de Fermin (2026-09-15): el ahorro es menor al 1%.
+  - **Medición** sobre el HTML de la home en el build de producción (`cdb38f6`):
+    - hoy el icono aparece 7 veces, no 12 (R-M10 cambió los enlaces de las tarjetas). Cada copia mide 1.399 bytes, pero gzip ya comprime la repetición: las 7 juntas pesan 835 bytes gz de 20,2 KB;
+    - con un `<symbol>` y `<use href>`, el HTML baja 157 bytes gz (20.213 → 20.056), porque la definición del símbolo también pesa. Pasando todos los iconos a símbolos, 237 bytes (20.213 → 19.976).
+  - Por menos del 1% del HTML no vale sumar el sprite, que además agrega un paso más a cada icono.
   - **Dónde:** `components/Icon.jsx`, `ProjectCard.jsx:10` y `:92`, y `Nav.jsx:79-88`.
   - **Problema:** son 1,6 KB de los 17,4 KB gz del HTML.
   - **Solución:** un `<symbol>` en `Document` y `<use href>` en `Icon`.
