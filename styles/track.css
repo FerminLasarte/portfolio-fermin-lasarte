@@ -155,8 +155,21 @@ body {
     transform-origin: left center;
   }
 
-  .strip a {
+  .strip__credit {
     justify-self: end;
+  }
+
+  /* La ola del "Design & code by" de douglus (components/WaveText.jsx): cada letra
+     avanza 80px hacia la pantalla con perspectiva de 180px (casi el doble de grande)
+     y gira 35°, y vuelve; 50ms entre letras. */
+  .wave__ch {
+    display: inline-block;
+    white-space: pre;
+  }
+
+  .wave.is-waving .wave__ch {
+    animation: wave 400ms cubic-bezier(0.45, 0, 0.55, 1) both;
+    animation-delay: calc(var(--i) * 50ms);
   }
 
   /* Solo si el navegador tiene la línea de tiempo. Sin este @supports, la animación
@@ -186,5 +199,15 @@ body {
 @keyframes fill {
   to {
     scale: 1 1;
+  }
+}
+
+@keyframes wave {
+  25% {
+    transform: perspective(180px) translateZ(45px) rotateY(35deg);
+  }
+
+  50% {
+    transform: perspective(180px) translateZ(80px);
   }
 }

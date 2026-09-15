@@ -1,4 +1,5 @@
 import { PERSON } from "@/lib/site";
+import WaveText from "@/components/WaveText";
 
 // Franja inferior del modo horizontal (docs/DISENO.md, 7.1): el © y el progreso del
 // recorrido con el nombre de la sección visible. En vertical no se muestra. El nombre
@@ -15,6 +16,9 @@ export default function Strip({ t }) {
           <span className="strip__fill" />
         </span>
         <span data-strip-label>{t("nav.about")}</span>
+      </span>
+      <span className="strip__credit">
+        <WaveText text={t("strip.credit")} />
       </span>
     </div>
   );
