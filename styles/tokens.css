@@ -1,0 +1,92 @@
+/*
+ * Tokens del diseño (docs/DISENO.md, secciones 2 a 4, 6 y 8).
+ * Ningún componente usa colores, tamaños o duraciones sueltos: todo sale de acá.
+ */
+
+:root {
+  /* Color, tema claro. Contraste medido en DISENO.md, sección 2. */
+  --paper: #f1f2ee;
+  --surface: #e6e8e3;
+  --ink: #101214;
+  --ink-muted: #4e5358;
+  --line: #7e838a;
+  --accent: #1d3fd8;
+  --accent-soft: #dce2fb;
+  --on-accent: #f4f6ff;
+  --on-accent-muted: #c8d1ff;
+  --focus: var(--accent);
+  --cursor-ink: var(--ink);
+  color-scheme: light;
+
+  /* Tipografía: Archivo variable (ejes wght y wdth), cargada con next/font. */
+  --font: var(--font-archivo), "Helvetica Neue", Arial, system-ui, sans-serif;
+  --wdth-display: 68%;
+  --wdth-mega: 75%;
+  --fs-0: 0.8125rem;
+  --fs-1: 1rem;
+  --fs-2: clamp(1.125rem, 0.9rem + 0.6vw, 1.375rem);
+  --fs-3: clamp(1.375rem, 1rem + 1vw, 1.75rem);
+  --fs-4: clamp(2rem, 1rem + 4vmin, 4.25rem);
+  --fs-display: clamp(3.5rem, 17vmin, 13rem);
+  --fs-mega: clamp(2.25rem, 9vmin, 7.5rem);
+
+  /* Forma */
+  --radius-0: 0;
+  --radius-pill: 999px;
+  --radius-device: 12%;
+
+  /* Espacio (base de 4px) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: 8rem;
+  --pad-x: clamp(1rem, 3cqi, 3rem);
+  --nav-h: 4rem;
+  --strip-h: 3rem;
+  --tap: 2.75rem;
+
+  /* Capas */
+  --z-track: 0;
+  --z-nav: 10;
+  --z-strip: 10;
+  --z-menu: 20;
+  --z-skip: 30;
+  --z-cursor: 40;
+
+  /* Movimiento */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-press: 140ms;
+  --dur-hover: 220ms;
+  --dur-ui: 260ms;
+  --dur-menu: 420ms;
+  --dur-enter: 700ms;
+  --dur-curtain: 800ms;
+
+  /* Anchos de panel en el modo horizontal (DISENO.md, sección 5). */
+  --w-intro: clamp(20rem, 26cqi, 26rem);
+  --w-card-lg: clamp(30rem, 40cqi, 42rem);
+  --w-card: clamp(22rem, 28cqi, 28rem);
+  --w-timeline: clamp(60rem, 110cqi, 100rem);
+  --w-skills: clamp(48rem, 80cqi, 80rem);
+}
+
+/* Tema oscuro: lo pone lib/theme.js en <html> antes del primer pintado. */
+html.dark-mode {
+  --paper: #0e1012;
+  --surface: #181b1f;
+  --ink: #ecede9;
+  --ink-muted: #a3a8ad;
+  --line: #6b7076;
+  --accent: #8ca3ff;
+  --accent-soft: #1b2240;
+  --on-accent: #0e1012;
+  --on-accent-muted: #26304f;
+  color-scheme: dark;
+}
