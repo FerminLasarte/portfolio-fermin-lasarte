@@ -31,6 +31,11 @@
 - **Importantes:** los 9 están cerrados, cada uno en su commit. Se arreglaron R-I1, R-I2, R-I4, R-I5, R-I6, R-I7, R-I8 y R-I9. R-I3 se deja como está, por decisión de Fermin.
 - **Rama:** los commits están pusheados en `fase-3-rediseno` (el último es `0601232`) y todavía no hay merge a `main`.
 - **Sigue:** los menores (R-M1 a R-M38), en una conversación nueva. El orden propuesto es accesibilidad (R-M1 a R-M13), SEO y robustez (R-M21 a R-M27), eficiencia (R-M14 a R-M20), limpieza (R-M28 a R-M36) y, al final, la documentación (R-M37 y R-M38), para que DISENO.md quede en su versión definitiva.
+- **Actualización (2026-09-15, más tarde):** accesibilidad y flujo (R-M1 a R-M13) está cerrado, un commit por punto (de `bb6dc48` a `98750b8`). Sigue SEO y robustez (R-M21 a R-M27), en otra conversación. Antes de hacerlos hay que decidir con Fermin:
+  - R-M21: los textos de `global-error.js`, en ES y EN.
+  - R-M25: la descripción de la página, de unos 155 caracteres (la de EN tiene 177).
+  - R-M27: si el tema tiene que seguir al del sistema cuando cambia con la página abierta.
+  - R-M27: la imagen OG pesa 394 KB, y para saber si WhatsApp la muestra hay que compartir un enlace real.
 - **Siguen abiertos de antes:** I12 y N4 (contenido que tiene que conseguir Fermin), M13 y N5 (este último está en R-M35).
 
 Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual**: se usan como requisitos del diseño nuevo.
