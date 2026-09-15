@@ -31,6 +31,15 @@
     animation-delay: calc(var(--i) * 28ms + 5000ms);
   }
 
+  /* Si se saltea el preloader (html.pl-skip, lib/theme.js), entra cuando se va el
+     velo. Otro nombre de animación, para que vuelva a empezar: si solo cambiara el
+     retraso, las letras aparecerían de golpe. pl-skip queda puesta, así que no se
+     repite cuando se saca html.pl. */
+  html.pl-skip .hero__name .ch {
+    animation-name: rise-skip;
+    animation-delay: calc(var(--i) * 28ms + 150ms);
+  }
+
   /* ---------- Entradas de los paneles, como en douglus ----------
      Cada elemento entra por separado, en 1,1 s con curva expo y 60ms después del
      anterior. TrackController marca los elementos (.rv, con su orden en --rv), pone
@@ -94,6 +103,12 @@
 }
 
 @keyframes rise {
+  from {
+    translate: 0 105%;
+  }
+}
+
+@keyframes rise-skip {
   from {
     translate: 0 105%;
   }

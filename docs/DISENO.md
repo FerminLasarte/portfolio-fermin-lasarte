@@ -137,7 +137,7 @@ Solo hay un tamaño Display por panel. Las mayúsculas se reservan para Display 
 - **Esquinas:** los paneles, las placas y las imágenes van rectos (`--radius-0: 0`). Los botones son píldora (`--radius-pill: 999px`). Las capturas de teléfono usan el radio de un iPhone (`--radius-device: 12%` del ancho). No hay otras esquinas.
 - **Espaciado:** base de 4px (`--space-1` = 0,25rem … `--space-9` = 8rem). Margen lateral de panel `--pad-x: clamp(1rem, 3cqi, 3rem)`: nunca menos de 16px.
 - **Alturas fijas:** `--nav-h: 4rem` (64px), `--strip-h: 3rem` (la franja inferior del modo horizontal).
-- **Capas:** `--z-track: 0`, `--z-nav: 10`, `--z-strip: 10`, `--z-menu: 20`, `--z-skip: 30`, `--z-preloader: 35`, `--z-cursor: 40`. La foto que se está arrastrando usa `z-index: 1` dentro del hero. No hay otros `z-index`.
+- **Capas:** `--z-track: 0`, `--z-nav: 10`, `--z-strip: 10`, `--z-menu: 20`, `--z-preloader: 35`, `--z-skip: 36` (el enlace de salto va sobre el preloader; hasta R-M3 de la re-auditoría estaba en 30, debajo del velo), `--z-cursor: 40`. La foto que se está arrastrando usa `z-index: 1` dentro del hero. No hay otros `z-index`.
 - **Cortes:** 30rem (480), 48rem (768), 64rem (1024; umbral del modo horizontal), 90rem (1440; ancho máximo del texto en vertical).
 
 ## 5. Orden de las secciones
@@ -449,8 +449,9 @@ Pedido por Fermin el 2026-09-14. Al principio no se tomaba, porque tapa el conte
 - **Qué muestra:** sobre `--night`, cuatro palabras gigantes que suben de a una dentro de una máscara: "HAGO SOFTWARE QUE INNOVA" / "BUILDING SOFTWARE THAT INNOVATES" (`preloader.words`). La última entra creciendo (de 0,88 a 1) y queda en `--night-accent`. Después aparecen "FERMIN LASARTE" letra por letra, una línea que se dibuja y "iOS & Mobile Engineer · 2026". Al final las letras suben, empezando por la última, el bloque crece a 1,04 y el velo se desvanece.
 - **Tiempos:** cada palabra entra en 380ms, queda 220ms y sale en 260ms (una cada 900ms); el nombre tarda 550ms, con 30ms entre letras; el velo se va entre los 4,8 y los 5,35 s, y ahí entra el nombre del hero. douglus tarda algo más (unos 6 s).
 - **Solo CSS:** la secuencia son `@keyframes` con retrasos (`styles/preloader.css`), así que termina sola aunque el JS falle. Al final queda con `visibility: hidden` y deja de recibir clics. Como red de seguridad (por ejemplo, si el navegador no corre las animaciones), el script del tema saca `html.pl` a los 8 s.
-- **Cuándo:** solo bajo `html.pl`. Esa clase la pone el script del tema antes del primer pintado, si es la primera visita de la sesión (`sessionStorage`) y no hay reduce motion. No aparece sin JS, con reduce motion, con el almacenamiento bloqueado ni en las visitas siguientes (tampoco al cambiar de idioma).
-- **Accesibilidad:** es `aria-hidden` y el contenido real ya está debajo. El enlace para saltar al contenido sigue siendo el primero.
+- **Cuándo:** solo bajo `html.pl`. Esa clase la pone el script del tema antes del primer pintado, si es la primera visita de la sesión (`sessionStorage`) y no hay reduce motion. No aparece sin JS, con reduce motion, con el almacenamiento bloqueado ni en las visitas siguientes (tampoco al cambiar de idioma). La marca de la sesión se guarda recién cuando el documento tiene el preloader (la home): si la primera visita entra por una página propia o por el 404, la home lo muestra igual (2026-09-15, R-M3 de la re-auditoría).
+- **Se puede saltear** (R-M3): la primera tecla, clic o giro de la rueda le pone `html.pl-skip`, que desvanece el velo en 250ms; el nombre del hero entra enseguida, con su animación de siempre. A los 4,8 s el velo ya se está yendo solo y los listeners se sacan.
+- **Accesibilidad:** es `aria-hidden` y el contenido real ya está debajo. El enlace para saltar al contenido sigue siendo el primero y se ve sobre el velo (`--z-skip` por encima de `--z-preloader`).
 - **Costo:** unos 5 s de espera la primera vez. El LCP puede pasar a ser el texto del preloader (se pinta enseguida) en vez de la foto.
 
 ### 7.12 Páginas propias
@@ -488,7 +489,7 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
 |---|---|---|---|---|
 | Pista horizontal | Scroll | `translate` | Lineal, 1:1 | Modo vertical |
 | Scroll con la rueda | Rueda o trackpad, con puntero fino | Scroll del documento, con Lenis | `lerp: 0.1` por frame; anclas y "Volver arriba" en 1,2 s con `1 − (1 − t)³` | Scroll nativo, sin suavizar |
-| Preloader | Primera carga de la sesión | `translate` Y y `scale` de palabras y letras, `scale` X de la línea, `opacity` del velo | Unos 5,3 s en total (7.11) | No existe |
+| Preloader | Primera carga de la sesión | `translate` Y y `scale` de palabras y letras, `scale` X de la línea, `opacity` del velo | Unos 5,3 s en total (7.11); con una tecla, un clic o la rueda, el velo se desvanece en 250ms | No existe |
 | Nombre del nav | Hover o foco (puntero fino) | Ancho del apellido (`grid-template-columns` de 0fr a 1fr) y `translate` Y + `opacity` de cada letra | Entra en 550ms `--ease-out`, 40ms entre letras; sale en 350ms, 30ms entre letras desde la última | Nombre completo, quieto |
 | Ola de la franja | 5 s sin mover el mouse ni scrollear (se repite mientras siga quieta) | `transform: perspective(180px) translateZ() rotateY()` de cada letra | 400ms por letra, 50ms entre letras | No existe (la franja es solo del modo horizontal) |
 | Línea de Trayectoria | Scroll | `scale` X del `::before` de `.stages` | Lineal, atada al scroll: del 60% de la ventana al borde derecho del panel (en Firefox, `--rail` desde TrackController) | No existe (vertical) |

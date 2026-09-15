@@ -197,8 +197,22 @@ html.pl .preloader {
   }
 }
 
+/* Salteado con una tecla, un clic o la rueda (lib/theme.js, R-M3): el velo se
+   desvanece en 250ms. Otro nombre de animación, para que empiece de nuevo: con el
+   mismo (pl-exit), el navegador solo le cambia la duración y salta al final. */
+html.pl.pl-skip .preloader {
+  animation: pl-skip 250ms ease-out both;
+}
+
 /* visibility pasa a hidden recién al final: el velo deja de tapar y de recibir clics. */
 @keyframes pl-exit {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes pl-skip {
   to {
     opacity: 0;
     visibility: hidden;

@@ -78,8 +78,8 @@
   --z-nav: 10;
   --z-strip: 10;
   --z-menu: 20;
-  --z-skip: 30;
   --z-preloader: 35;
+  --z-skip: 36; /* sobre el preloader: el enlace de salto se ve aunque esté el velo (R-M3) */
   --z-cursor: 40;
 
   /* Movimiento */

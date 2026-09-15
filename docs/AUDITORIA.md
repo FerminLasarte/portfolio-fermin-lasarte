@@ -603,7 +603,19 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
   - **Problema:** en la home a 390×844, con Shift+Tab, el botón "Código" quedó con 39 de sus 57px debajo del nav. En `/trayectoria` y `/habilidades` a 1280×800 no se reprodujo.
   - **Solución:** `html { scroll-padding-block-start: var(--nav-h) }` y sacar el `scroll-margin-top` de `.panel`.
 
-- [ ] **R-M3. El preloader tapa el enlace de salto, no se puede saltear y se gasta en otras páginas** **[nav]**
+- [x] **R-M3. El preloader tapa el enlace de salto, no se puede saltear y se gasta en otras páginas** **[nav]**
+  - **Hecho (decidido por Fermin, 2026-09-15):**
+    - `--z-skip` pasó a 36, arriba de `--z-preloader` (35).
+    - El script del tema pone `html.pl` como antes, pero guarda la marca de la sesión recién en el `DOMContentLoaded`, y solo si el documento tiene `.preloader`. Si no la tiene, saca `pl`. No depende de las rutas.
+    - La primera tecla, `pointerdown` o `wheel` (listeners en captura, pasivos) le pone `html.pl-skip`: el velo se desvanece en 250ms (`@keyframes pl-skip`) y a los 250ms se saca `pl`. El nombre del hero vuelve a entrar con `rise-skip`, una copia de `rise` con otro nombre, porque si solo cambiara el retraso las letras aparecerían de golpe. A los 4,8 s se sacan los listeners: el velo ya se está yendo solo.
+    - El fundido del salteo tiene su propio `@keyframes`. Con el mismo `pl-exit`, el navegador solo le cambiaba la duración y el velo desaparecía de golpe (se vio en la primera prueba).
+  - **Verificado** sobre el servidor local, con Chrome sin sesión, a 1440×900:
+    - Con el velo, el enlace de salto queda arriba (`elementFromPoint` da el enlace).
+    - Con Tab, clic y rueda a los 1,5 s: a los 120ms el velo tiene opacidad de entre 0,28 y 0,35, a los 420ms `pl` ya no está, y el nombre del hero entra (a los 1,6 s, `translate` 0). Con Tab, el foco queda en el enlace de salto.
+    - Sin tocar nada, a los 6 s una tecla no cambia nada y a los 8,5 s `pl` ya no está, como antes.
+    - Entrando primero por `/trayectoria`, `/en/skills` o una ruta que no existe, no se guarda la marca, y después `/` muestra el preloader y `/en` ya no.
+    - Con reduce motion no hay preloader.
+  - DISENO.md, secciones 4, 7.11 y 8.
   - **Dónde:** `styles/tokens.css:81-82`, `styles/preloader.css:20-30` y `lib/theme.js:14-17`.
   - **Problema:**
     - El enlace de salto (`--z-skip: 30`) queda debajo del velo (`--z-preloader: 35`), así que con Tab se enfoca algo que no se ve.
