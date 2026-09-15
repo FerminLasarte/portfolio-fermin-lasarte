@@ -1083,7 +1083,25 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
   - `Magnet.jsx:10` espera 420ms, pero la transición dura 400ms (`base.css:220`), y el comentario dice que son el mismo valor.
   - En colores forzados, el `.strike` y otros detalles no tienen un estilo propio (ver R-I8).
 
-- [ ] **R-M34. Diferencias de copia entre ES y EN**
+- [x] **R-M34. Diferencias de copia entre ES y EN**
+  - **Hecho** (copia aprobada por Fermin, 2026-09-15; también decidió sacar la frase del producto):
+    - **EN:**
+      - `contact.back` pasa a "Back to top": lleva arriba de la misma página. Los otros dos llevan a otra página y quedan "Back to home".
+      - "View Projects" pasa a "View projects", y "Databases & Cloud", a "Databases and cloud".
+    - **ES:**
+      - "de esta página" pasa a "de este sitio" (`skills.pageLead` y `skills.matrixLead`), y "end-to-end", a "de punta a punta" (`exp.intro`).
+      - "mobile" pasa a "móvil" en el texto (`exp.lead` y los roles) y en el grupo "Móvil"; el grupo también es el nombre de la fila del muro en la home. "Backend" con mayúscula ya se había arreglado con R-I7.
+    - **Etapas:** `exp.*.company` es solo el nombre ("TravelPic", "DeporTurnos"), que es el título de la etapa, y `exp.*.title` es el rol: "Desarrollador móvil freelance" / "Freelance mobile developer" y "Creador y desarrollador móvil" / "Founder and mobile developer". "Argentina" pasó a `EXPERIENCE[].where`, así que ya no hay `split(" | ")` y en la home no se repite "Desarrollador".
+    - **Tipografía:** comillas tipográficas en `exp.travelpic.desc` (“Uber para fotógrafos”) y apóstrofos tipográficos en EN (Let’s, you’re, doesn’t, Lasarte’s). Las fechas en texto van con raya, igual que los años grandes: "2021–2025".
+    - **Sin la frase** "Mentalidad orientada al producto en entornos de alto crecimiento" (ni "Product-oriented mindset…" en EN).
+  - **Antes y después** (texto sacado del HTML del build anterior y del nuevo):
+    - Home ES: "Ideólogo y creador de DeporTurnos" / "Desarrollador mobile independiente" pasa a "DeporTurnos" / "Creador y desarrollador móvil"; "Desarrollador de TravelPic" / "Desarrollador mobile freelance" pasa a "TravelPic" / "Desarrollador móvil freelance"; "Experiencia · 2021-2025" pasa a "Experiencia · 2021–2025".
+    - `/en/experience`: "Founder & Developer of DeporTurnos" / "Independent Mobile Developer · Argentina" pasa a "DeporTurnos" / "Founder and mobile developer · Argentina".
+  - **Verificado:**
+    - Capturas contra el build anterior: cambian solo las vistas con esos textos. La home a 1440 da hasta 0,97% en el panel de Trayectoria. A 390, las etapas son más cortas y todo lo de abajo sube, así que la comparación por píxel da hasta 47%.
+    - Desbordes: 0 en `/`, `/en`, `/trayectoria`, `/en/experience`, `/habilidades` y `/en/skills`, a 1440×900 y 1024×768 (horizontal; nada se sale de su panel) y a 390 (vertical).
+    - La foto sigue siendo el LCP; el scroll suave, la ola, el ancla, el cierre y el imán funcionan, sin errores de consola.
+  - **Herramienta:** al revisar esto apareció un error en la comparación de capturas de esta ronda. En horizontal buscaba los paneles por id, con "trayectoria" en vez de "experiencia", así que el panel de Trayectoria a 1440 no se había comparado. Ahora recorre toda la pista de pantalla en pantalla. Se volvió a comparar el HEAD con R-M28, R-M29 y R-M33 (`fa69000`) contra el build anterior, con toda la pista: 0% o dentro del ruido. Una vista de `/en` a 1440 en claro dio 22,5% la primera vez: las dos capturas habían quedado en posiciones distintas de la pista. Repetida dos veces, dio 0,059% y 0,045%.
   - **EN:**
     - "Back to start" (`contact.back`) contra "Back to home" (`page.back`, `notFound.back`).
     - "View Projects" en Title Case, contra "See all skills".

@@ -15,16 +15,13 @@ export default function ExperiencePage({ t, lang }) {
   const home = homePath(lang);
   const projects = Object.fromEntries(PROJECTS.map((p) => [p.id, p]));
   const chapters = [
-    ...EXPERIENCE.map((e) => {
-      const [title, where] = t(`exp.${e.id}.company`).split(" | ");
-      return {
-        ...e,
-        kind: "work",
-        title,
-        place: [t(`exp.${e.id}.title`), where].filter(Boolean).join(" · "),
-        desc: t(`exp.${e.id}.desc`),
-      };
-    }),
+    ...EXPERIENCE.map((e) => ({
+      ...e,
+      kind: "work",
+      title: t(`exp.${e.id}.company`),
+      place: [t(`exp.${e.id}.title`), e.where].filter(Boolean).join(" · "),
+      desc: t(`exp.${e.id}.desc`),
+    })),
     ...EDUCATION.filter((e) => e.start).map((e) => ({
       ...e,
       kind: "edu",
@@ -53,7 +50,7 @@ export default function ExperiencePage({ t, lang }) {
             </p>
             <div className="chapter__body">
               <p className="meta">
-                {t(`exp.kind.${c.kind}`)} · <time dateTime={String(c.start)}>{c.start}</time>-
+                {t(`exp.kind.${c.kind}`)} · <time dateTime={String(c.start)}>{c.start}</time>–
                 <time dateTime={String(c.end)}>{c.end}</time>
                 {c.end >= now && ` · ${t("exp.ongoing")}`}
               </p>

@@ -23,7 +23,7 @@ export default function Trajectory({ t, lang }) {
     ...EXPERIENCE.map((e) => ({
       ...e,
       kind: "work",
-      title: t(`exp.${e.id}.company`).split(" | ")[0],
+      title: t(`exp.${e.id}.company`),
       place: t(`exp.${e.id}.title`),
       line: t(`exp.${e.id}.short`),
     })),
@@ -70,7 +70,7 @@ export default function Trajectory({ t, lang }) {
             <span className="stage__dot" aria-hidden="true" />
             <div className="stage__body">
               <p className="meta">
-                {t(`exp.kind.${s.kind}`)} · <time dateTime={String(s.start)}>{s.start}</time>-
+                {t(`exp.kind.${s.kind}`)} · <time dateTime={String(s.start)}>{s.start}</time>–
                 <time dateTime={String(s.end)}>{s.end}</time>
               </p>
               <h3 className="stage__title">{s.title}</h3>
