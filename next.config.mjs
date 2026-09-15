@@ -4,9 +4,24 @@ import { PAGES } from "./lib/pages.mjs";
 // que la home.
 const esSlugs = Object.values(PAGES).map((page) => page.es);
 
+// Cabeceras de seguridad de todas las respuestas (R-M22 de la re-auditoría); HSTS lo
+// pone Vercel. La CSP es mínima a propósito: no deja que otro sitio meta la página en
+// un iframe, ni cambiar la base de las URLs, ni cargar plugins. Una completa
+// (script-src) choca con los scripts inline de Next y del tema (lib/theme.js).
+const securityHeaders = [
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), browsing-topics=()" },
+  { key: "Content-Security-Policy", value: "frame-ancestors 'none'; base-uri 'self'; object-src 'none'" },
+];
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  poweredByHeader: false,
+  async headers() {
+    return [{ source: "/:path*", headers: securityHeaders }];
+  },
   // app/global-not-found.js: el 404 de las URLs que no son de ningún idioma (con
   // varios root layouts, uno por idioma, no hay un layout raíz para app/not-found.js).
   experimental: { globalNotFound: true },

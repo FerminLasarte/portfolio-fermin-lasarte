@@ -826,7 +826,13 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
   - **Problema:** `/xx/opengraph-image` y `/habilidades/opengraph-image` responden 500 (verificado con curl) con la página de error de Next en inglés, porque `getT("xx")` rompe. Tampoco hay un `app/global-error.js` para los errores de cliente.
   - **Solución:** que `getT` caiga en el idioma por defecto (o que la ruta llame a `notFound()`), y crear un `global-error.js` bilingüe, como el 404.
 
-- [ ] **R-M22. No hay cabeceras de seguridad, salvo HSTS**
+- [x] **R-M22. No hay cabeceras de seguridad, salvo HSTS** **[nav]**
+  - **Hecho:** `headers()` en `next.config.mjs`, para `/:path*`, con `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy: camera=(), microphone=(), geolocation=(), browsing-topics=()` y la CSP mínima (`frame-ancestors 'none'; base-uri 'self'; object-src 'none'`). Además, `poweredByHeader: false`, que saca el `X-Powered-By: Next.js`. HSTS lo sigue poniendo Vercel.
+  - **Verificado** en `next start` sobre un build aislado:
+    - con curl, las cuatro cabeceras salen en `/`, `/en`, `/trayectoria`, `/en/opengraph-image`, `/assets/…`, `/icons/…`, `/sitemap.xml`, `/robots.txt`, un chunk de `/_next/static` y el 404; la redirección de `/es/trayectoria` sigue igual;
+    - con Puppeteer, en `/`, `/en`, `/trayectoria`, `/en/skills` y el 404: sin errores de consola ni violaciones de CSP, con el script del tema, el JSON-LD, la fuente y las imágenes cargando;
+    - la home dentro de un `<iframe>` de otro origen no se muestra.
+  - **Queda:** confirmarlas en el preview de Vercel después del push.
   - **Solución:** un `headers()` con `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` y una CSP mínima: `frame-ancestors 'none'; base-uri 'self'; object-src 'none'`. Una CSP completa choca con los scripts inline de Next y del tema.
 
 - [ ] **R-M23. `SITE_URL` es frágil**
