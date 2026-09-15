@@ -146,15 +146,13 @@ ol {
   align-items: center;
   justify-content: center;
   min-block-size: var(--tap);
-  padding: 0.875rem 1.75rem;
+  padding: 1.125rem 2rem;
   overflow: clip;
   border: 1px solid var(--btn-line);
   border-radius: var(--radius-pill);
   background: var(--btn-bg);
   color: var(--btn-ink);
-  font: 500 var(--fs-0) / 1.2 var(--font);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font: 500 var(--fs-1) / 1.2 var(--font);
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;

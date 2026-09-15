@@ -109,8 +109,8 @@
   stroke-linecap: square;
 }
 
-/* Píldoras del cierre: grandes, en caja normal (el email no va en mayúsculas) y
-   sobre noche; el relleno es claro y el texto pasa a noche. */
+/* Píldoras del cierre: más grandes (las de douglus miden 1.75rem 2.5rem) y sobre
+   noche; el relleno es claro y el texto pasa a noche. */
 .btn--night {
   --btn-bg: var(--night-raised);
   --btn-ink: var(--on-night);
@@ -120,10 +120,8 @@
 }
 
 .btn--lg {
-  padding: 1.125rem 1.875rem;
-  font-size: var(--fs-1);
-  letter-spacing: 0;
-  text-transform: none;
+  padding: 1.5rem 2.5rem;
+  font-size: clamp(1rem, 1vw, 1.25rem);
 }
 
 /* ---------- Horizontal ---------- */

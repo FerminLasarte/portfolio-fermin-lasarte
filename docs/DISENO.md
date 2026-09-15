@@ -356,7 +356,7 @@ Rediseñado el 2026-09-14 a pedido de Fermin, como el final de douglus (antes er
 ### 7.6 Botones
 
 Rediseñados el 2026-09-14 como las píldoras de douglus (`.pill` e `initPillButtonMagnetic` en su JS).
-- **Forma:** píldora de al menos 44px de alto, con `0.875rem 1.75rem` de relleno, texto en `--fs-0`, peso 500, mayúsculas con `0.08em` de tracking y sin salto de línea.
+- **Forma:** píldora de unos 57px de alto, con `1.125rem 2rem` de relleno, texto en `--fs-1`, peso 500, en caja normal, sin tracking y sin salto de línea, como las de douglus. Las del cierre (`.btn--lg`) miden unos 69px, con `1.5rem 2.5rem` y el texto en `clamp(1rem, 1vw, 1.25rem)`. El botón "Menú" del nav móvil es más chico (`0.625rem 1.25rem`) para entrar en la barra. (Hasta el 2026-09-14 eran de 46px, con el texto en mayúsculas de 13px; Fermin los pidió más gordos y con otra letra).
 - **Principal:** fondo `--accent`, texto `--on-accent`; el relleno es `--ink` y el texto pasa a `--paper`. **Secundario:** borde de 1px en `--line`, texto `--ink`; el relleno es `--accent` y el texto pasa a `--on-accent`. Cada variante solo cambia las variables `--btn-*`.
 - **Relleno (hover con puntero fino):** un óvalo de 150% × 200% con borde de 50% sube desde abajo (`translate` de 75% a 0, 500ms `--ease-out`) e invierte el color. Al salir, sigue hacia arriba (a −75%, 400ms) y después vuelve abajo sin transición. Sin JS, el relleno vuelve a bajar.
 - **Salto del texto:** al entrar, el texto se va 10% hacia arriba y reaparece desde 30% abajo (100ms y 250ms); al salir, al revés. Reemplaza al texto que "rodaba" (`Roll`).

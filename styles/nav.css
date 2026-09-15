@@ -90,9 +90,11 @@ html.dark-mode .theme-toggle .icon-sun {
   display: inline-block;
 }
 
+/* Más chico que un botón normal: tiene que entrar en la barra de 4rem. */
 .nav__menu {
   display: none;
   margin-inline-start: var(--space-2);
+  padding: 0.625rem 1.25rem;
 }
 
 /* "Menú" / "Cerrar": el texto rueda de uno al otro. */
