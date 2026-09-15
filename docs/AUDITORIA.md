@@ -472,7 +472,8 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
   - **Problema:** en Chrome, los enlaces toman el foco en el `mousedown`. Si el botón está cortado por el borde derecho, el listener de `focusin` lo trae a la vista con un `scrollBy` sin animación: la pista salta, el `mouseup` cae en otro lado y el clic no llega al enlace. Medido a 1440×900 con el botón "Visitar" cortado a la mitad: en el `mousedown` el scroll pasó de 530 a 1.865 y el `click` fue a la sección `projects`, no al enlace.
   - **Solución:** atender solo el foco de teclado, con `if (!e.target.matches(":focus-visible")) return;` al principio de `onFocus`.
 
-- [ ] **R-I3. El nav y la franja se vuelven ilegibles sobre la transición al cierre (era N8)** **[nav]**
+- [~] **R-I3. El nav y la franja se vuelven ilegibles sobre la transición al cierre (era N8)** **[nav]**
+  - **Decidido por Fermin (2026-09-15): se deja como está**, como en douglus (opción c). La medición queda anotada en DISENO 7.1.
   - **Dónde:** `styles/nav.css:246-259` y `styles/track.css:111-132` (blanco con `mix-blend-mode: difference`). El tramo es `.bleed` (`styles/contact.css`).
   - **Problema:** se midió cada 120px de scroll, en 84 posiciones por tema, a 1440×900. Fuera del cierre, el texto del nav y de la franja da 4,5:1 o más en todo el recorrido. Mientras pasa la transición (de 7.800 a 9.600px de un recorrido de 10.038, unos 1.800px de scroll):
     - **En claro:**
