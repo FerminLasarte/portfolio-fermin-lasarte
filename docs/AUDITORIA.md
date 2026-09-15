@@ -584,7 +584,9 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
 
 ### Accesibilidad y flujo
 
-- [ ] **R-M1. La tabla de `/habilidades` no tiene nombre y su caja con scroll no se puede enfocar** **[nav]**
+- [x] **R-M1. La tabla de `/habilidades` no tiene nombre y su caja con scroll no se puede enfocar** **[nav]**
+  - **Hecho:** `.matrix-scroll` lleva `tabIndex={0}`, `role="region"` y `aria-labelledby="donde-t"`, y la tabla, `aria-labelledby="donde-t"`. La sección de "Dónde las usé" dejó de tener `aria-labelledby`: si no, había dos regiones con el mismo nombre y axe marcaba `landmark-unique`. El `<h2>` sigue encabezando el bloque.
+  - **Verificado** sobre el servidor local, en `/habilidades` a 375 (claro) y 768 (oscuro), `/en/skills` a 375 (oscuro) y `/habilidades` a 1440: con Tab se llega a la caja, se ve el anillo de 2px en `--focus` y las flechas la desplazan (de 0 a 120px a 375). El árbol de accesibilidad da "región: Dónde las usé" / "Where I used them", y axe da 0 fallos en los cuatro casos. A 1440 la tabla entra y la caja sigue siendo una parada de Tab, sin nada que desplazar. DISENO.md, 7.12.
   - **Dónde:** `components/SkillsPage.jsx:66-97` y `styles/page.css:171-174`.
   - **Problema:** `.matrix-scroll` se desplaza a lo ancho: a 375px mide 343px con una tabla de 757px, y también se desplaza a 768 y a 1024 en vertical. Pero no tiene nada enfocable, y axe lo marca como serio (`scrollable-region-focusable`). Además, la tabla no tiene `<caption>` ni `aria-labelledby`.
   - **Solución:** poner `tabindex="0" role="region" aria-labelledby="donde-t"` en la caja, y `aria-labelledby="donde-t"` (o un `<caption>` con `sr-only`) en la tabla.

@@ -60,13 +60,18 @@ export default function SkillsPage({ t, lang }) {
         </section>
       ))}
 
-      <section className="skill-group" aria-labelledby="donde-t">
+      {/* Sin aria-labelledby en la sección: el nombre lo lleva la caja de la tabla, y
+          dos regiones con el mismo nombre se confunden (axe, landmark-unique). */}
+      <section className="skill-group">
         <h2 id="donde-t" className="chapter__title">
           {t("skills.matrixTitle")}
         </h2>
         <p className="skill-group__lead">{t("skills.matrixLead")}</p>
-        <div className="matrix-scroll">
-          <table className="matrix">
+        {/* La caja se desplaza a lo ancho en teléfonos y tablets (R-M1): se puede
+            enfocar para moverla con las flechas, y ella y la tabla llevan el nombre
+            del bloque. */}
+        <div className="matrix-scroll" tabIndex={0} role="region" aria-labelledby="donde-t">
+          <table className="matrix" aria-labelledby="donde-t">
             <thead>
               <tr>
                 <th scope="col">{t("skills.tech")}</th>
