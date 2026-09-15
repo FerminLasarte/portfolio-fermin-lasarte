@@ -623,7 +623,13 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
     - La marca de `sessionStorage` se pone en cualquier página. Si la primera visita entra por `/trayectoria` o por el 404, la home ya no muestra el preloader, y DISENO 7.11 dice "primera visita de la sesión".
   - **Solución:** `--z-skip` por encima del preloader; sacar `html.pl` con el primer `keydown`, `pointerdown` o `wheel`, con un fundido corto; y poner la marca solo si la página tiene `.preloader`.
 
-- [ ] **R-M4. El muro de la home no dice el nivel en texto** **[nav]**
+- [x] **R-M4. El muro de la home no dice el nivel en texto** **[nav]**
+  - **Hecho (decidido por Fermin, 2026-09-15: solo para los lectores de pantalla):** en la lista de texto de abajo del muro, cada tecnología lleva su nivel en un `sr-only` (" (avanzado)" / " (advanced)"). En pantalla la lista se ve igual; el nivel lo sigue mostrando el muro, y en colores forzados ya se distingue desde R-I8.
+  - **Verificado** sobre el servidor local:
+    - En el árbol de accesibilidad, en `/` y `/en` a 1440 y a 375, dice "Swift (avanzado), SwiftUI (avanzado), Objective-C (intermedio)…".
+    - Con y sin los `sr-only`, los tres párrafos miden lo mismo y parten en los mismos lugares (1440, 768 y 375). Comparando píxel a píxel: a 375, 0 píxeles distintos. A 768 y 1440 cambian algunos subpíxeles en las letras, porque el `span` corta la tira de texto; a simple vista no se nota.
+    - Sin desbordes. axe da 0 fallos a 375; a 1440 solo marca el `color-contrast` del nav, que es el falso positivo ya descartado (`difference`).
+  - DISENO.md, 7.7.
   - **Dónde:** `components/Skills.jsx:44-72`.
   - **Problema:** el muro es `aria-hidden` y la lista en texto de abajo tiene los nombres pero no el nivel, aunque DISENO 7.7 dice que es "la misma información". En colores forzados, las intermedias además se ven llenas y la leyenda no distingue nada. El detalle está en `/habilidades`.
   - **Solución:** sumar el nivel a la lista (visible o `sr-only`), o corregir DISENO.

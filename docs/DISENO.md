@@ -370,7 +370,7 @@ Rediseñada el 2026-09-15. Fermin eligió primero la propuesta "C · Marquesina"
 - **Muro:** las 27 tecnologías de `SKILL_GROUPS` en Archivo angosta y en mayúsculas, justificadas (`text-align: justify`, la última línea a la izquierda) en el ancho del panel. Ninguna se sale. El tamaño sale del ancho y del alto de la pantalla en horizontal (`min(5.6cqi, 7.8vmin)`: con 8,5vmin, a 1024×680 la lista de abajo se pasaba 22px) y de `--fs-wall` en vertical. Es visual (`aria-hidden`).
 - **Estado final:** las de nivel avanzado, llenas; las intermedias, en contorno (`-webkit-text-stroke`); las de mobile, en `--accent`. Una leyenda chica (cuadrado lleno: avanzado; en contorno: intermedio) lo explica.
 - **La ola:** todas empiezan en contorno gris (`--line`) y pasan a su estado final una detrás de otra. En horizontal, con la línea de tiempo de la pista, desde que el panel asoma (su borde izquierdo al 70% de la ventana) hasta que entra entero, con 2,3cqi de desfase entre palabra y palabra (`--x-skills` en `.h-scroll`); en vertical, cada palabra mientras cruza la pantalla (`view()`). Sin soporte (Firefox), sin JS o con reduce motion se ve el estado final.
-- **Debajo, la misma información en texto:** los tres grupos con sus tecnologías, que es lo que leen los lectores de pantalla.
+- **Debajo, la misma información en texto:** los tres grupos con sus tecnologías, que es lo que leen los lectores de pantalla. El nivel de cada una va en un `sr-only` ("Swift (avanzado)"): en pantalla la lista se ve igual, y el nivel lo dice el muro (2026-09-15, R-M4 de la re-auditoría).
 - En horizontal el panel ocupa una pantalla (`--w-skills: 100cqi`).
 
 ### 7.8 Cursor propio

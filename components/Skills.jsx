@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { SKILL_GROUPS } from "@/lib/site";
 import { pagePath } from "@/lib/i18n";
 
@@ -62,11 +63,21 @@ export default function Skills({ t, lang }) {
         </p>
       </div>
 
+      {/* El nivel va en texto para los lectores de pantalla (R-M4): el muro, que lo
+          muestra con lleno y contorno, es aria-hidden. En pantalla no cambia nada. */}
       <div className="skills__groups">
         {groups.map((group) => (
           <div key={group.key} className="skills__group">
             <h3 className="meta">{t(group.key)}</h3>
-            <p>{group.skills.map((s) => s.name).join(", ")}</p>
+            <p>
+              {group.skills.map((s, i) => (
+                <Fragment key={s.name}>
+                  {i > 0 && ", "}
+                  {s.name}
+                  <span className="sr-only"> ({t(`skills.level.${s.level}`).toLowerCase()})</span>
+                </Fragment>
+              ))}
+            </p>
           </div>
         ))}
       </div>
