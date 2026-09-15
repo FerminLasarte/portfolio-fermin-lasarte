@@ -454,7 +454,7 @@ _(Agregá aquí lo que aparezca durante las fases.)_
   - R-I1 (`03bbd6a`), R-I2 (`e9b12f0`) y R-I4 (`02b1ee3`);
   - R-I5 (`6ac71a9`), R-I6 (`bd6c925`) y R-I9 (`c893007`);
   - R-I8 (`df28bec`), R-I3 (`0d52325`, se deja como está) y R-I7 (`0601232`).
-- **Menores:** todavía abiertos. Solo el detalle de "Backend" en `meta.description` de R-M34 quedó hecho, con R-I7.
+- **Menores:** los de accesibilidad y flujo (R-M1 a R-M13) están cerrados, cada uno en su commit (de `bb6dc48` a R-M13). Siguen SEO y robustez (R-M21 a R-M27), eficiencia (R-M14 a R-M20), limpieza (R-M28 a R-M36) y documentación (R-M37 y R-M38). De R-M34, solo el detalle de "Backend" en `meta.description` quedó hecho, con R-I7.
 
 No hay nada crítico. Los problemas más visibles son cuatro:
 - **R-I1:** dos nombres de proyecto quedan cortados en su placa.
@@ -752,7 +752,9 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
     - En vertical con puntero fino, las anclas no pasan por Lenis, cuando DISENO 7.10 dice que sí.
   - **Solución:** que el gesto de costado dependa de que haya `.h-scroll`, y que `goTo` use `smoothScrollTo` también en vertical (o corregir el documento).
 
-- [ ] **R-M13. El cargo en inglés no lleva `lang="en"` en la página en español** (sospecha)
+- [x] **R-M13. El cargo en inglés no lleva `lang="en"` en la página en español** (sospecha)
+  - **Hecho:** en el hero, `<strong lang="en">` en el cargo, solo si la página no está en inglés (en `/en` ya lo hereda de `<html>`).
+  - **Verificado** sobre el servidor local: en `/` el `<strong>` tiene `lang="en"` dentro de `<html lang="es">`; en `/en` no lleva atributo y hereda `en`. axe da 0 fallos en `valid-lang`, `html-has-lang` y `html-lang-valid`. DISENO.md, 7.2.
   - **Dónde:** `components/Hero.jsx:26`.
   - **Problema:** "iOS & Cross-Platform Mobile Engineer" se lee con fonética española (3.1.2). Es discutible, porque puede entrar en la excepción de términos técnicos.
   - **Solución:** usar `<strong lang="en">`.

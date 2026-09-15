@@ -22,8 +22,10 @@ export default function Hero({ t, lang }) {
       <p className="hero__avail meta">{t("hero.availability")}</p>
 
       <div className="hero__copy">
+        {/* El cargo está en inglés en los dos idiomas: en la página en español lleva
+            lang="en", así un lector de pantalla no lo lee con fonética española (R-M13). */}
         <p className="hero__lead">
-          <strong>{ROLE}.</strong> {t("hero.lead")}
+          <strong lang={lang === "en" ? undefined : "en"}>{ROLE}.</strong> {t("hero.lead")}
         </p>
         <div className="hero__ctas">
           <a className="btn btn--primary" href="#proyectos">

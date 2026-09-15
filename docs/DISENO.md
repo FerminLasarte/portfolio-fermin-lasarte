@@ -293,7 +293,7 @@ Si `CSS.supports("animation-timeline: view()")` da falso y el modo horizontal es
 
 Un panel del ancho de la ventana, en una grilla de 12 columnas.
 - **Arriba a la izquierda:** disponibilidad ("Disponible para nuevos desafíos"), en `--fs-0` y `--ink-muted`, con un punto de `--accent`. Es el único punto de estado de la página, y es real.
-- **Al medio, a la izquierda (columnas 1–5):** un párrafo de hasta 20 palabras, con el cargo en negrita al principio, y dos botones:
+- **Al medio, a la izquierda (columnas 1–5):** un párrafo de hasta 20 palabras, con el cargo en negrita al principio (está en inglés en los dos idiomas, así que en la página en español lleva `lang="en"`; R-M13 de la re-auditoría), y dos botones:
   - "Ver proyectos": principal, `--accent`, ancla a `#proyectos`;
   - "Descargar CV": secundario, borde `--line`, PDF directo del idioma actual.
 - **Abajo a la izquierda (columnas 1–8):** `<h1>` con el nombre completo (M16) en Display, en dos líneas: FERMIN / LASARTE.
