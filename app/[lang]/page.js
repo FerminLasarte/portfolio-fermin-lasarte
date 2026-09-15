@@ -23,7 +23,7 @@ export default async function Home({ params }) {
         <Hero t={t} lang={lang} />
         <Projects t={t} />
         <Trajectory t={t} lang={lang} />
-        <Skills t={t} />
+        <Skills t={t} lang={lang} />
         <Contact t={t} />
       </Track>
       <Strip t={t} />

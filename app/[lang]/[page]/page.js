@@ -3,11 +3,13 @@ import { DEFAULT_LOCALE, LOCALES, OG_LOCALES, getT, pageId, pagePath, pageUrl } 
 import { PAGES } from "@/lib/pages.mjs";
 import { PERSON, SOCIAL } from "@/lib/site";
 import ExperiencePage from "@/components/ExperiencePage";
+import SkillsPage from "@/components/SkillsPage";
 
 // Páginas propias (docs/DISENO.md, 7.12): qué componente muestra cada una y con qué
 // textos se arma su metadata.
 const VIEWS = {
   experience: { Component: ExperiencePage, title: "exp.title", description: "exp.pageDescription" },
+  skills: { Component: SkillsPage, title: "skills.title", description: "skills.pageDescription" },
 };
 
 // Una página por idioma con la ruta de ese idioma (/trayectoria, /en/experience);

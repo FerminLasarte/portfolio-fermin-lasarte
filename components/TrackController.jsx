@@ -20,6 +20,7 @@ const REVEAL = [
   ".stage__years",
   ".stage__body",
   ".skills__lead",
+  ".skills__more",
   ".marquee",
   ".skills__group",
   ".contact__rule",

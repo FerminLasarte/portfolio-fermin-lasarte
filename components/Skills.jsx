@@ -1,4 +1,5 @@
 import { SKILL_GROUPS } from "@/lib/site";
+import { pagePath } from "@/lib/i18n";
 
 // Filas de la marquesina, cada una con sus grupos de SKILL_GROUPS y su tono: llena,
 // en contorno y en --accent. La leyenda de abajo usa los mismos grupos.
@@ -13,7 +14,7 @@ const ROWS = [
 // cada lado. Son visuales (aria-hidden, y cada fila repite la lista para tener
 // recorrido): la información está debajo, en texto, con los mismos grupos. El nivel de
 // cada tecnología y dónde la usé van en la página de Habilidades (7.12).
-export default function Skills({ t }) {
+export default function Skills({ t, lang }) {
   const byId = Object.fromEntries(SKILL_GROUPS.map((g) => [g.id, g]));
   const rows = ROWS.map((row) => ({
     ...row,
@@ -33,6 +34,9 @@ export default function Skills({ t }) {
           {t("skills.title")}
         </h2>
         <p className="skills__lead">{t("skills.lead")}</p>
+        <a className="btn skills__more" href={pagePath(lang, "skills")}>
+          <span className="btn__label">{t("skills.more")}</span>
+        </a>
       </header>
 
       <div className="marquee" aria-hidden="true">

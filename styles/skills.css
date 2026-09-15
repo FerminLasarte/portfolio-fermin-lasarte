@@ -15,6 +15,10 @@
   gap: var(--space-3);
 }
 
+.skills__more {
+  justify-self: start;
+}
+
 .skills__lead {
   max-width: 40ch;
   font-size: var(--fs-2);
@@ -128,6 +132,13 @@
 
   html.js .skills {
     justify-content: space-between;
+  }
+
+  /* El título, la frase y el botón en una fila, así la marquesina tiene más alto. */
+  html.js .skills__head {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: end;
+    column-gap: var(--space-7);
   }
 }
 
