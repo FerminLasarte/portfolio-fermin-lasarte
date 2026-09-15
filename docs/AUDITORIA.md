@@ -811,7 +811,20 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
   - **Problema:** son 5,6 KB gz, casi un tercio del JS propio de la home. `/trayectoria` también los baja, aunque no tiene imágenes. No se usa `placeholder` ni `onLoad`.
   - **Solución:** usar `getImageProps()` en los server components y un `<img>` común, y confirmar que se mantenga el preload de la foto.
 
-- [ ] **R-M16. Trabajo que corre de más: Lenis, Magnet y WaveText**
+- [x] **R-M16. Trabajo que corre de más: Lenis, Magnet y WaveText**
+  - **Hecho:**
+    - **Lenis** (`components/SmoothScroll.jsx`): sin `autoRaf`. Un `requestAnimationFrame` propio arranca con la rueda (el evento `virtual-scroll` de Lenis) o con un salto de `smoothScrollTo` (`lib/scroll.js` lo despierta), y para cuando Lenis termina (`isScrolling` deja de ser `"smooth"`). Lenis ve un reloj propio, que después de una pausa avanza un frame común: si viera la pausa como un solo frame, llegaría de golpe al destino. Y se importa con `import("lenis")` solo con puntero fino y sin reduce motion.
+    - **Magnet:** un `IntersectionObserver` sobre la sección de las píldoras del cierre. Mientras no se ve, no se miden en cada movimiento del mouse. Se observa la sección y no cada píldora, porque "Copiar email" aparece recién al hidratar.
+    - **WaveText:** escucha la actividad (mouse, scroll, teclado, foco) solo en horizontal; en vertical la franja no se ve.
+  - **Antes y después**, en el build de producción:
+    - **Cuadros pedidos en 2 s con la página quieta** (escritorio, las cuatro páginas): 120 → 0.
+    - **JS en el celular:** home 145,2 → 140,6 KB gz, páginas propias 141,8 → 137,1 (ya no baja Lenis).
+    - **JS en escritorio:** home 145,2 → 145,9 KB gz, páginas propias 141,8 → 142,4. Lenis quedó en un chunk aparte, de 5,3 KB gz, y eso cuesta unos 0,7 KB de más.
+    - **`getBoundingClientRect` por movimiento del mouse sobre el hero:** 7,1 → 0.
+  - **El scroll se siente igual.** Se midió `scrollY` en cada frame, en el build anterior y en el nuevo, a 1440×900, en claro y oscuro:
+    - una rueda recién cargada, otra después de 1,5 s quieta y el gesto de costado del trackpad: el mismo recorrido, con 1px de diferencia como mucho (el mismo ruido que el build anterior contra sí mismo);
+    - un ancla del nav: el mismo recorrido, pero empieza un frame antes (unos 16 ms), porque el bucle se despierta en el mismo clic. El build anterior también varía un frame de una corrida a otra.
+  - **Verificado** con Puppeteer contra el build anterior, a 1440 y 390, en claro y oscuro, en las cuatro páginas: las capturas difieren lo mismo que el ruido. La foto sigue siendo el LCP con la precarga; el ancla, el imán de las píldoras, el cierre y la ola de la franja (a los 5 s quieta) funcionan, y no hay errores de consola.
   - **Dónde:** `components/SmoothScroll.jsx:26`, `components/Magnet.jsx:93-117` y `components/WaveText.jsx:23-40`.
   - **Problema:**
     - Con `autoRaf: true`, el `requestAnimationFrame` de Lenis corre en cada frame aunque la página esté quieta.

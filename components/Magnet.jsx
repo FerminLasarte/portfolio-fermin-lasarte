@@ -25,6 +25,7 @@ export default function Magnet() {
     const mq = matchMedia(WANTED);
     const moving = new Map(); // botón → { x, y }: el corrimiento actual
     const reachable = document.getElementsByClassName("btn--lg");
+    let near = false; // si la sección de las píldoras del cierre está a la vista
     let current = null; // el botón activo
     let over = null; // el botón que está debajo del mouse
     let mx = 0;
@@ -89,8 +90,10 @@ export default function Magnet() {
       if (el) enter(el);
     };
 
-    // La píldora del cierre más cercana que esté a su alcance.
+    // La píldora del cierre más cercana que esté a su alcance. Mide todas en cada
+    // movimiento del mouse, así que solo mientras su sección se ve (R-M16).
     const nearest = () => {
+      if (!near) return null;
       let best = null;
       let bestD = Infinity;
       for (const el of reachable) {
@@ -128,12 +131,26 @@ export default function Magnet() {
       if (!mq.matches) set(null);
     };
 
+    // Se observa la sección y no cada píldora: "Copiar email" aparece recién al
+    // hidratar. Al salir de la vista, la píldora que atraía de lejos se suelta.
+    const seen = new Set();
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) seen.add(e.target);
+        else seen.delete(e.target);
+      }
+      near = seen.size > 0;
+      update();
+    });
+    new Set([...reachable].map((el) => el.closest("section") ?? el)).forEach((s) => io.observe(s));
+
     document.addEventListener("pointermove", onMove, { passive: true });
     document.addEventListener("pointerover", onOver);
     document.documentElement.addEventListener("mouseleave", onOut);
     mq.addEventListener("change", onChange);
 
     return () => {
+      io.disconnect();
       cancelAnimationFrame(raf);
       for (const el of moving.keys()) el.style.translate = "";
       document.removeEventListener("pointermove", onMove);

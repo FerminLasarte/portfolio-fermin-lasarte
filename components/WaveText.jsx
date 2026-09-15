@@ -49,15 +49,29 @@ export default function WaveText({ text }) {
       }, length);
     }
 
+    // La actividad se escucha solo en horizontal (R-M16): en vertical la franja no se
+    // ve y cada scroll o toque despertaba esto para nada.
     const events = ["pointermove", "scroll", "keydown", "focusin"];
-    wake();
-    events.forEach((e) => addEventListener(e, wake, { passive: true }));
-    horizontal.addEventListener("change", wake);
+    let listening = false;
+    const listen = () => {
+      if (horizontal.matches === listening) return;
+      listening = horizontal.matches;
+      for (const e of events) {
+        if (listening) addEventListener(e, wake, { passive: true });
+        else removeEventListener(e, wake);
+      }
+    };
+    const onChange = () => {
+      listen();
+      wake();
+    };
+    onChange();
+    horizontal.addEventListener("change", onChange);
     return () => {
       clearTimeout(timer);
       clearTimeout(end);
       events.forEach((e) => removeEventListener(e, wake));
-      horizontal.removeEventListener("change", wake);
+      horizontal.removeEventListener("change", onChange);
     };
   }, [text]);
 
