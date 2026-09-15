@@ -33,7 +33,7 @@
 | Barra fina de progreso abajo, al centro, con franja inferior fija | **Stickers** (el disco y la carita) y el **efecto de celdas en canvas** sobre las imágenes: opcionales para después. |
 | Botón "Menú / Cerrar" con menú a pantalla completa en móvil | **Tooltip en grilla naranja con el email:** muestra información solo con hover (criterio 7). |
 | Cortina curva con el nombre del destino al cambiar de página (acá: al cambiar de idioma) | |
-| Texto que "rueda" al pasar el mouse (el pie "Design & code by") | |
+| Botones píldora: relleno que sube, texto que salta e imán (7.6) | |
 | **Cursor propio:** un círculo que sigue al mouse con retraso y un punto; crece sobre enlaces e imágenes y sobre la foto dice "Arrastrame" (7.8) | |
 | **Foto del hero arrastrable,** con inercia y estela de copias (7.9) | |
 
@@ -328,10 +328,14 @@ Los rangos de años se escriben con guion corto normal ("2021-2025") en el texto
 
 ### 7.6 Botones
 
-- **Principal:** `--accent` con `--on-accent`. **Secundario:** borde de 1px en `--line`, texto `--ink`.
-- Alto de 44px, píldora, sin salto de línea (`white-space: nowrap`; los textos son de 1 a 3 palabras).
+Rediseñados el 2026-09-14 como las píldoras de douglus (`.pill` e `initPillButtonMagnetic` en su JS).
+- **Forma:** píldora de al menos 44px de alto, con `0.875rem 1.75rem` de relleno, texto en `--fs-0`, peso 500, mayúsculas con `0.08em` de tracking y sin salto de línea.
+- **Principal:** fondo `--accent`, texto `--on-accent`; el relleno es `--ink` y el texto pasa a `--paper`. **Secundario:** borde de 1px en `--line`, texto `--ink`; el relleno es `--accent` y el texto pasa a `--on-accent`. Cada variante solo cambia las variables `--btn-*`.
+- **Relleno (hover con puntero fino):** un óvalo de 150% × 200% con borde de 50% sube desde abajo (`translate` de 75% a 0, 500ms `--ease-out`) e invierte el color. Al salir, sigue hacia arriba (a −75%, 400ms) y después vuelve abajo sin transición. Sin JS, el relleno vuelve a bajar.
+- **Salto del texto:** al entrar, el texto se va 10% hacia arriba y reaparece desde 30% abajo (100ms y 250ms); al salir, al revés. Reemplaza al texto que "rodaba" (`Roll`).
+- **Imán:** mientras el mouse está encima, el botón se corre hacia él un 30% de la distancia al centro, con un retraso de 0,1 por frame, y al salir vuelve a su lugar. Lo hace `components/Magnet.jsx`: un listener delegado y un `requestAnimationFrame` que se detiene cuando ningún botón se mueve. Usa `translate`, así no choca con el `scale` de presionar.
 - **Al presionar:** `scale: 0.97`, 140ms, `--ease-out`.
-- **Hover con puntero fino:** el texto "rueda". Sube y se va, y desde abajo entra una copia (un `<span aria-hidden>` duplicado), en 260ms con `--ease-out`. Es el giro de letras de douglus, pero con la palabra entera: más calmo y más barato que por letra.
+- **Con reduce motion:** no hay imán ni salto, y el relleno aparece con un fundido. En táctil no hay hover.
 
 ### 7.7 Habilidades
 
@@ -429,7 +433,9 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
 | Pista horizontal | Scroll | `translate` | Lineal, 1:1 | Modo vertical |
 | Barra de progreso | Scroll | `scale` X | Lineal | No existe (vertical) |
 | Tachado del nav y de contacto | Hover o foco | `scale` X del pseudo-elemento | 220ms `--ease-out` | Aparece sin transición |
-| Botón que rueda | Hover | `translate` Y de dos `span` | 260ms `--ease-out` | Sin movimiento |
+| Botón: relleno | Hover | `translate` Y del `::before` (entra desde abajo, sale por arriba con JS) | 500ms entrada, 400ms salida, `--ease-out` | Fundido de `opacity` |
+| Botón: salto del texto | Hover | `translate` Y y `opacity` de `.btn__label` | 350ms `--ease-out` | Sin movimiento |
+| Botón: imán | Mouse encima | `translate` del botón, 30% de la distancia al centro | Retraso de 0,1 por frame | No existe |
 | Presionar botón | `:active` | `scale: 0.97` | 140ms `--ease-out` | Igual (no desplaza) |
 | Nombre del hero, letra por letra | Carga | `translate` Y desde 105%, dentro de una máscara | 700ms `--ease-expo`, 28ms entre letras | Sin animación |
 | Entrada de cada panel | El panel entra en la vista (`IntersectionObserver`, una vez) | Placa: `clip-path: inset(0 0 0 100%) → inset(0)`, desde el lado por donde entra; texto: `opacity` y `translate` de 12px | 700ms `--ease-expo`; texto 60ms después | Sin animación |

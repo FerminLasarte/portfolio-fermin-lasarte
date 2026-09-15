@@ -1,6 +1,5 @@
 import Image from "next/image";
 import DraggablePhoto from "@/components/DraggablePhoto";
-import Roll from "@/components/Roll";
 import { CV, PERSON, ROLE } from "@/lib/site";
 
 // Hero (docs/DISENO.md, 7.2). En horizontal es un panel de una pantalla. El nombre va
@@ -28,10 +27,10 @@ export default function Hero({ t, lang }) {
         </p>
         <div className="hero__ctas">
           <a className="btn btn--primary" href="#proyectos">
-            <Roll>{t("hero.projectsBtn")}</Roll>
+            <span className="btn__label">{t("hero.projectsBtn")}</span>
           </a>
           <a className="btn" href={cv.href} download={cv.download}>
-            <Roll>{t("hero.cvBtn")}</Roll>
+            <span className="btn__label">{t("hero.cvBtn")}</span>
           </a>
         </div>
       </div>

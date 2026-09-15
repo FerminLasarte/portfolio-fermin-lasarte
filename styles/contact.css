@@ -39,8 +39,10 @@
 }
 
 .btn--on-accent {
-  border-color: var(--on-accent);
-  color: var(--on-accent);
+  --btn-ink: var(--on-accent);
+  --btn-line: var(--on-accent);
+  --btn-fill: var(--on-accent);
+  --btn-fill-ink: var(--accent);
 }
 
 .contact__rows li {

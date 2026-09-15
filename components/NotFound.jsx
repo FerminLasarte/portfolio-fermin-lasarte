@@ -30,7 +30,7 @@ export default function NotFound() {
             className={i === 0 ? "btn btn--primary" : "btn"}
             {...(i > 0 ? { lang, hrefLang: lang } : {})}
           >
-            {t("notFound.back")}
+            <span className="btn__label">{t("notFound.back")}</span>
           </a>
         ))}
       </div>

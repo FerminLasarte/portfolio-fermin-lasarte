@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Roll from "@/components/Roll";
 import Icon from "@/components/Icon";
 import { isFeatured } from "@/lib/site";
 import { faApple, faGithub, faGooglePlay, faUpRightFromSquare } from "@/lib/icons";
@@ -89,8 +88,10 @@ export default function ProjectCard({ project, t }) {
           const { icon, label } = LINKS[link.type];
           return (
             <a key={link.url} className={i === 0 ? "btn btn--primary" : "btn"} href={link.url} {...EXTERNAL}>
-              <Icon icon={icon} />
-              <Roll>{label(t)}</Roll>
+              <span className="btn__label">
+                <Icon icon={icon} />
+                {label(t)}
+              </span>
             </a>
           );
         })}

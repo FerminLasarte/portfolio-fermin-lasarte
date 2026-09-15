@@ -33,7 +33,7 @@ export default function CopyEmail({ email, label, done, className }) {
   return (
     <>
       <button type="button" className={className} onClick={copy}>
-        {copied ? done : label}
+        <span className="btn__label">{copied ? done : label}</span>
       </button>
       <span className="sr-only" aria-live="polite">
         {copied ? done : ""}
