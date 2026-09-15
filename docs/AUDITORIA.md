@@ -1211,7 +1211,24 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
 
 ### Documentación
 
-- [ ] **R-M37. DISENO.md quedó desactualizado**
+- [x] **R-M37. DISENO.md quedó desactualizado**
+  - **Hecho:** DISENO.md queda en su versión final, en un solo commit. Cada punto de abajo se confirmó contra el código (`c20c6bc`) antes de corregirlo.
+    - Además de lo listado, entró lo que cambió la limpieza:
+      - los tokens nuevos de R-M32 (secciones 4 y 8) y los borrados de R-M28;
+      - las clases `.display`, `.poster`, `.years` y `.lead` (R-M30, sección 3);
+      - `lib/media.js` y `scripts/check.mjs` (R-M31, secciones 2 y 6.2);
+      - el imán de 420ms y el tachado con colores forzados (R-M33, 7.6 y 9.7);
+      - los títulos de etapa y las cifras (R-M34, 7.3 y 7.4);
+      - el crédito con `PERSON.city` (R-M29, 7.1).
+    - **`--wdth-mega` queda** (decidido por Fermin, 2026-09-15): R-M37 no lo nombraba, pero todavía lo usan los números de la entrada de Proyectos. Se documentó como la fila "Cifras" de la sección 3, con una nota sobre el nombre.
+    - **Fuera de DISENO:** el comentario de `lib/scroll.js` también atribuía la curva a douglus. Se corrigió en un commit aparte (`c20c6bc`).
+  - **Descartados, porque ya no aplicaban:**
+    - 6.1, "Buscar en la página funciona como siempre": ya se había corregido con R-M11.
+    - 7.6, el imán del 50%: 7.6 ya lo decía; faltaba solo en la tabla de la sección 8, y ahí se agregó.
+    - 7.9, la foto que vuelve sin animación: desde R-M33 el código vuelve con animación, como decía DISENO.
+    - 7.10, "en vertical, las anclas no pasan por Lenis": desde R-M12 sí pasan.
+    - Tabla de la sección 8, el tachado con reduce motion: R-M6 lo arregló, y la tabla ya decía lo correcto.
+    - 9.4: ya se había reescrito con R-M32.
   - **Sección 1:** la cortina "con el nombre del destino" contradice la sección 8, que dice "sin el nombre", y ya no se usa solo al cambiar de idioma.
   - **Sección 2:**
     - `--line` no es el color de la línea de Trayectoria, que usa `--ink`.

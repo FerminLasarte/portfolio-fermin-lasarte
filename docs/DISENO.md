@@ -1,7 +1,7 @@
 # Diseño del portfolio (Fase 3)
 
 - **Fecha:** 2026-09-14
-- **Estado:** aprobado por Fermin el 2026-09-14 e implementado en la rama `fase-3-rediseno`, un commit por paso (sección 10). Donde la implementación se apartó del brief, este documento ya lo dice.
+- **Estado:** aprobado por Fermin el 2026-09-14 e implementado en la rama `fase-3-rediseno`, un commit por paso (sección 10). Donde la implementación se apartó del brief, este documento ya lo dice. Es la versión final: se puso al día con el código después de la re-auditoría (2026-09-15, R-M37), incluidos los cambios de la limpieza (R-M28 a R-M36).
 - **Fuentes, en orden de prioridad:** los "Criterios del rediseño" de `docs/AUDITORIA.md`; [douglus.site](https://douglus.site) (navegación horizontal y sus animaciones); las skills `design-taste-frontend`, `impeccable` y `emil-design-eng`. Si dos fuentes chocan, manda la de más arriba.
 - **Cómo se analizó douglus.site:** en el panel del navegador a 1440×900 (modo horizontal) y a 390×844 (modo vertical), leyendo el DOM, su CSS y su JS publicado. Los datos concretos están en el anexo A.
 
@@ -32,7 +32,7 @@
 | Tachado al pasar el mouse por los enlaces del nav | **Mancha de fluido en WebGL detrás del cursor:** es un canvas a pantalla completa que corre siempre; queda para después (D10). |
 | Barra fina de progreso abajo, al centro, con franja inferior fija | **Stickers** (el disco y la carita) y el **efecto de celdas en canvas** sobre las imágenes: opcionales para después. |
 | Botón "Menú / Cerrar" con menú a pantalla completa en móvil | **Tooltip en grilla naranja con el email:** muestra información solo con hover (criterio 7). |
-| Cortina curva con el nombre del destino al cambiar de página (acá: al cambiar de idioma) | |
+| Cortina curva al cambiar de página, sin el nombre del destino (sección 8): acá, al cambiar de idioma y al entrar o salir de las páginas propias (7.12) | |
 | Botones píldora: relleno que sube, texto que salta e imán (7.6) | |
 | **Cursor propio:** un círculo que sigue al mouse con retraso y un punto; sobre la foto crece y dice "Arrastrame", y sobre enlaces y botones crece junto a la mano del sistema (7.8) | |
 | **Foto del hero arrastrable,** con inercia y estela de copias (7.9) | |
@@ -53,12 +53,14 @@ Los tokens van en `:root` y se redefinen bajo `html.dark-mode` (se mantiene el m
 | `--surface` | `#E7E1D8` | `#1F1915` | Placas sin imagen, zonas hundidas |
 | `--ink` | `#1A1411` | `#EFE9E3` | Texto principal |
 | `--ink-muted` | `#5A4F47` | `#B0A59B` | Texto secundario, nav sin activar |
-| `--line` | `#8A7E74` | `#7A6E64` | Bordes de botón, reglas del timeline, riel del progreso |
+| `--line` | `#8A7E74` | `#7A6E64` | Bordes de botón, riel del progreso, contorno gris del muro antes de la ola, puntos vacíos de la tabla de Habilidades y la línea del menú móvil. La línea de Trayectoria va en `--ink` |
 | `--accent` | `#A93C0B` | `#FF9A62` | Botón principal, texto de acento, relleno de botones |
 | `--accent-soft` | `#F8E3D4` | `#3A1E10` | Placas tipográficas de proyecto |
 | `--on-accent` | `#FFF6EF` | `#14100D` | Texto y foco sobre `--accent` |
-| `--on-accent-muted` | `#FFE4D2` | `#4A2412` | Texto secundario sobre `--accent` |
 | `--focus` | `= --accent` | `= --accent` | Anillo de foco (sobre el cierre pasa a `--on-night`) |
+| `--cursor-ink` | `= --ink` | `= --ink` | Cursor propio (7.8; sobre el cierre pasa a `--on-night`) |
+
+Hasta la re-auditoría había también un `--on-accent-muted`, para texto secundario sobre el acento. Nunca se usó y se borró (R-M28).
 
 El acento empezó en cobalto (`#1D3FD8` / `#8CA3FF`). El 2026-09-14 Fermin lo cambió por un violeta más vivo (`#6224F0` / `#A57BFF`): el cobalto se sentía insulso y no transmitía confianza. El 2026-09-15 la paleta entera pasó a cálida, porque Fermin quería que transmitiera más confianza y cercanía. Eligió "Teja" entre tres propuestas: la teja; una mandarina viva con texto oscuro; y un naranja con los neutros fríos y el cierre en azul tinta. Con el acento cambiaron también los neutros (de fríos a arena) y el cierre (de negro violeta a café). No es el naranja de douglus: el suyo, `#FF6432`, tiene tono 14° y luz 60%; la teja tiene tono 19° y luz 35%.
 
@@ -89,7 +91,6 @@ El acento empezó en cobalto (`#1D3FD8` / `#8CA3FF`). El 2026-09-14 Fermin lo ca
 | `--accent` (texto) sobre `--accent-soft` | 5,07 | 7,32 |
 | `--ink` sobre `--accent-soft` | 14,69 | 12,70 |
 | `--on-accent` sobre `--accent` (botón) | 5,90 | 9,06 |
-| `--on-accent-muted` sobre `--accent` | 5,18 | 6,47 |
 | `--line` sobre `--paper` (borde, 3:1) | 3,42 | 3,82 |
 | `--line` sobre `--surface` (borde, 3:1) | 3,04 | 3,51 |
 | `--on-night` sobre `--night` / `--night-raised` | 17,03 / 15,67 | igual |
@@ -104,20 +105,34 @@ Reglas:
 - `--ink-muted` nunca va sobre `--accent` (da 1,26 en claro y 1,16 en oscuro).
 - Las placas de proyecto con el color de la marca (TravelPic negro, DeporTurnos blanco) son datos del proyecto (`media.plate` en `PROJECTS`), no tokens del tema; no llevan texto encima.
 - Sin sombras. Si un componente la necesita, se agrega como token (`--shadow-*`), teñida con el tono del fondo.
+- La imagen de Open Graph (`lib/og.js`) y el color de la barra del navegador (`THEME_COLORS`, `lib/theme.js`) no pueden leer variables de CSS, así que copian sus colores de `styles/tokens.css`. `scripts/check.mjs` los compara antes de cada build y lo detiene si alguno se separa (R-M31).
 
 ## 3. Tipografía y escala
 
 **Familia:** [Archivo](https://fonts.google.com/specimen/Archivo), variable, con los ejes `wght` (100–900) y `wdth` (62–125). Un solo archivo sirve para los títulos angostos, que tienen la fuerza de un afiche, y para el texto de lectura. Se carga con `next/font/local` desde `lib/fonts.js`, con `display: "swap"`: una copia recortada a lo que usa el sitio, pesos de 400 a 800 y anchos de 68% a 100%, solo latín (`assets/fonts/Archivo-web.woff2`, 57 KB; Google Fonts mandaba 88 KB con todos los pesos y anchos; 2026-09-15, R-M14 de la re-auditoría). Un peso o un ancho fuera de esos rangos obliga a regenerar el archivo (`assets/fonts/README.md`). Mientras carga, se ve Arial ajustada a las medidas de Archivo ("Archivo Fallback", en `styles/tokens.css`). Se sirve desde el propio dominio y no hay CSS externo. Reemplaza a Inter, que la skill desaconseja como fuente por defecto. No hay monoespaciada: las cifras usan `font-variant-numeric: tabular-nums`.
 
-| Rol | Ancho (`wdth`) | Peso | Tamaño | Interlineado y tracking |
-|---|---|---|---|---|
-| Display (nombre, título de panel) | 68 | 800 | `--fs-display` | 0,86 · −0,01em · mayúsculas |
-| Mega (email de contacto) | 75 | 700 | `--fs-mega` | 0,95 · −0,02em |
-| Título de proyecto (h3) | 68 | 800 | `--fs-4` | 0,9 · mayúsculas |
-| Título (h2 en vertical) | 100 | 600 | `--fs-4` | 1,05 · −0,02em |
-| Destacado | 100 | 500 | `--fs-2` | 1,35 |
-| Cuerpo | 100 | 400 | `--fs-1` | 1,55 · máximo 60ch |
-| Meta (estado, fechas, tags) | 100 | 500 | `--fs-0` | 1,4 · +0,01em · sin mayúsculas |
+| Rol | Clase | Ancho (`wdth`) | Peso | Tamaño | Interlineado y tracking |
+|---|---|---|---|---|---|
+| Display (nombre del hero, título del contacto) | `.display` | 68 | 800 | `--fs-display` | 0,86 · −0,01em · mayúsculas |
+| Título de sección (Proyectos, Trayectoria, Habilidades), en los dos modos | `.display.display--section` | 68 | 800 | `--fs-section` | 0,86 · −0,01em · mayúsculas |
+| Título de proyecto (h3) y de capítulo | `.poster` | 68 | 800 | `--fs-4` | 0,9 en la tarjeta, 0,95 en el capítulo · mayúsculas |
+| Años de Trayectoria | `.years` | 68 | 800 | `--fs-stage` | 0,84 · −0,01em · el fin en contorno |
+| Muro de Habilidades | `.wall` | 68 | 800 | `--fs-wall` en vertical; `min(5.6cqi, 7.8vmin)` en horizontal (7.7) | 0,92 · −0,01em · mayúsculas |
+| Cifras de la entrada de Proyectos | `.stats dd` | 75 (`--wdth-mega`) | 700 | `--fs-4` | 1 · `tabular-nums` |
+| Subtítulo (título de etapa, nota de idiomas) | | 100 | 650 | `--fs-3` | 1,15 |
+| Destacado (frase de entrada, párrafo del hero) | `.lead`, `.hero__lead` | 100 | 400 | `--fs-2` | 1,4 (1,35 en el hero) |
+| Cuerpo | | 100 | 400 | `--fs-1` | 1,55 · máximo 60ch |
+| Meta (estado, fechas, tags) | `.meta` | 100 | 500 | `--fs-0` | +0,01em · sin mayúsculas |
+
+`.display`, `.poster` y `.years` comparten el peso, el ancho y las mayúsculas en `base.css`; cada uno pone su tamaño e interlineado (R-M30). `--wdth-mega` conserva el nombre del email en tamaño "Mega", que se fue con el cierre nuevo (7.5): hoy solo lo usan las cifras. Hasta la re-auditoría la tabla tenía también una fila "Título (h2 en vertical)" que no existía en el código.
+
+**Pesos:** se escriben directo, sin token (9.4):
+- 400: el texto;
+- 500: Meta, los botones y el lugar de cada etapa;
+- 600: el nombre del nav, "Ver el proyecto" y los encabezados de la tabla de `/habilidades`;
+- 650: los subtítulos, el cargo en negrita del hero y el nombre de cada tecnología en `/habilidades`;
+- 700: las cifras;
+- 800: el afiche.
 
 **Escala.** En horizontal, lo que limita es el alto de la ventana, así que los tamaños grandes usan `vmin` (el menor entre ancho y alto):
 
@@ -129,18 +144,37 @@ Reglas:
 --fs-4: clamp(2rem, 1rem + 4vmin, 4.25rem);
 --fs-display: clamp(3.5rem, 17vmin, 13rem);     /* 153px a 1440×900; 66px a 390px */
 --fs-section: clamp(2.5rem, 7.5vmin, 6rem);     /* títulos de sección en paneles angostos */
---fs-mega: clamp(2.25rem, 9vmin, 7.5rem);
+--fs-stage: clamp(4rem, 15vmin, 11rem);         /* los años de Trayectoria (7.4) */
+--fs-wall: clamp(2.25rem, 11vw, 5rem);          /* el muro de Habilidades, en vertical (7.7) */
 ```
+
+`--fs-mega` se borró en la re-auditoría (R-M28): ya no había email en tamaño Mega.
 
 Solo hay un tamaño Display por panel. Las mayúsculas se reservan para Display y títulos de proyecto: no hay etiquetas chicas en mayúsculas espaciadas sobre cada sección (máximo 1 cada 3 secciones, según la skill).
 
 ## 4. Forma, espacio y capas
 
-- **Esquinas:** los paneles, las placas y las imágenes van rectos (`--radius-0: 0`). Los botones son píldora (`--radius-pill: 999px`). Las capturas de teléfono usan el radio de un iPhone (`--radius-device: 12%` del ancho). No hay otras esquinas.
+- **Esquinas:**
+  - Los paneles, las placas y las imágenes van rectos, sin token (hasta R-M28 había un `--radius-0` sin uso).
+  - Los botones son píldora (`--radius-pill: 999px`).
+  - Los círculos usan `--radius-round: 50%`: el punto de disponibilidad, los puntos de Trayectoria y de la tabla, el cursor y el relleno de los botones (R-M32).
+  - Las capturas de teléfono van a usar el radio de un iPhone (`--radius-device: 12%` del ancho), que queda reservado hasta que lleguen (I12).
+  - No hay otras esquinas.
 - **Espaciado:** base de 4px (`--space-1` = 0,25rem … `--space-9` = 8rem). Margen lateral de panel `--pad-x: clamp(1rem, 3cqi, 3rem)`: nunca menos de 16px.
-- **Alturas fijas:** `--nav-h: 4rem` (64px), `--strip-h: 3rem` (la franja inferior del modo horizontal).
-- **Capas:** `--z-track: 0`, `--z-nav: 10`, `--z-strip: 10`, `--z-menu: 20`, `--z-preloader: 35`, `--z-skip: 36` (el enlace de salto va sobre el preloader; hasta R-M3 de la re-auditoría estaba en 30, debajo del velo), `--z-cursor: 40`. La foto que se está arrastrando usa `z-index: 1` dentro del hero. No hay otros `z-index`.
-- **Cortes:** 30rem (480), 48rem (768), 64rem (1024; umbral del modo horizontal), 90rem (1440; ancho máximo del texto en vertical).
+- **Alturas fijas:** `--nav-h: 4rem` (64px), `--strip-h: 3rem` (la franja inferior del modo horizontal) y `--tap: 2.75rem` (44px, la zona táctil mínima de los botones y las herramientas del nav).
+- **Capas:**
+  - `--z-below: -1` (el relleno de los botones, debajo de su texto) y `--z-lift: 1` (la foto mientras se arrastra, sobre el resto del hero), los dos de R-M32;
+  - `--z-nav: 10`, `--z-strip: 10` y `--z-menu: 20`;
+  - `--z-preloader: 35` y `--z-skip: 36` (el enlace de salto va sobre el preloader; hasta R-M3 de la re-auditoría estaba en 30, debajo del velo);
+  - `--z-cursor: 40`.
+  - No hay otros `z-index`. `--z-track` se borró en R-M28: la pista no necesita capa.
+- **Cortes:**
+  - 48rem (768) de ancho: tablet (dos columnas, el menú móvil se va);
+  - 64rem (1024) de ancho con 42,5rem (680) de alto: el modo horizontal (6.2);
+  - 50rem (800) de alto: por debajo, en horizontal, los paneles tienen menos aire arriba y abajo;
+  - 90rem (1440): el ancho máximo de las páginas propias;
+  - 100rem (1600): la transición al cierre pasa de 65cqi a 70cqi.
+  - El corte de 30rem del brief no se usó.
 
 ## 5. Orden de las secciones
 
@@ -156,7 +190,7 @@ Proyectos pasa a estar justo después del hero (I15). Experiencia y Educación s
 | 6 | Transición al cierre: decorativa, `aria-hidden` (agregada el 2026-09-14) | | `--w-bleed: 65cqi` (70cqi desde 1600px, como douglus) |
 | 7 | Contacto | `contacto` | `100cqi` |
 
-En vertical, después del último panel va un `<footer>` corto (© y derechos). En horizontal el pie no se muestra: la página termina con la pista, sin scroll de más (antes el pie agregaba 85px al final), y el © ya está en la franja inferior. El nav queda con **cuatro enlaces**: Proyectos, Trayectoria, Habilidades y Contacto; "Sobre mí" es el nombre, a la izquierda. **Esto cambia las etiquetas del nav y hay que aprobarlo** (sección 10).
+En vertical, después del último panel va un `<footer>` corto (© y derechos). En horizontal el pie no se muestra: la página termina con la pista, sin scroll de más (antes el pie agregaba 85px al final), y el © ya está en la franja inferior. El nav queda con **cuatro enlaces**: Proyectos, Trayectoria, Habilidades y Contacto; "Sobre mí" es el nombre, a la izquierda. Fermin aprobó estas etiquetas (D1, sección 10).
 
 ## 6. Navegación horizontal
 
@@ -169,11 +203,15 @@ El documento se scrollea en vertical, como cualquier página. Una sección alta 
   <div class="h-scroll" style="--n-card: 6; --n-card-lg: 2">   <!-- alto = recorrido horizontal + 1 pantalla -->
     <div class="h-sticky">                                     <!-- sticky, 100dvh, overflow: clip -->
       <div class="h-track">                                    <!-- fila de paneles; se mueve con translate -->
-        <section id="sobre-mi" class="panel">…</section>
-        <section id="proyectos" class="panel">…</section>
-        <article id="proyecto-travelpic" class="panel card card--lg">…</article>
+        <section id="sobre-mi" class="panel panel--screen hero">…</section>
+        <section id="proyectos" class="panel panel--intro intro">…</section>
+        <article id="proyecto-travelpic" class="panel panel--card-lg card card--lg">…</article>
+        <article id="proyecto-vault" class="panel panel--card card">…</article>
         …
-        <section id="contacto" class="panel">…</section>
+        <section id="experiencia" class="panel panel--timeline trajectory">…</section>
+        <section id="habilidades" class="panel panel--skills">…</section>
+        <div class="panel panel--bleed bleed" aria-hidden="true">…</div>   <!-- transición al cierre (7.5) -->
+        <section id="contacto" class="panel panel--screen contact">…</section>
       </div>
     </div>
   </div>
@@ -188,18 +226,26 @@ main, .h-sticky { container-type: inline-size; }  /* cqi = ancho sin la barra de
    :root quedaba inválida y el alto caía a auto (se vio en el mockup). Los `cqi` sí
    se resuelven donde se usa la variable (en .h-scroll, contra main; en el keyframe,
    contra .h-sticky), y los dos miden lo mismo. */
+/* --x-timeline, --x-skills y --x-bleed son dónde empiezan Trayectoria, Habilidades y
+   la transición al cierre: sus animaciones atadas al scroll las usan para saber en qué
+   tramo del recorrido se mueven (7.4, 7.7 y 7.5). */
 .h-scroll {
-  --track-w: calc(100cqi + var(--w-intro)
-                + var(--n-card-lg) * var(--w-card-lg) + var(--n-card) * var(--w-card)
-                + var(--w-timeline) + var(--w-skills) + 100cqi);
+  --x-timeline: calc(100cqi + var(--w-intro)
+                   + var(--n-card-lg) * var(--w-card-lg) + var(--n-card) * var(--w-card));
+  --x-skills: calc(var(--x-timeline) + var(--w-timeline));
+  --x-bleed: calc(var(--x-skills) + var(--w-skills));
+  --track-w: calc(var(--x-bleed) + var(--w-bleed) + 100cqi);
 }
 
-@media (min-width: 64rem) and (min-height: 42.5rem) and (pointer: fine)
+.panel { padding: var(--space-8) var(--pad-x); }   /* en pantallas de menos de 50rem de alto, menos aire */
+
+@media screen and (min-width: 64rem) and (min-height: 42.5rem) and (pointer: fine)
        and (prefers-reduced-motion: no-preference) {
   html.js .h-scroll { height: calc(var(--track-w) - 100cqi + 100dvh); view-timeline: --pan block; }
   html.js .h-sticky { position: sticky; top: 0; height: 100dvh; overflow: clip; }
   html.js .h-track  { display: flex; width: max-content; height: 100%; }
   html.js .panel    { flex: none; height: 100%; }
+  html.js .panel--intro { inline-size: var(--w-intro); }   /* y así cada panel--*, con su token */
 
   /* Solo si el navegador soporta la línea de tiempo. Sin este @supports, la
      animación correría por tiempo con duración 0 y saltaría al final. */
@@ -218,13 +264,25 @@ main, .h-sticky { container-type: inline-size; }  /* cqi = ancho sin la barra de
 Detalles que importan:
 - **El ancho de la pista sale del CSS, no de medir.** Cada panel declara su ancho con un token, y el servidor escribe cuántos proyectos de cada tamaño hay (`--n-card`, `--n-card-lg`, calculados de `PROJECTS`). Así el alto de la sección es exacto desde el primer pintado, sin JS y sin salto. Regla de diseño que sale de esto: **ningún panel tiene un ancho que dependa de su contenido**; el contenido se acomoda (y se prueba) dentro del ancho y el alto declarados.
 - **Unidades de contenedor (`cqi`), no `vw`**, para que en Windows la barra de scroll no deje un sobrante.
-- **`overflow: clip` en el `sticky`, no `hidden`.** `hidden` crea un contenedor de scroll, y entonces el navegador lo scrollearía de costado al enfocar o al saltar a un ancla, desarmando la pista. Es el único recorte de la página y es intencional: está donde nace el desborde (criterio 1). `html` y `body` no llevan `overflow`.
+- **`overflow: clip` en el `sticky`, no `hidden`.** `hidden` crea un contenedor de scroll, y entonces el navegador lo scrollearía de costado al enfocar o al saltar a un ancla, desarmando la pista. Es el único recorte que esconde contenido, y es intencional: está donde nace el desborde (criterio 1). Los otros `overflow: clip` son máscaras de un solo elemento, que no esconden texto: el relleno de los botones (`.btn`), la placa de proyecto (`.card__plate`, que nunca corta el nombre, 7.3), el marco de la foto (`.drag__frame`), las líneas del nombre del hero y del preloader, "Menú" / "Cerrar" (`.swap`) y el apellido del nav (`.brand__last`). `html` y `body` no llevan `overflow`.
 - **Se anima `translate`**, la propiedad independiente, así no compite con otros `transform` (I6).
 - La franja inferior está fuera de `.h-scroll`, así que para que el progreso use la misma línea de tiempo, `body` lleva `timeline-scope: --pan`.
 
 ### 6.2 Cuándo es horizontal
 
 Las cinco condiciones a la vez: `html.js` (lo pone `themeInitScript` antes del primer pintado), ancho ≥ 64rem, alto ≥ 42,5rem (680px), puntero fino y sin `prefers-reduced-motion: reduce`. El alto empezó en 37,5rem, pero a 1024×640 Trayectoria y ClubSystem no entraban en su panel; con 42,5rem, y con menos aire vertical por debajo de 50rem de alto, entra todo desde 1024×680 (probado en 1024×680, 1024×720, 1024×768, 1366×680 y 1440×900). Si falta cualquiera, la página es vertical: los mismos paneles, uno debajo del otro, en el mismo orden.
+
+**Dónde vive la consulta:**
+- En `lib/track.js` (`HORIZONTAL_QUERY`), que usan los componentes.
+- El CSS no puede importarla, así que está copiada en 9 hojas de `styles/`. `scripts/check.mjs` corre antes de cada build (`prebuild`, también en Vercel) y lo detiene si alguna copia es distinta (R-M31).
+- Las demás consultas de puntero y movimiento están en `lib/media.js` (`FINE_POINTER`, `HOVER_POINTER`, `REDUCED_MOTION` y `MOTION_OK`).
+
+Los criterios de "puntero fino" son tres, a propósito:
+- el puntero fino decide el modo horizontal y el scroll suave;
+- con hover además, el cursor propio y el imán;
+- `pointerType === "mouse"` se mira en cada evento.
+
+Unificarlos cambiaría lo que pasa en una portátil táctil.
 
 | Situación | Resultado |
 |---|---|
@@ -241,7 +299,9 @@ Los enlaces son anclas nativas, como hoy: `href="/#proyectos"` en ES y `/en#proy
 
 - **En vertical (y sin JS),** el navegador lleva al ancla; con puntero fino y sin reduce motion, TrackController cambia solo el cómo: el salto pasa por Lenis (`smoothScrollTo`, 1,2 s), igual que en horizontal (2026-09-15, R-M12 de la re-auditoría). Lo demás lo hace el navegador: `scroll-behavior: smooth` y `scroll-padding-block-start: var(--nav-h)` en `html`, que también sirve para el foco: lo que el navegador trae a la vista con Tab o Shift+Tab queda debajo del nav y no tapado (2026-09-15, R-M2 de la re-auditoría; antes era un `scroll-margin-top` en los paneles, que solo servía para las anclas). En horizontal vale 0 (`html.js:has(.h-scroll)`): al enfocar algo cerca del borde de arriba, el navegador correría el documento, y con él la pista.
 - **En horizontal,** el panel destino está dentro de la pista y el navegador no sabe llevarlo a la vista (el documento no tiene scroll horizontal). Una mejora de JS, dentro del componente de la pista, lo resuelve sin cambiar el HTML:
-  - al hacer clic en un enlace a una sección de la misma página, al cargar con un `#hash` y en `hashchange`/`popstate`, calcula `top = h-scroll.offsetTop + panel.offsetLeft` (limitado al máximo del recorrido) y hace `window.scrollTo({ top, behavior })`, con `smooth` salvo en carga inicial;
+  - reacciona al cargar con un `#hash`, en `hashchange` y al hacer clic en un enlace al mismo `#hash` que ya tiene la URL (ese clic no dispara `hashchange`). No escucha `popstate`: volver atrás entre `#hash` también dispara `hashchange`;
+  - calcula `top` = el inicio de `.h-scroll` en el documento (`getBoundingClientRect().top + scrollY`) más `panel.offsetLeft`, limitado al máximo del recorrido;
+  - al cargar salta sin animación (`scrollTo` con `behavior: "instant"`); en los demás casos va con `smoothScrollTo` (7.10), que pasa por Lenis;
   - no hace `preventDefault` del clic en sí: el navegador igual actualiza la URL; el script solo corrige a dónde se scrollea.
 - **`aria-current="location"`** en el enlace de la sección visible, con un `IntersectionObserver` sobre los paneles: en horizontal, con `rootMargin: "0px -50% 0px -50%"` (una línea vertical en el centro de la ventana; `IntersectionObserver` tiene en cuenta el `translate`); en vertical, `"-40% 0px -59% 0px"`. Se vuelve a crear si cambia el modo (`matchMedia` con `change`).
 - El botón de idioma conserva el panel visible: el que cruza la misma línea que usa la sección actual (`elementFromPoint`), así desde la tarjeta de Vault lleva a `/en#proyecto-vault` y no a la entrada de Proyectos (2026-09-15, R-M8 de la re-auditoría). Si ese punto cae en la transición al cierre, que no tiene `id`, usa la sección actual.
@@ -263,9 +323,9 @@ Si `CSS.supports("animation-timeline: view()")` da falso y el modo horizontal es
 
 ### 6.6 Móvil (vertical)
 
-- Los paneles se apilan a lo ancho, con alto automático; nada queda atado a `100dvh`, salvo el hero (`min-height: 100svh`).
-- Proyectos: una columna por debajo de 48rem, dos columnas entre 48 y 64rem.
-- Trayectoria: lista vertical (años a la izquierda, contenido a la derecha; por debajo de 30rem, los años arriba).
+- Los paneles se apilan a lo ancho, con alto automático; nada queda atado a `100dvh`, tampoco el hero (el brief le daba `min-height: 100svh` y el código no lo usa).
+- Proyectos: una columna por debajo de 48rem y dos desde 48rem, siempre que la página esté en vertical (también a 64rem o más, con pantalla táctil, reduce motion o una ventana baja).
+- Trayectoria: lista vertical (desde 48rem, años a la izquierda y contenido a la derecha; por debajo, los años arriba).
 - Nav: nombre a la izquierda; a la derecha, idioma y un botón "Menú" que abre un menú a pantalla completa (7.1).
 - La franja inferior y la barra de progreso no se muestran.
 
@@ -283,13 +343,13 @@ Si `CSS.supports("animation-timeline: view()")` da falso y el modo horizontal es
 **Franja inferior (solo en horizontal):** fija, `--strip-h`, con tres zonas, como el pie de douglus. Igual que el nav: sin fondo, en blanco con `difference` (la barra de progreso de douglus también lo usa).
 - Izquierda: "© 2026 Fermin Lasarte".
 - Centro: riel de 10rem × 1px en `--line` con el relleno en `--accent` (`scale` en X, con la línea de tiempo `--pan`), y a su lado el nombre de la sección actual (`aria-hidden`: la información útil ya está en `aria-current`).
-- Derecha: al principio iba "Descargar CV"; Fermin lo sacó el 2026-09-15 (el CV sigue en el hero, I15). En su lugar va "Hecho a mano en Buenos Aires" / "Handmade in Buenos Aires" (`strip.credit`) con la ola del "Design & code by" de douglus (`components/WaveText.jsx`): cuando la página lleva 5 s quieta (sin mover el mouse, scrollear, tocar una tecla ni mover el foco), cada letra avanza 80px hacia la pantalla con perspectiva de 180px (casi el doble de grande), gira 35° y vuelve, 50ms después de la anterior. Pasa dos veces como máximo; la próxima vez que se use la página, la cuenta vuelve a empezar (2026-09-15, R-M5 de la re-auditoría: antes se repitía sin fin, y con el teclado no se cortaba nunca). Solo corre en horizontal, que es donde se ve la franja. Es visual: el texto entero está en un `sr-only`.
+- Derecha: al principio iba "Descargar CV"; Fermin lo sacó el 2026-09-15 (el CV sigue en el hero, I15). En su lugar va "Hecho a mano en Buenos Aires" / "Handmade in Buenos Aires" (`strip.credit`, "Hecho a mano en {city}", con la ciudad de `PERSON.city`; R-M29) con la ola del "Design & code by" de douglus (`components/WaveText.jsx`): cuando la página lleva 5 s quieta (sin mover el mouse, scrollear, tocar una tecla ni mover el foco), cada letra avanza 80px hacia la pantalla con perspectiva de 180px (casi el doble de grande), gira 35° y vuelve, 50ms después de la anterior. Pasa dos veces como máximo; la próxima vez que se use la página, la cuenta vuelve a empezar (2026-09-15, R-M5 de la re-auditoría: antes se repitía sin fin, y con el teclado no se cortaba nunca). Solo corre en horizontal, que es donde se ve la franja. Es visual: el texto entero está en un `sr-only`.
 
 **Móvil:** botón `<button aria-expanded aria-controls="menu">` con el texto "Menú" / "Cerrar", que rueda de uno al otro (7.6).
 - Abre un panel fijo a pantalla completa con los cuatro enlaces en tamaño Display, y abajo el tema y las redes.
 - Mientras está abierto: `main`, el `footer` y lo que el panel tapa del nav (el enlace de salto, el nombre y el idioma) quedan `inert`, así el foco no sale del botón y del menú; `Escape` lo cierra y devuelve el foco al botón; tocar un enlace también lo cierra.
 - El nombre accesible del botón es siempre "Menú" (en un `sr-only`) y el estado lo da `aria-expanded`; "Cerrar" es solo visual. Antes cambiaba junto con `aria-expanded` y se anunciaba de más ("Cerrar, expandido"). (2026-09-15, R-M9 de la re-auditoría).
-- Sin JS no hay botón: la lista de enlaces se ve directamente, en una fila que puede partirse en dos (`html:not(.js)`).
+- Sin JS no hay botón (solo se muestra con `html.js`): la lista de enlaces se ve directamente, en una fila que puede partirse en dos.
 
 ### 7.2 Hero
 
@@ -298,18 +358,18 @@ Un panel del ancho de la ventana, en una grilla de 12 columnas.
 - **Al medio, a la izquierda (columnas 1–5):** un párrafo de hasta 20 palabras, con el cargo en negrita al principio (está en inglés en los dos idiomas, así que en la página en español lleva `lang="en"`; R-M13 de la re-auditoría), y dos botones:
   - "Ver proyectos": principal, `--accent`, ancla a `#proyectos`;
   - "Descargar CV": secundario, borde `--line`, PDF directo del idioma actual.
-- **Abajo a la izquierda (columnas 1–8):** `<h1>` con el nombre completo (M16) en Display, en dos líneas: FERMIN / LASARTE.
-- **Derecha (columnas 10–12), abajo, con el 62% de la altura útil:** la foto (antes iba en las columnas 8–12 a toda la altura, 550×740px a 1440×900, y Fermin la pidió más chica el 2026-09-14; ahora mide unos 320×460). En tablet va a la derecha con un máximo de 18rem y en móvil, debajo, con un máximo de 20rem. Va con `next/image`, `priority`, `fetchPriority="high"`, `object-fit: cover`, sin esquinas y **sin animación de entrada** (es el LCP, C5). Se puede arrastrar con el mouse (7.9).
+- **Abajo a la izquierda (columnas 1–9):** `<h1>` con el nombre completo (M16) en Display, en dos líneas: FERMIN / LASARTE.
+- **Derecha (columnas 10–12), abajo, con el 62% de la altura útil:** la foto (antes iba en las columnas 8–12 a toda la altura, 550×740px a 1440×900, y Fermin la pidió más chica el 2026-09-14; ahora mide unos 320×460). En tablet va a la derecha con un máximo de 18rem y en móvil, debajo, con un máximo de 20rem. Lleva los atributos de `next/image` (con `getImageProps`, desde `lib/image.js`; R-M15), `loading="eager"`, `fetchPriority="high"` y una precarga en el `<head>` (`priority` está deprecado en Next 16), con `object-fit: cover`, sin esquinas y **sin animación de entrada** (es el LCP, C5). Se puede arrastrar con el mouse (7.9).
 - Se van los badges flotantes de tecnologías, las cifras (pasan a la entrada de Proyectos) y el botón "Contactame" (repetía la intención del enlace "Contacto" del nav).
 - **Móvil:** disponibilidad, nombre, párrafo y botones entran en la primera pantalla a 375×667 (M16); la foto va debajo, en 4:5.
 
-Copia propuesta para el párrafo (hoy `hero.description` tiene 45 palabras y pasaría a Trayectoria):
+Copia del párrafo (`hero.lead`, aprobada en D2). El texto largo de antes (`hero.description`, de 45 palabras) pasó a llamarse `exp.intro` y abre la página de Trayectoria (7.12):
 - ES: "**iOS & Cross-Platform Mobile Engineer.** Hago apps móviles de punta a punta: arquitectura, backend y publicación en App Store y Google Play."
 - EN: "**iOS & Cross-Platform Mobile Engineer.** I build mobile apps end to end: architecture, backend, and release on the App Store and Google Play."
 
 ### 7.3 Entrada de Proyectos y tarjeta de proyecto
 
-**Entrada** (`#proyectos`): `<h2>` "Proyectos" en Display y las cifras de `STATS` como una `<dl>`: número en `--fs-4` con `tabular-nums` y la etiqueta en Meta ("2 apps en producción", "4+ años", "8 proyectos").
+**Entrada** (`#proyectos`): `<h2>` "Proyectos" en Display y las cifras de `STATS` como una `<dl>`: número en el estilo de Cifras (sección 3) y la etiqueta en Meta ("2 apps en producción", "4+ años de experiencia", "8 proyectos"; salen de los datos, R-I7).
 
 **Tarjeta:** un panel por proyecto, generado de `PROJECTS` (M11). De arriba a abajo:
 1. **Placa** (alrededor del 55% del alto):
@@ -318,15 +378,15 @@ Copia propuesta para el párrafo (hoy `hero.description` tiene 45 palabras y pas
    - Si no hay ninguno de los dos: placa tipográfica en `--accent-soft`, con el nombre del proyecto en Display y `--accent`. El nombre nunca se corta (2026-09-15, R-I1 de la re-auditoría): su tamaño sale del ancho de la ventana (`clamp(2rem, 4.6vw, 4.5rem)`), con un tope del 18% del ancho útil de la placa, que es un contenedor (`18cqi`). Antes, a 1440px, "COMPILADOR" y "CLUBSYSTEM" se cortaban unos 50px, porque la tarjeta chica deja de crecer antes que la ventana.
    - No hay terminales falsos, degradados ni código decorativo: la skill los prohíbe y hoy eran relleno.
    - La placa es un enlace al destino principal (tienda o demo, I15), con `tabindex="-1"` y `aria-hidden`, para no duplicar el enlace en el orden de foco.
-2. **Meta:** estado en texto ("En producción" / "En desarrollo") y plataformas en texto ("iOS y Android"), con los iconos de `lib/icons.js` como apoyo y no como única información.
+2. **Meta:** estado en texto ("En producción" / "En desarrollo") y plataformas en texto ("iOS y Android"). Solo texto: la tarjeta no lleva iconos de plataforma (los iconos de `lib/icons.js` van en los botones de enlace).
 3. **Título** (`<h3>`) con el título traducido, en el estilo de título de proyecto.
-4. **Problema** (si hay) y **solución:** dos párrafos de hasta 25 palabras cada uno. Sin etiquetas "Problema" y "Solución técnica": el orden ya lo dice. Varios textos actuales son más largos y hay que acortarlos (sección 10).
+4. **Problema** (si hay) y **solución:** dos párrafos de hasta 25 palabras cada uno. Sin etiquetas "Problema" y "Solución técnica": el orden ya lo dice. Los textos que eran más largos se acortaron en la implementación (D3).
 5. **Tecnologías:** en una línea de texto Meta, separadas por comas.
 6. **Enlaces directos:** un botón por destino ("App Store", "Google Play", "Código", "Visitar"). El primero es el principal y el resto van con borde. "Código" y "Visitar" se repiten entre tarjetas, así que su nombre accesible suma el proyecto en un `sr-only` ("Código de Vault", "Vault code"; 2026-09-15, R-M10 de la re-auditoría). Se van el dropdown de "Descargar" y el botón deshabilitado "Próximamente" (M16).
 
 - **Tamaños:** `card--lg` para las apps móviles en producción; el resto, `card`.
 - **Sin cortes entre paneles** (pedido de Fermin, 2026-09-14): los paneles no llevan bordes que los separen, ni en horizontal ni en vertical, y el pie tampoco. Los separa el aire (el margen lateral de cada panel), así el recorrido se lee como una sola tira. Las líneas que son parte del contenido (el eje de años, el título de cada grupo de habilidades) se quedan.
-- **En vertical:** las mismas tarjetas, en una grilla de una o dos columnas, con la placa en 4:3.
+- **En vertical:** las mismas tarjetas, en una grilla de una o dos columnas, con la placa en 4:3 en las chicas y en 16:9 en las grandes (`card--lg`). En horizontal la placa no tiene proporción fija (`aspect-ratio: auto`).
 
 ### 7.4 Trayectoria
 
@@ -337,7 +397,7 @@ Rediseñada el 2026-09-15: Fermin eligió la propuesta "A · Etapas" del lienzo 
 - A la derecha, una columna por etapa, en orden: UNICEN (2020–26), DeporTurnos (2021–25) y TravelPic (2024–25). Las tres comparten filas (`subgrid`):
   - arriba, el rango de años enorme (`--fs-stage: clamp(4rem, 15vmin, 11rem)`): el inicio lleno y el fin ("–25") en contorno. La educación lleva también el inicio en contorno y la etapa más nueva va en `--accent`. Es visual (`aria-hidden`): las fechas están en texto con `<time>`;
   - al medio, una línea de 1px que une las etapas, con un punto en cada una (lleno de `--accent` para la experiencia, hueco para la educación). Se dibuja con el scroll, con la misma línea de tiempo que la pista: desde que el panel llega al 60% de la ventana hasta que su borde derecho llega al de la ventana (en Firefox, TrackController escribe `--rail`);
-  - abajo, qué es y las fechas (Meta), el título, el rol o el lugar (con "en curso" si todavía no terminó), una sola línea de texto (`*.short`) y las tecnologías.
+  - abajo, qué es y las fechas (Meta); el título, que es el nombre del proyecto ("TravelPic") o de la carrera; debajo, el rol ("Desarrollador móvil freelance") o la institución ("UNICEN"), con "en curso" si todavía no terminó (R-M34); una sola línea de texto (`*.short`) y las tecnologías.
 - Cada etapa dice qué es ("Experiencia" o "Educación"), así que no depende del color ni del contorno.
 
 **Vertical:** las etapas una debajo de otra; desde tablet, los años a la izquierda y el texto a la derecha. Sin línea ni puntos.
@@ -365,7 +425,7 @@ Rediseñados el 2026-09-14 como las píldoras de douglus (`.pill` e `initPillBut
 - **Principal:** fondo `--accent`, texto `--on-accent`; el relleno es `--ink` y el texto pasa a `--paper`. **Secundario:** borde de 1px en `--line`, texto `--ink`; el relleno es `--accent` y el texto pasa a `--on-accent`. Cada variante solo cambia las variables `--btn-*`.
 - **Relleno (hover con puntero fino):** un óvalo de 150% × 200% con borde de 50% sube desde abajo (`translate` de 78% a 0, 500ms `--ease-out`) e invierte el color. Al salir, sigue hacia arriba (a −78%, 400ms) y después vuelve abajo sin transición. Con 75% el relleno quedaba justo en el borde y asomaba como una línea fina (2026-09-15, N9 de la auditoría). Sin JS, el relleno vuelve a bajar.
 - **Salto del texto:** al entrar, el texto se va 10% hacia arriba y reaparece desde 30% abajo (100ms y 250ms); al salir, al revés. Reemplaza al texto que "rodaba" (`Roll`).
-- **Imán:** mientras el mouse está encima, el botón se corre hacia él un 30% de la distancia al centro, con un retraso de 0,1 por frame, y al salir vuelve a su lugar. Las píldoras del cierre (`.btn--lg`) tienen más imán (pedido de Fermin, 2026-09-15): se corren un 50% y, como en douglus, atraen desde antes de tocarlas, cuando el mouse está a menos de 0,7× su ancho de su centro; mientras atraen también se rellenan (`.is-on`). Lo hace `components/Magnet.jsx`: un listener delegado y un `requestAnimationFrame` que se detiene cuando ningún botón se mueve. Las píldoras del cierre se miden en cada movimiento del mouse solo mientras su sección se ve (un `IntersectionObserver`; R-M16 de la re-auditoría). Usa `translate`, así no choca con el `scale` de presionar.
+- **Imán:** mientras el mouse está encima, el botón se corre hacia él un 30% de la distancia al centro, con un retraso de 0,1 por frame, y al salir vuelve a su lugar. Las píldoras del cierre (`.btn--lg`) tienen más imán (pedido de Fermin, 2026-09-15): se corren un 50% y, como en douglus, atraen desde antes de tocarlas, cuando el mouse está a menos de 0,7× su ancho de su centro; mientras atraen también se rellenan (`.is-on`). Lo hace `components/Magnet.jsx`: un listener delegado y un `requestAnimationFrame` que se detiene cuando ningún botón se mueve. Las píldoras del cierre se miden en cada movimiento del mouse solo mientras su sección se ve (un `IntersectionObserver`; R-M16 de la re-auditoría). Usa `translate`, así no choca con el `scale` de presionar. Al salir, la clase `.is-out` (el relleno que se va por arriba) dura 420ms: los 400ms de `--dur-fill-out` más 20ms de margen para que la salida no se corte (R-M33).
 - **Al presionar:** `scale: 0.97`, 140ms, `--ease-out`.
 - **Con reduce motion:** no hay imán ni salto, y el relleno aparece con un fundido. En táctil no hay hover.
 
@@ -384,7 +444,7 @@ Rediseñada el 2026-09-15. Fermin eligió primero la propuesta "C · Marquesina"
 Es el de douglus, rehecho sin los problemas de M7 (reemplaza a `PremiumCursor`).
 
 **Qué es:**
-- Un círculo de `--cursor-size` (28px) con borde de 1px y un punto de 4px, los dos en `--cursor-ink` (que vale `--ink`; sobre el cierre, `--on-night`).
+- Un círculo de 28px (`--size`, una variable local de `styles/cursor.css`) con borde de 1px y un punto de 4px, los dos en `--cursor-ink`, que vale `--ink`. Sobre el cierre pasan a `--on-night`: `Cursor.jsx` pone `data-tone="night"` cuando el mouse está sobre el contacto (hasta R-M28, `.contact` también redefinía `--cursor-ink`, sin efecto).
 - El punto sigue al mouse con un retraso de 0,35 por frame y el círculo con 0,2 (los valores de douglus), así que el círculo llega un poco después.
 
 **Estados**, según lo que tenga debajo:
@@ -422,7 +482,7 @@ La foto del hero se puede arrastrar con el mouse, como en douglus.
 
 **Al presionar:** el marco se achica a 0,8 y la imagen de adentro se agranda a 1,5 (260ms, `--ease-out`). Son los valores de douglus.
 
-**Estela:** mientras se arrastra, cada 30px de recorrido queda una copia de la foto en ese punto, que se desvanece en 300ms. Hay 8 copias que se reusan en rueda (douglus usa 10). Son `<img>` con el mismo `src` (ya está en caché), `aria-hidden`, y se crean al hidratar.
+**Estela:** mientras se arrastra, cada 30px de recorrido queda una copia de la foto en ese punto, que se desvanece en 400ms (`TRAIL_FADE`, con la curva de `--ease-out` leída del CSS; R-M32). Hay 8 copias que se reusan en rueda (douglus usa 10). Son `<img>` con el mismo `src` (ya está en caché), `aria-hidden`, y se crean al hidratar.
 
 **Al soltar:**
 - La foto sigue con la velocidad que traía y frena con fricción (0,92 por frame).
@@ -430,7 +490,7 @@ La foto del hero se puede arrastrar con el mouse, como en douglus.
 - Queda donde frena, como en douglus (decidido por Fermin el 2026-09-14), aunque tape el nombre, el párrafo o los botones: quien la movió la puede volver a mover.
 - Vuelve a su lugar (700ms, `--ease-expo`) en dos casos:
   - si el foco del teclado entra al hero, para no tapar un botón enfocado (WCAG 2.4.11, criterio 7);
-  - si cambia el tamaño de la ventana, porque cambian los límites.
+  - si cambia el tamaño de la ventana, porque cambian los límites (salvo que se esté arrastrando). Hasta R-M33 volvía sin animación en este caso.
 - Con reduce motion vuelve sin animación.
 
 **Cuándo se puede arrastrar:**
@@ -447,7 +507,7 @@ Pedido por Fermin el 2026-09-14. Hasta entonces el diseño decía que el scroll 
 - **Qué:** [Lenis](https://github.com/darkroomengineering/lenis) 1.3, lo mismo que usa douglus, con `lerp: 0.1` (douglus usa 0,12). Lo monta `components/SmoothScroll.jsx`.
 - **Sobre el documento:** a diferencia de douglus, no hay `overflow: hidden` ni pista fija. Lenis solo interpola la rueda y escribe el scroll del documento (con `behavior: "instant"`, así no choca con `scroll-behavior: smooth`). La barra, el teclado, "buscar en la página" (con su límite en horizontal, 6.5) y las anclas siguen siendo nativos, y la pista la sigue moviendo el CSS (6.1). Si el scroll no lo empieza la rueda, Lenis lo adopta cuando termina.
 - **Cuándo:** solo con puntero fino y sin reduce motion. En táctil queda el scroll nativo (`syncTouch` apagado) y Lenis ni se descarga: se importa recién cuando hace falta (2026-09-15, R-M16 de la re-auditoría). Sin JS no cambia nada.
-- **Anclas y "Volver arriba":** usan `smoothScrollTo` de `lib/scroll.js`, que pasa por Lenis (1,2 s, con la curva `1 − (1 − t)³` de douglus) o, sin Lenis, por el `scrollTo` nativo. El foco con teclado sigue siendo inmediato (6.5).
+- **Anclas y "Volver al inicio":** usan `smoothScrollTo` de `lib/scroll.js`, en los dos modos (en vertical, desde R-M12). Pasa por Lenis (1,2 s, con la curva `1 − (1 − t)³`, una ease-out cúbica) o, sin Lenis, por el `scrollTo` nativo. La curva no es la de douglus: su Lenis usa `1 − 2^(−10t)` (anexo A). El foco con teclado sigue siendo inmediato (6.5).
 - **Costo:** una dependencia (`lenis`, 5,3 KB gz, solo con puntero fino) y un `requestAnimationFrame` mientras el scroll se está moviendo: arranca con la rueda o con un salto y para cuando Lenis termina. Con la página quieta no corre (antes, con `autoRaf`, corría siempre; R-M16).
 
 ### 7.11 Preloader
@@ -475,12 +535,14 @@ Pedidas por Fermin el 2026-09-15: Trayectoria y Habilidades son vistas previas e
 
 Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
 1. **El recorrido sigue al scroll.** El `translate` de la pista es lineal y 1:1 con el scroll del documento. Lo que se suaviza es la rueda (Lenis, 7.10), como en douglus: el scroll llega con inercia y la pista lo acompaña.
-2. **Cada animación tiene un motivo:** orientar (progreso, sección actual), dar respuesta (presionar, hover) o acompañar un cambio de estado (menú, idioma). Nada se mueve en loop.
-3. **Solo `transform` (`translate`/`scale`), `opacity` y `clip-path`.** No se anima `filter: blur` ni el layout. `will-change` solo durante la animación.
+2. **Cada animación tiene un motivo:** orientar (progreso, sección actual), dar respuesta (presionar, hover) o acompañar un cambio de estado (menú, idioma). Nada se mueve en loop. La única que se repite es la ola de la franja, que es un adorno pedido por Fermin: aparece después de 5 s sin usar la página y pasa dos veces como máximo (7.1).
+3. **Solo `transform` (`translate`/`scale`), `opacity` y `clip-path`.** No se anima `filter: blur`. `will-change` solo durante la animación. Hay dos excepciones:
+   - el nombre del nav anima `grid-template-columns` para abrir el apellido; es una sola caja chica, fija arriba;
+   - el muro de Habilidades anima `color` y el color del contorno, atados al scroll.
 4. **Todo lo que oculta contenido de entrada va bajo `html.js`** (criterio 2), y todo movimiento, bajo `(prefers-reduced-motion: no-preference)`. Con reduce motion quedan los cambios de color y opacidad cortos; se van los desplazamientos.
 5. **El hover solo existe con `(hover: hover) and (pointer: fine)`.** Nada de hover en táctil.
-6. **Transiciones para lo interactivo** (se pueden interrumpir); `@keyframes` solo para las entradas que pasan una vez.
-7. **Lo que se hace con teclado es instantáneo:** el foco que mueve la pista, abrir el menú con Enter.
+6. **Transiciones para lo interactivo** (se pueden interrumpir); `@keyframes` para las entradas que pasan una vez. Hay tres secuencias que también van con `@keyframes` porque tienen pasos que una transición no puede hacer: el salto del texto de los botones (`btn-in` y `btn-out`, al entrar y salir el mouse), las letras del apellido del nav (`brand-in` y `brand-out`) y la ola de la franja (`wave`).
+7. **Lo que se hace con teclado es instantáneo:** el foco que mueve la pista y la selección que la trae a la vista. El menú móvil es la excepción: abre en 420ms también con Enter, porque la cortina es corta y no mueve el foco.
 
 **Tokens:**
 
@@ -488,14 +550,20 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
 --ease-out: cubic-bezier(0.23, 1, 0.32, 1);      /* respuestas de UI */
 --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);  /* cosas que se mueven en pantalla */
 --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);      /* entradas; aproxima el 1 - 2^(-10t) de douglus */
+--ease-in: cubic-bezier(0.55, 0, 1, 0.45);       /* salidas: lo que se va hacia arriba */
 --dur-press: 140ms;  --dur-hover: 220ms;  --dur-ui: 260ms;
+--dur-jump: 350ms;   /* el salto del texto de los botones */
+--dur-fill-out: 400ms;  --dur-fill: 500ms;   /* el relleno de los botones, al salir y al subir */
 --dur-menu: 420ms;   --dur-enter: 700ms;  --dur-curtain: 800ms;
+--dur-reveal: 1100ms;   /* la entrada de cada elemento de un panel */
 ```
+
+`--ease-in`, `--dur-jump`, `--dur-fill-out`, `--dur-fill` y `--dur-reveal` se sumaron en R-M32, porque esos valores estaban escritos a mano en varias hojas. Las coreografías de un solo uso (el preloader, la ola, el nombre del nav y el menú) llevan sus valores en su hoja, con un comentario (9.4).
 
 | Animación | Disparador | Propiedades | Duración y curva | Con reduce motion |
 |---|---|---|---|---|
 | Pista horizontal | Scroll | `translate` | Lineal, 1:1 | Modo vertical |
-| Scroll con la rueda | Rueda o trackpad, con puntero fino | Scroll del documento, con Lenis | `lerp: 0.1` por frame; anclas y "Volver arriba" en 1,2 s con `1 − (1 − t)³` | Scroll nativo, sin suavizar |
+| Scroll con la rueda | Rueda o trackpad, con puntero fino | Scroll del documento, con Lenis | `lerp: 0.1` por frame; anclas y "Volver al inicio" en 1,2 s con `1 − (1 − t)³` | Scroll nativo, sin suavizar |
 | Preloader | Primera carga de la sesión | `translate` Y y `scale` de palabras y letras, `scale` X de la línea, `opacity` del velo | Unos 5,3 s en total (7.11); con una tecla, un clic o la rueda, el velo se desvanece en 250ms | No existe |
 | Nombre del nav | Hover o foco (puntero fino) | Ancho del apellido (`grid-template-columns` de 0fr a 1fr) y `translate` Y + `opacity` de cada letra | Entra en 550ms `--ease-out`, 40ms entre letras; sale en 350ms, 30ms entre letras desde la última | Nombre completo, quieto |
 | Ola de la franja | 5 s sin mover el mouse, scrollear, tocar una tecla ni mover el foco (dos veces como máximo, hasta que se vuelva a usar la página) | `transform: perspective(180px) translateZ() rotateY()` de cada letra | 400ms por letra, 50ms entre letras | No existe (la franja es solo del modo horizontal) |
@@ -503,16 +571,16 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
 | Muro de Habilidades | Scroll | `color` y `-webkit-text-stroke-color` de cada palabra, del contorno gris a su estado final | Lineal, atada al scroll: en horizontal, del 70% de la ventana a panel entero, 2,3cqi entre palabra y palabra; en vertical, `view()` de cada palabra (`cover 15%` a `cover 40%`) | Estado final, quieto |
 | Barra de progreso | Scroll | `scale` X | Lineal | No existe (vertical) |
 | Transición al cierre | Scroll | `scale` del degradado: de 0,05 a 1,02 en X (horizontal) o de 0,05 a 1 en Y (vertical) | Lineal, atada al scroll: en horizontal, mientras el borde izquierdo del panel va del borde derecho de la ventana al centro menos 100px (misma línea de tiempo que la pista; en Firefox, TrackController); en vertical, `view()` de `entry 0%` a `entry 100%` | Quieta y dibujada |
-| Tachado del nav y de contacto | Hover o foco | `scale` X del pseudo-elemento | 220ms `--ease-out` | Aparece sin transición |
+| Tachado del nav y de "Ver el proyecto" (`/trayectoria`) | Hover o foco | `scale` X del pseudo-elemento | 220ms `--ease-out` | Aparece sin transición (R-M6) |
 | Botón: relleno | Hover | `translate` Y del `::before` (entra desde abajo, sale por arriba con JS) | 500ms entrada, 400ms salida, `--ease-out` | Fundido de `opacity` |
 | Botón: salto del texto | Hover | `translate` Y y `opacity` de `.btn__label` | 350ms `--ease-out` | Sin movimiento |
-| Botón: imán | Mouse encima | `translate` del botón, 30% de la distancia al centro | Retraso de 0,1 por frame | No existe |
+| Botón: imán | Mouse encima (las píldoras del cierre, desde 0,7× su ancho) | `translate` del botón: 30% de la distancia al centro, y 50% en las píldoras del cierre (7.6) | Retraso de 0,1 por frame | No existe |
 | Presionar botón | `:active` | `scale: 0.97` | 140ms `--ease-out` | Igual (no desplaza) |
 | Nombre del hero, letra por letra | Carga (con el preloader, cuando se va el velo, a los 5 s) | `translate` Y desde 105%, dentro de una máscara | 700ms `--ease-expo`, 28ms entre letras | Sin animación |
-| Entrada de cada panel | El panel llega al 80% de la pantalla (85% del alto en vertical; `IntersectionObserver`, una vez). Si antes entra el foco del teclado, o si entra mientras el panel se está animando, se muestra al instante, sin entrada (`.is-instant`; 2026-09-15, R-I4 de la re-auditoría): así el foco nunca cae en algo que todavía no se ve | Cada elemento por separado, como en douglus: los títulos suben dentro de su caja (`translate` Y 100% y `clip-path` como máscara); las placas se destapan con `clip-path` desde el lado por donde entran; las barras del eje y la línea del cierre crecen (`scale` X); el resto sube 2rem con `opacity` | 1,1 s `--ease-expo`, 60ms entre uno y otro (tope de 12 pasos). Son `@keyframes` que solo rellenan hacia atrás, para no pisar las transiciones de los botones. Antes: 700ms, todo el texto junto, al verse un 15% del panel, y se sentía brusco | Sin animación |
+| Entrada de cada panel | El panel llega al 80% de la pantalla (85% del alto en vertical; `IntersectionObserver`, una vez). Si antes entra el foco del teclado, o si entra mientras el panel se está animando, se muestra al instante, sin entrada (`.is-instant`; 2026-09-15, R-I4 de la re-auditoría): así el foco nunca cae en algo que todavía no se ve | Cada elemento por separado, como en douglus: los títulos suben dentro de su caja (`translate` Y 100% y `clip-path` como máscara); las placas se destapan con `clip-path` desde el lado por donde entran; la línea del cierre crece (`scale` X; las barras del eje que también crecían se fueron con la Trayectoria nueva, 7.4); el resto sube 2rem con `opacity` | 1,1 s `--ease-expo`, 60ms entre uno y otro (tope de 12 pasos). Son `@keyframes` que solo rellenan hacia atrás, para no pisar las transiciones de los botones. Antes: 700ms, todo el texto junto, al verse un 15% del panel, y se sentía brusco | Sin animación |
 | Menú móvil | Botón | Panel: `clip-path` desde arriba; enlaces: `translate` Y 16px y `opacity`, 40ms entre cada uno; `@starting-style` | Abre en 420ms `--ease-out`; cierra en 200ms | Fundido de 150ms |
 | "Menú" / "Cerrar" | Botón | `translate` Y | 260ms `--ease-out` | Cambio directo |
-| Cambio de idioma | Navegación a `/en` o `/` | View Transition entre documentos (`@view-transition { navigation: auto }`): la página nueva sube desde abajo con borde curvo, `clip-path: ellipse(150% 0% at 50% 100%) → ellipse(150% 150% at 50% 100%)`. Sin el nombre del idioma encima (a diferencia de douglus): con View Transitions entre documentos, ese texto tendría que estar en las dos páginas | 800ms `--ease-in-out` | Fundido de 150ms |
+| Cortina entre páginas | Cambio de idioma, o entrar o salir de una página propia (7.12) | View Transition entre documentos (`@view-transition { navigation: auto }`): la página nueva sube desde abajo con borde curvo, `clip-path: ellipse(150% 0% at 50% 100%) → ellipse(150% 150% at 50% 100%)`. Sin el nombre del idioma encima (a diferencia de douglus): con View Transitions entre documentos, ese texto tendría que estar en las dos páginas | 800ms `--ease-in-out` | Fundido de 150ms |
 | Cursor: seguimiento | Movimiento del mouse | `translate` del punto y del círculo | Retraso de 0,35 y 0,2 por frame; se detiene al alcanzar al mouse | No existe (cursor del sistema) |
 | Cursor: estados | Hover o presionar | `scale` del círculo, `opacity` del punto y del texto | 260ms `--ease-out` | No existe |
 | Foto: presionar | `pointerdown` | Marco a `scale: 0.8`, imagen a `scale: 1.5` | 260ms `--ease-out` | Igual |
@@ -520,16 +588,16 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
 | Foto: inercia y rebote | Soltar | `translate` con fricción de 0,92 por frame; vuelve adentro del hero si se pasó | Hasta frenar | Sin inercia: queda donde se suelta, dentro del hero |
 | Foto: estela | Cada 30px de arrastre | `opacity` de 8 copias reusadas | 400ms `--ease-out` | Sin estela |
 | Foto: vuelta a su lugar | Foco del teclado en el hero o cambio de tamaño (si no, queda donde cae) | `translate` a 0 | 700ms `--ease-expo` | Sin animación |
-| Tema | Botón, o el tema del sistema si no hay uno guardado (R-M27) | Ninguna (cambio instantáneo) | | |
+| Tema | Botón, o el tema del sistema si no hay uno guardado (R-M27) | Sin animación propia: los colores cambian de golpe, salvo los de los enlaces del nav y los botones, que pasan por la transición de `color` que ya tienen para el hover | 220ms y 260ms `--ease-out` en esos elementos | Igual |
 
-- La cortina es la de douglus (un `path` SVG con curva que cubre la pantalla y muestra el destino), hecha con la API nativa. Donde no hay View Transitions entre documentos (Firefox, por ahora), el cambio de idioma es una navegación normal.
+- La cortina es la de douglus (un `path` SVG con curva que cubre la pantalla y muestra el destino), hecha con la API nativa. Como `@view-transition { navigation: auto }` vale para toda navegación dentro del sitio, también cubre las páginas propias. Donde no hay View Transitions entre documentos (Firefox, por ahora), es una navegación normal.
 - La entrada del nombre usa máscaras (`overflow: clip` en cada línea). El `<h1>` lleva el nombre como texto real en un `<span class="sr-only">` y las letras animadas van en `aria-hidden`. Si Lighthouse marca al `<h1>` como LCP en lugar de la foto, la entrada se acorta o se quita.
 
 ## 9. Los 7 criterios
 
 1. **Sin desbordes tapados.**
-   - `html` y `body` no llevan `overflow`. El único recorte es `overflow: clip` en `.h-sticky`, que es donde nace el desborde intencional de la pista.
-   - Los anchos de panel usan `cqi` (sin el sobrante de la barra de scroll) y el texto largo se parte (`overflow-wrap: anywhere` en el email).
+   - `html` y `body` no llevan `overflow`. El único recorte que esconde contenido es `overflow: clip` en `.h-sticky`, que es donde nace el desborde intencional de la pista; los otros son máscaras de un solo elemento (6.1).
+   - Los anchos de panel usan `cqi` (sin el sobrante de la barra de scroll). El email no se parte: es una píldora de una línea, y las píldoras del contacto pasan a la línea siguiente cuando no entran.
    - Se prueba en 375, 768, 900, 1024 y 1440px: 1024 y 1440 en horizontal (con alto ≥ 680px); el resto, y 1024×640, en vertical. En cada ancho se verifica con JS que ningún elemento pase de `document.documentElement.clientWidth`, salvo la pista.
 2. **Contenido visible sin JS.**
    - Sin JS, la página es vertical y completa: hero, proyectos, trayectoria, habilidades y contacto.
@@ -556,7 +624,7 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
    - `<main id="contenido">` y enlace para saltar a él.
    - `:focus-visible` propio: anillo de 2px en `--focus` con separación de 3px; sobre el cierre, en `--on-night`.
    - Contraste AA medido en los dos temas (tabla de la sección 2).
-   - Zonas táctiles de 44px en el nav, los botones y las filas de contacto, y de al menos 24px en los enlaces dentro del texto.
+   - Zonas táctiles de 44px (`--tap`) en el nav, los botones y las píldoras de contacto, y de al menos 24px en los enlaces dentro del texto.
    - Los niveles de skills se ven sin hover (M4) y el estado de un proyecto va en texto, no solo en color.
    - Un solo `<h1>` (el nombre), un `<h2>` por sección y un `<h3>` por proyecto. Se quita la etiqueta que repetía el h2 (M6).
    - Los enlaces que abren una pestaña nueva lo dicen ("(abre en una pestaña nueva)", en `sr-only` o en el `aria-label`), y dos enlaces con el mismo nombre llevan al mismo lugar (R-M10).
@@ -565,24 +633,26 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
    - **Colores forzados** (`styles/forced-colors.css`; 2026-09-15, R-I8 de la re-auditoría):
      - el nav y la franja pierden el `difference` y toman el fondo del sistema;
      - el muro, su leyenda y los años en contorno conservan el lleno y el contorno con `CanvasText`, y el muro queda quieto en su estado final;
-     - la línea y los puntos de Trayectoria y los puntos de la tabla de Habilidades se dibujan con los colores del sistema. La foto arrastrable (7.9) es decorativa: no esconde información y no se enfoca.
+     - la línea y los puntos de Trayectoria y los puntos de la tabla de Habilidades se dibujan con los colores del sistema;
+     - el tachado de los enlaces va en `LinkText`, con `forced-color-adjust: none`: como es un fondo, el sistema lo pintaba del color del fondo y no se veía (R-M33).
+     - La foto arrastrable (7.9) es decorativa: no esconde información y no se enfoca.
 
-## 10. Decisiones y pendientes para aprobar
+## 10. Decisiones
 
-| # | Tema | Propuesta | Hace falta |
+| # | Tema | Propuesta | Estado (2026-09-15) |
 |---|---|---|---|
-| D1 | Etiquetas del nav | Cuatro enlaces: Proyectos, Trayectoria, Habilidades y Contacto. "Sobre mí" pasa al nombre y "Educación" se une a Trayectoria (los `id` se mantienen) | Aprobación |
-| D2 | Párrafo del hero | El texto corto de 7.2; el largo pasa a Trayectoria | Aprobación de la copia ES y EN |
-| D3 | Textos de solución | Acortar cada uno a 25 palabras o menos | Aprobar la copia en la implementación |
-| D4 | Rayas largas en textos visibles | "Vault — Finanzas personales", "Bookit — …", "ClubSystem — …" y el `<title>` usan "—", que la skill prohíbe. Pasan a ":" ("Vault: finanzas personales") y el `<title>` a "Fermin Lasarte · iOS & Mobile Engineer" | Aprobación |
-| D5 | Capturas (I12) | Capturas verticales de TravelPic y DeporTurnos, idealmente también del juego iOS, chatbot-ai, Vault, Bookit y ClubSystem. Mientras no estén: placa con logo o placa tipográfica | Que Fermin las consiga |
-| D6 | Cursor propio y foto arrastrable | **Decidido por Fermin (2026-09-14):** se hacen como en douglus (7.8 y 7.9). `PremiumCursor` se reemplaza. Los números "01/" no se toman. El preloader tampoco se tomaba, pero Fermin lo pidió después (7.11) | Nada |
-| D10 | Mancha de fluido en WebGL detrás del cursor | Queda fuera de esta fase: es un canvas a pantalla completa que corre siempre | Opcional |
-| D7 | Firefox | Respaldo de JS (6.4), en vez de dejarlo en vertical | Aprobación |
-| D8 | Efecto de celdas en las imágenes | Queda fuera de esta fase | Opcional |
-| D9 | PRODUCT.md | La skill `impeccable` pide un PRODUCT.md. No se creó porque la dirección la fija douglus.site y este documento cumple ese papel. Se puede generar después con `/impeccable init` | Opcional |
+| D1 | Etiquetas del nav | Cuatro enlaces: Proyectos, Trayectoria, Habilidades y Contacto. "Sobre mí" pasa al nombre y "Educación" se une a Trayectoria (los `id` se mantienen) | Aprobado e implementado |
+| D2 | Párrafo del hero | El texto corto de 7.2; el largo pasa a Trayectoria | Aprobado e implementado (`hero.lead`; el largo es `exp.intro`, en `/trayectoria`) |
+| D3 | Textos de solución | Acortar cada uno a 25 palabras o menos | Aprobado e implementado |
+| D4 | Rayas largas en textos visibles | "Vault — Finanzas personales", "Bookit — …", "ClubSystem — …" y el `<title>` usan "—", que la skill prohíbe. Pasan a ":" ("Vault: finanzas personales") y el `<title>` a "Fermin Lasarte · iOS & Mobile Engineer" | Aprobado e implementado |
+| D5 | Capturas (I12) | Capturas verticales de TravelPic y DeporTurnos, idealmente también del juego iOS, chatbot-ai, Vault, Bookit y ClubSystem. Mientras no estén: placa con logo o placa tipográfica | **Abierto:** falta que Fermin las consiga (I12). Mientras tanto, placas con logo o tipográficas |
+| D6 | Cursor propio y foto arrastrable | **Decidido por Fermin (2026-09-14):** se hacen como en douglus (7.8 y 7.9). `PremiumCursor` se reemplaza. Los números "01/" no se toman. El preloader tampoco se tomaba, pero Fermin lo pidió después (7.11) | Implementado |
+| D7 | Firefox | Respaldo de JS (6.4), en vez de dejarlo en vertical | Implementado, sin probar en Firefox: la re-auditoría lo dejó afuera por decisión de Fermin (N6) |
+| D8 | Efecto de celdas en las imágenes | Queda fuera de esta fase | Opcional, no se hizo |
+| D9 | PRODUCT.md | La skill `impeccable` pide un PRODUCT.md. No se creó porque la dirección la fija douglus.site y este documento cumple ese papel. Se puede generar después con `/impeccable init` | Opcional, no se hizo |
+| D10 | Mancha de fluido en WebGL detrás del cursor | Queda fuera de esta fase: es un canvas a pantalla completa que corre siempre | Opcional, no se hizo |
 
-Después de la aprobación, la implementación sigue este orden:
+Después de la aprobación, la implementación siguió este orden, un commit por paso:
 1. tokens y fuente;
 2. pista horizontal y modo vertical;
 3. nav;
@@ -591,6 +661,8 @@ Después de la aprobación, la implementación sigue este orden:
 6. el resto de las secciones;
 7. movimiento;
 8. pruebas en los cinco anchos, en los dos temas y en los dos idiomas, sin JS, con teclado y con reduce motion.
+
+Después vinieron las rondas de cambios que pidió Fermin (las fechas están en cada sección) y la re-auditoría de la Fase 4 (`docs/AUDITORIA.md`).
 
 ## Anexo A. Lo que se midió en douglus.site
 
