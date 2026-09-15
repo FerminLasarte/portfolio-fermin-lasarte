@@ -1,4 +1,5 @@
-import Image from "next/image";
+import { preload } from "react-dom";
+import { getImageProps } from "@/lib/image";
 import DraggablePhoto from "@/components/DraggablePhoto";
 import { CV, PERSON, ROLE } from "@/lib/site";
 
@@ -10,6 +11,21 @@ export default function Hero({ t, lang }) {
   const words = PERSON.name.split(" ");
   // Índice de la primera letra de cada palabra, para el retraso de la entrada.
   const starts = words.map((_, w) => words.slice(0, w).join("").length);
+
+  // La foto con getImageProps (lib/image.js) y un <img> común (R-M15): los mismos
+  // atributos que <Image>, armados en el servidor, sin el componente de cliente de
+  // next/image. La precarga que ponía <Image> se pide acá, como lo hace Next por dentro.
+  const { props: photo } = getImageProps({
+    src: "/assets/foto_perfil.webp",
+    width: 560,
+    height: 715,
+    sizes: "(min-width: 64rem) 24vw, (min-width: 48rem) 18rem, 20rem",
+    loading: "eager",
+    fetchPriority: "high",
+    draggable: false,
+    alt: t("hero.photoAlt"),
+  });
+  preload(photo.src, { as: "image", imageSrcSet: photo.srcSet, imageSizes: photo.sizes, fetchPriority: "high" });
 
   return (
     <section
@@ -54,16 +70,8 @@ export default function Hero({ t, lang }) {
 
       <div className="hero__photo">
         <DraggablePhoto label={t("hero.dragCursor")}>
-          <Image
-            src="/assets/foto_perfil.webp"
-            width={560}
-            height={715}
-            sizes="(min-width: 64rem) 24vw, (min-width: 48rem) 18rem, 20rem"
-            loading="eager"
-            fetchPriority="high"
-            draggable={false}
-            alt={t("hero.photoAlt")}
-          />
+          {/* eslint-disable-next-line @next/next/no-img-element -- los atributos salen de getImageProps (R-M15) */}
+          <img {...photo} alt={photo.alt} />
         </DraggablePhoto>
       </div>
     </section>

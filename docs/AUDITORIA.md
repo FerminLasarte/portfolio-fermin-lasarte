@@ -796,7 +796,17 @@ Lighthouse da 100 en accesibilidad y buenas prácticas en todas las páginas. En
   - **Problema:** el archivo latin precargado pesa 90 KB, seis veces el JS propio de la home. Se piden `wght` de 100 a 900 y `wdth` de 62 a 125, pero se usan pesos de 400 a 800 y anchos de 68%, 75% y 100%.
   - **Solución:** `weight: "400 800"` en `Archivo()`, o una instancia local recortada con `fonttools varLib.instancer`.
 
-- [ ] **R-M15. next/image manda JS de cliente que no aporta nada**
+- [x] **R-M15. next/image manda JS de cliente que no aporta nada**
+  - **Hecho:** los tres `<Image>` (la foto del hero, los logos de las placas y los iconos de `/habilidades`) pasan a un `<img>` común con los atributos de `getImageProps()`. La foto pide su precarga con `preload()` de `react-dom`, con las mismas opciones que usaba `<Image>` por dentro (`imageSrcSet`, `imageSizes`, `fetchPriority: "high"`).
+  - **Por qué hay un `lib/image.js`:** con el `getImageProps` de `next/image` el chunk no se iba. Ese módulo (`dist/shared/lib/image-external.js`) importa siempre el componente de cliente, así que las páginas lo seguían bajando aunque solo se usara la función. `lib/image.js` hace lo mismo que ese `getImageProps`, con las mismas dos piezas internas (`getImgProps` y el loader por defecto). Si una versión de Next las mueve, el build falla al importarlas.
+  - **Antes y después**, en el build de producción (JS total de la página, gz):
+    - home (`/` y `/en`): 150,8 → 145,2 KB (8 scripts en vez de 9);
+    - páginas propias: 147,7 → 141,8 KB (7 en vez de 9);
+    - `next/dist/client/image-component.js` ya no está en ningún manifiesto de cliente.
+  - **El costo:** el HTML de la home suma unos 0,4 KB gz (19,7 → 20,1 en `/`). Ahora los `srcset` completos viajan también en el payload de React, porque el `<img>` es HTML del servidor. `/habilidades` no cambia (sus iconos no tienen `srcset`).
+  - **Verificado:**
+    - En `/`, `/en` y `/habilidades`, los `<img>` y la precarga tienen los mismos atributos que antes, salvo `data-nimg`, que nada usa.
+    - Con Puppeteer contra el build anterior, a 1440 y 390, en claro y oscuro, en las cuatro páginas: las capturas difieren lo mismo que el ruido del build anterior contra sí mismo. La foto sigue siendo el LCP, con la precarga igual al `srcset`; el scroll suave, el ancla, el imán y el cierre funcionan, y no hay errores de consola.
   - **Dónde:** `components/Hero.jsx:55-64`, `ProjectCard.jsx:39-45` y `SkillsPage.jsx:39-43`.
   - **Problema:** son 5,6 KB gz, casi un tercio del JS propio de la home. `/trayectoria` también los baja, aunque no tiene imágenes. No se usa `placeholder` ni `onLoad`.
   - **Solución:** usar `getImageProps()` en los server components y un `<img>` común, y confirmar que se mantenga el preload de la foto.

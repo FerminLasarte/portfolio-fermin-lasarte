@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { getImageProps } from "@/lib/image";
 import { DEVICON, OTHER_SKILLS, PROJECTS, SKILL_GROUPS } from "@/lib/site";
 import { homePath } from "@/lib/i18n";
 
@@ -38,13 +38,17 @@ export default function SkillsPage({ t, lang }) {
               const used = usedIn(skill.name);
               return (
                 <li key={skill.name} className="skill-row">
-                  <Image
-                    src={`${DEVICON}/${skill.icon}.svg`}
+                  {/* eslint-disable-next-line @next/next/no-img-element -- los atributos salen de getImageProps (R-M15) */}
+                  <img
+                    {...getImageProps({
+                      src: `${DEVICON}/${skill.icon}.svg`,
+                      alt: "",
+                      width: 28,
+                      height: 28,
+                      style: skill.style,
+                      ...(skill.darkInvert ? { "data-dark-invert": "" } : {}),
+                    }).props}
                     alt=""
-                    width={28}
-                    height={28}
-                    style={skill.style}
-                    {...(skill.darkInvert ? { "data-dark-invert": "" } : {})}
                   />
                   <span className="skill-row__name">{skill.name}</span>
                   <span className="skill-row__level meta">{t(`skills.level.${skill.level}`)}</span>

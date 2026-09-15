@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { getImageProps } from "@/lib/image";
 import Icon from "@/components/Icon";
 import { isFeatured } from "@/lib/site";
 import { faApple, faGithub, faGooglePlay, faUpRightFromSquare } from "@/lib/icons";
@@ -54,11 +54,15 @@ function Plate({ project, t, featured }) {
       {media.type === "type" ? (
         <span>{t(`projects.${id}.name`, name)}</span>
       ) : (
-        <Image
-          src={media.image}
-          width={media.width}
-          height={media.height}
-          sizes={featured ? "(min-width: 64rem) 34vw, 80vw" : "(min-width: 64rem) 22vw, (min-width: 48rem) 36vw, 80vw"}
+        // eslint-disable-next-line @next/next/no-img-element -- los atributos salen de getImageProps (R-M15)
+        <img
+          {...getImageProps({
+            src: media.image,
+            width: media.width,
+            height: media.height,
+            sizes: featured ? "(min-width: 64rem) 34vw, 80vw" : "(min-width: 64rem) 22vw, (min-width: 48rem) 36vw, 80vw",
+            alt: "",
+          }).props}
           alt=""
         />
       )}
