@@ -9,6 +9,7 @@ import Cursor from "@/components/Cursor";
 import Magnet from "@/components/Magnet";
 import SmoothScroll from "@/components/SmoothScroll";
 import Curtain from "@/components/Curtain";
+import { TAPADA } from "@/lib/curtain";
 
 // Estructura común de las páginas (la home de cada idioma y el 404 global): <html>
 // con el idioma, el script del tema, el enlace para saltar al contenido, el nav, el
@@ -58,11 +59,13 @@ export default function Document({ lang, head, children }) {
 
         {/* Cortina entre páginas (styles/curtain.css). Va en el HTML, no la monta
             React al llegar: el script del tema puede dejarla tapando antes del primer
-            pintado, y para eso tiene que estar pintada ya. El nombre del destino lo
-            pone --curtain-label, así que el <span> va vacío. */}
+            pintado, y para eso tiene que estar pintada ya. Por eso el `d` arranca en la
+            posición tapada, que es justo como llega la página de destino; la de salida
+            la pone Curtain.jsx antes de mostrarla. El nombre del destino lo pone
+            --curtain-label, así que el <span> va vacío. */}
         <div className="curtain" aria-hidden="true">
           <svg className="curtain__svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <path className="curtain__path" />
+            <path className="curtain__path" d={TAPADA} />
           </svg>
           <div className="curtain__stage">
             <p className="curtain__label">

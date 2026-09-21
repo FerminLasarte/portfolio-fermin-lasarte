@@ -3,187 +3,114 @@
  * desde abajo con el borde curvo hasta cubrir la pantalla, muestra el nombre del
  * destino con una línea que se dibuja, y del otro lado se retira hacia arriba.
  *
- * Es la misma forma que douglus (medida en su bundle, anexo A): el viewBox es
- * 0 0 100 100 con preserveAspectRatio="none", así el 100 es siempre la pantalla, y
- * las cinco posiciones del path son las suyas. Acá el morph lo hace el CSS con la
- * propiedad `d` en vez de GSAP; todas las posiciones tienen los mismos comandos
- * (M, V, Q, V, z), que es lo que hace falta para que interpolen.
+ * El borde lo mueve components/Curtain.jsx escribiendo el atributo `d`, no el CSS:
+ * la propiedad CSS del mismo nombre no existe en Safari (ninguna versión), y con
+ * `@supports` la cortina quedaba invisible justo ahí (2026-09-21). Acá quedan la caja,
+ * el nombre y la línea, que se mueven con translate, opacity y scale: eso sí funciona
+ * en todos lados.
  *
- * El recorrido es entre documentos, así que son dos mitades: `curtain-in` en la
- * página que se va (components/Curtain.jsx frena la navegación mientras tapa) y
- * `curtain-hold` + `curtain-out` en la que llega. `curtain-hold` la pone el script
- * del tema (lib/theme.js) antes del primer pintado: la pantalla ya aparece tapada y
- * el visitante nunca ve el hero antes de que la pista salte a su sección.
+ * Son dos mitades, porque el recorrido es entre documentos: `curtain-in` en la página
+ * que se va (Curtain.jsx frena la navegación mientras tapa) y `curtain-hold` +
+ * `curtain-out` en la que llega. `curtain-hold` la pone el script del tema
+ * (lib/theme.js) antes del primer pintado, y el `d` que trae el HTML ya es la posición
+ * tapada: la pantalla aparece cubierta y el visitante nunca ve el hero antes de que la
+ * pista salte a su sección.
  *
- * Sin JS, con reduce motion o sin soporte de `d` en CSS no hay cortina: la navegación
- * es la de siempre (en esos casos la página es vertical y el ancla la resuelve el
- * navegador, así que tampoco hay nada que tapar).
+ * Sin JS o con reduce motion no hay cortina: la navegación es la de siempre (y en esos
+ * casos la página es vertical, así que el ancla la resuelve el navegador y no hay nada
+ * que tapar).
  */
 
 .curtain {
   display: none;
 }
 
-@supports (d: path("M 0 0 z")) {
-  @media screen and (prefers-reduced-motion: no-preference) {
-    html.curtain-in .curtain,
-    html.curtain-hold .curtain,
-    html.curtain-out .curtain {
-      position: fixed;
-      inset: 0;
-      z-index: var(--z-curtain);
-      display: grid;
-      place-items: center;
-      pointer-events: none;
-    }
-
-    .curtain__svg {
-      position: absolute;
-      inset: 0;
-      inline-size: 100%;
-      block-size: 100%;
-    }
-
-    .curtain__path {
-      d: path("M 0 100 V 100 Q 50 100 100 100 V 100 z");
-      fill: var(--night);
-    }
-
-    /* ---------- La página que se va ---------- */
-
-    html.curtain-in .curtain__path {
-      animation: curtain-in var(--dur-curtain-in) both;
-    }
-
-    /* ---------- La página que llega ---------- */
-
-    /* Tapada desde el primer pintado, con el mismo vaivén suave de douglus mientras
-       se acomoda la pista. */
-    html.curtain-hold .curtain__path {
-      d: path("M 0 100 V 0 Q 50 0 100 0 V 100 z");
-      animation: curtain-hold 1600ms var(--ease-in-out) infinite;
-    }
-
-    html.curtain-out .curtain__path {
-      animation: curtain-out var(--dur-curtain-out) both;
-    }
-
-    /* ---------- El nombre del destino ---------- */
-
-    .curtain__stage {
-      display: grid;
-      gap: var(--space-3);
-      inline-size: min(90vw, 40rem);
-      color: var(--on-night);
-    }
-
-    .curtain__label {
-      overflow: clip;
-      font-size: var(--fs-4);
-      font-weight: 600;
-      line-height: 1;
-      text-transform: uppercase;
-    }
-
-    /* El nombre llega en --curtain-label, ya entre comillas (JSON.stringify, que
-       escapa igual que CSS): la deja puesta el script del tema (lib/theme.js) antes
-       del primer pintado, o Curtain.jsx antes de tapar. Así el texto está en el primer
-       frame, sin esperar a React. */
-    .curtain__label span {
-      display: block;
-      translate: 0 110%;
-      opacity: 0;
-    }
-
-    .curtain__label span::after {
-      content: var(--curtain-label, "");
-    }
-
-    .curtain__rule {
-      display: block;
-      block-size: 1px;
-      background: var(--night-line-strong);
-      scale: 0 1;
-      transform-origin: left center;
-    }
-
-    /* Entra cuando la cortina ya tapa (douglus: el texto a 1,1 s y la línea a 1,65 s;
-       acá, contados desde que arranca la cortina). */
-    html.curtain-in .curtain__label span {
-      animation: curtain-word 650ms var(--ease-expo) 1100ms both;
-    }
-
-    html.curtain-in .curtain__rule {
-      animation: curtain-rule 500ms var(--ease-in-out) 1550ms both;
-    }
-
-    /* Del otro lado ya está puesto, y se va antes que la cortina. */
-    html.curtain-hold .curtain__label span,
-    html.curtain-hold .curtain__rule {
-      translate: none;
-      opacity: 1;
-      scale: none;
-    }
-
-    html.curtain-out .curtain__label span {
-      animation: curtain-word-out 350ms var(--ease-in) both;
-    }
-
-    html.curtain-out .curtain__rule {
-      animation: curtain-rule-out 300ms var(--ease-in) 100ms both;
-    }
-  }
-}
-
-/* Sube desde abajo: primero se estira con el borde curvo (douglus: 700ms power4.in)
-   y después el borde se endereza contra el techo (300ms power2.out). */
-@keyframes curtain-in {
-  0% {
-    d: path("M 0 100 V 100 Q 50 100 100 100 V 100 z");
-    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+@media screen and (prefers-reduced-motion: no-preference) {
+  html.curtain-in .curtain,
+  html.curtain-hold .curtain,
+  html.curtain-out .curtain {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-curtain);
+    display: grid;
+    place-items: center;
+    pointer-events: none;
   }
 
-  70% {
-    d: path("M 0 100 V 50 Q 50 0 100 50 V 100 z");
-    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  .curtain__svg {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
   }
 
-  100% {
-    d: path("M 0 100 V 0 Q 50 0 100 0 V 100 z");
-  }
-}
-
-/* El vaivén de douglus mientras espera: el borde de arriba se hunde 3 y sube 2. */
-@keyframes curtain-hold {
-  0%,
-  100% {
-    d: path("M 0 100 V 0 Q 50 0 100 0 V 100 z");
+  .curtain__path {
+    fill: var(--night);
   }
 
-  33% {
-    d: path("M 0 100 V 0 Q 50 3 100 0 V 100 z");
+  /* ---------- El nombre del destino ---------- */
+
+  .curtain__stage {
+    display: grid;
+    gap: var(--space-3);
+    inline-size: min(90vw, 40rem);
+    color: var(--on-night);
   }
 
-  66% {
-    d: path("M 0 100 V 0 Q 50 -2 100 0 V 100 z");
-  }
-}
-
-/* Se retira hacia arriba: ahora la forma cuelga del techo (douglus: 250ms sine.in
-   hasta la curva y 800ms power4.out hasta irse). */
-@keyframes curtain-out {
-  0% {
-    d: path("M 0 0 V 100 Q 50 100 100 100 V 0 z");
-    animation-timing-function: cubic-bezier(0.47, 0, 0.745, 0.715);
+  .curtain__label {
+    overflow: clip;
+    font-size: var(--fs-4);
+    font-weight: 600;
+    line-height: 1;
+    text-transform: uppercase;
   }
 
-  24% {
-    d: path("M 0 0 V 50 Q 50 100 100 50 V 0 z");
-    animation-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+  /* El nombre llega en --curtain-label, ya entre comillas (JSON.stringify, que escapa
+     igual que CSS): la deja puesta el script del tema (lib/theme.js) antes del primer
+     pintado, o Curtain.jsx antes de tapar. Así el texto está en el primer frame, sin
+     esperar a React. */
+  .curtain__label span {
+    display: block;
+    translate: 0 110%;
+    opacity: 0;
   }
 
-  100% {
-    d: path("M 0 0 V 0 Q 50 0 100 0 V 0 z");
+  .curtain__label span::after {
+    content: var(--curtain-label, "");
+  }
+
+  .curtain__rule {
+    display: block;
+    block-size: 1px;
+    background: var(--night-line-strong);
+    scale: 0 1;
+    transform-origin: left center;
+  }
+
+  /* Entra cuando la cortina ya tapa (douglus: el texto a 1,1 s y la línea a 1,55 s,
+     contados desde que arranca). */
+  html.curtain-in .curtain__label span {
+    animation: curtain-word 650ms var(--ease-expo) 1100ms both;
+  }
+
+  html.curtain-in .curtain__rule {
+    animation: curtain-rule 500ms var(--ease-in-out) 1550ms both;
+  }
+
+  /* Del otro lado ya está puesto, y se va antes que la cortina. */
+  html.curtain-hold .curtain__label span,
+  html.curtain-hold .curtain__rule {
+    translate: none;
+    opacity: 1;
+    scale: none;
+  }
+
+  html.curtain-out .curtain__label span {
+    animation: curtain-word-out 350ms var(--ease-in) both;
+  }
+
+  html.curtain-out .curtain__rule {
+    animation: curtain-rule-out 300ms var(--ease-in) 100ms both;
   }
 }
 
