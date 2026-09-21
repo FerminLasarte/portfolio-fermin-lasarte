@@ -103,7 +103,32 @@ else {
   }
 }
 
-// 6. Los colores de los iconos: scripts/icons.mjs los tiene copiados, porque se sirven
+// 6. Las posiciones de la cortina (lib/curtain.js): `mezclar` las interpola número a
+//    número, así que todas tienen que tener la misma secuencia de comandos y la misma
+//    cantidad de números. Si no, los números se cruzan entre comandos distintos y la
+//    forma sale cualquier cosa. Nada en el lenguaje lo obliga: agregar una posición con
+//    otra forma rompería la cortina sin que nadie avise.
+// Cualquier literal de path, con los comandos que sea: si la lista se limitara a los
+// comandos de hoy, una posición con otros no matchearía y pasaría por "falta una"
+// en vez de por lo que realmente es.
+const formas = [...read("lib/curtain.js").matchAll(/"(M [A-Za-z\d\s.,-]*z)"/g)].map((m) => m[1]);
+if (formas.length < 6) {
+  errors.push(`lib/curtain.js: se esperaban al menos 6 posiciones del path y se encontraron ${formas.length}.`);
+} else {
+  const comandos = (d) => d.replace(/[\d\s.-]/g, "");
+  const cuantos = (d) => d.match(/-?\d+(?:\.\d+)?/g).length;
+  const [primera] = formas;
+  for (const d of formas.slice(1)) {
+    if (comandos(d) !== comandos(primera) || cuantos(d) !== cuantos(primera)) {
+      errors.push(
+        `lib/curtain.js: "${d}" no se puede interpolar con "${primera}": ` +
+          `comandos ${comandos(d)} contra ${comandos(primera)}, ${cuantos(d)} números contra ${cuantos(primera)}.`,
+      );
+    }
+  }
+}
+
+// 7. Los colores de los iconos: scripts/icons.mjs los tiene copiados, porque se sirven
 //    como archivos sueltos y no pueden leer el CSS.
 const icons = read("scripts/icons.mjs");
 const paleta = [
@@ -130,5 +155,6 @@ if (errors.length) {
 console.log(
   `✓ scripts/check.mjs: ${copies} copias de la media query horizontal iguales, ${es.size} claves en ES y EN, ` +
     `${colors} colores de lib/og.js y los 2 de THEME_COLORS iguales a los tokens, ` +
-    "los tiempos de la cortina iguales en lib/curtain.js y en los tokens, los 4 de scripts/icons.mjs, y themeInitScript parsea.",
+    `los tiempos de la cortina iguales en lib/curtain.js y en los tokens, sus ${formas.length} posiciones interpolables, ` +
+    "los 4 colores de scripts/icons.mjs, y themeInitScript parsea.",
 );
