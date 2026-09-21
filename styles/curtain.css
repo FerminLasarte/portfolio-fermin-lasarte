@@ -50,7 +50,13 @@
 
   /* ---------- El nombre del destino ---------- */
 
+  /* `relative` y z-index: el SVG es `absolute` y, por orden de pintado, los elementos
+     posicionados van encima de los que no lo están: sin esto el path negro tapaba el
+     nombre (2026-09-21). Antes no se notaba porque la animación CSS del path lo subía
+     a su propia capa; con el movimiento en JS esa casualidad desapareció. */
   .curtain__stage {
+    position: relative;
+    z-index: 1;
     display: grid;
     gap: var(--space-3);
     inline-size: min(90vw, 40rem);
@@ -87,14 +93,17 @@
     transform-origin: left center;
   }
 
-  /* Entra cuando la cortina ya tapa (douglus: el texto a 1,1 s y la línea a 1,55 s,
-     contados desde que arranca). */
+  /* El nombre entra mientras la cortina todavía está subiendo, para que ya esté
+     cuando termina de tapar. Los retrasos se cuentan desde el final de la subida
+     (--dur-curtain-in, el mismo número que CURTAIN_MS.in en lib/curtain.js), así que
+     si se cambia el tiempo de la cortina estos se acomodan solos. douglus los pone
+     después de tapar, pero ahí la espera es larga: es una SPA y no recarga. */
   html.curtain-in .curtain__label span {
-    animation: curtain-word 650ms var(--ease-expo) 1100ms both;
+    animation: curtain-word 450ms var(--ease-expo) calc(var(--dur-curtain-in) - 500ms) both;
   }
 
   html.curtain-in .curtain__rule {
-    animation: curtain-rule 500ms var(--ease-in-out) 1550ms both;
+    animation: curtain-rule 400ms var(--ease-in-out) calc(var(--dur-curtain-in) - 300ms) both;
   }
 
   /* Del otro lado ya está puesto, y se va antes que la cortina. */

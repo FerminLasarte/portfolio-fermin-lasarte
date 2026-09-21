@@ -92,7 +92,7 @@ else {
 //    esos milisegundos antes de navegar y antes de destapar; si el CSS cambia y el JS
 //    no, la cortina navega antes de terminar de tapar (se ve el salto) o destapa antes
 //    de tiempo.
-const curtain = read("lib/curtain.js").match(/CURTAIN_MS = \{\s*in:\s*(\d+),\s*out:\s*(\d+)\s*\}/);
+const curtain = read("lib/curtain.js").match(/CURTAIN_MS = \{\s*in:\s*(\d+),[^}]*out:\s*(\d+)\s*\}/);
 if (!curtain) errors.push("lib/curtain.js: no se encontró CURTAIN_MS.");
 else {
   for (const [i, name] of [[1, "--dur-curtain-in"], [2, "--dur-curtain-out"]]) {
