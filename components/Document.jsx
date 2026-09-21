@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import Cursor from "@/components/Cursor";
 import Magnet from "@/components/Magnet";
 import SmoothScroll from "@/components/SmoothScroll";
+import Curtain from "@/components/Curtain";
 
 // Estructura común de las páginas (la home de cada idioma y el 404 global): <html>
 // con el idioma, el script del tema, el enlace para saltar al contenido, el nav, el
@@ -32,7 +33,7 @@ export default function Document({ lang, head, children }) {
           {t("nav.skip")}
         </a>
         <Nav
-          brand={{ href: `${homePath(lang)}#sobre-mi`, label: PERSON.name }}
+          brand={{ href: `${homePath(lang)}#sobre-mi`, label: PERSON.name, home: t("curtain.home") }}
           links={NAV_SECTIONS.map((s) => ({ id: s.id, href: `${homePath(lang)}#${s.id}`, label: t(s.key) }))}
           switchTo={{
             lang: other,
@@ -54,6 +55,23 @@ export default function Document({ lang, head, children }) {
         <Cursor />
         <Magnet />
         <SmoothScroll />
+
+        {/* Cortina entre páginas (styles/curtain.css). Va en el HTML, no la monta
+            React al llegar: el script del tema puede dejarla tapando antes del primer
+            pintado, y para eso tiene que estar pintada ya. El nombre del destino lo
+            pone --curtain-label, así que el <span> va vacío. */}
+        <div className="curtain" aria-hidden="true">
+          <svg className="curtain__svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <path className="curtain__path" />
+          </svg>
+          <div className="curtain__stage">
+            <p className="curtain__label">
+              <span />
+            </p>
+            <span className="curtain__rule" />
+          </div>
+        </div>
+        <Curtain />
       </body>
     </html>
   );

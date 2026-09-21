@@ -12,6 +12,7 @@
   .strip,
   .cursor,
   .preloader,
+  .curtain,
   .bleed,
   .drag__trail {
     display: none !important;
@@ -37,11 +38,6 @@
   .btn--primary {
     --btn-bg: transparent;
     --btn-ink: var(--accent);
-  }
-
-  /* "Copiar email" no sirve en papel (es el único <button> del contacto). */
-  .contact button {
-    display: none;
   }
 
   /* Un título no queda solo al pie de una hoja. */

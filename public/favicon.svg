@@ -1,6 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#A93C0B"/>
-  <text x="50%" y="50%" dy=".07em" text-anchor="middle" dominant-baseline="middle"
-        font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif"
-        font-size="34" font-weight="800" fill="#FFF6EF" letter-spacing="-1">FL</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Fermin Lasarte">
+  <!-- Generado por scripts/icons.mjs a partir de assets/fonts/Archivo-Display-68-800.ttf: no editar a mano. -->
+  <style>
+    svg { --bg: #a93c0b; --ink: #fff6ef; }
+    @media (prefers-color-scheme: dark) {
+      svg { --bg: #120b07; --ink: #ff9a62; }
+    }
+  </style>
+  <rect width="64" height="64" rx="14" fill="var(--bg)"/>
+  <path fill="var(--ink)" transform="translate(19.66 50) scale(0.0524 -0.0524)"
+        d="M50 0L50 687L421 687L421 555L207 555L207 394L385 394L385 260L207 260L207 0L50 0Z"/>
 </svg>

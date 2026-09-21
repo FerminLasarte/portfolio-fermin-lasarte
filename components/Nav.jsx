@@ -78,7 +78,7 @@ export default function Nav({ brand, links, switchTo, labels, social }) {
   const sectionLinks = (className, onClick) =>
     links.map((link, i) => (
       <li key={link.id} style={{ "--i": i }}>
-        <a className={className} href={link.href} data-section={link.id} onClick={onClick}>
+        <a className={className} href={link.href} data-section={link.id} data-curtain={link.label} onClick={onClick}>
           {link.label}
         </a>
       </li>
@@ -114,6 +114,7 @@ export default function Nav({ brand, links, switchTo, labels, social }) {
           className="nav__brand"
           href={brand.href}
           data-brand={brandState}
+          data-curtain={brand.home}
           onMouseEnter={showLast}
           onMouseLeave={hideLast}
           onFocus={showLast}
@@ -141,6 +142,8 @@ export default function Nav({ brand, links, switchTo, labels, social }) {
             className="tool"
             href={langHref}
             hrefLang={switchTo.lang}
+            // El destino que muestra la cortina (components/Curtain.jsx).
+            data-curtain={switchTo.name}
             // El nombre empieza con lo que se ve ("EN, English"; R-M8, WCAG 2.5.3).
             aria-label={`${switchTo.lang.toUpperCase()}, ${switchTo.name}`}
             onClick={handleLangClick}

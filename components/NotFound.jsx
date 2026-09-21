@@ -27,6 +27,7 @@ export default function NotFound() {
           <a
             key={lang}
             href={homePath(lang)}
+            data-curtain={t("curtain.home")}
             className={i === 0 ? "btn btn--primary" : "btn"}
             {...(i > 0 ? { lang, hrefLang: lang } : {})}
           >

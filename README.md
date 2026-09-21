@@ -43,7 +43,8 @@ node scripts/strip-metadata.mjs public/assets/nueva.jpeg
 | `npm run build` | Build de producción; antes corre `npm run check`                                                                                |
 | `npm run start` | Sirve el build de producción                                                                                                    |
 | `npm run lint`  | Lint con el CLI de ESLint (`eslint .`; ignora `.claude/`)                                                                       |
-| `npm run check` | Controla lo que está copiado a mano: la media query horizontal en `styles/`, las claves ES/EN y los colores de la OG y del tema |
+| `npm run check` | Controla lo que está copiado a mano: la media query horizontal en `styles/`, las claves ES/EN, los colores de la OG, del tema y de los iconos, los tiempos de la cortina y que el script del tema parsee |
+| `npm run icons` | Regenera `favicon.svg`, `favicon.ico` y `apple-icon.png` desde la fuente (no se editan a mano)                                   |
 
 ## Estructura
 
@@ -74,6 +75,7 @@ lib/
 styles/                  # tokens.css, base.css y una hoja por componente, más print y forced-colors
 scripts/
   check.mjs              # controles antes de cada build
+  icons.mjs              # genera los tres iconos desde la F de Archivo Display
   strip-metadata.mjs     # quita los metadatos de JPEG, PNG y WebP
 docs/
   DISENO.md              # el diseño: dirección, tokens, componentes y movimiento
@@ -82,4 +84,5 @@ assets/fonts/            # Archivo (OFL): la de la web y las de la imagen de Ope
 public/
   assets/                # foto, logos y CVs
   icons/devicon/         # SVG de Devicon (2.17.0)
+  favicon.svg, favicon.ico, apple-icon.png   # generados por scripts/icons.mjs
 ```

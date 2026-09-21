@@ -36,7 +36,7 @@ export default function Trajectory({ t, lang }) {
             <strong>{t(`edu.${note.id}.title`)}</strong>
           </p>
         ))}
-        <a className="btn trajectory__more" href={pagePath(lang, "experience")}>
+        <a className="btn trajectory__more" href={pagePath(lang, "experience")} data-curtain={t("exp.title")}>
           <span className="btn__label">{t("exp.more")}</span>
         </a>
       </div>

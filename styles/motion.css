@@ -140,37 +140,7 @@
   }
 }
 
-/* ---------- Cambio de idioma: la cortina de douglus, con View Transitions ----------
-   El botón de idioma es un <a> que carga la otra página, así que la transición es
-   entre documentos: la página nueva sube desde abajo con el borde curvo. Donde el
-   navegador no la soporta, es una navegación normal. */
-
-@view-transition {
-  navigation: auto;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  ::view-transition-old(root) {
-    animation: none;
-  }
-
-  ::view-transition-new(root) {
-    animation: curtain var(--dur-curtain) var(--ease-in-out) both;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(root) {
-    animation-duration: 150ms;
-  }
-}
-
-@keyframes curtain {
-  from {
-    clip-path: ellipse(150% 0% at 50% 100%);
-  }
-
-  to {
-    clip-path: ellipse(150% 150% at 50% 100%);
-  }
-}
+/* La cortina entre páginas está en styles/curtain.css: la de douglus, que tapa antes
+   de cargar. Antes eran View Transitions entre documentos, que revelaban la página
+   nueva sin tapar primero, y al volver de una página propia se veía el hero un segundo
+   hasta que la pista saltaba a su sección. */

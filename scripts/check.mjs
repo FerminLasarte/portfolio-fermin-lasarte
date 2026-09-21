@@ -73,11 +73,62 @@ for (const [key, css] of [["light", light], ["dark", dark]]) {
   }
 }
 
+// 4. El script del tema (lib/theme.js) se sirve tal cual dentro de un <script> inline:
+//    si no parsea, no corre nada de lo que pone antes del primer pintado (html.js, el
+//    tema, el preloader y la cortina) y la página se cae al modo vertical sin que nada
+//    avise. Acá se lo parsea con las interpolaciones ya resueltas.
+const script = read("lib/theme.js").match(/themeInitScript = `([\s\S]*?)`;/)?.[1];
+if (!script) errors.push("lib/theme.js: no se encontró themeInitScript.");
+else {
+  try {
+    new Function(script.replace(/\$\{[^}]*\}/g, "0"));
+  } catch (e) {
+    errors.push(`lib/theme.js: themeInitScript no parsea como JavaScript (${e.message}).`);
+  }
+}
+
+// 5. Los tiempos de la cortina: CURTAIN_MS (lib/curtain.js) tiene que valer lo mismo
+//    que --dur-curtain-in y --dur-curtain-out (styles/tokens.css). Curtain.jsx espera
+//    esos milisegundos antes de navegar y antes de destapar; si el CSS cambia y el JS
+//    no, la cortina navega antes de terminar de tapar (se ve el salto) o destapa antes
+//    de tiempo.
+const curtain = read("lib/curtain.js").match(/CURTAIN_MS = \{\s*in:\s*(\d+),\s*out:\s*(\d+)\s*\}/);
+if (!curtain) errors.push("lib/curtain.js: no se encontró CURTAIN_MS.");
+else {
+  for (const [i, name] of [[1, "--dur-curtain-in"], [2, "--dur-curtain-out"]]) {
+    const css = tokens.match(new RegExp(`${name}:\\s*(\\d+)ms`))?.[1];
+    if (css !== curtain[i]) {
+      errors.push(`lib/curtain.js: CURTAIN_MS es ${curtain[i]}ms, pero ${name} vale ${css ?? "(no está)"}.`);
+    }
+  }
+}
+
+// 6. Los colores de los iconos: scripts/icons.mjs los tiene copiados, porque se sirven
+//    como archivos sueltos y no pueden leer el CSS.
+const icons = read("scripts/icons.mjs");
+const paleta = [
+  ["CLARO", "bg", light, "--accent"],
+  ["CLARO", "ink", light, "--on-accent"],
+  ["OSCURO", "bg", light, "--night"],
+  ["OSCURO", "ink", light, "--night-accent"],
+];
+for (const [nombre, clave, css, cual] of paleta) {
+  const bloque = icons.match(new RegExp(`const ${nombre} = \\{([^}]*)\\}`))?.[1] ?? "";
+  const value = bloque.match(new RegExp(`${clave}:\\s*"(#[0-9a-fA-F]{6})"`))?.[1];
+  const esperado = token(css, cual);
+  if (!same(value, esperado)) {
+    errors.push(
+      `scripts/icons.mjs: ${nombre}.${clave} es ${value ?? "(no está)"}, pero ${cual} vale ${esperado ?? "(no está)"}.`,
+    );
+  }
+}
+
 if (errors.length) {
   console.error(`✖ scripts/check.mjs: ${errors.length} ${errors.length === 1 ? "problema" : "problemas"}\n  ${errors.join("\n  ")}`);
   process.exit(1);
 }
 console.log(
   `✓ scripts/check.mjs: ${copies} copias de la media query horizontal iguales, ${es.size} claves en ES y EN, ` +
-    `${colors} colores de lib/og.js y los 2 de THEME_COLORS iguales a los tokens.`,
+    `${colors} colores de lib/og.js y los 2 de THEME_COLORS iguales a los tokens, ` +
+    "los tiempos de la cortina iguales en lib/curtain.js y en los tokens, los 4 de scripts/icons.mjs, y themeInitScript parsea.",
 );

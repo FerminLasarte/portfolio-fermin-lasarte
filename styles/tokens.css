@@ -97,6 +97,7 @@
   --z-preloader: 35;
   --z-skip: 36; /* sobre el preloader: el enlace de salto se ve aunque esté el velo (R-M3) */
   --z-cursor: 40;
+  --z-curtain: 45; /* sobre todo: tapa la pantalla entre páginas (styles/curtain.css) */
 
   /* Movimiento */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
@@ -111,7 +112,10 @@
   --dur-menu: 420ms;
   --dur-fill: 500ms; /* el relleno de los botones al subir */
   --dur-enter: 700ms;
-  --dur-curtain: 800ms;
+  /* Cortina entre páginas (styles/curtain.css), con los tiempos de douglus: 1 s en
+     tapar (la navegación arranca ahí) y 1,05 s en retirarse. */
+  --dur-curtain-in: 1000ms;
+  --dur-curtain-out: 1050ms;
   --dur-reveal: 1100ms; /* la entrada de cada elemento de un panel (motion.css, page.css) */
 
   /* Anchos de panel en el modo horizontal (DISENO.md, sección 5). */

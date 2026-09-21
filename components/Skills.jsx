@@ -37,7 +37,7 @@ export default function Skills({ t, lang }) {
           {t("skills.title")}
         </h2>
         <p className="lead skills__lead">{t("skills.lead")}</p>
-        <a className="btn skills__more" href={pagePath(lang, "skills")}>
+        <a className="btn skills__more" href={pagePath(lang, "skills")} data-curtain={t("skills.title")}>
           <span className="btn__label">{t("skills.more")}</span>
         </a>
       </header>

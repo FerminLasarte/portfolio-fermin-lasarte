@@ -115,8 +115,14 @@ export default function SkillsPage({ t, lang }) {
         <p className="skill-group__lead">{OTHER_SKILLS.join(", ")}</p>
       </section>
 
+      {/* Ancla nativa, no next/link: la home española se sirve con una reescritura
+          ("/" a "/es", next.config.mjs) y el router de Next no siempre la resuelve del
+          lado del cliente; cuando no puede, cae en una navegación completa que se come
+          el "#seccion" y deja al visitante arriba de la home (probado el 2026-09-21;
+          en inglés, que no tiene reescritura, no pasa). Lo que sacó la sensación de
+          recarga fue saltear la cortina (components/Curtain.jsx). */}
       <p className="page__back">
-        <a className="btn" href={`${home}#habilidades`}>
+        <a className="btn" href={`${home}#habilidades`} data-curtain={t("curtain.home")}>
           <span className="btn__label">{t("page.back")}</span>
         </a>
       </p>

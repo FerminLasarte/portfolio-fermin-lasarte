@@ -54,7 +54,7 @@ export default function ExperiencePage({ t, lang }) {
                 </p>
               )}
               {projects[c.id] && (
-                <a className="chapter__link strike" href={`${home}#proyecto-${c.id}`}>
+                <a className="chapter__link strike" href={`${home}#proyecto-${c.id}`} data-curtain={t("projects.title")}>
                   {t("page.seeProject")}
                   {/* Se repite en cada etapa: el nombre suma el proyecto (R-M10). */}
                   <span className="sr-only"> {t(`projects.${c.id}.name`, projects[c.id].name)}</span>
@@ -79,8 +79,14 @@ export default function ExperiencePage({ t, lang }) {
         </section>
       ))}
 
+      {/* Ancla nativa, no next/link: la home española se sirve con una reescritura
+          ("/" a "/es", next.config.mjs) y el router de Next no siempre la resuelve del
+          lado del cliente; cuando no puede, cae en una navegación completa que se come
+          el "#seccion" y deja al visitante arriba de la home (probado el 2026-09-21;
+          en inglés, que no tiene reescritura, no pasa). Lo que sacó la sensación de
+          recarga fue saltear la cortina (components/Curtain.jsx). */}
       <p className="page__back">
-        <a className="btn" href={`${home}#experiencia`}>
+        <a className="btn" href={`${home}#experiencia`} data-curtain={t("curtain.home")}>
           <span className="btn__label">{t("page.back")}</span>
         </a>
       </p>

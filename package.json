@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "check": "node scripts/check.mjs",
+    "icons": "node scripts/icons.mjs",
     "prebuild": "node scripts/check.mjs",
     "build": "next build",
     "start": "next start",
