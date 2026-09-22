@@ -1,8 +1,31 @@
 /*
- * Proyectos (docs/DISENO.md, 7.3): un panel de entrada con las cifras y un panel
- * por proyecto. En horizontal, cada tarjeta es un panel de la pista; en vertical,
+ * Proyectos (docs/DISENO.md, 7.3): un panel de entrada con el índice y las cifras, y un
+ * panel por proyecto. En horizontal, cada tarjeta es un panel de la pista; en vertical,
  * una grilla de una o dos columnas.
+ *
+ * El movimiento de la sección sale de --cross: cuánto lleva cruzada la pantalla el
+ * panel, de 0 (su borde izquierdo entra por la derecha) a 1 (su borde derecho sale por
+ * la izquierda). Lo mueve una sola animación atada a la pista y de ahí salen las dos
+ * capas de la paralaje, la deriva de la tarjeta y el desplazamiento de la captura: así
+ * hay un solo lugar donde se decide el recorrido y un solo lugar donde se lo calcula
+ * (el respaldo de Firefox, en components/TrackController.jsx, escribe la misma
+ * variable). Sin JS, con reduce motion o en vertical se queda en 0,5, que es el medio:
+ * todo sin desplazar.
  */
+
+@property --cross {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0.5;
+}
+
+/* Cuánto está llena una fila del índice, de 0 (gris, sin línea) a 1. Arranca llena,
+   que es como se ve sin animación. */
+@property --fill {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 1;
+}
 
 .projects {
   display: grid;
@@ -12,13 +35,67 @@
   padding-block: var(--space-6);
 }
 
-/* ---------- Entrada ---------- */
+/* ---------- Entrada: título, índice y cifras ---------- */
 
 .intro {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: var(--space-6);
+  gap: var(--space-5);
+}
+
+.idx {
+  display: grid;
+  align-content: start;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* La fila arranca en el gris de las líneas y se llena hasta el color del texto, con la
+   línea del acento creciendo abajo. El gris de partida es un estado de paso, solo
+   mientras la fila se llena: el estado final, y el único que se ve sin animación, es el
+   del texto. Como el nombre va en negrita y en --fs-2 cuenta como texto grande, así que
+   hasta ese gris llega al 3:1 que pide la norma (3,3:1 en claro y 3,8:1 en oscuro). */
+.idx__row {
+  color: var(--ink);
+}
+
+.idx__link {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.5em 1fr;
+  gap: var(--space-3);
+  align-items: baseline;
+  padding-block: var(--space-1);
+  color: inherit;
+  text-decoration: none;
+}
+
+.idx__link::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  block-size: 1px;
+  background: var(--accent);
+  scale: var(--fill) 1;
+  transform-origin: left center;
+}
+
+.idx__n {
+  font-size: var(--fs-0);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+
+.idx__name {
+  font-size: var(--fs-2);
+  font-weight: 800;
+  font-stretch: var(--wdth-display);
+  line-height: 1.1;
+  text-transform: uppercase;
 }
 
 .stats {
@@ -51,20 +128,39 @@
   gap: var(--space-4);
 }
 
-/* Placa: la captura o el logo sobre el color de la app, o el nombre en grande.
-   Es un enlace al destino principal, fuera del orden de foco (los botones ya lo
-   tienen). */
+/* Las dos capas que se mueven a distinta velocidad. Las entradas de cada elemento van
+   adentro (styles/motion.css), así una no pisa a la otra. */
+/* grid-template-rows y no una fila automática: adentro puede haber un marco de
+   teléfono con aspect-ratio y block-size: 100%, y contra una fila automática eso se
+   muerde la cola (la fila mide lo que el contenido, el contenido mide lo que la fila) y
+   la placa terminaba midiendo 649px en un hueco de 223, encima del texto. Con
+   minmax(0, 1fr) la fila es el alto que le tocó al envoltorio, y el clip es el seguro. */
+.card__media {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  overflow: clip;
+}
+
+.card__body {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+}
+
+/* Placa: la captura en su marco, el logo sobre el color de la app, o el nombre en
+   grande. Es un enlace a la página del proyecto, fuera del orden de foco (el botón de
+   abajo lleva al mismo lado). */
 .card__plate {
   display: grid;
   place-items: center;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: var(--plate-ratio, 4 / 3);
   overflow: clip;
   background: var(--plate, var(--surface));
   text-decoration: none;
 }
 
-.card--lg .card__plate {
-  aspect-ratio: 16 / 9;
+.card--lg {
+  --plate-ratio: 16 / 9;
 }
 
 .card__plate img {
@@ -91,6 +187,33 @@
   font-size: min(clamp(2rem, 4.6vw, 4.5rem), 18cqi);
   line-height: 0.86;
   hyphens: manual;
+}
+
+/* Captura dentro del marco de teléfono (I12, todavía sin usar: ningún proyecto tiene
+   media.type "shot"). El marco toma el alto de la placa y la proporción de una pantalla
+   de iPhone; la captura lo llena a lo ancho y se desplaza lo que le sobra de alto
+   (--shot-travel, que calcula components/ProjectPlate.jsx desde las medidas de la
+   imagen) mientras el panel cruza. Con una captura de una sola pantalla sobra 0 y queda
+   quieta y encuadrada, que es exactamente lo que tiene que pasar. */
+.card__plate--shot {
+  --plate-ratio: 3 / 4; /* en vertical: una placa más alta, para que el teléfono entre */
+  grid-template-rows: minmax(0, 1fr);
+  padding: var(--space-4);
+}
+
+.plate__frame {
+  display: grid;
+  block-size: 100%;
+  aspect-ratio: 9 / 19.5;
+  overflow: clip;
+  border-radius: var(--radius-device);
+  background: var(--paper);
+}
+
+.card__plate .plate__shot {
+  align-self: start;
+  inline-size: 100%;
+  translate: 0 calc(var(--cross) * -1 * var(--shot-travel, 0%));
 }
 
 .card__meta {
@@ -125,6 +248,35 @@
   margin-top: auto;
 }
 
+/* ---------- Hover: la tarjeta entera responde ---------- */
+
+@media (hover: hover) and (pointer: fine) {
+  .card__title {
+    transition: color var(--dur-hover) var(--ease-out);
+  }
+
+  .card:hover .card__title {
+    color: var(--accent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .card__plate--logo img,
+    .card__plate--type span {
+      transition:
+        scale var(--dur-fill) var(--ease-out),
+        translate var(--dur-fill) var(--ease-out);
+    }
+
+    .card:hover .card__plate--logo img {
+      scale: 1.04;
+    }
+
+    .card:hover .card__plate--type span {
+      translate: 0 calc(var(--space-2) * -1);
+    }
+  }
+}
+
 /* ---------- Vertical: dos columnas desde tablet ---------- */
 
 @media (min-width: 48rem) {
@@ -134,22 +286,127 @@
   }
 
   .intro,
-  .card--lg {
+  .panel--card-lg {
     grid-column: 1 / -1;
+  }
+}
+
+/* El índice se llena mientras cada fila cruza la pantalla, como el muro de Habilidades
+   (styles/skills.css). Sin soporte (Firefox), sin JS o con reduce motion se ve lleno. */
+@media screen and (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    html.js .idx__row {
+      animation: idx-fill linear both;
+      animation-timeline: view();
+      animation-range: cover 15% cover 40%;
+    }
   }
 }
 
 /* ---------- Horizontal: cada tarjeta es un panel ---------- */
 
 @media screen and (min-width: 64rem) and (min-height: 42.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  html.js .projects {
+  /* Solo la sección de la home vive en la pista: en /proyectos la grilla se queda. */
+  html.js .h-track .projects {
     display: contents;
   }
 
+  html.js :is(.panel--card, .panel--card-lg) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* La tira desfasada: la tarjeta no llena el panel y las pares se apoyan abajo, así la
+     fila deja de leerse como una hilera de estacas. El 8% que se recorta sale del alto
+     de la placa, que es lo que se estira, así que no se puede bajar mucho más: con las
+     tarjetas chicas y el texto largo, la placa queda en nada. */
+  html.js :is(.panel--card, .panel--card-lg) > .card {
+    block-size: 92%;
+  }
+
+  html.js .is-low > .card {
+    --sway: -1;
+    margin-block-start: auto;
+  }
+
+  /* Todo lo de acá abajo va contra el panel y no contra .card a secas: las mismas
+     tarjetas se muestran en /proyectos, que en una pantalla ancha también entra en esta
+     media query y no tiene pista. */
+
   /* La placa toma el alto que sobra; el texto manda. */
-  html.js .card__plate {
-    aspect-ratio: auto;
+  html.js :is(.panel--card, .panel--card-lg) .card__media {
     flex: 1 1 0;
     min-block-size: 5rem;
+  }
+
+  /* Sin block-size: 100%: la placa es el único hijo de .card__media y su fila ya mide
+     todo el hueco, así que estirarla alcanza (y un porcentaje contra una fila que se
+     mide sola no resuelve). */
+  html.js :is(.panel--card, .panel--card-lg) .card__plate {
+    aspect-ratio: auto;
+  }
+
+  html.js :is(.panel--card, .panel--card-lg) .card__body {
+    flex: none;
+  }
+
+  /* Las dos capas de la paralaje, las dos desde --cross: la placa se adelanta y el
+     texto se queda atrás. La deriva de la tarjeta va en sentidos contrarios según la
+     fila (--sway). */
+  html.js :is(.panel--card, .panel--card-lg) > .card {
+    translate: 0 calc((var(--cross) - 0.5) * var(--sway, 1) * 2cqi);
+  }
+
+  html.js :is(.panel--card, .panel--card-lg) .card__media {
+    translate: calc((var(--cross) - 0.5) * -3cqi) 0;
+  }
+
+  html.js :is(.panel--card, .panel--card-lg) .card__body {
+    translate: calc((var(--cross) - 0.5) * 1.5cqi) 0;
+  }
+
+  @supports (animation-timeline: view()) {
+    /* --cross va de 0 a 1 mientras el panel cruza: empieza cuando su borde izquierdo
+       toca el derecho de la ventana (el recorrido de la pista vale --x-card menos una
+       pantalla) y termina cuando su borde derecho sale por el otro lado. --x-card lo
+       escribe components/Projects.jsx y --w-self es el ancho del propio panel. */
+    html.js :is(.panel--card, .panel--card-lg) {
+      animation: cross linear both;
+      animation-timeline: --pan;
+      animation-range: contain calc(var(--x-card) - 100cqi) contain calc(var(--x-card) + var(--w-self));
+    }
+
+    html.js .panel--card {
+      --w-self: var(--w-card);
+    }
+
+    html.js .panel--card-lg {
+      --w-self: var(--w-card-lg);
+    }
+
+    /* En horizontal las filas del índice se llenan una detrás de otra mientras el panel
+       cruza, no cada una por su cuenta: 3cqi de recorrido entre fila y fila. */
+    html.js .idx__row {
+      animation-timeline: --pan;
+      animation-range: contain calc(var(--x-projects) - 75cqi + var(--i) * 3cqi) contain
+        calc(var(--x-projects) - 60cqi + var(--i) * 3cqi);
+    }
+  }
+}
+
+@keyframes cross {
+  from {
+    --cross: 0;
+  }
+
+  to {
+    --cross: 1;
+  }
+}
+
+@keyframes idx-fill {
+  from {
+    --fill: 0;
+    color: var(--line);
   }
 }

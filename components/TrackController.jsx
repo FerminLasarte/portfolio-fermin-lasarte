@@ -12,6 +12,7 @@ const REVEAL = [
   ".hero__avail",
   ".hero__lead",
   ".hero__ctas > .btn",
+  ".idx",
   ".card__plate",
   ".card__meta",
   ".card__title",
@@ -71,6 +72,8 @@ export default function TrackController() {
     const wash = track.querySelector(".bleed__wash");
     const stages = track.querySelector(".stages");
     const label = document.querySelector("[data-strip-label]");
+    const count = document.querySelector("[data-strip-count]");
+    const cards = panels.filter((p) => p.matches(".panel--card, .panel--card-lg"));
 
     // Scroll que deja el panel de `el` contra el borde izquierdo de la ventana.
     const topFor = (el) => {
@@ -146,6 +149,9 @@ export default function TrackController() {
               else a.removeAttribute("aria-current");
             }
             if (label && name) label.textContent = name;
+            // El contador ("03 / 06") lo arma el servidor en cada tarjeta
+            // (components/ProjectCard.jsx); fuera de Proyectos no hay ninguno.
+            if (count) count.textContent = entry.target.dataset.count ?? "";
           }
         },
         { rootMargin: mq.matches ? "0px -50% 0px -50%" : "-40% 0px -59% 0px" },
@@ -179,6 +185,15 @@ export default function TrackController() {
         const end = panel.offsetLeft + panel.offsetWidth - vw;
         stages.style.setProperty("--rail", Math.min(Math.max((x - start) / (end - start), 0), 1));
       }
+      // Cuánto lleva cruzada la pantalla cada tarjeta de Proyectos: de ahí salen la
+      // paralaje, la deriva y el desplazamiento de la captura (styles/projects.css).
+      // Es la misma cuenta que hace ahí el `animation-range`, escrita en la misma
+      // variable, así el movimiento se decide en un solo lugar.
+      for (const card of cards) {
+        const left = card.offsetLeft - x;
+        const cross = (vw - left) / (vw + card.offsetWidth);
+        card.style.setProperty("--cross", Math.min(Math.max(cross, 0), 1));
+      }
     };
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(paint);
@@ -191,6 +206,7 @@ export default function TrackController() {
         if (fill) fill.style.scale = "";
         if (wash) wash.style.scale = "";
         stages?.style.removeProperty("--rail");
+        for (const card of cards) card.style.removeProperty("--cross");
         return;
       }
       addEventListener("scroll", onScroll, { passive: true });

@@ -16,12 +16,17 @@ main,
 /* Largo de la pista: la suma de los anchos de los paneles (definidos abajo). Va en
    .h-scroll y no en :root porque un var() se resuelve donde se declara la variable,
    y --n-card y --n-card-lg los escribe el servidor recién en este elemento.
-   --x-timeline, --x-skills y --x-bleed son dónde empiezan Trayectoria, Habilidades y
-   la transición al cierre: los usan styles/trajectory.css, styles/skills.css y
-   styles/contact.css para saber en qué tramo del recorrido se mueven. */
+   --x-* es dónde empieza cada sección, medido en el mismo recorrido de la pista: como
+   1px de scroll mueve 1px la pista, esa distancia sirve igual como `animation-range`
+   de la línea de tiempo --pan. Los usan styles/projects.css, styles/trajectory.css,
+   styles/skills.css y styles/contact.css para saber en qué tramo se mueve cada cosa.
+   --x-cards (dónde empieza la primera tarjeta) es el que cada tarjeta le suma para
+   calcular el suyo, en components/Projects.jsx. */
 .h-scroll {
+  --x-projects: 100cqi; /* el hero mide una pantalla */
+  --x-cards: calc(var(--x-projects) + var(--w-intro));
   --x-timeline: calc(
-    100cqi + var(--w-intro) + var(--n-card-lg) * var(--w-card-lg) + var(--n-card) * var(--w-card)
+    var(--x-cards) + var(--n-card-lg) * var(--w-card-lg) + var(--n-card) * var(--w-card)
   );
   --x-skills: calc(var(--x-timeline) + var(--w-timeline));
   --x-bleed: calc(var(--x-skills) + var(--w-skills));
@@ -158,6 +163,13 @@ body {
     background: var(--accent);
     scale: 0 1;
     transform-origin: left center;
+  }
+
+  /* El contador de Proyectos ("03 / 06"): en el color del texto, para que se
+     despegue del nombre de la sección, que va apagado. */
+  .strip__count {
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
   }
 
   .strip__credit {

@@ -2,7 +2,7 @@
 
 - **Fecha:** 2026-09-14
 - **Estado:** aprobado por Fermin el 2026-09-14 e implementado en la rama `fase-3-rediseno`, un commit por paso (sección 10). Esa rama se mergeó a `main` el 2026-09-15 (`006bdf0`) y se borró: el diseño está en producción. Donde la implementación se apartó del brief, este documento ya lo dice. Se puso al día con el código después de la re-auditoría (2026-09-15, R-M37), incluidos los cambios de la limpieza (R-M28 a R-M36).
-- **Cambio posterior (2026-09-22):** cada proyecto tiene su página (7.12) y Proyectos se rehizo (7.3), a pedido de Fermin. Lo que cambió está escrito en esas dos secciones, en la tabla de movimiento (8) y en la franja (7.1); el resto del documento sigue valiendo.
+- **Cambio posterior (2026-09-22):** Proyectos se rehizo (7.3) y cada proyecto tiene su página (7.12), a pedido de Fermin. Lo que cambió está escrito en esas dos secciones, en la tabla de movimiento (8) y en la franja (7.1); el resto del documento sigue valiendo.
 - **Fuentes, en orden de prioridad:** los "Criterios del rediseño" de `docs/AUDITORIA.md`; [douglus.site](https://douglus.site) (navegación horizontal y sus animaciones); las skills `design-taste-frontend`, `impeccable` y `emil-design-eng`. Si dos fuentes chocan, manda la de más arriba.
 - **Cómo se analizó douglus.site:** en el panel del navegador a 1440×900 (modo horizontal) y a 390×844 (modo vertical), leyendo el DOM, su CSS y su JS publicado. Los datos concretos están en el anexo A.
 
@@ -159,7 +159,7 @@ Solo hay un tamaño Display por panel. Las mayúsculas se reservan para Display 
   - Los paneles, las placas y las imágenes van rectos, sin token (hasta R-M28 había un `--radius-0` sin uso).
   - Los botones son píldora (`--radius-pill: 999px`).
   - Los círculos usan `--radius-round: 50%`: el punto de disponibilidad, los puntos de Trayectoria y de la tabla, el cursor y el relleno de los botones (R-M32).
-  - Las capturas de teléfono van a usar el radio de un iPhone (`--radius-device: 12%` del ancho), que queda reservado hasta que lleguen (I12).
+  - Las capturas de teléfono usan el radio de un iPhone (`--radius-device: 12%` del ancho). Desde el 2026-09-22 el marco está escrito y probado (7.3); sigue esperando las capturas (I12).
   - No hay otras esquinas.
 - **Espaciado:** base de 4px (`--space-1` = 0,25rem … `--space-9` = 8rem). Margen lateral de panel `--pad-x: clamp(1rem, 3cqi, 3rem)`: nunca menos de 16px.
 - **Alturas fijas:** `--nav-h: 4rem` (64px), `--strip-h: 3rem` (la franja inferior del modo horizontal) y `--tap: 2.75rem` (44px, la zona táctil mínima de los botones y las herramientas del nav).
@@ -344,6 +344,7 @@ Si `CSS.supports("animation-timeline: view()")` da falso y el modo horizontal es
 **Franja inferior (solo en horizontal):** fija, `--strip-h`, con tres zonas, como el pie de douglus. Igual que el nav: sin fondo, en blanco con `difference` (la barra de progreso de douglus también lo usa).
 - Izquierda: "© 2026 Fermin Lasarte".
 - Centro: riel de 10rem × 1px en `--line` con el relleno en `--accent` (`scale` en X, con la línea de tiempo `--pan`), y a su lado el nombre de la sección actual (`aria-hidden`: la información útil ya está en `aria-current`).
+- Centro: la barra de progreso, el nombre de la sección visible y, **dentro de Proyectos, el contador ("03 / 06")**, que es lo que orienta una vez que el índice de la entrada ya pasó (2026-09-22, 7.3). El texto del contador lo arma el servidor en cada panel de proyecto (`data-count`) y `TrackController` solo lo copia cuando esa sección cruza el centro de la ventana; fuera de Proyectos queda vacío. Es visual: para los lectores de pantalla ya está el `aria-current` del nav.
 - Derecha: al principio iba "Descargar CV"; Fermin lo sacó el 2026-09-15 (el CV sigue en el hero, I15). En su lugar va "Hecho a mano en Buenos Aires" / "Handmade in Buenos Aires" (`strip.credit`, "Hecho a mano en {city}", con la ciudad de `PERSON.city`; R-M29) con la ola del "Design & code by" de douglus (`components/WaveText.jsx`): cuando la página lleva 5 s quieta (sin mover el mouse, scrollear, tocar una tecla ni mover el foco), cada letra avanza 80px hacia la pantalla con perspectiva de 180px (casi el doble de grande), gira 35° y vuelve, 50ms después de la anterior. Pasa dos veces como máximo; la próxima vez que se use la página, la cuenta vuelve a empezar (2026-09-15, R-M5 de la re-auditoría: antes se repitía sin fin, y con el teclado no se cortaba nunca). Solo corre en horizontal, que es donde se ve la franja. Es visual: el texto entero está en un `sr-only`.
 
 **Móvil:** botón `<button aria-expanded aria-controls="menu">` con el texto "Menú" / "Cerrar", que rueda de uno al otro (7.6).
@@ -370,24 +371,43 @@ Copia del párrafo (`hero.lead`, aprobada en D2). El texto largo de antes (`hero
 
 ### 7.3 Entrada de Proyectos y tarjeta de proyecto
 
-**Entrada** (`#proyectos`): `<h2>` "Proyectos" en Display y las cifras de `STATS` como una `<dl>`: número en el estilo de Cifras (sección 3) y la etiqueta en Meta ("2 apps en producción", "4+ años de experiencia", "8 proyectos"; salen de los datos, R-I7).
+Rehecho el 2026-09-22, a pedido de Fermin: la sección se sentía más estática que las demás. El diagnóstico fue que **todas las otras secciones tienen movimiento atado al scroll y Proyectos no tenía ninguno** (la línea de Trayectoria se dibuja, el muro de Habilidades se llena, el degradado del cierre crece; Proyectos solo tenía la entrada genérica de panel, que pasa una vez y después queda quieto), y que seis paneles con la misma estructura y dos anchos se leían como una hilera de estacas, sin forma de saber en cuál se estaba. Se le mostraron a Fermin cuatro modelos (índice y expediente, teléfono vivo, tira desfasada, una pantalla por proyecto) y eligió la mezcla de los tres primeros.
+
+**Entrada** (`#proyectos`): `<h2>` "Proyectos" en Display, el **índice** y las cifras de `STATS` como una `<dl>` (número en el estilo de Cifras, sección 3, y la etiqueta en Meta; salen de los datos, R-I7).
+
+**Índice:** las seis filas numeradas (`01` a `06`), cada una un enlace a su panel. Se llenan una detrás de otra mientras el panel cruza la pantalla, con la misma técnica del muro de Habilidades: el nombre pasa del gris de las líneas al color del texto y la línea del acento crece de izquierda a derecha. Es una sola animación por fila, que mueve `--fill` (una propiedad registrada con `@property`) y el color; la línea es un `::after` que lee `--fill` heredado, así no hacen falta dos animaciones por fila. El índice vive en el panel de entrada y deja de verse apenas se lo pasa: **la orientación mientras se recorre la sección la da el contador de la franja, no el índice** (7.1).
 
 **Tarjeta:** un panel por proyecto, generado de `PROJECTS` (M11). De arriba a abajo:
-1. **Placa** (alrededor del 55% del alto):
-   - Si hay captura vertical real: la captura en proporción de teléfono, con `--radius-device`, sobre una placa del color de la app.
-   - Si todavía no hay captura pero sí logo (TravelPic, DeporTurnos): el logo sobre su color de marca.
-   - Si no hay ninguno de los dos: placa tipográfica en `--accent-soft`, con el nombre del proyecto en Display y `--accent`. El nombre nunca se corta (2026-09-15, R-I1 de la re-auditoría): su tamaño sale del ancho de la ventana (`clamp(2rem, 4.6vw, 4.5rem)`), con un tope del 18% del ancho útil de la placa, que es un contenedor (`18cqi`). Antes, a 1440px, "COMPILADOR" y "CLUBSYSTEM" se cortaban unos 50px, porque la tarjeta chica deja de crecer antes que la ventana.
+
+> **Hubo un número grande (`01`…`06`) sobre la esquina de la placa y se sacó el 2026-09-22, el mismo día, a pedido de Fermin.** Vale la pena dejar escrito por qué falló su primera versión, porque la lección sirve para toda la pista: iba en blanco con `mix-blend-mode: difference`, como el nav y la franja, para leerse sobre cualquier color sin saber qué había debajo. Pero el número y la placa derivan a distinta velocidad, así que al final de cada cruce el número asomaba unos 14px fuera del borde izquierdo de la placa, y ahí la mezcla invertía esa parte contra el papel mientras el resto seguía contra la placa: se partía en dos colores y parecía aparecer y desaparecer, sobre todo en TravelPic (placa negra). **`mix-blend-mode` deja de ser una solución cuando lo que hay debajo cambia mientras la cosa se mueve.** El nav y la franja sí lo pueden usar porque son fijos. La numeración sigue estando donde orienta: el índice de la entrada y el contador de la franja.
+
+1. **Placa** (el alto que sobra): tres tipos, en `media.type`.
+   - `logo` (TravelPic, DeporTurnos): el logo sobre su color de marca.
+   - `type`: placa tipográfica en `--accent-soft`, con el nombre del proyecto en Display y `--accent`. El nombre nunca se corta (2026-09-15, R-I1): su tamaño sale del ancho de la ventana (`clamp(2rem, 4.6vw, 4.5rem)`), con un tope del 18% del ancho útil de la placa, que es un contenedor (`18cqi`).
+   - `shot` (I12, escrito y probado el 2026-09-22, todavía sin usar): la captura vertical dentro de un marco de teléfono, con `--radius-device`, que se desplaza sola mientras el panel cruza. Cuánto se desplaza sale de las medidas de la imagen (`ProjectPlate.jsx` calcula `--shot-travel`: lo que le sobra de alto después de llenar el marco), así que **una captura de una sola pantalla queda quieta y encuadrada, y una captura larga de scroll recorre**. Para encenderlo alcanza con cambiarle el `media` a un proyecto; lo único que falta sumar con la captura es su descripción, porque hoy las placas son decorativas (`alt=""`).
    - No hay terminales falsos, degradados ni código decorativo: la skill los prohíbe y hoy eran relleno.
-   - La placa es un enlace al destino principal (tienda o demo, I15), con `tabindex="-1"` y `aria-hidden`, para no duplicar el enlace en el orden de foco.
-2. **Meta:** estado en texto ("En producción" / "En desarrollo") y plataformas en texto ("iOS y Android"). Solo texto: la tarjeta no lleva iconos de plataforma (los iconos de `lib/icons.js` van en los botones de enlace).
+   - La placa es un enlace a la página del proyecto, con `tabindex="-1"` y `aria-hidden`, para no duplicar el enlace en el orden de foco, y con `data-curtain` para que el salto vaya con la cortina como el del botón.
+2. **Meta:** estado en texto ("En producción" / "En desarrollo") y plataformas en texto ("iOS y Android"). Solo texto: la tarjeta no lleva iconos de plataforma (los de `lib/icons.js` van en los botones de enlace).
 3. **Título** (`<h3>`) con el título traducido, en el estilo de título de proyecto.
-4. **Problema** (si hay) y **solución:** dos párrafos de hasta 25 palabras cada uno. Sin etiquetas "Problema" y "Solución técnica": el orden ya lo dice. Los textos que eran más largos se acortaron en la implementación (D3).
+4. **Problema** (si hay) y **solución:** dos párrafos de hasta 25 palabras cada uno. Sin etiquetas "Problema" y "Solución técnica": el orden ya lo dice.
 5. **Tecnologías:** en una línea de texto Meta, separadas por comas.
-6. **Enlaces directos:** un botón por destino ("App Store", "Google Play", "Código", "Visitar"). El primero es el principal y el resto van con borde. "Código" y "Visitar" se repiten entre tarjetas, así que su nombre accesible suma el proyecto en un `sr-only` ("Código de Vault", "Vault code"; 2026-09-15, R-M10 de la re-auditoría). Se van el dropdown de "Descargar" y el botón deshabilitado "Próximamente" (M16).
+6. **Enlaces:** el relleno es **"Ver el proyecto"**, que lleva a `/proyectos/<id>` (7.12); al lado, con borde, un botón por destino de afuera ("App Store", "Google Play", "Código", "Visitar"). Cambia la decisión de I15, que tenía la tienda como acción principal: la decidió Fermin el 2026-09-22, al sumar las páginas de proyecto. "Código" y "Visitar" se repiten entre tarjetas, así que su nombre accesible suma el proyecto en un `sr-only` (R-M10), y "Ver el proyecto" también.
+
+**Movimiento de la sección.** Todo sale de `--cross`: cuánto lleva cruzada la pantalla el panel, de 0 (su borde izquierdo entra por la derecha) a 1 (su borde derecho sale por la izquierda). Es una propiedad registrada con `@property` (inicial 0,5, el medio) que mueve **una sola animación** atada a la línea de tiempo `--pan`, con el tramo exacto de cada panel: `--x-card`, que escribe el servidor sumando los anchos de las tarjetas que tiene delante (`components/Projects.jsx`), y `--w-self`, el ancho del propio panel. De `--cross` salen las cuatro cosas que se mueven, cada una una línea de CSS:
+- **paralaje de dos capas:** la placa se adelanta 3cqi y el texto se queda atrás 1,5cqi;
+- **deriva de la tarjeta:** 2cqi en vertical, en sentidos contrarios según la fila (`--sway`);
+- **desplazamiento de la captura** dentro del marco, si la placa es `shot`.
+
+Que sea una sola variable es lo que hace barato el respaldo de Firefox (6.4): `paint()` en `TrackController.jsx` escribe `--cross` con la misma cuenta y el CSS no cambia. Sin JS, con reduce motion o en vertical se queda en 0,5 y nada se desplaza.
+
+**Tira desfasada.** En horizontal la tarjeta mide el 92% del panel y las pares se apoyan abajo, así la fila deja de leerse pareja. El 8% que se recorta sale del alto de la placa, que es lo que se estira: no se puede bajar mucho más, porque con las tarjetas chicas y el texto largo la placa queda en nada (con 88% la de Bookit bajaba a 122px).
+
+**Hover.** La tarjeta entera responde: el título toma el acento, el logo se acerca un 4% y el nombre de la placa tipográfica sube medio paso. Solo con `(hover: hover) and (pointer: fine)`, y lo que se mueve, solo sin reduce motion.
 
 - **Tamaños:** `card--lg` para las apps móviles en producción; el resto, `card`.
-- **Sin cortes entre paneles** (pedido de Fermin, 2026-09-14): los paneles no llevan bordes que los separen, ni en horizontal ni en vertical, y el pie tampoco. Los separa el aire (el margen lateral de cada panel), así el recorrido se lee como una sola tira. Las líneas que son parte del contenido (el eje de años, el título de cada grupo de habilidades) se quedan.
-- **En vertical:** las mismas tarjetas, en una grilla de una o dos columnas, con la placa en 4:3 en las chicas y en 16:9 en las grandes (`card--lg`). En horizontal la placa no tiene proporción fija (`aspect-ratio: auto`).
+- **Sin cortes entre paneles** (pedido de Fermin, 2026-09-14): los paneles no llevan bordes que los separen, ni en horizontal ni en vertical, y el pie tampoco. Los separa el aire (el margen lateral de cada panel), así el recorrido se lee como una sola tira. Las líneas que son parte del contenido (la de cada fila del índice, el eje de años, el título de cada grupo de habilidades) se quedan.
+- **En vertical:** las mismas tarjetas, en una grilla de una o dos columnas, con la placa en 4:3 en las chicas, 16:9 en las grandes (`card--lg`) y 3:4 en las de captura. En horizontal la placa no tiene proporción fija. El índice se llena ahí con el `view()` de cada fila, como el muro.
+- **Estructura:** la tarjeta se parte en `.card__media` (la placa) y `.card__body` (el resto) porque son las dos capas que se mueven a distinta velocidad. La paralaje va en esos envoltorios y las entradas de panel, en los elementos de adentro: si estuvieran en el mismo elemento, la animación de entrada pisaría el `translate` de la paralaje mientras dura.
 
 ### 7.4 Trayectoria
 
@@ -575,6 +595,11 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
 | Ola de la franja | 5 s sin mover el mouse, scrollear, tocar una tecla ni mover el foco (dos veces como máximo, hasta que se vuelva a usar la página) | `transform: perspective(180px) translateZ() rotateY()` de cada letra | 400ms por letra, 50ms entre letras | No existe (la franja es solo del modo horizontal) |
 | Línea de Trayectoria | Scroll | `scale` X del `::before` de `.stages` | Lineal, atada al scroll: del 60% de la ventana al borde derecho del panel (en Firefox, `--rail` desde TrackController) | No existe (vertical) |
 | Muro de Habilidades | Scroll | `color` y `-webkit-text-stroke-color` de cada palabra, del contorno gris a su estado final | Lineal, atada al scroll: en horizontal, del 70% de la ventana a panel entero, 2,3cqi entre palabra y palabra; en vertical, `view()` de cada palabra (`cover 15%` a `cover 40%`) | Estado final, quieto |
+| Índice de Proyectos | Scroll | `color` y `--fill` de cada fila (la línea del acento es un `::after` que lo hereda) | Lineal, atada al scroll: en horizontal, desde que el panel llega al 75% de la ventana hasta el 60%, 3cqi entre fila y fila; en vertical, `view()` de cada fila (`cover 15%` a `cover 40%`) | Lleno, quieto |
+| Paralaje de una tarjeta | Scroll | `translate` X de la placa (3cqi) y del texto (1,5cqi), los dos desde `--cross` | Lineal, atada al scroll: todo el cruce del panel, de su borde izquierdo entrando por la derecha a su borde derecho saliendo por la izquierda (en Firefox, `--cross` desde TrackController) | Sin desplazar (`--cross` queda en 0,5) |
+| Deriva de una tarjeta | Scroll | `translate` Y de la tarjeta, 2cqi, en sentidos contrarios según la fila | Igual que la paralaje | Sin desplazar |
+| Captura dentro del teléfono | Scroll | `translate` Y de la captura, lo que le sobra de alto | Igual que la paralaje | Quieta, encuadrada |
+| Hover de una tarjeta | Hover (puntero fino) | `color` del título; `scale` del logo (1,04) y `translate` Y del nombre de la placa tipográfica | 220ms y 500ms `--ease-out` | Solo el color |
 | Barra de progreso | Scroll | `scale` X | Lineal | No existe (vertical) |
 | Transición al cierre | Scroll | `scale` del degradado: de 0,05 a 1,02 en X (horizontal) o de 0,05 a 1 en Y (vertical) | Lineal, atada al scroll: en horizontal, mientras el borde izquierdo del panel va del borde derecho de la ventana al centro menos 100px (misma línea de tiempo que la pista; en Firefox, TrackController); en vertical, `view()` de `entry 0%` a `entry 100%` | Quieta y dibujada |
 | Tachado del nav y de "Ver el proyecto" (`/trayectoria`) | Hover o foco | `scale` X del pseudo-elemento | 220ms `--ease-out` | Aparece sin transición (R-M6) |

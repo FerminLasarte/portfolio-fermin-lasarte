@@ -20,8 +20,8 @@ export default function ProjectsPage({ t, lang }) {
       </header>
 
       <div className="project-list">
-        {PROJECTS.map((project) => (
-          <ProjectCard key={project.id} project={project} t={t} lang={lang} panel={false} />
+        {PROJECTS.map((project, i) => (
+          <ProjectCard key={project.id} project={project} t={t} lang={lang} n={i + 1} panel={false} />
         ))}
       </div>
 
