@@ -5,7 +5,7 @@ import { PROJECTS, STATS } from "@/lib/site";
 // los datos, y un panel por proyecto, en el orden de PROJECTS (M11). El envoltorio
 // .projects es una grilla en vertical y desaparece en horizontal (display: contents),
 // donde cada tarjeta es un panel de la pista.
-export default function Projects({ t }) {
+export default function Projects({ t, lang }) {
   const stats = [
     { value: STATS.appsLive, label: t("projects.stat.apps") },
     { value: `${STATS.years}+`, label: t("projects.stat.years") },
@@ -35,7 +35,7 @@ export default function Projects({ t }) {
       </section>
 
       {PROJECTS.map((project) => (
-        <ProjectCard key={project.id} project={project} t={t} />
+        <ProjectCard key={project.id} project={project} t={t} lang={lang} />
       ))}
     </div>
   );

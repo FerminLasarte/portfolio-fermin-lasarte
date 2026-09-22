@@ -11,6 +11,7 @@ import {
 } from "@/lib/i18n";
 import { PAGES } from "@/lib/pages.mjs";
 import { PERSON } from "@/lib/site";
+import ProjectsPage from "@/components/ProjectsPage";
 import ExperiencePage from "@/components/ExperiencePage";
 import SkillsPage from "@/components/SkillsPage";
 import JsonLd from "@/components/JsonLd";
@@ -19,6 +20,7 @@ import JsonLd from "@/components/JsonLd";
 // de su metadata están en PAGE_TEXT (lib/i18n.js), compartidos con su imagen de Open
 // Graph (opengraph-image.js, en esta misma carpeta).
 const VIEWS = {
+  projects: ProjectsPage,
   experience: ExperiencePage,
   skills: SkillsPage,
 };

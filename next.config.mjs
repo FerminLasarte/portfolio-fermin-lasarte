@@ -1,9 +1,5 @@
 import { PAGES } from "./lib/pages.mjs";
 
-// Rutas en español de las páginas propias (/trayectoria): se sirven sin prefijo, igual
-// que la home.
-const esSlugs = Object.values(PAGES).map((page) => page.es);
-
 // Cabeceras de seguridad de todas las respuestas (R-M22 de la re-auditoría); HSTS lo
 // pone Vercel. La CSP es mínima a propósito: no deja que otro sitio meta la página en
 // un iframe, ni cambiar la base de las URLs, ni cargar plugins. Una completa
@@ -28,6 +24,12 @@ const cacheHeaders = [
   },
 ];
 
+// Rutas en español de las páginas propias (/trayectoria): se sirven sin prefijo, igual
+// que la home. Cada una se lista dos veces, ella y lo que cuelgue de ella, porque
+// Proyectos tiene una página por proyecto (/proyectos/travelpic). Las que no tienen
+// hijas no pierden nada: esa ruta no existe y termina en el 404 igual.
+const esRoutes = Object.values(PAGES).flatMap((page) => [page.es, `${page.es}/:slug`]);
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   poweredByHeader: false,
@@ -43,13 +45,13 @@ const nextConfig = {
   async rewrites() {
     return [
       { source: "/", destination: "/es" },
-      ...esSlugs.map((slug) => ({ source: `/${slug}`, destination: `/es/${slug}` })),
+      ...esRoutes.map((route) => ({ source: `/${route}`, destination: `/es/${route}` })),
     ];
   },
   async redirects() {
     return [
       { source: "/es", destination: "/", permanent: true },
-      ...esSlugs.map((slug) => ({ source: `/es/${slug}`, destination: `/${slug}`, permanent: true })),
+      ...esRoutes.map((route) => ({ source: `/es/${route}`, destination: `/${route}`, permanent: true })),
     ];
   },
 };

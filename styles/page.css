@@ -221,6 +221,85 @@ html.dark-mode .skill-row img[data-dark-invert] {
   }
 }
 
+/* ---------- Proyectos: la lista y la página de cada proyecto ---------- */
+
+/* /proyectos: las mismas tarjetas de la home (components/ProjectCard.jsx con
+   panel={false}), en dos columnas desde tablet y sin nada de la pista. */
+.project-list {
+  display: grid;
+  gap: var(--space-8) var(--pad-x);
+}
+
+/* El número y la vuelta a la lista, arriba del título. */
+.project__kicker {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+
+.project__n {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.project__problem {
+  max-width: 34.36em; /* 60ch */
+  font-size: var(--fs-2);
+  color: var(--ink-muted);
+}
+
+/* La placa, a lo ancho de la página. Va como una banda y no como el 16/9 de la
+   tarjeta: a 1200px de ancho, un 16/9 mide 675px de alto y se come la pantalla. Por lo
+   mismo, el logo ocupa menos proporción que en la tarjeta, que es angosta. */
+.project__plate {
+  --plate-ratio: 5 / 2;
+}
+
+.project__plate img {
+  inline-size: min(45%, 26rem);
+}
+
+/* Anterior y siguiente, al pie. */
+.project__around {
+  display: grid;
+  gap: var(--space-5);
+  padding-block-start: var(--space-6);
+  border-top: 1px solid var(--surface);
+}
+
+.project__step {
+  display: grid;
+  gap: var(--space-1);
+  color: inherit;
+  text-decoration: none;
+}
+
+.project__step-name {
+  font-size: var(--fs-3);
+  line-height: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .project__step-name {
+    transition: color var(--dur-hover) var(--ease-out);
+  }
+
+  .project__step:hover .project__step-name {
+    color: var(--accent);
+  }
+}
+
+@media (min-width: 48rem) {
+  .project-list,
+  .project__around {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .project__step--next {
+    text-align: end;
+  }
+}
+
 /* ---------- Entrada: el título sube en su máscara y el resto llega detrás ---------- */
 
 @media (prefers-reduced-motion: no-preference) {

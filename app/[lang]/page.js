@@ -34,7 +34,7 @@ export default async function Home({ params }) {
       <Preloader words={t("preloader.words")} />
       <Track cards={PROJECTS.length - cardsLg} cardsLg={cardsLg}>
         <Hero t={t} lang={lang} />
-        <Projects t={t} />
+        <Projects t={t} lang={lang} />
         <Trajectory t={t} lang={lang} />
         <Skills t={t} lang={lang} />
         <Contact t={t} />

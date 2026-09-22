@@ -10,7 +10,7 @@ El diseño es una "tira de pantallas": en escritorio, las secciones pasan de cos
 - CSS plano, repartido en `styles/` (tokens, base y una hoja por componente) y reunido en `app/globals.css`. La pista horizontal es CSS: `position: sticky` y una animación atada al scroll, con un respaldo en JS para los navegadores sin `animation-timeline`.
 - [Lenis](https://github.com/darkroomengineering/lenis) para el scroll suave con la rueda, solo con mouse y sin reduce motion.
 - Archivo, variable y recortada a lo que usa el sitio, con `next/font/local`.
-- i18n por ruta: `/` en español y `/en` en inglés, y las páginas propias (`/trayectoria` y `/en/experience`, `/habilidades` y `/en/skills`). Todo se prerenderiza, con el diccionario en el servidor (`lib/i18n.js`).
+- i18n por ruta: `/` en español y `/en` en inglés, las páginas propias (`/proyectos` y `/en/projects`, `/trayectoria` y `/en/experience`, `/habilidades` y `/en/skills`) y una página por proyecto (`/proyectos/<id>`, con el mismo slug en los dos idiomas). Todo se prerenderiza, con el diccionario en el servidor (`lib/i18n.js`).
 - Tema claro y oscuro sin parpadeo al cargar: sigue al sistema hasta que se usa el botón, y desde ahí manda lo elegido.
 
 ## Desarrollo
@@ -54,7 +54,8 @@ app/
     layout.js            # layout raíz por idioma: metadata, hreflang y JSON-LD
     page.js              # la home: la pista con sus paneles
     opengraph-image.js   # imagen de Open Graph de cada home
-    [page]/              # páginas propias (Trayectoria y Habilidades), con su imagen
+    [page]/              # páginas propias (Proyectos, Trayectoria y Habilidades), con su imagen
+      [slug]/            # la página de cada proyecto, con su imagen de Open Graph
   global-not-found.js    # 404 bilingüe de todas las URLs que no existen
   global-error.js        # error bilingüe que reemplaza al layout raíz
   sitemap.js, robots.js

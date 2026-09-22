@@ -1,10 +1,11 @@
-import { DEFAULT_LOCALE, LOCALES, homeUrl, pageUrl } from "@/lib/i18n";
+import { DEFAULT_LOCALE, LOCALES, homeUrl, pageUrl, projectUrl } from "@/lib/i18n";
 import { PAGES } from "@/lib/pages.mjs";
+import { PROJECTS } from "@/lib/site";
 
-// /sitemap.xml: la home y las páginas propias de cada idioma, con sus alternativas
-// (hreflang), x-default incluido, como en el <head>. Sin `lastModified`: no hay una
-// fecha real por página, y la del build le decía a los buscadores que todo cambiaba
-// en cada deploy (R-M24 de la re-auditoría).
+// /sitemap.xml: la home, las páginas propias y la de cada proyecto, en los dos idiomas,
+// con sus alternativas (hreflang), x-default incluido, como en el <head>. Sin
+// `lastModified`: no hay una fecha real por página, y la del build le decía a los
+// buscadores que todo cambiaba en cada deploy (R-M24 de la re-auditoría).
 const alternates = (url) => ({
   languages: {
     ...Object.fromEntries(LOCALES.map((l) => [l, url(l)])),
@@ -28,5 +29,14 @@ export default function sitemap() {
       alternates: alternates(url),
     }));
   });
-  return [...home, ...pages];
+  const projects = PROJECTS.flatMap((project) => {
+    const url = (l) => projectUrl(l, project.id);
+    return LOCALES.map((lang) => ({
+      url: url(lang),
+      changeFrequency: "monthly",
+      priority: lang === DEFAULT_LOCALE ? 0.6 : 0.5,
+      alternates: alternates(url),
+    }));
+  });
+  return [...home, ...pages, ...projects];
 }

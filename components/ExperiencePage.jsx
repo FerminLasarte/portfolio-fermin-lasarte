@@ -1,5 +1,5 @@
 import { EDUCATION_NOTES, PROJECTS, STAGES } from "@/lib/site";
-import { homePath } from "@/lib/i18n";
+import { homePath, projectPath } from "@/lib/i18n";
 import { twoDigits } from "@/lib/text";
 
 // Página de Trayectoria (docs/DISENO.md, 7.12): el detalle de la vista previa de la
@@ -53,8 +53,14 @@ export default function ExperiencePage({ t, lang }) {
                   {t("page.techs")}: {c.tags.join(", ")}
                 </p>
               )}
+              {/* Lleva a la página del proyecto, que es de lo que habla la etapa; antes
+                  llevaba a su tarjeta en la home, que dice menos. */}
               {projects[c.id] && (
-                <a className="chapter__link strike" href={`${home}#proyecto-${c.id}`} data-curtain={t("projects.title")}>
+                <a
+                  className="chapter__link strike"
+                  href={projectPath(lang, c.id)}
+                  data-curtain={t(`projects.${c.id}.name`, projects[c.id].name)}
+                >
                   {t("page.seeProject")}
                   {/* Se repite en cada etapa: el nombre suma el proyecto (R-M10). */}
                   <span className="sr-only"> {t(`projects.${c.id}.name`, projects[c.id].name)}</span>

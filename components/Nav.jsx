@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useSelectedLayoutSegment } from "next/navigation";
+import { useSelectedLayoutSegments } from "next/navigation";
 import ThemeToggle from "@/components/ThemeToggle";
 import Icon from "@/components/Icon";
 import { faGithub, faLinkedin } from "@/lib/icons";
@@ -36,10 +36,15 @@ export default function Nav({ brand, links, switchTo, labels, social }) {
   // ventana en horizontal; el 40% del alto en vertical). Si no hay ninguno (la
   // transición al cierre no tiene id), la sección actual.
   // En una página propia, el idioma lleva a la misma página en el otro idioma
-  // (useSelectedLayoutSegment da el segmento debajo del layout de [lang], igual en el
-  // servidor y en el navegador); en la home, a la otra home.
-  const segment = useSelectedLayoutSegment();
-  const langHref = (segment && switchTo.pages?.[segment]) || switchTo.href;
+  // (useSelectedLayoutSegments da los segmentos debajo del layout de [lang], iguales en
+  // el servidor y en el navegador); en la home, a la otra home.
+  // Los segmentos debajo del layout de [lang]: ["proyectos"] en la lista y
+  // ["proyectos", "travelpic"] en la página de un proyecto. El slug es el mismo en los
+  // dos idiomas (lib/pages.mjs), así que se lo pega tal cual y el idioma no saca del
+  // proyecto en el que se estaba.
+  const [segment, slug] = useSelectedLayoutSegments();
+  const page = segment && switchTo.pages?.[segment];
+  const langHref = (page && (slug ? `${page}/${slug}` : page)) || switchTo.href;
   const handleLangClick = (e) => {
     if (segment) return;
     const panel = document.elementFromPoint(innerWidth / 2, innerHeight * 0.4)?.closest("main .panel[id]");
