@@ -279,6 +279,41 @@ html.dark-mode .skill-row img[data-dark-invert] {
   }
 }
 
+/* Varias capturas (media.gallery): en abanico, la principal adelante y las otras detrás,
+   una a cada lado, más chicas. Las tres ocupan la misma celda y se abren con
+   `transform` (el `translate` queda libre para la paralaje). El borde del color de la
+   placa hace de marco y las separa donde se pisan. El alto sale del ancho de la placa
+   (80cqi) cuando es angosta, así las de los costados no se cortan: el abanico mide
+   2,46 veces el ancho de un teléfono. */
+.project__plate:has(.plate__fan) {
+  container-type: inline-size;
+}
+
+.plate__fan {
+  display: grid;
+  grid-template: minmax(0, 1fr) / auto;
+  place-items: center;
+  block-size: 100%;
+}
+
+.plate__fan > .plate__frame {
+  grid-area: 1 / 1;
+  block-size: min(100%, 80cqi);
+  box-shadow: 0 0 0 max(3px, 0.9cqi) var(--plate);
+}
+
+.plate__fan > :first-child {
+  z-index: 1;
+}
+
+.plate__fan > :nth-child(2) {
+  transform: translateX(-80%) scale(0.86);
+}
+
+.plate__fan > :nth-child(3) {
+  transform: translateX(80%) scale(0.86);
+}
+
 @media (min-width: 64rem) {
   .project__plate.card__plate--shot {
     --plate-ratio: 5 / 2;
@@ -426,14 +461,17 @@ html.dark-mode .skill-row img[data-dark-invert] {
      entera y el siguiente proyecto lleno. */
   @supports (animation-timeline: view()) {
     /* El teléfono (o el logo) sube más rápido que la página mientras la placa cruza la
-       ventana: la paralaje de las tarjetas de la home, en vertical. La línea de tiempo
+       ventana: la paralaje de las tarjetas de la home, en vertical. En el abanico, cada
+       teléfono según su profundidad (--k, components/ProjectPlate.jsx): los de atrás se
+       mueven menos. La línea de tiempo
        es la de la placa y no la del propio elemento, porque el que se mueve cambiaría
        su propia vista. */
     html.js .project__plate {
       view-timeline: --plate block;
     }
 
-    html.js .project__plate > * {
+    html.js .project__plate > :not(.plate__fan),
+    html.js .plate__fan > * {
       animation: plate-rise linear both;
       animation-timeline: --plate;
       animation-range: cover;
@@ -458,11 +496,11 @@ html.dark-mode .skill-row img[data-dark-invert] {
 
 @keyframes plate-rise {
   from {
-    translate: 0 6%;
+    translate: 0 calc(6% * var(--k, 1));
   }
 
   to {
-    translate: 0 -6%;
+    translate: 0 calc(-6% * var(--k, 1));
   }
 }
 

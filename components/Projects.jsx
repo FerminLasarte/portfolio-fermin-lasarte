@@ -1,6 +1,7 @@
 import ProjectCard from "@/components/ProjectCard";
 import { PROJECTS, STATS, isFeatured } from "@/lib/site";
 import { padded } from "@/lib/text";
+import { appsLabel } from "@/lib/i18n";
 
 // Dónde empieza cada tarjeta dentro del recorrido, en el mismo lenguaje que --x-cards
 // (styles/track.css): lo que miden las que tiene delante. Como la pista se mueve 1px
@@ -25,7 +26,7 @@ function offsets(projects) {
 // es un panel de la pista.
 export default function Projects({ t, lang }) {
   const stats = [
-    { value: STATS.appsLive, label: t("projects.stat.apps") },
+    { value: STATS.appsLive, label: appsLabel(lang, t) },
     { value: `${STATS.years}+`, label: t("projects.stat.years") },
     { value: STATS.projects, label: t("projects.stat.projects") },
   ];

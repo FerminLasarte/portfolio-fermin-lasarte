@@ -22,37 +22,60 @@ const SHOT_SIZES = "(min-width: 48rem) 16rem, 50vw";
 //    nombre del destino: lleva a otra página, así que necesita la cortina igual que el
 //    botón (components/Curtain.jsx solo mira los enlaces con data-curtain).
 //  - `sizes`: el del <img>, que cambia según dónde se muestre.
+//  - `gallery`: en la página del proyecto, las capturas de `media.gallery` van en abanico
+//    detrás de la principal (docs/DISENO.md, 7.13). Cada una con su profundidad (--k),
+//    que decide cuánto se mueve con el scroll: las de atrás, menos.
 // El logo y el nombre repiten el título, así que son decorativos (alt vacío). La
 // captura no: muestra la app. En la página del proyecto lleva su descripción
 // (`projects.<id>.shotAlt`) y los lectores de pantalla la leen; en la tarjeta la placa
 // entera es un enlace oculto que repite el botón, así que ahí sigue vacía.
-export default function ProjectPlate({ project, t, sizes, href, curtain, className = "" }) {
+// La profundidad de cada teléfono del abanico: el de adelante y, detrás, uno a cada lado.
+const DEPTH = [1, 0.5, 0.75];
+
+export default function ProjectPlate({ project, t, sizes, href, curtain, gallery = false, className = "" }) {
   const { id, name, media } = project;
   const style = { ...(media.plate ? { "--plate": media.plate } : null) };
-  const alt = media.type === "shot" && !href ? t(`projects.${id}.shotAlt`, "") : "";
-  const image = (extra) => (
+  const described = media.type === "shot" && !href;
+  const alt = described ? t(`projects.${id}.shotAlt`, "") : "";
+  const image = (src, { alt: text, className: imgClass }) => (
     // eslint-disable-next-line @next/next/no-img-element -- los atributos salen de getImageProps (R-M15)
     <img
       {...getImageProps({
-        src: media.image,
-        width: media.width,
-        height: media.height,
+        src: src.image,
+        width: src.width,
+        height: src.height,
         sizes: media.type === "shot" ? SHOT_SIZES : sizes,
-        alt,
+        alt: text,
       }).props}
-      alt={alt}
-      {...extra}
+      alt={text}
+      className={imgClass}
     />
+  );
+  const frame = (shot, altText, extraStyle) => (
+    <span
+      key={shot.image}
+      className="plate__frame"
+      style={{ "--shot-travel": `${(travel(shot) * 100).toFixed(2)}%`, ...extraStyle }}
+    >
+      {image(shot, { className: "plate__shot", alt: altText })}
+    </span>
   );
 
   let inner;
   if (media.type === "type") {
     inner = <span className="poster">{t(`projects.${id}.name`, name)}</span>;
+  } else if (media.type === "shot" && gallery && media.gallery?.length) {
+    const shots = [
+      { shot: media, alt },
+      ...media.gallery.map((g) => ({ shot: g, alt: described ? t(`projects.${id}.shotAlt.${g.key}`, "") : "" })),
+    ];
+    inner = (
+      <span className="plate__fan">{shots.map((s, i) => frame(s.shot, s.alt, { "--k": DEPTH[i] ?? 0.5 }))}</span>
+    );
   } else if (media.type === "shot") {
-    style["--shot-travel"] = `${(travel(media) * 100).toFixed(2)}%`;
-    inner = <span className="plate__frame">{image({ className: "plate__shot" })}</span>;
+    inner = frame(media, alt);
   } else {
-    inner = image();
+    inner = image(media, { alt: "" });
   }
 
   const Tag = href ? "a" : "div";

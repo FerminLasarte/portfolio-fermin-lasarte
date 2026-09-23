@@ -1,6 +1,6 @@
 import "../globals.css";
 import { fill } from "@/lib/translations";
-import { DEFAULT_LOCALE, LOCALES, getT, homePath, homeUrl, shareMeta } from "@/lib/i18n";
+import { DEFAULT_LOCALE, LOCALES, appsLabel, getT, homePath, homeUrl, shareMeta } from "@/lib/i18n";
 import {
   ICONS,
   LD_ID,
@@ -27,14 +27,14 @@ export const revalidate = 86400;
 export function generateStaticParams() {
   return LOCALES.map((lang) => ({ lang }));
 }
-const describe = (t) =>
-  fill(t("meta.description"), { name: PERSON.name, role: ROLE, apps: STATS.appsLive });
+const describe = (lang, t) =>
+  fill(t("meta.description"), { name: PERSON.name, role: ROLE, apps: STATS.appsLive, appsLabel: appsLabel(lang, t) });
 
 // La imagen de Open Graph sale de opengraph-image.js (una por idioma).
 export async function generateMetadata({ params }) {
   const { lang } = await params;
   const t = getT(lang);
-  const description = describe(t);
+  const description = describe(lang, t);
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -76,7 +76,7 @@ export default async function RootLayout({ children, params }) {
         name: PERSON.name,
         url: SITE_URL,
         jobTitle: ROLE,
-        description: describe(t),
+        description: describe(lang, t),
         image: `${SITE_URL}/assets/fermin.jpg`,
         knowsAbout: [...SKILLS.map((s) => s.name), ...OTHER_SKILLS],
         knowsLanguage: PERSON.languages,

@@ -68,7 +68,13 @@ export default function ProjectPage({ project, t, lang }) {
           la página quedaba una banda de color de medio metro repitiendo el título. */}
       {project.media.type !== "type" && (
         <div className="project__stage" data-reveal>
-          <ProjectPlate project={project} t={t} sizes="(min-width: 90rem) 80rem, 92vw" className="project__plate" />
+          <ProjectPlate
+            project={project}
+            t={t}
+            sizes="(min-width: 90rem) 80rem, 92vw"
+            className="project__plate"
+            gallery
+          />
         </div>
       )}
 

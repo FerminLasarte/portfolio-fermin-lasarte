@@ -1,5 +1,5 @@
 import { fill } from "@/lib/translations";
-import { LOCALES, getT } from "@/lib/i18n";
+import { LOCALES, appsLabel, getT } from "@/lib/i18n";
 import { OG_SIZE, OG_TYPE, ogImage } from "@/lib/og";
 import { PERSON, ROLE, SITE_TITLE, STATS } from "@/lib/site";
 
@@ -24,7 +24,7 @@ export default async function Image({ params }) {
   const { lang } = await params;
   return ogImage({
     top: ROLE,
-    lead: fill(getT(lang)("meta.ogTagline"), { apps: STATS.appsLive }),
+    lead: fill(getT(lang)("meta.ogTagline"), { apps: STATS.appsLive, appsLabel: appsLabel(lang, getT(lang)) }),
     // Una palabra por línea, como el nombre del hero.
     words: PERSON.name.split(" "),
     fontSize: 176,
