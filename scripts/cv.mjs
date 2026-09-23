@@ -91,7 +91,7 @@ const CV = {
           "Creé en Flutter una plataforma para que los complejos deportivos gestionen sus reservas en tiempo real.",
           "Diseñé el backend serverless en Firebase: Firestore para los datos en tiempo real y Cloud Messaging para las notificaciones push.",
           "Integré pagos con Mercado Pago y desarrollé desde cero un chat nativo en tiempo real entre jugadores y complejos.",
-          "Publiqué la app en App Store y Google Play, donde sigue en producción, y después vendí el producto.",
+          "Publiqué la app en App Store y Google Play: llegó a 11 complejos, más de 4300 usuarios y más de 1300 reservas, y después vendí el producto.",
         ],
       },
     ],
@@ -107,7 +107,7 @@ const CV = {
         name: "Vault: finanzas personales",
         link: "vault",
         note: "Proyecto propio",
-        tags: "Tauri, React, TypeScript, SQLite",
+        tags: "Tauri, Rust, React, TypeScript, SQLite",
         desc: "App de escritorio local-first: los datos quedan en SQLite, en el dispositivo, sin servidor ni cuentas.",
       },
       {
@@ -120,7 +120,7 @@ const CV = {
     ],
     skills: [
       ["Móvil", "Swift, SwiftUI, Objective-C, Flutter, Dart, React Native"],
-      ["Backend", "Java, Python, FastAPI, C# / .NET, C / C++, APIs REST"],
+      ["Backend", "Java, Python, FastAPI, Rust, C# / .NET, C / C++, APIs REST"],
       ["Web", "TypeScript, JavaScript, React, Next.js, HTML, CSS"],
       ["Datos y nube", "PostgreSQL, MongoDB, Firebase, Supabase, SQLite, Docker"],
       ["IA", "Claude API, RAG, Rasa, Machine Learning"],
@@ -169,7 +169,7 @@ const CV = {
           "Built a Flutter platform that lets sports complexes manage their bookings in real time.",
           "Designed the serverless backend on Firebase: Firestore for real-time data and Cloud Messaging for push notifications.",
           "Integrated Mercado Pago payments and built a native real-time chat between players and venues from scratch.",
-          "Released the app on the App Store and Google Play, where it is still live, and later sold the product.",
+          "Released the app on the App Store and Google Play, where it reached 11 venues, 4,300+ users and 1,300+ bookings, and later sold the product.",
         ],
       },
     ],
@@ -185,7 +185,7 @@ const CV = {
         name: "Vault: personal finance",
         link: "vault",
         note: "Own project",
-        tags: "Tauri, React, TypeScript, SQLite",
+        tags: "Tauri, Rust, React, TypeScript, SQLite",
         desc: "Local-first desktop app: data stays in SQLite on the device, with no server and no accounts.",
       },
       {
@@ -198,7 +198,7 @@ const CV = {
     ],
     skills: [
       ["Mobile", "Swift, SwiftUI, Objective-C, Flutter, Dart, React Native"],
-      ["Backend", "Java, Python, FastAPI, C# / .NET, C / C++, REST APIs"],
+      ["Backend", "Java, Python, FastAPI, Rust, C# / .NET, C / C++, REST APIs"],
       ["Web", "TypeScript, JavaScript, React, Next.js, HTML, CSS"],
       ["Data & cloud", "PostgreSQL, MongoDB, Firebase, Supabase, SQLite, Docker"],
       ["AI", "Claude API, RAG, Rasa, Machine Learning"],
