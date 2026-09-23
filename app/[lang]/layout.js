@@ -77,7 +77,7 @@ export default async function RootLayout({ children, params }) {
         url: SITE_URL,
         jobTitle: ROLE,
         description: describe(t),
-        image: `${SITE_URL}/assets/foto_perfil.jpg`,
+        image: `${SITE_URL}/assets/fermin.jpg`,
         knowsAbout: [...SKILLS.map((s) => s.name), ...OTHER_SKILLS],
         knowsLanguage: PERSON.languages,
         alumniOf: { "@type": "CollegeOrUniversity", name: t("edu.unicen.company") },

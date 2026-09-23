@@ -17,9 +17,9 @@ export default function Hero({ t, lang }) {
   // atributos que <Image>, armados en el servidor, sin el componente de cliente de
   // next/image. La precarga que ponía <Image> se pide acá, como lo hace Next por dentro.
   const { props: photo } = getImageProps({
-    src: "/assets/foto_perfil.webp",
-    width: 560,
-    height: 715,
+    src: "/assets/fermin.webp",
+    width: 1120,
+    height: 1400,
     sizes: "(min-width: 64rem) 24vw, (min-width: 48rem) 18rem, 20rem",
     loading: "eager",
     fetchPriority: "high",
