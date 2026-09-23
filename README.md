@@ -2,7 +2,7 @@
 
 Portfolio personal de Fermin Lasarte (iOS & Cross-Platform Mobile Engineer), construido con **Next.js (App Router)** en JavaScript.
 
-El diseño es una "tira de pantallas": en escritorio, las secciones pasan de costado en una pista horizontal que mueve el scroll; en móvil, con reduce motion o sin JS, la página es vertical. El diseño completo está en [`docs/DISENO.md`](docs/DISENO.md), y las auditorías, con su estado, en [`docs/AUDITORIA.md`](docs/AUDITORIA.md).
+El diseño es una "tira de pantallas": en escritorio, las secciones pasan de costado en una pista horizontal que mueve el scroll; en móvil, con reduce motion o sin JS, la página es vertical. El diseño completo está en [`docs/DISENO.md`](docs/DISENO.md).
 
 ## Stack
 
@@ -82,7 +82,6 @@ scripts/
   strip-metadata.mjs     # quita los metadatos de JPEG, PNG y WebP
 docs/
   DISENO.md              # el diseño: dirección, tokens, componentes y movimiento
-  AUDITORIA.md           # auditorías y su estado, por fase
 assets/fonts/            # Archivo (OFL): la de la web y las de la imagen de Open Graph
 public/
   assets/                # foto, logos y CVs (los CV, generados por scripts/cv.mjs)

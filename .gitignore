@@ -22,3 +22,6 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# notas de trabajo locales (no se publican)
+/docs/AUDITORIA.md
