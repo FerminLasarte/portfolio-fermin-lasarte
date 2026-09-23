@@ -279,6 +279,54 @@ html.dark-mode .skill-row img[data-dark-invert] {
   }
 }
 
+/* Una app de escritorio: cuadrada no, porque la ventana es apaisada. 4:3 en celular, 2:1
+   en tablet y la banda de siempre desde escritorio. */
+.project__plate.card__plate--window {
+  --plate-ratio: 4 / 3;
+}
+
+@media (min-width: 48rem) {
+  .project__plate.card__plate--window {
+    --plate-ratio: 2;
+  }
+}
+
+@media (min-width: 64rem) {
+  .project__plate.card__plate--window {
+    --plate-ratio: 5 / 2;
+  }
+}
+
+/* Varias ventanas (media.gallery de "window"): en cascada, como en un escritorio. La
+   principal adelante y abajo a la derecha, y las otras detrás, cada una más arriba, más
+   a la izquierda y un poco más chica. Van en la misma celda y se corren con
+   `transform` (el `translate` queda para la paralaje); el grupo se corre al revés, así
+   la cascada queda centrada. Para que entre, la ventana es más chica que sola: la
+   cascada mide 1,16 veces su ancho y 1,2 veces su alto. */
+.plate__stack {
+  display: grid;
+  place-items: center;
+  transform: translate(8%, 10%);
+}
+
+.plate__stack > .plate__window {
+  --win-w: min(79cqi, 111cqb);
+  grid-area: 1 / 1;
+}
+
+.plate__stack > :first-child {
+  z-index: 2;
+}
+
+.plate__stack > :nth-child(2) {
+  z-index: 1;
+  transform: translate(-8%, -10%) scale(0.94);
+}
+
+.plate__stack > :nth-child(3) {
+  transform: translate(-16%, -20%) scale(0.88);
+}
+
 /* Varias capturas (media.gallery): en abanico, la principal adelante y las otras detrás,
    una a cada lado, más chicas. Las tres ocupan la misma celda y se abren con
    `transform` (el `translate` queda libre para la paralaje). El borde del color de la
@@ -470,8 +518,8 @@ html.dark-mode .skill-row img[data-dark-invert] {
       view-timeline: --plate block;
     }
 
-    html.js .project__plate > :not(.plate__fan),
-    html.js .plate__fan > * {
+    html.js .project__plate > :not(.plate__fan, .plate__stack),
+    html.js :is(.plate__fan, .plate__stack) > * {
       animation: plate-rise linear both;
       animation-timeline: --plate;
       animation-range: cover;

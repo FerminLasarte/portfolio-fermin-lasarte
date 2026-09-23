@@ -215,6 +215,70 @@
   translate: 0 calc(var(--cross) * -1 * var(--shot-travel, 0%));
 }
 
+/* Captura de una app de escritorio en una ventana de macOS (media.type "window", Vault).
+   La ventana se mide contra la placa (contenedor de tamaño): lo más ancha que entre, sin
+   pasarse del alto. Todo lo demás (la barra, los botones, el redondeo, la sombra) sale
+   de su ancho, --win-w, así es la misma ventana en la tarjeta y en la página. La barra
+   mide el 3,5% del ancho y la captura es 1600×1004, así que la ventana entera mide 0,662
+   veces su ancho de alto: con 127cqb llena el 84% del alto de la placa. */
+.card__plate--window {
+  container-type: size;
+}
+
+.plate__window {
+  --win-w: min(86cqi, 127cqb);
+  display: grid;
+  inline-size: var(--win-w);
+  border-radius: calc(var(--win-w) * 0.012);
+  overflow: clip;
+  background: var(--paper);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--ink) 14%, transparent),
+    0 calc(var(--win-w) * 0.02) calc(var(--win-w) * 0.06) rgb(0 0 0 / 0.18);
+}
+
+.plate__bar {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--win-w) * 0.008);
+  block-size: calc(var(--win-w) * 0.035);
+  padding-inline: calc(var(--win-w) * 0.014);
+  background: #e9e7e4;
+}
+
+/* Los tres botones de la ventana, con los colores de macOS: son la seña de "ventana". */
+.plate__bar > span {
+  inline-size: calc(var(--win-w) * 0.011);
+  aspect-ratio: 1;
+  border-radius: var(--radius-round);
+  background: #ff5f57;
+}
+
+.plate__bar > span:nth-child(2) {
+  background: #febc2e;
+}
+
+.plate__bar > span:nth-child(3) {
+  background: #28c840;
+}
+
+.card__plate .plate__window img {
+  inline-size: 100%;
+  block-size: auto;
+}
+
+/* La captura del tema del sitio: la oscura con html.dark-mode (lib/theme.js), la clara
+   si no. La que no va queda con display: none, que tampoco se lee ni, siendo lazy, se
+   descarga. */
+html.dark-mode .plate__img--light,
+html:not(.dark-mode) .plate__img--dark {
+  display: none;
+}
+
+html.dark-mode .plate__bar {
+  background: #1f1d1c;
+}
+
 .card__meta {
   display: flex;
   flex-wrap: wrap;
