@@ -60,8 +60,8 @@
     filter: none;
   }
 
-  /* Que una tarjeta o una etapa no quede partida entre dos hojas. */
-  .card,
+  /* Que una fila del índice o una etapa no quede partida entre dos hojas. */
+  .works__row,
   .stage,
   .chapter {
     break-inside: avoid;

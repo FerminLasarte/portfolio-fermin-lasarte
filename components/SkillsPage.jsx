@@ -12,7 +12,7 @@ import { homePath } from "@/lib/i18n";
 export default function SkillsPage({ t, lang }) {
   const home = homePath(lang);
   const usedIn = (name) => PROJECTS.filter((p) => p.tags.includes(name));
-  // El nombre traducido, como en ProjectCard ("Compilador" / "Compiler").
+  // El nombre traducido, como en el índice de Proyectos ("Compilador" / "Compiler").
   const projectName = (p) => t(`projects.${p.id}.name`, p.name);
   const rows = SKILL_GROUPS.flatMap((g) => g.skills)
     .map((skill) => ({ name: skill.name, used: new Set(usedIn(skill.name).map((p) => p.id)) }))

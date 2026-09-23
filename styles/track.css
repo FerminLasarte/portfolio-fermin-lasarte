@@ -15,19 +15,14 @@ main,
 
 /* Largo de la pista: la suma de los anchos de los paneles (definidos abajo). Va en
    .h-scroll y no en :root porque un var() se resuelve donde se declara la variable,
-   y --n-card y --n-card-lg los escribe el servidor recién en este elemento.
+   y --n-stage lo escribe el servidor recién en este elemento.
    --x-* es dónde empieza cada sección, medido en el mismo recorrido de la pista: como
    1px de scroll mueve 1px la pista, esa distancia sirve igual como `animation-range`
    de la línea de tiempo --pan. Los usan styles/projects.css, styles/trajectory.css,
-   styles/skills.css y styles/contact.css para saber en qué tramo se mueve cada cosa.
-   --x-cards (dónde empieza la primera tarjeta) es el que cada tarjeta le suma para
-   calcular el suyo, en components/Projects.jsx. */
+   styles/skills.css y styles/contact.css para saber en qué tramo se mueve cada cosa. */
 .h-scroll {
   --x-projects: 100cqi; /* el hero mide una pantalla */
-  --x-cards: calc(var(--x-projects) + var(--w-intro));
-  --x-timeline: calc(
-    var(--x-cards) + var(--n-card-lg) * var(--w-card-lg) + var(--n-card) * var(--w-card)
-  );
+  --x-timeline: calc(var(--x-projects) + var(--w-projects));
   /* Trayectoria: la columna del título y una columna por etapa (--n-stage, de
      components/Track.jsx); cada etapa mide 3,9 veces el tamaño de sus años, así
      "2021–25" siempre entra. Va acá y no en :root, al lado de la cantidad, porque un
@@ -102,16 +97,8 @@ body {
     inline-size: 100cqi;
   }
 
-  html.js .panel--intro {
-    inline-size: var(--w-intro);
-  }
-
-  html.js .panel--card {
-    inline-size: var(--w-card);
-  }
-
-  html.js .panel--card-lg {
-    inline-size: var(--w-card-lg);
+  html.js .panel--projects {
+    inline-size: var(--w-projects);
   }
 
   html.js .panel--timeline {
@@ -168,13 +155,6 @@ body {
     background: var(--accent);
     scale: 0 1;
     transform-origin: left center;
-  }
-
-  /* El contador de Proyectos ("03 / 06"): en el color del texto, para que se
-     despegue del nombre de la sección, que va apagado. */
-  .strip__count {
-    color: var(--ink);
-    font-variant-numeric: tabular-nums;
   }
 
   .strip__credit {

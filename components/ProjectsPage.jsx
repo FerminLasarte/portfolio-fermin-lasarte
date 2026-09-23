@@ -1,12 +1,11 @@
-import ProjectCard from "@/components/ProjectCard";
-import { PROJECTS } from "@/lib/site";
+import ProjectIndex from "@/components/ProjectIndex";
 import { homePath } from "@/lib/i18n";
 
 // Página de Proyectos (/proyectos, docs/DISENO.md, 7.12): la lista completa en
 // vertical, que es también la madre de las páginas de cada proyecto (de ahí salen las
-// migas de pan "Inicio › Proyectos › TravelPic"). Son las mismas tarjetas de la home
-// sin nada de la pista (`panel={false}`): una sola definición de cómo se resume un
-// proyecto, en los dos lugares.
+// migas de pan "Inicio › Proyectos › TravelPic"). Es el mismo índice de la home
+// (components/ProjectIndex.jsx): una sola definición de cómo se resume un proyecto, en
+// los dos lugares.
 export default function ProjectsPage({ t, lang }) {
   const home = homePath(lang);
 
@@ -19,11 +18,7 @@ export default function ProjectsPage({ t, lang }) {
         <p className="page__lead">{t("projects.pageLead")}</p>
       </header>
 
-      <div className="project-list">
-        {PROJECTS.map((project, i) => (
-          <ProjectCard key={project.id} project={project} t={t} lang={lang} n={i + 1} panel={false} />
-        ))}
-      </div>
+      <ProjectIndex t={t} lang={lang} />
 
       {/* Ancla nativa, no next/link: la home española se sirve con una reescritura
           ("/" a "/es", next.config.mjs) y el router de Next no siempre la resuelve del

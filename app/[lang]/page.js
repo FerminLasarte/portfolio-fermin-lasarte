@@ -1,5 +1,5 @@
 import { getT, homeUrl } from "@/lib/i18n";
-import { LD_ID, PROJECTS, SITE_TITLE, STAGES, isFeatured } from "@/lib/site";
+import { LD_ID, SITE_TITLE, STAGES } from "@/lib/site";
 import JsonLd from "@/components/JsonLd";
 import Preloader from "@/components/Preloader";
 import Track from "@/components/Track";
@@ -15,7 +15,6 @@ import Contact from "@/components/Contact";
 export default async function Home({ params }) {
   const { lang } = await params;
   const t = getT(lang);
-  const cardsLg = PROJECTS.filter(isFeatured).length;
 
   // La home es la página de perfil de la persona que define el layout (R-M25).
   const profile = {
@@ -32,7 +31,7 @@ export default async function Home({ params }) {
     <>
       <JsonLd data={profile} />
       <Preloader words={t("preloader.words")} />
-      <Track cards={PROJECTS.length - cardsLg} cardsLg={cardsLg} stages={STAGES.length}>
+      <Track stages={STAGES.length}>
         <Hero t={t} lang={lang} />
         <Projects t={t} lang={lang} />
         <Trajectory t={t} lang={lang} />

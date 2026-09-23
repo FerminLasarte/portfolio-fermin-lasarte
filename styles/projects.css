@@ -1,102 +1,16 @@
 /*
- * Proyectos (docs/DISENO.md, 7.3): un panel de entrada con el índice y las cifras, y un
- * panel por proyecto. En horizontal, cada tarjeta es un panel de la pista; en vertical,
- * una grilla de una o dos columnas.
+ * Proyectos (docs/DISENO.md, 7.3 y 7.13): el índice de la home y de /proyectos, con la
+ * vista previa de cada proyecto (components/ProjectIndex.jsx), y lo que comparten las
+ * páginas de cada proyecto: la placa con sus capturas, la línea de meta, los enlaces y
+ * las cifras.
  *
- * El movimiento de la sección sale de --cross: cuánto lleva cruzada la pantalla el
- * panel, de 0 (su borde izquierdo entra por la derecha) a 1 (su borde derecho sale por
- * la izquierda). Lo mueve una sola animación atada a la pista y de ahí salen las dos
- * capas de la paralaje, la deriva de la tarjeta y el desplazamiento de la captura: así
- * hay un solo lugar donde se decide el recorrido y un solo lugar donde se lo calcula
- * (el respaldo de Firefox, en components/TrackController.jsx, escribe la misma
- * variable). Sin JS, con reduce motion o en vertical se queda en 0,5, que es el medio:
- * todo sin desplazar.
+ * Nada de esto se mueve con el scroll. Hasta el 2026-09-23 cada proyecto era un panel
+ * de la pista con paralaje, movido por una propiedad animada (--cross): el navegador
+ * recalculaba los estilos de cada tarjeta en cada cuadro (3,7 veces más que sin ella) y
+ * la sección se trababa.
  */
 
-@property --cross {
-  syntax: "<number>";
-  inherits: true;
-  initial-value: 0.5;
-}
-
-/* Cuánto está llena una fila del índice, de 0 (gris, sin línea) a 1. Arranca llena,
-   que es como se ve sin animación. */
-@property --fill {
-  syntax: "<number>";
-  inherits: true;
-  initial-value: 1;
-}
-
-.projects {
-  display: grid;
-}
-
-.projects > .panel {
-  padding-block: var(--space-6);
-}
-
-/* ---------- Entrada: título, índice y cifras ---------- */
-
-.intro {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: var(--space-5);
-}
-
-.idx {
-  display: grid;
-  align-content: start;
-  gap: var(--space-1);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-/* La fila arranca en el gris de las líneas y se llena hasta el color del texto, con la
-   línea del acento creciendo abajo. El gris de partida es un estado de paso, solo
-   mientras la fila se llena: el estado final, y el único que se ve sin animación, es el
-   del texto. Como el nombre va en negrita y en --fs-2 cuenta como texto grande, así que
-   hasta ese gris llega al 3:1 que pide la norma (3,3:1 en claro y 3,8:1 en oscuro). */
-.idx__row {
-  color: var(--ink);
-}
-
-.idx__link {
-  position: relative;
-  display: grid;
-  grid-template-columns: 2.5em 1fr;
-  gap: var(--space-3);
-  align-items: baseline;
-  padding-block: var(--space-1);
-  color: inherit;
-  text-decoration: none;
-}
-
-.idx__link::after {
-  content: "";
-  position: absolute;
-  inset: auto 0 0;
-  block-size: 1px;
-  background: var(--accent);
-  scale: var(--fill) 1;
-  transform-origin: left center;
-}
-
-.idx__n {
-  font-size: var(--fs-0);
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-  color: var(--accent);
-}
-
-.idx__name {
-  font-size: var(--fs-2);
-  font-weight: 800;
-  font-stretch: var(--wdth-display);
-  line-height: 1.1;
-  text-transform: uppercase;
-}
+/* ---------- Cifras (la entrada de Proyectos y el Resultado de cada proyecto) ---------- */
 
 .stats {
   display: grid;
@@ -120,47 +34,326 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ---------- Tarjeta ---------- */
+/* ---------- Índice: la lista ---------- */
 
-.card {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
-
-/* Las dos capas que se mueven a distinta velocidad. Las entradas de cada elemento van
-   adentro (styles/motion.css), así una no pisa a la otra. */
-/* grid-template-rows y no una fila automática: adentro puede haber un marco de
-   teléfono con aspect-ratio y block-size: 100%, y contra una fila automática eso se
-   muerde la cola (la fila mide lo que el contenido, el contenido mide lo que la fila) y
-   la placa terminaba midiendo 649px en un hueco de 223, encima del texto. Con
-   minmax(0, 1fr) la fila es el alto que le tocó al envoltorio, y el clip es el seguro. */
-.card__media {
+.works {
   display: grid;
-  grid-template-rows: minmax(0, 1fr);
-  overflow: clip;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-6);
 }
 
-.card__body {
+.works__side {
   display: grid;
   align-content: start;
-  gap: var(--space-4);
+  gap: var(--space-6);
 }
 
-/* Placa: la captura en su marco, el logo sobre el color de la app, o el nombre en
-   grande. Es un enlace a la página del proyecto, fuera del orden de foco (el botón de
-   abajo lleva al mismo lado). */
+/* El título y las cifras, en una fila si entran. */
+.works__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-5) var(--space-7);
+}
+
+/* Tres columnas que se reparten el ancho: con el mínimo de 7rem de .stats, en un
+   celular de 375px medían 368px y la página se desbordaba. */
+.works__head .stats {
+  flex: 1 1 20rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-inline-size: 28rem;
+}
+
+.works__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.works__row {
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 45%, transparent);
+}
+
+/* Cada fila: el número, el nombre y, abajo, de quién es y cuándo; a la derecha, la
+   miniatura. En pantallas con mouse (abajo) la miniatura se va y la meta sube al lado
+   del nombre. */
+.works__link {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr) auto;
+  grid-template-areas:
+    "n name thumb"
+    "n meta thumb";
+  align-items: center;
+  gap: var(--space-1) var(--space-4);
+  padding-block: var(--space-4);
+  color: inherit;
+  text-decoration: none;
+}
+
+.works__n {
+  grid-area: n;
+  align-self: start;
+  padding-block-start: 0.6em;
+  font-size: var(--fs-0);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+
+.works__name {
+  grid-area: name;
+  font-size: clamp(1.75rem, 1rem + 4vw, 2.75rem);
+  line-height: 0.95;
+}
+
+.works__meta {
+  grid-area: meta;
+}
+
+.works__arrow {
+  display: none;
+}
+
+/* La miniatura: el principio de la pantalla del teléfono, o la ventana entera. */
+/* min-block-size: 0 para que mande el aspect-ratio y no el alto de la captura. */
+.works__thumb {
+  grid-area: thumb;
+  min-block-size: 0;
+  overflow: clip;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 14%, transparent);
+}
+
+/* block-size: auto en todas las imágenes del índice: si no, toman el alto de su
+   atributo (2000px de una captura) y se estiran. */
+.works__thumb img {
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.works__thumb--shot {
+  inline-size: 3.5rem;
+  aspect-ratio: 3 / 4;
+  border-radius: 0.6rem;
+}
+
+.works__thumb--window {
+  inline-size: 5.5rem;
+  aspect-ratio: 1600 / 1004;
+  border-radius: 0.3rem;
+}
+
+.works__view {
+  display: none;
+}
+
+/* ---------- Índice: con mouse, dos columnas y la vista previa ----------
+   La lista a la izquierda y, a la derecha, la pantalla del proyecto que está bajo el
+   mouse o con foco (components/WorksHover.jsx). Sin JS no hay quién la cambie, así que
+   se queda la lista con miniaturas. Alcanza con que el puntero pueda pasar por encima
+   (hover): no es la media query del modo horizontal, que también pide alto y que no
+   haya reduce motion, y esto vale igual en /proyectos. */
+
+@media (min-width: 64rem) and (hover: hover) {
+  html.js .works {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-8);
+  }
+
+  html.js .works__link {
+    grid-template-columns: 2.5rem minmax(0, 1fr) auto 1.5rem;
+    grid-template-areas: "n name meta arrow";
+    align-items: baseline;
+    padding-block: var(--space-3);
+  }
+
+  html.js .works__n {
+    align-self: auto;
+    padding-block-start: 0;
+    color: var(--ink-muted);
+  }
+
+  /* El nombre en grande, apagado; el que está activo, en el color del texto. El tamaño
+     sale del alto de la pantalla, así las seis filas y el título entran en el panel. */
+  html.js .works__name {
+    font-size: clamp(1.75rem, 4.4vmin, 3.25rem);
+    color: color-mix(in srgb, var(--ink) 42%, transparent);
+    transition: color var(--dur-hover) var(--ease-out);
+  }
+
+  html.js .works__meta {
+    text-align: end;
+  }
+
+  html.js .works__thumb {
+    display: none;
+  }
+
+  html.js .works__arrow {
+    display: block;
+    color: var(--accent);
+    opacity: 0;
+    transition: opacity var(--dur-hover) var(--ease-out);
+  }
+
+  html.js .works__link.is-on .works__name {
+    color: var(--ink);
+  }
+
+  html.js .works__link.is-on .works__n {
+    color: var(--accent);
+  }
+
+  html.js .works__link.is-on .works__arrow {
+    opacity: 1;
+  }
+
+  /* La vista previa: las seis, una encima de otra, y se ve la activa. En /proyectos
+     queda pegada arriba mientras se recorre la lista; en la home toma el alto del
+     panel (abajo). */
+  html.js .works__view {
+    position: sticky;
+    top: calc(var(--nav-h) + var(--space-5));
+    display: grid;
+    container-type: inline-size;
+    block-size: min(75vh, 44rem);
+  }
+
+  html.js .works__shot {
+    grid-area: 1 / 1;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    justify-items: center;
+    align-items: center;
+    gap: var(--space-5);
+    min-block-size: 0;
+    margin: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--dur-ui) var(--ease-out),
+      visibility 0s var(--dur-ui);
+  }
+
+  html.js .works__shot.is-on {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity var(--dur-ui) var(--ease-out);
+  }
+
+  html.js .works__shot figcaption {
+    max-inline-size: 28rem;
+    color: var(--ink-muted);
+    text-align: center;
+    text-wrap: pretty;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html.js .works__name {
+      transition:
+        color var(--dur-hover) var(--ease-out),
+        translate var(--dur-ui) var(--ease-out);
+    }
+
+    html.js .works__link.is-on .works__name {
+      translate: var(--space-3) 0;
+    }
+
+    html.js .works__arrow {
+      translate: calc(var(--space-2) * -1) 0;
+      transition:
+        opacity var(--dur-hover) var(--ease-out),
+        translate var(--dur-ui) var(--ease-out);
+    }
+
+    html.js .works__link.is-on .works__arrow {
+      translate: 0 0;
+    }
+
+    html.js .works__shot {
+      scale: 0.97;
+      transition:
+        opacity var(--dur-ui) var(--ease-out),
+        scale var(--dur-reveal) var(--ease-expo),
+        visibility 0s var(--dur-ui);
+    }
+
+    html.js .works__shot.is-on {
+      scale: 1;
+      transition:
+        opacity var(--dur-ui) var(--ease-out),
+        scale var(--dur-reveal) var(--ease-expo);
+    }
+  }
+}
+
+/* Lo que se ve en la vista previa: el teléfono, la ventana o el nombre. */
+.works__phone {
+  display: block;
+  block-size: 100%;
+  max-block-size: 40rem;
+  aspect-ratio: 9 / 19.5;
+  overflow: clip;
+  border-radius: 12% / 5.5%;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 16%, transparent);
+}
+
+.works__phone img {
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.works__window {
+  --win-w: min(100cqi, 40rem);
+  display: grid;
+  inline-size: var(--win-w);
+  border-radius: calc(var(--win-w) * 0.012);
+  overflow: clip;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 14%, transparent);
+}
+
+.works__window img {
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.works__type {
+  font-size: clamp(3rem, 8cqi, 6rem);
+  color: var(--accent);
+}
+
+/* ---------- En la pista: un panel del ancho de la pantalla ---------- */
+
+@media screen and (min-width: 64rem) and (min-height: 42.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html.js .panel--projects {
+    display: grid;
+  }
+
+  html.js .panel--projects .works {
+    grid-template-rows: minmax(0, 1fr);
+    block-size: 100%;
+    min-block-size: 0;
+  }
+
+  html.js .panel--projects .works__view {
+    position: relative;
+    top: auto;
+    block-size: 100%;
+  }
+}
+
+/* ---------- Placa de la página de cada proyecto ----------
+   La captura en su marco (teléfono o ventana), el logo sobre el color de la app, o el
+   nombre en grande (components/ProjectPlate.jsx; los tamaños de la banda, en
+   styles/page.css). */
 .card__plate {
   display: grid;
   place-items: center;
   aspect-ratio: var(--plate-ratio, 4 / 3);
   overflow: clip;
   background: var(--plate, var(--surface));
-  text-decoration: none;
-}
-
-.card--lg {
-  --plate-ratio: 16 / 9;
 }
 
 .card__plate img {
@@ -168,13 +361,6 @@
   block-size: auto;
 }
 
-/* El nombre de la placa tipográfica no se puede cortar (R-I1): la placa recorta con
-   overflow: clip y la tarjeta chica deja de crecer antes que la ventana. El tamaño
-   sale del ancho de la ventana (4.6vw; acá vw y no cqi, porque dentro de la placa el
-   cqi ya es el de la placa, y en un tamaño de letra el sobrante de la barra de scroll
-   de Windows no se nota) y tiene como tope el 18% del ancho útil de la placa (18cqi,
-   contra la placa, que es contenedor). La palabra más larga ("COMPILADOR") mide 5,26
-   veces su tamaño de letra: con 18cqi ocupa el 95%. */
 .card__plate--type {
   container-type: inline-size;
   place-items: end start;
@@ -189,13 +375,9 @@
   hyphens: manual;
 }
 
-/* Captura dentro del marco de teléfono (I12, media.type "shot"). El marco toma el alto de la placa y la proporción de una pantalla
-   de iPhone; la captura lo llena a lo ancho y se desplaza lo que le sobra de alto
-   (--shot-travel, que calcula components/ProjectPlate.jsx desde las medidas de la
-   imagen) mientras el panel cruza. Con una captura de una sola pantalla sobra 0 y queda
-   quieta y encuadrada, que es exactamente lo que tiene que pasar. */
+/* Captura de una app móvil (media.type "shot"): el marco toma el alto de la placa y la
+   proporción de una pantalla de iPhone. */
 .card__plate--shot {
-  --plate-ratio: 3 / 4; /* en vertical: una placa más alta, para que el teléfono entre */
   grid-template-rows: minmax(0, 1fr);
   padding: var(--space-4);
 }
@@ -212,15 +394,14 @@
 .card__plate .plate__shot {
   align-self: start;
   inline-size: 100%;
-  translate: 0 calc(var(--cross) * -1 * var(--shot-travel, 0%));
 }
 
 /* Captura de una app de escritorio en una ventana de macOS (media.type "window", Vault).
    La ventana se mide contra la placa (contenedor de tamaño): lo más ancha que entre, sin
    pasarse del alto. Todo lo demás (la barra, los botones, el redondeo, la sombra) sale
-   de su ancho, --win-w, así es la misma ventana en la tarjeta y en la página. La barra
-   mide el 3,5% del ancho y la captura es 1600×1004, así que la ventana entera mide 0,662
-   veces su ancho de alto: con 127cqb llena el 84% del alto de la placa. */
+   de su ancho, --win-w. La barra mide el 3,5% del ancho y la captura es 1600×1004, así
+   que la ventana entera mide 0,662 veces su ancho de alto: con 127cqb llena el 84% del
+   alto de la placa. */
 .card__plate--window {
   container-type: size;
 }
@@ -237,6 +418,12 @@
     0 calc(var(--win-w) * 0.02) calc(var(--win-w) * 0.06) rgb(0 0 0 / 0.18);
 }
 
+.card__plate .plate__window img {
+  inline-size: 100%;
+  block-size: auto;
+}
+
+/* La barra de la ventana, también la de la vista previa del índice. */
 .plate__bar {
   display: flex;
   align-items: center;
@@ -262,9 +449,8 @@
   background: #28c840;
 }
 
-.card__plate .plate__window img {
-  inline-size: 100%;
-  block-size: auto;
+html.dark-mode .plate__bar {
+  background: #1f1d1c;
 }
 
 /* La captura del tema del sitio: la oscura con html.dark-mode (lib/theme.js), la clara
@@ -275,9 +461,7 @@ html:not(.dark-mode) .plate__img--dark {
   display: none;
 }
 
-html.dark-mode .plate__bar {
-  background: #1f1d1c;
-}
+/* ---------- Meta y enlaces de la página de cada proyecto ---------- */
 
 .card__meta {
   display: flex;
@@ -289,187 +473,8 @@ html.dark-mode .plate__bar {
   color: var(--ink);
 }
 
-.card__title {
-  font-size: var(--fs-4);
-  line-height: 0.9;
-}
-
-.card__text {
-  display: grid;
-  gap: var(--space-2);
-  max-width: 46ch;
-}
-
-.card__problem {
-  color: var(--ink-muted);
-}
-
 .card__links {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2) var(--space-3);
-  margin-top: auto;
-}
-
-/* ---------- Hover: la tarjeta entera responde ---------- */
-
-@media (hover: hover) and (pointer: fine) {
-  .card__title {
-    transition: color var(--dur-hover) var(--ease-out);
-  }
-
-  .card:hover .card__title {
-    color: var(--accent);
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .card__plate--logo img,
-    .card__plate--type span {
-      transition:
-        scale var(--dur-fill) var(--ease-out),
-        translate var(--dur-fill) var(--ease-out);
-    }
-
-    .card:hover .card__plate--logo img {
-      scale: 1.04;
-    }
-
-    .card:hover .card__plate--type span {
-      translate: 0 calc(var(--space-2) * -1);
-    }
-  }
-}
-
-/* ---------- Vertical: dos columnas desde tablet ---------- */
-
-@media (min-width: 48rem) {
-  .projects {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: var(--pad-x);
-  }
-
-  .intro,
-  .panel--card-lg {
-    grid-column: 1 / -1;
-  }
-}
-
-/* El índice se llena mientras cada fila cruza la pantalla, como el muro de Habilidades
-   (styles/skills.css). Sin soporte (Firefox), sin JS o con reduce motion se ve lleno. */
-@media screen and (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
-    html.js .idx__row {
-      animation: idx-fill linear both;
-      animation-timeline: view();
-      animation-range: cover 15% cover 40%;
-    }
-  }
-}
-
-/* ---------- Horizontal: cada tarjeta es un panel ---------- */
-
-@media screen and (min-width: 64rem) and (min-height: 42.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  /* Solo la sección de la home vive en la pista: en /proyectos la grilla se queda. */
-  html.js .h-track .projects {
-    display: contents;
-  }
-
-  html.js :is(.panel--card, .panel--card-lg) {
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* La tira desfasada: la tarjeta no llena el panel y las pares se apoyan abajo, así la
-     fila deja de leerse como una hilera de estacas. El 8% que se recorta sale del alto
-     de la placa, que es lo que se estira, así que no se puede bajar mucho más: con las
-     tarjetas chicas y el texto largo, la placa queda en nada. */
-  html.js :is(.panel--card, .panel--card-lg) > .card {
-    block-size: 92%;
-  }
-
-  html.js .is-low > .card {
-    --sway: -1;
-    margin-block-start: auto;
-  }
-
-  /* Todo lo de acá abajo va contra el panel y no contra .card a secas: las mismas
-     tarjetas se muestran en /proyectos, que en una pantalla ancha también entra en esta
-     media query y no tiene pista. */
-
-  /* La placa toma el alto que sobra; el texto manda. */
-  html.js :is(.panel--card, .panel--card-lg) .card__media {
-    flex: 1 1 0;
-    min-block-size: 5rem;
-  }
-
-  /* Sin block-size: 100%: la placa es el único hijo de .card__media y su fila ya mide
-     todo el hueco, así que estirarla alcanza (y un porcentaje contra una fila que se
-     mide sola no resuelve). */
-  html.js :is(.panel--card, .panel--card-lg) .card__plate {
-    aspect-ratio: auto;
-  }
-
-  html.js :is(.panel--card, .panel--card-lg) .card__body {
-    flex: none;
-  }
-
-  /* Las dos capas de la paralaje, las dos desde --cross: la placa se adelanta y el
-     texto se queda atrás. La deriva de la tarjeta va en sentidos contrarios según la
-     fila (--sway). */
-  html.js :is(.panel--card, .panel--card-lg) > .card {
-    translate: 0 calc((var(--cross) - 0.5) * var(--sway, 1) * 2cqi);
-  }
-
-  html.js :is(.panel--card, .panel--card-lg) .card__media {
-    translate: calc((var(--cross) - 0.5) * -3cqi) 0;
-  }
-
-  html.js :is(.panel--card, .panel--card-lg) .card__body {
-    translate: calc((var(--cross) - 0.5) * 1.5cqi) 0;
-  }
-
-  @supports (animation-timeline: view()) {
-    /* --cross va de 0 a 1 mientras el panel cruza: empieza cuando su borde izquierdo
-       toca el derecho de la ventana (el recorrido de la pista vale --x-card menos una
-       pantalla) y termina cuando su borde derecho sale por el otro lado. --x-card lo
-       escribe components/Projects.jsx y --w-self es el ancho del propio panel. */
-    html.js :is(.panel--card, .panel--card-lg) {
-      animation: cross linear both;
-      animation-timeline: --pan;
-      animation-range: contain calc(var(--x-card) - 100cqi) contain calc(var(--x-card) + var(--w-self));
-    }
-
-    html.js .panel--card {
-      --w-self: var(--w-card);
-    }
-
-    html.js .panel--card-lg {
-      --w-self: var(--w-card-lg);
-    }
-
-    /* En horizontal las filas del índice se llenan una detrás de otra mientras el panel
-       cruza, no cada una por su cuenta: 3cqi de recorrido entre fila y fila. */
-    html.js .idx__row {
-      animation-timeline: --pan;
-      animation-range: contain calc(var(--x-projects) - 75cqi + var(--i) * 3cqi) contain
-        calc(var(--x-projects) - 60cqi + var(--i) * 3cqi);
-    }
-  }
-}
-
-@keyframes cross {
-  from {
-    --cross: 0;
-  }
-
-  to {
-    --cross: 1;
-  }
-}
-
-@keyframes idx-fill {
-  from {
-    --fill: 0;
-    color: var(--line);
-  }
 }

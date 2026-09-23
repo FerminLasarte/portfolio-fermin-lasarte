@@ -119,9 +119,7 @@
   --dur-reveal: 1100ms; /* la entrada de cada elemento de un panel (motion.css, page.css) */
 
   /* Anchos de panel en el modo horizontal (DISENO.md, sección 5). */
-  --w-intro: clamp(22rem, 30cqi, 30rem);
-  --w-card-lg: clamp(30rem, 40cqi, 42rem);
-  --w-card: clamp(22rem, 28cqi, 28rem);
+  --w-projects: 100cqi; /* el índice con su vista previa (components/ProjectIndex.jsx) */
   --w-skills: 100cqi;
   --w-bleed: 65cqi; /* 70cqi desde 100rem, como douglus */
 }
