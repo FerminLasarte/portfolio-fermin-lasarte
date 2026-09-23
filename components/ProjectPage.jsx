@@ -1,4 +1,5 @@
-import ProjectPlate from "@/components/ProjectPlate";
+import ProjectScreens, { screensOf } from "@/components/ProjectScreens";
+import ScreenSync from "@/components/ScreenSync";
 import ProjectMeta from "@/components/ProjectMeta";
 import ProjectLinks from "@/components/ProjectLinks";
 import PageReveal from "@/components/PageReveal";
@@ -8,22 +9,22 @@ import { padded } from "@/lib/text";
 
 // Los bloques largos, en orden. Cada uno se muestra solo si el proyecto tiene ese
 // texto (`projects.<id>.context` y compañía, lib/translations.js): el que no tiene
-// ninguno sale con el resumen, la placa, las tecnologías y los enlaces, y se va
+// ninguno sale con el resumen, las pantallas, las tecnologías y los enlaces, y se va
 // llenando sin tocar código.
 const SECTIONS = ["context", "build", "decisions", "result"];
 
-// Página de un proyecto (/proyectos/<id>, docs/DISENO.md, 7.12): el detalle de su
-// tarjeta, en vertical y con el texto completo. El resumen, la placa y los enlaces son
-// los mismos componentes que usa la tarjeta de la home, así que no hay dos versiones
-// de lo mismo. Se recorre como la home (7.13): la placa se destapa y el teléfono sube
-// más rápido que la página; los bloques son capítulos numerados con el título pegado
-// a la izquierda y una línea que se dibuja mientras se leen; cada cosa entra como en
-// los paneles (components/PageReveal.jsx); y cierra con el siguiente proyecto en
-// grande, que se llena como el muro de Habilidades.
+// Página de un proyecto (/proyectos/<id>, docs/DISENO.md, 7.12): el detalle de su fila
+// del índice, en vertical y con el texto completo. La meta y los enlaces son los mismos
+// componentes que usa el índice, así que no hay dos versiones de lo mismo. Se recorre
+// como la home (7.13): las pantallas de la app acompañan la lectura y cambian con cada
+// capítulo; los capítulos van numerados, con una línea que se dibuja mientras se leen;
+// cada cosa entra como en los paneles (components/PageReveal.jsx); y cierra con el
+// siguiente proyecto en grande, que se llena como el muro de Habilidades.
 export default function ProjectPage({ project, t, lang }) {
   const { id, name, tags, links, stats } = project;
   const projectName = t(`projects.${id}.name`, name);
   const problem = t(`projects.${id}.problem`, null);
+  const screens = screensOf(project, t);
   const blocks = SECTIONS.map((key) => ({ key, text: t(`projects.${id}.${key}`, null) })).filter((b) => b.text);
 
   // Los años salen de Trayectoria cuando el proyecto también es una etapa (TravelPic y
@@ -69,61 +70,60 @@ export default function ProjectPage({ project, t, lang }) {
         </ProjectMeta>
       </header>
 
-      {/* La placa solo si hay una imagen de verdad. La tipográfica, que es el nombre en
-          grande, acá no suma nada: el <h1> de arriba ya es eso mismo, y a lo ancho de
-          la página quedaba una banda de color de medio metro repitiendo el título. */}
-      {project.media.type !== "type" && (
-        <div className="project__stage" data-reveal>
-          <ProjectPlate
-            project={project}
-            t={t}
-            sizes="(min-width: 90rem) 80rem, 92vw"
-            className="project__plate"
-            gallery
-          />
-        </div>
-      )}
+      {/* La historia: las pantallas a la izquierda, fijas mientras se lee, y a la derecha
+          los capítulos, cada uno con su número y su título arriba del texto; cierra
+          Tecnologías, con los enlaces de afuera. Sin capturas, los capítulos van solos,
+          al ras del borde de la página. */}
+      <div className={`story${screens.length ? " story--screens" : ""}`} data-story>
+        {screens.length > 0 && <ProjectScreens project={project} screens={screens} />}
 
-      {blocks.length > 0 && (
-        <div className="story">
-          {blocks.map(({ key, text }, n) => (
-            <section key={key} className="chapter story__chapter" aria-labelledby={`${key}-t`} data-reveal>
-              <h2 id={`${key}-t`} className="chapter__label story__label">
-                <span className="story__n meta">{padded(n + 1)}</span>
-                <span className="chapter__title poster">{t(`projects.${key}`)}</span>
-              </h2>
-              <div className="chapter__body">
-                {key === "result" && stats && (
-                  <dl className="stats story__stats">
-                    {stats.map((s) => (
-                      <div key={s.key}>
-                        <dt className="meta">{t(`projects.stat.${s.key}`)}</dt>
-                        <dd>
-                          {number.format(s.value)}
-                          {s.plus && "+"}
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
-                )}
-                <p className="chapter__desc">{text}</p>
-              </div>
-            </section>
-          ))}
-        </div>
-      )}
+        <div className="story__text">
+          {blocks.length > 0 && (
+            <div className="story__chapters">
+              {blocks.map(({ key, text }, n) => (
+                <section
+                  key={key}
+                  className="story__chapter"
+                  aria-labelledby={`${key}-t`}
+                  data-reveal
+                  data-screen-step
+                >
+                  <h2 id={`${key}-t`} className="story__label">
+                    <span className="story__n meta">{padded(n + 1)}</span>
+                    <span className="story__title poster">{t(`projects.${key}`)}</span>
+                  </h2>
+                  {key === "result" && stats && (
+                    <dl className="stats story__stats">
+                      {stats.map((s) => (
+                        <div key={s.key}>
+                          <dt className="meta">{t(`projects.stat.${s.key}`)}</dt>
+                          <dd>
+                            {number.format(s.value)}
+                            {s.plus && "+"}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  )}
+                  <p className="chapter__desc">{text}</p>
+                </section>
+              ))}
+            </div>
+          )}
 
-      <section className="chapter project__links" aria-labelledby="enlaces-t" data-reveal>
-        <h2 id="enlaces-t" className="chapter__title poster">
-          {t("page.techs")}
-        </h2>
-        <div className="chapter__body">
-          <p>{tags.join(", ")}</p>
-          <div className="card__links">
-            <ProjectLinks links={links} t={t} name={projectName} primary />
-          </div>
+          <section className="story__chapter project__links" aria-labelledby="enlaces-t" data-reveal data-screen-step>
+            <h2 id="enlaces-t" className="story__label">
+              <span className="story__title poster">{t("page.techs")}</span>
+            </h2>
+            <p className="story__tags">{tags.join(", ")}</p>
+            <div className="card__links">
+              <ProjectLinks links={links} t={t} name={projectName} primary />
+            </div>
+          </section>
         </div>
-      </section>
+
+        {screens.length > 1 && <ScreenSync />}
+      </div>
 
       {/* El siguiente en grande, que es a donde sigue la lectura; el anterior, chico. */}
       <nav className="project__around" aria-label={t("projects.title")} data-reveal>

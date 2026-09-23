@@ -1,3 +1,4 @@
+import ProjectLinks from "@/components/ProjectLinks";
 import WorksHover from "@/components/WorksHover";
 import { getImageProps } from "@/lib/image";
 import { projectPath } from "@/lib/i18n";
@@ -70,6 +71,10 @@ function Preview({ project, name }) {
 //    miniatura.
 //  - Nada se mueve con el scroll: la versión anterior (tarjetas con paralaje) recalculaba
 //    los estilos de cada tarjeta en cada cuadro y se trababa.
+//  - Los enlaces de afuera (las tiendas, el código, la web) van en cada fila, al lado
+//    del enlace a la página y no adentro (un enlace no puede tener otro adentro). En la
+//    lista, debajo de la meta. Con la vista previa, aparecen en la fila activa en lugar
+//    de la meta, que pasa a la vista previa: se llega a ellos sin cruzar otras filas.
 //  - `children`: lo que va arriba de la lista (el título y las cifras, en la home).
 export default function ProjectIndex({ t, lang, children }) {
   const rows = PROJECTS.map((project, i) => {
@@ -109,16 +114,24 @@ export default function ProjectIndex({ t, lang, children }) {
                   →
                 </span>
               </a>
+              {project.links.length > 0 && (
+                <p className="works__out">
+                  <ProjectLinks links={project.links} t={t} name={name} small />
+                </p>
+              )}
             </li>
           ))}
         </ol>
       </div>
 
       <div className="works__view" aria-hidden="true">
-        {rows.map(({ project, i, name }) => (
+        {rows.map(({ project, i, name, meta }) => (
           <figure key={project.id} className={`works__shot${i === 0 ? " is-on" : ""}`}>
             <Preview project={project} name={name} />
-            <figcaption>{t(`projects.${project.id}.solution`)}</figcaption>
+            <figcaption>
+              <span className="meta">{meta}</span>
+              {t(`projects.${project.id}.solution`)}
+            </figcaption>
           </figure>
         ))}
       </div>

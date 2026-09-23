@@ -248,128 +248,28 @@ html.dark-mode .skill-row img[data-dark-invert] {
   color: var(--ink-muted);
 }
 
-/* La placa, a lo ancho de la página. Va como una banda y no como el 16/9 de la
-   tarjeta: a 1200px de ancho, un 16/9 mide 675px de alto y se come la pantalla. Por lo
-   mismo, el logo ocupa menos proporción que en la tarjeta, que es angosta. */
-.project__plate {
-  --plate-ratio: 5 / 2;
-}
-
-.project__plate img {
-  inline-size: min(45%, 26rem);
-}
-
-/* Con una captura, la banda crece hacia abajo en pantallas angostas: el teléfono toma
-   el alto de la placa, y en un 5:2 de celular medía 120px. Cuadrada en celular, 2:1 en
-   tablet y la banda de siempre desde escritorio. */
-.project__plate.card__plate--shot {
-  --plate-ratio: 1;
-}
-
-@media (min-width: 48rem) {
-  .project__plate.card__plate--shot {
-    --plate-ratio: 2;
-  }
-}
-
-/* Una app de escritorio: cuadrada no, porque la ventana es apaisada. 4:3 en celular, 2:1
-   en tablet y la banda de siempre desde escritorio. */
-.project__plate.card__plate--window {
-  --plate-ratio: 4 / 3;
-}
-
-@media (min-width: 48rem) {
-  .project__plate.card__plate--window {
-    --plate-ratio: 2;
-  }
-}
-
-@media (min-width: 64rem) {
-  .project__plate.card__plate--window {
-    --plate-ratio: 5 / 2;
-  }
-}
-
-/* Varias ventanas (media.gallery de "window"): en cascada, como en un escritorio. La
-   principal adelante y abajo a la derecha, y las otras detrás, cada una más arriba, más
-   a la izquierda y un poco más chica. Van en la misma celda y se corren con
-   `transform` (el `translate` queda para la paralaje); el grupo se corre al revés, así
-   la cascada queda centrada. Para que entre, la ventana es más chica que sola: la
-   cascada mide 1,16 veces su ancho y 1,2 veces su alto. */
-.plate__stack {
-  display: grid;
-  place-items: center;
-  transform: translate(8%, 10%);
-}
-
-.plate__stack > .plate__window {
-  --win-w: min(79cqi, 111cqb);
-  grid-area: 1 / 1;
-}
-
-.plate__stack > :first-child {
-  z-index: 2;
-}
-
-.plate__stack > :nth-child(2) {
-  z-index: 1;
-  transform: translate(-8%, -10%) scale(0.94);
-}
-
-.plate__stack > :nth-child(3) {
-  transform: translate(-16%, -20%) scale(0.88);
-}
-
-/* Varias capturas (media.gallery): en abanico, la principal adelante y las otras detrás,
-   una a cada lado, más chicas. Las tres ocupan la misma celda y se abren con
-   `transform` (el `translate` queda libre para la paralaje). El borde del color de la
-   placa hace de marco y las separa donde se pisan. El alto sale del ancho de la placa
-   (80cqi) cuando es angosta, así las de los costados no se cortan: el abanico mide
-   2,46 veces el ancho de un teléfono. */
-.project__plate:has(.plate__fan) {
-  container-type: inline-size;
-}
-
-.plate__fan {
-  display: grid;
-  grid-template: minmax(0, 1fr) / auto;
-  place-items: center;
-  block-size: 100%;
-}
-
-.plate__fan > .plate__frame {
-  grid-area: 1 / 1;
-  block-size: min(100%, 80cqi);
-  box-shadow: 0 0 0 max(3px, 0.9cqi) var(--plate);
-}
-
-.plate__fan > :first-child {
-  z-index: 1;
-}
-
-.plate__fan > :nth-child(2) {
-  transform: translateX(-80%) scale(0.86);
-}
-
-.plate__fan > :nth-child(3) {
-  transform: translateX(80%) scale(0.86);
-}
-
-@media (min-width: 64rem) {
-  .project__plate.card__plate--shot {
-    --plate-ratio: 5 / 2;
-  }
-}
-
-/* ---------- La historia: los bloques del proyecto como capítulos (7.13) ----------
-   Un número y un título por bloque a la izquierda, a la altura de la primera línea de
-   su texto (first baseline), y el texto a la derecha: en las mismas columnas que
-   "Tecnologías" y el resto de la página. Una línea los une por la izquierda, en el
-   margen de la página, con un punto por capítulo, y se dibuja mientras se lee: la misma
-   línea con puntos de Trayectoria en la home. (Hasta el 2026-09-23 el título quedaba
-   pegado arriba mientras se leía, a otra altura que el texto, y la línea corría 48px
-   las columnas.) */
+/* ---------- La historia: las pantallas y los capítulos (7.13) ----------
+   A la izquierda, las pantallas de la app, fijas mientras se lee (components/
+   ProjectScreens.jsx); a la derecha, los capítulos. Cada uno lleva el número y el título
+   arriba de su texto, todo al ras del mismo borde: no hay dos columnas que alinear.
+   (Hasta el 2026-09-23 las capturas iban en una banda del color de la app, arriba de
+   todo, y el título de cada capítulo a la izquierda de su texto.) Sin capturas, los
+   capítulos van solos, al ras del borde de la página. */
 .story {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.story__text {
+  display: grid;
+  gap: var(--space-8);
+}
+
+/* Una línea une los capítulos por la izquierda, con un punto del acento en el número de
+   cada uno, y se dibuja mientras se lee: la misma línea con puntos de Trayectoria en la
+   home. Va en el margen de la página o, con pantallas, en el aire entre las dos
+   columnas. Arranca en el primer punto. */
+.story__chapters {
   --rail-x: calc(var(--pad-x) * -0.5);
   position: relative;
   display: grid;
@@ -377,59 +277,234 @@ html.dark-mode .skill-row img[data-dark-invert] {
   view-timeline: --story block;
 }
 
-.story__chapter {
-  align-items: first baseline;
-}
-
-.story::before {
+.story__chapters::before {
   content: "";
   position: absolute;
-  inset-block: 0.5em 0;
+  inset-block: calc(var(--fs-0) * 0.5) 0;
   inset-inline-start: var(--rail-x);
   inline-size: 1px;
   background: var(--ink);
   transform-origin: top;
 }
 
-/* El número a la izquierda del título, en la misma línea. No queda pegado arriba como
-   los años de Trayectoria (.chapter__label): relative y sin `top`. */
-.story__label {
-  position: relative;
-  top: auto;
+.story__chapter {
   display: grid;
-  grid-template-columns: 2.5rem minmax(0, 1fr);
-  align-items: baseline;
+  align-content: start;
+  gap: var(--space-5);
 }
 
-/* El punto, sobre la línea, a la mitad de las mayúsculas del título (Display, alto de
-   línea 0,95: la mitad de la mayúscula cae a unos 0,47 del tamaño). */
-.story__label::before {
+.story__label {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-3);
+}
+
+.story__n {
+  position: relative;
+  line-height: 1;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* El punto, sobre la línea, a la mitad del número. */
+.story__n::before {
   content: "";
   position: absolute;
-  inset-block-start: calc(var(--fs-4) * 0.47 - 0.375rem);
+  inset-block-start: 50%;
   inset-inline-start: calc(var(--rail-x) + 0.5px - 0.375rem);
   inline-size: 0.75rem;
   block-size: 0.75rem;
   border-radius: var(--radius-round);
   background: var(--accent);
+  translate: 0 -50%;
 }
 
-.story__n {
-  color: var(--accent);
-  font-variant-numeric: tabular-nums;
+.story__title {
+  font-size: var(--fs-4);
+  line-height: 0.95;
 }
 
-.story__stats {
-  margin-block-end: var(--space-5);
+.story__tags {
+  max-width: 34.36em; /* 60ch */
+  font-size: var(--fs-2);
+  line-height: 1.55;
 }
 
-/* "Tecnologías" cierra la historia con una línea y más aire: antes quedaba a la misma
-   distancia que un capítulo del otro, pegada a Resultado. La línea de los capítulos
-   termina antes (es de .story). */
+/* "Tecnologías" cierra la historia con una línea y más aire. La línea de los capítulos
+   termina antes (es de .story__chapters). */
 .project__links {
-  align-items: first baseline;
   padding-block-start: var(--space-7);
   border-top: 1px solid var(--surface);
+}
+
+@media (min-width: 64rem) {
+  .story--screens {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: var(--space-7);
+    align-items: start;
+  }
+
+  .story--screens .story__chapters {
+    --rail-x: calc(var(--space-7) * -0.5);
+  }
+}
+
+/* ---------- Las pantallas ----------
+   Sin caja de color: el teléfono (media.type "shot") o la ventana de macOS ("window"),
+   sobre el fondo de la página. Las medidas salen del ancho de la columna (contenedor)
+   y del alto de la pantalla. */
+.screens {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+  container-type: inline-size;
+}
+
+.screens__stack {
+  display: grid;
+  place-items: center;
+}
+
+.screens__item {
+  grid-area: 1 / 1;
+}
+
+.screens__phone {
+  display: block;
+  block-size: var(--phone-h, min(26rem, 70svh));
+  aspect-ratio: 9 / 19.5;
+  overflow: clip;
+  border-radius: 12% / 5.5%;
+  background: var(--paper);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 16%, transparent);
+}
+
+.screens__window {
+  --win-w: 100cqi;
+  display: grid;
+  inline-size: var(--win-w);
+  border-radius: calc(var(--win-w) * 0.012);
+  overflow: clip;
+  background: var(--paper);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--ink) 14%, transparent),
+    0 calc(var(--win-w) * 0.02) calc(var(--win-w) * 0.06) rgb(0 0 0 / 0.18);
+}
+
+/* block-size: auto: si no, las imágenes toman el alto de su atributo y se estiran. */
+.screens img {
+  inline-size: 100%;
+  block-size: auto;
+}
+
+/* Los puntos que dicen cuál de cuántas: solo cuando las pantallas cambian (abajo). */
+.screens__dots {
+  display: none;
+}
+
+/* En celular y tablet, antes de los capítulos. Varios teléfonos van en abanico: el
+   principal adelante y los otros detrás, uno a cada lado, más chicos y un poco
+   girados. El abanico mide 2,1 veces el ancho de un teléfono, así que el alto sale del
+   ancho de la columna para que los de los costados no se corten ni toquen el borde.
+   De más de tres se ven los tres primeros. Varias ventanas van en cascada, como en un
+   escritorio: la principal adelante y abajo a la derecha, las otras detrás, más
+   arriba, más a la izquierda y más chicas; el grupo se corre al revés, así queda
+   centrado. */
+@media (width < 64rem) {
+  .screens--shot:has(.screens__item + .screens__item) {
+    --phone-h: min(26rem, 92cqi);
+  }
+
+  .screens--shot .screens__item:first-child {
+    z-index: 1;
+  }
+
+  .screens--shot .screens__item:nth-child(2) {
+    transform: translateX(-62%) rotate(-6deg) scale(0.86);
+  }
+
+  .screens--shot .screens__item:nth-child(3) {
+    transform: translateX(62%) rotate(6deg) scale(0.86);
+  }
+
+  .screens--shot .screens__item:nth-child(n + 4) {
+    visibility: hidden;
+  }
+
+  .screens--window:has(.screens__item + .screens__item) .screens__stack {
+    transform: translate(8%, 10%);
+  }
+
+  .screens--window:has(.screens__item + .screens__item) .screens__window {
+    --win-w: 79cqi;
+  }
+
+  .screens--window .screens__item:first-child {
+    z-index: 2;
+  }
+
+  .screens--window .screens__item:nth-child(2) {
+    z-index: 1;
+    transform: translate(-8%, -10%) scale(0.94);
+  }
+
+  .screens--window .screens__item:nth-child(3) {
+    transform: translate(-16%, -20%) scale(0.88);
+  }
+}
+
+/* Desde escritorio, a la izquierda de los capítulos. Sin JS, todas, una debajo de otra,
+   al lado del texto. */
+@media (min-width: 64rem) {
+  .screens {
+    --phone-h: min(100svh - var(--nav-h) - 6rem, 44rem, 100cqi * 19.5 / 9);
+    justify-items: start;
+  }
+
+  .screens__stack {
+    gap: var(--space-6);
+    place-items: start;
+  }
+
+  .screens__item {
+    grid-area: auto;
+  }
+
+  /* Con JS, fijas mientras se leen los capítulos, y se ve la del capítulo que se está
+     leyendo (components/ScreenSync.jsx): las otras quedan transparentes en la misma
+     celda, y se siguen leyendo con su descripción. */
+  html.js .screens {
+    position: sticky;
+    top: calc(var(--nav-h) + var(--space-5));
+  }
+
+  html.js .screens__item {
+    grid-area: 1 / 1;
+    opacity: 0;
+    transition: opacity var(--dur-ui) var(--ease-out);
+  }
+
+  html.js .screens__item.is-on {
+    opacity: 1;
+  }
+
+  html.js .screens__dots {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .screens__dots > span {
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+    border-radius: var(--radius-pill);
+    background: var(--line);
+  }
+
+  .screens__dots > .is-on {
+    inline-size: 1.375rem;
+    background: var(--accent);
+  }
 }
 
 /* Al pie: el siguiente proyecto en grande, que es a donde sigue la lectura, y el
@@ -500,29 +575,12 @@ html.dark-mode .skill-row img[data-dark-invert] {
   }
 
   /* Lo que sigue al scroll, con líneas de tiempo de vista (docs/DISENO.md, 7.13). Sin
-     soporte, sin JS o con reduce motion se ve quieto: la placa en su lugar, la línea
-     entera y el siguiente proyecto lleno. */
+     soporte, sin JS o con reduce motion se ve quieto: la línea entera y el siguiente
+     proyecto lleno. */
   @supports (animation-timeline: view()) {
-    /* El teléfono (o el logo) sube más rápido que la página mientras la placa cruza la
-       ventana: la paralaje de las tarjetas de la home, en vertical. En el abanico, cada
-       teléfono según su profundidad (--k, components/ProjectPlate.jsx): los de atrás se
-       mueven menos. La línea de tiempo
-       es la de la placa y no la del propio elemento, porque el que se mueve cambiaría
-       su propia vista. */
-    html.js .project__plate {
-      view-timeline: --plate block;
-    }
-
-    html.js .project__plate > :not(.plate__fan, .plate__stack),
-    html.js :is(.plate__fan, .plate__stack) > * {
-      animation: plate-rise linear both;
-      animation-timeline: --plate;
-      animation-range: cover;
-    }
-
     /* La línea se dibuja desde que la historia llega al 60% de la ventana hasta que su
        final pasa por el mismo lugar: va a la par de lo que se lee. */
-    html.js .story::before {
+    html.js .story__chapters::before {
       animation: draw-story linear both;
       animation-timeline: --story;
       animation-range: cover 40vh cover calc(100% - 60vh);
@@ -537,13 +595,11 @@ html.dark-mode .skill-row img[data-dark-invert] {
   }
 }
 
-@keyframes plate-rise {
-  from {
-    translate: 0 calc(6% * var(--k, 1));
-  }
-
-  to {
-    translate: 0 calc(-6% * var(--k, 1));
+@media (prefers-reduced-motion: no-preference) {
+  .screens__dots > span {
+    transition:
+      inline-size var(--dur-ui) var(--ease-out),
+      background-color var(--dur-ui) var(--ease-out);
   }
 }
 

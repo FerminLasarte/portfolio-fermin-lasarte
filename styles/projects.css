@@ -144,6 +144,18 @@
   border-radius: 0.3rem;
 }
 
+/* Los enlaces de afuera de cada fila (las tiendas, el código, la web), en píldoras
+   chicas: en la lista, debajo de la meta, alineados con el nombre. Van al lado del
+   enlace de la fila y no adentro, porque un enlace no puede tener otro adentro. */
+.works__out {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: calc(var(--space-2) * -1) 0 0;
+  padding-block-end: var(--space-4);
+  padding-inline-start: calc(2.25rem + var(--space-4));
+}
+
 .works__view {
   display: none;
 }
@@ -185,6 +197,66 @@
 
   html.js .works__meta {
     text-align: end;
+    transition: opacity var(--dur-hover) var(--ease-out);
+  }
+
+  /* La fila activa cambia la meta por sus enlaces de afuera, en el mismo lugar: se
+     llega a ellos moviendo el mouse de costado, sin cruzar otras filas. La meta pasa a
+     la vista previa. Las otras filas los tienen transparentes y sin puntero, pero se
+     leen y se enfocan: el foco activa su fila (components/WorksHover.jsx). La fila es
+     una sola celda con el enlace y los botones encima, a la izquierda de la flecha. */
+  html.js .works__row {
+    display: grid;
+    grid-template-areas: "row";
+    align-items: center;
+  }
+
+  html.js .works__link {
+    grid-area: row;
+  }
+
+  html.js .works__out {
+    grid-area: row;
+    z-index: 1;
+    justify-self: end;
+    flex-wrap: nowrap;
+    margin: 0 calc(1.5rem + var(--space-4)) 0 0;
+    padding: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--dur-hover) var(--ease-out);
+  }
+
+  html.js .works__row:has(> .works__link.is-on) .works__out,
+  html.js .works__out:focus-within {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  html.js .works__row:has(> .works__link.is-on) .works__meta {
+    opacity: 0;
+  }
+
+  /* Si la lista es angosta y no entran con su nombre, solo el icono (el nombre queda
+     para los lectores de pantalla). */
+  html.js .works__side {
+    container: works-side / inline-size;
+  }
+
+  @container works-side (width < 42rem) {
+    html.js .works__out .btn {
+      inline-size: var(--tap);
+      padding-inline: 0;
+    }
+
+    html.js .works__out .btn__text {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
   }
 
   html.js .works__thumb {
@@ -248,6 +320,11 @@
     color: var(--ink-muted);
     text-align: center;
     text-wrap: pretty;
+  }
+
+  html.js .works__shot figcaption .meta {
+    display: block;
+    margin-block-end: var(--space-2);
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -344,86 +421,11 @@
   }
 }
 
-/* ---------- Placa de la página de cada proyecto ----------
-   La captura en su marco (teléfono o ventana), el logo sobre el color de la app, o el
-   nombre en grande (components/ProjectPlate.jsx; los tamaños de la banda, en
-   styles/page.css). */
-.card__plate {
-  display: grid;
-  place-items: center;
-  aspect-ratio: var(--plate-ratio, 4 / 3);
-  overflow: clip;
-  background: var(--plate, var(--surface));
-}
+/* ---------- La ventana de macOS ----------
+   La de la vista previa del índice y la de las pantallas de cada proyecto
+   (styles/page.css): todo sale de su ancho, --win-w. */
 
-.card__plate img {
-  inline-size: 78%;
-  block-size: auto;
-}
-
-.card__plate--type {
-  container-type: inline-size;
-  place-items: end start;
-  padding: var(--space-5);
-  background: var(--accent-soft);
-  color: var(--accent);
-}
-
-.card__plate--type span {
-  font-size: min(clamp(2rem, 4.6vw, 4.5rem), 18cqi);
-  line-height: 0.86;
-  hyphens: manual;
-}
-
-/* Captura de una app móvil (media.type "shot"): el marco toma el alto de la placa y la
-   proporción de una pantalla de iPhone. */
-.card__plate--shot {
-  grid-template-rows: minmax(0, 1fr);
-  padding: var(--space-4);
-}
-
-.plate__frame {
-  display: grid;
-  block-size: 100%;
-  aspect-ratio: 9 / 19.5;
-  overflow: clip;
-  border-radius: var(--radius-device);
-  background: var(--paper);
-}
-
-.card__plate .plate__shot {
-  align-self: start;
-  inline-size: 100%;
-}
-
-/* Captura de una app de escritorio en una ventana de macOS (media.type "window", Vault).
-   La ventana se mide contra la placa (contenedor de tamaño): lo más ancha que entre, sin
-   pasarse del alto. Todo lo demás (la barra, los botones, el redondeo, la sombra) sale
-   de su ancho, --win-w. La barra mide el 3,5% del ancho y la captura es 1600×1004, así
-   que la ventana entera mide 0,662 veces su ancho de alto: con 127cqb llena el 84% del
-   alto de la placa. */
-.card__plate--window {
-  container-type: size;
-}
-
-.plate__window {
-  --win-w: min(86cqi, 127cqb);
-  display: grid;
-  inline-size: var(--win-w);
-  border-radius: calc(var(--win-w) * 0.012);
-  overflow: clip;
-  background: var(--paper);
-  box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--ink) 14%, transparent),
-    0 calc(var(--win-w) * 0.02) calc(var(--win-w) * 0.06) rgb(0 0 0 / 0.18);
-}
-
-.card__plate .plate__window img {
-  inline-size: 100%;
-  block-size: auto;
-}
-
-/* La barra de la ventana, también la de la vista previa del índice. */
+/* La barra: el 3,5% del ancho de la ventana. */
 .plate__bar {
   display: flex;
   align-items: center;
