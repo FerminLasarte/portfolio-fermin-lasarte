@@ -230,6 +230,13 @@ html.dark-mode .skill-row img[data-dark-invert] {
   gap: var(--space-8) var(--pad-x);
 }
 
+/* El título de un proyecto es su nombre, y "DEPORTURNOS" mide 5,74 veces su tamaño de
+   letra: con el 19vw de las otras páginas se salía 7px por la derecha en celular. Con
+   15vw entra desde 320px, y es el mismo tamaño que el siguiente proyecto al pie. */
+.project .page__title {
+  font-size: min(var(--fs-display), 15vw);
+}
+
 /* El número y la vuelta a la lista, arriba del título. */
 .project__kicker {
   display: flex;
@@ -259,12 +266,99 @@ html.dark-mode .skill-row img[data-dark-invert] {
   inline-size: min(45%, 26rem);
 }
 
-/* Anterior y siguiente, al pie. */
+/* Con una captura, la banda crece hacia abajo en pantallas angostas: el teléfono toma
+   el alto de la placa, y en un 5:2 de celular medía 120px. Cuadrada en celular, 2:1 en
+   tablet y la banda de siempre desde escritorio. */
+.project__plate.card__plate--shot {
+  --plate-ratio: 1;
+}
+
+@media (min-width: 48rem) {
+  .project__plate.card__plate--shot {
+    --plate-ratio: 2;
+  }
+}
+
+@media (min-width: 64rem) {
+  .project__plate.card__plate--shot {
+    --plate-ratio: 5 / 2;
+  }
+}
+
+/* ---------- La historia: los bloques del proyecto como capítulos (7.13) ----------
+   Un número y un título por bloque, a la izquierda y pegados arriba desde escritorio
+   (lo pone .chapter__label, como los años de Trayectoria), y el texto a la derecha.
+   Una línea los une por la izquierda, con un punto por capítulo, y se dibuja mientras
+   se lee: la misma línea con puntos de Trayectoria en la home. */
+.story {
+  --rail-x: 0.375rem;
+  position: relative;
+  display: grid;
+  gap: var(--space-8);
+  padding-inline-start: var(--space-6);
+  view-timeline: --story block;
+}
+
+.story::before {
+  content: "";
+  position: absolute;
+  inset-block: 0.5em 0;
+  inset-inline-start: var(--rail-x);
+  inline-size: 1px;
+  background: var(--ink);
+  transform-origin: top;
+}
+
+.story__label {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+}
+
+/* El punto, sobre la línea: el rótulo empieza donde termina el padding de .story. */
+.story__label::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0.25em;
+  inset-inline-start: calc(var(--rail-x) + 0.5px - 0.375rem - var(--space-6));
+  inline-size: 0.75rem;
+  block-size: 0.75rem;
+  border-radius: var(--radius-round);
+  background: var(--accent);
+}
+
+.story__n {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.story__stats {
+  margin-block-end: var(--space-5);
+}
+
+/* Al pie: el siguiente proyecto en grande, que es a donde sigue la lectura, y el
+   anterior chico. */
 .project__around {
   display: grid;
-  gap: var(--space-5);
+  gap: var(--space-6);
   padding-block-start: var(--space-6);
   border-top: 1px solid var(--surface);
+}
+
+.project__next {
+  display: grid;
+  gap: var(--space-3);
+  color: inherit;
+  text-decoration: none;
+}
+
+/* En los dos temas se lee lleno; mientras entra, se llena desde el contorno (abajo). */
+.project__next-name {
+  --next-ink: var(--ink);
+  font-size: min(var(--fs-display), 15vw);
+  color: var(--next-ink);
+  -webkit-text-stroke: 0.012em var(--next-ink);
 }
 
 .project__step {
@@ -287,16 +381,32 @@ html.dark-mode .skill-row img[data-dark-invert] {
   .project__step:hover .project__step-name {
     color: var(--accent);
   }
+
+  .project__next-name {
+    transition:
+      color var(--dur-hover) var(--ease-out),
+      -webkit-text-stroke-color var(--dur-hover) var(--ease-out);
+  }
+
+  .project__next:hover .project__next-name {
+    --next-ink: var(--accent);
+  }
 }
 
 @media (min-width: 48rem) {
-  .project-list,
-  .project__around {
+  .project-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
 
-  .project__step--next {
-    text-align: end;
+/* Desde escritorio, la línea de la historia pasa por la columna de los títulos. */
+@media (min-width: 64rem) {
+  .story {
+    padding-inline-start: var(--space-7);
+  }
+
+  .story__label::before {
+    inset-inline-start: calc(var(--rail-x) + 0.5px - 0.375rem - var(--space-7));
   }
 }
 
@@ -309,5 +419,55 @@ html.dark-mode .skill-row img[data-dark-invert] {
 
   html.js .page__lead {
     animation: rv-up var(--dur-reveal) var(--ease-expo) 120ms both;
+  }
+
+  /* Lo que sigue al scroll, con líneas de tiempo de vista (docs/DISENO.md, 7.13). Sin
+     soporte, sin JS o con reduce motion se ve quieto: la placa en su lugar, la línea
+     entera y el siguiente proyecto lleno. */
+  @supports (animation-timeline: view()) {
+    /* El teléfono (o el logo) sube más rápido que la página mientras la placa cruza la
+       ventana: la paralaje de las tarjetas de la home, en vertical. La línea de tiempo
+       es la de la placa y no la del propio elemento, porque el que se mueve cambiaría
+       su propia vista. */
+    html.js .project__plate {
+      view-timeline: --plate block;
+    }
+
+    html.js .project__plate > * {
+      animation: plate-rise linear both;
+      animation-timeline: --plate;
+      animation-range: cover;
+    }
+
+    /* La línea se dibuja desde que la historia llega al 60% de la ventana hasta que su
+       final pasa por el mismo lugar: va a la par de lo que se lee. */
+    html.js .story::before {
+      animation: draw-story linear both;
+      animation-timeline: --story;
+      animation-range: cover 40vh cover calc(100% - 60vh);
+    }
+
+    /* Se llena como las palabras del muro de Habilidades (styles/skills.css). */
+    html.js .project__next-name {
+      animation: wall-fill linear both;
+      animation-timeline: view();
+      animation-range: cover 10% cover 45%;
+    }
+  }
+}
+
+@keyframes plate-rise {
+  from {
+    translate: 0 6%;
+  }
+
+  to {
+    translate: 0 -6%;
+  }
+}
+
+@keyframes draw-story {
+  from {
+    scale: 1 0;
   }
 }

@@ -55,6 +55,23 @@
     background: Canvas;
   }
 
+  /* La historia de cada proyecto (styles/page.css): la línea y sus puntos. */
+  .story::before,
+  .story__label::before {
+    forced-color-adjust: none;
+    background: CanvasText;
+  }
+
+  /* El siguiente proyecto se llena desde el contorno con colores del tema: en colores
+     forzados, quieto y lleno, en el color de los enlaces. */
+  html.js .project__next-name {
+    animation: none;
+  }
+
+  .project__next-name {
+    --next-ink: LinkText;
+  }
+
   /* Tabla de Habilidades: un punto donde se usó y uno chico donde no. */
   .matrix__dot {
     forced-color-adjust: none;
