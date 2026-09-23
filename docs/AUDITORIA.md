@@ -265,6 +265,7 @@ Los puntos marcados como **→ Rediseño** **no se arreglan en el código actual
   - **Problema:** se leen "TravelPi" y "epor". En Juego iOS y Chatbot (`:157-163` y `:192-198`) solo se ve un borrón.
   - **Solución:** conseguir capturas verticales reales de cada app (es contenido; se necesita para el rediseño).
   - **2026-09-22:** el lado del código está hecho y probado. `media.type: "shot"` dibuja la captura dentro de un marco de teléfono (con `--radius-device`) que se desplaza solo mientras el panel cruza la pantalla (`docs/DISENO.md`, 7.3). Para encenderlo alcanza con cambiarle el `media` a un proyecto en `lib/site.js`: `{ type: "shot", image, width, height, plate }`. Dos cosas a tener en cuenta al sacar las capturas: **cuanto más larga sea la captura, más recorre** (una de una sola pantalla entra justa y queda quieta, que también está bien), y **cada una necesita su descripción**, porque hoy las placas son decorativas (`alt=""`). Sigue abierto: falta el contenido.
+  - **2026-09-22, DeporTurnos:** captura de la pantalla Reservar, sacada del celular con la app publicada (Fermin la vendió y ya no tiene el código). Barra de estado tapada con blanco (filas 0–150 de 2622; la hora y la batería estaban en 74–119), 828×1800, en `public/assets/deporturnos-reservas.webp`, sobre el violeta de la app (#A833E1). Es de una sola pantalla, así que queda quieta. La descripción va en `projects.deporturnos.shotAlt`: en la página del proyecto se lee; en la tarjeta la placa sigue oculta porque repite el botón. Las capturas piden la imagen por el ancho del teléfono (`SHOT_SIZES` en ProjectPlate), no por el de la placa. Falta TravelPic.
   - **Pendiente (Fase 1):** faltan las capturas verticales de TravelPic y DeporTurnos (las que se muestran en el teléfono), y opcionalmente del juego iOS, el chatbot, Vault, Bookit y ClubSystem, que hoy solo tienen fondo o degradado. Cuando lleguen: pasarlas a WebP de ~800px de alto con `sharp`, quitarles los metadatos con `scripts/strip-metadata.mjs` y actualizar `image`, `width`, `height` y `thumb` en `PROJECTS` (`lib/site.js`). Los `sizes` de `ProjectCard` suponen capturas horizontales 2:1; con capturas verticales bajan al ancho del teléfono (~90px y ~72px).
 
 - [x] **I13. Recortes en anchos intermedios** · → Rediseño **[nav]**
@@ -437,7 +438,8 @@ El diseño visual y el movimiento salen de las skills `design-taste-frontend`, `
 
 _(Agregá aquí lo que aparezca durante las fases.)_
 
-- [ ] **N4. La foto del hero se ve blanda en pantallas 2x** · Fase 3 (contenido)
+- [x] **N4. La foto del hero se ve blanda en pantallas 2x** · Fase 3 (contenido)
+  - **Hecho (2026-09-22):** foto nueva, elegida por Fermin (una selfie al atardecer: el sitio es descontracturado y la luz va con el naranja teja). Recorte 4:5 que deja ver las montañas, en `public/assets/fermin.webp` (1120×1400, 116 KB; el hero pide 640 o 750 según la pantalla) y `fermin.jpg` (640×800) para la imagen de Open Graph y el JSON-LD. Nombres nuevos por la caché de un día de `/assets` (R-M19); `foto_perfil.*` se borró. Sin metadatos (sharp no los copia; `scripts/strip-metadata.mjs` no encontró nada).
   - **Dónde:** `public/assets/foto_perfil.webp` (560×715).
   - **Problema:** en horizontal la foto se dibuja a unos 550×740px, así que en una pantalla 2x haría falta una imagen de unos 1100×1480. La original se borró por el GPS (C1).
   - **Solución:** conseguir una foto de al menos 1200px de alto, sin metadatos (`scripts/strip-metadata.mjs`), y actualizar `width` y `height` en `Hero.jsx`.

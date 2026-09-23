@@ -189,8 +189,7 @@
   hyphens: manual;
 }
 
-/* Captura dentro del marco de teléfono (I12, todavía sin usar: ningún proyecto tiene
-   media.type "shot"). El marco toma el alto de la placa y la proporción de una pantalla
+/* Captura dentro del marco de teléfono (I12, media.type "shot"). El marco toma el alto de la placa y la proporción de una pantalla
    de iPhone; la captura lo llena a lo ancho y se desplaza lo que le sobra de alto
    (--shot-travel, que calcula components/ProjectPlate.jsx desde las medidas de la
    imagen) mientras el panel cruza. Con una captura de una sola pantalla sobra 0 y queda
