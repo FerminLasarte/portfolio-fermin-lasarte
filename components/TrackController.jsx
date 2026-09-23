@@ -3,8 +3,7 @@
 import { useEffect } from "react";
 import { HORIZONTAL_QUERY } from "@/lib/track";
 import { hasLenis, smoothScrollTo } from "@/lib/scroll";
-import { REDUCED_MOTION } from "@/lib/media";
-import { CURTAIN_FAILSAFE_MS } from "@/lib/curtain";
+import { setupReveal } from "@/lib/reveal";
 
 // Lo que entra por separado en cada panel (styles/motion.css), en el orden del HTML.
 const REVEAL = [
@@ -228,96 +227,31 @@ export default function TrackController() {
     document.addEventListener("selectionchange", onSelection);
     mq.addEventListener("change", onModeChange);
 
-    // Entradas (docs/DISENO.md, sección 8), como en douglus: cada elemento de un panel
-    // entra por separado. Se marcan con .rv y su orden (--rv, con tope de 12 para que
-    // el último no espere de más). Los paneles que no se ven al cargar esperan con
-    // .is-waiting y, cuando llegan al 80% de la pantalla (85% del alto en vertical),
-    // pasan a .is-revealed, una vez; styles/motion.css anima ese paso. Sin JS o con
-    // reduce motion, nada espera.
-    const reveal = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          entry.target.classList.replace("is-waiting", "is-revealed");
-          reveal.unobserve(entry.target);
-        }
-      },
-      { rootMargin: mq.matches ? "0px -20% 0px 0px" : "0px 0px -15% 0px" },
-    );
-    // Qué paneles se ven al cargar. En horizontal no sirve medirlos con su rect: el
-    // `translate` de la pista lo escribe la animación atada al scroll
-    // (styles/track.css) y se aplica recién en el frame siguiente, así que justo
-    // después del salto de un ancla el rect todavía es el de antes. Se calcula dónde
-    // quedó la pista con la misma cuenta que el CSS (la de `paint`) y de ahí sale el
-    // borde izquierdo de cada panel.
-    //
-    // El que ya se ve entra igual que los demás, pero solo si se llegó con la cortina
-    // puesta (styles/curtain.css): ahí la pantalla está tapada, así que esconderlo
-    // para que entre no se nota, y la sección aparece armándose cuando la cortina se
-    // retira. Sin cortina se lo deja como está: esconder algo que ya se pintó sería
-    // justo el parpadeo que la cortina viene a sacar.
-    let enter = null;
-    let enterTimer = 0;
-    const marcar = (panel) => {
-      const items = [...panel.querySelectorAll(REVEAL)].filter((el) => !el.matches(SKIP));
-      items.forEach((el, i) => {
-        el.classList.add("rv", ...variant(el));
-        el.style.setProperty("--rv", Math.min(i, 12));
-      });
-      panel.classList.add("is-waiting");
-    };
-
-    if (!matchMedia(REDUCED_MOTION).matches) {
-      const range = wrap.offsetHeight - innerHeight;
-      const done = range > 0 ? Math.min(Math.max(-wrap.getBoundingClientRect().top / range, 0), 1) : 0;
-      const pan = mq.matches ? done * (track.scrollWidth - track.parentElement.clientWidth) : 0;
-      const curtained = document.documentElement.classList.contains("curtain-hold");
-      const here = [];
-
-      for (const panel of panels) {
-        const seen = mq.matches
-          ? panel.offsetLeft - pan < innerWidth
-          : panel.getBoundingClientRect().top < innerHeight;
-        if (seen && !curtained) continue;
-        marcar(panel);
-        if (seen) here.push(panel);
-        else reveal.observe(panel);
-      }
-
-      // Cuando la cortina terminó de irse (components/Curtain.jsx avisa con
-      // `curtain:done`). El timeout es el mismo respaldo que tiene la cortina: si el
-      // aviso no llega, la sección entra igual y nunca queda escondida.
-      if (here.length) {
-        enter = () => {
-          clearTimeout(enterTimer);
-          removeEventListener("curtain:done", enter);
-          for (const panel of here) panel.classList.replace("is-waiting", "is-revealed");
-        };
-        addEventListener("curtain:done", enter);
-        enterTimer = setTimeout(enter, CURTAIN_FAILSAFE_MS);
-      }
-    }
-
-    // El foco nunca cae en algo invisible (R-I4): si el teclado entra a un panel que
-    // todavía espera su entrada, o que la está haciendo, el panel se muestra al
-    // instante (.is-instant corta las animaciones; como solo rellenan hacia atrás, en un
-    // panel que ya entró no cambia nada). Con teclado, el movimiento es inmediato
-    // (docs/DISENO.md, 8.7). En los dos modos: en vertical también hay entradas.
-    const onFocusReveal = (e) => {
-      const panel = e.target.closest(".is-waiting, .is-revealed");
-      if (!panel || panel.classList.contains("is-instant")) return;
-      panel.classList.replace("is-waiting", "is-revealed");
-      panel.classList.add("is-instant");
-      reveal.unobserve(panel);
-    };
-    track.addEventListener("focusin", onFocusReveal);
+    // Entradas (docs/DISENO.md, sección 8): un grupo por panel (lib/reveal.js). Entran
+    // al 80% de la pantalla (85% del alto en vertical). Qué paneles se ven al cargar: en
+    // horizontal no sirve medirlos con su rect, porque el `translate` de la pista lo
+    // escribe la animación atada al scroll (styles/track.css) y se aplica recién en el
+    // frame siguiente, así que justo después del salto de un ancla el rect todavía es
+    // el de antes. Se calcula dónde quedó la pista con la misma cuenta que el CSS (la de
+    // `paint`) y de ahí sale el borde izquierdo de cada panel. En los dos modos: en
+    // vertical también hay entradas.
+    const range = wrap.offsetHeight - innerHeight;
+    const done = range > 0 ? Math.min(Math.max(-wrap.getBoundingClientRect().top / range, 0), 1) : 0;
+    const pan = mq.matches ? done * (track.scrollWidth - track.parentElement.clientWidth) : 0;
+    const stopReveal = setupReveal({
+      groups: panels,
+      items: REVEAL,
+      skip: SKIP,
+      variant,
+      isSeen: (panel) =>
+        mq.matches ? panel.offsetLeft - pan < innerWidth : panel.getBoundingClientRect().top < innerHeight,
+      rootMargin: mq.matches ? "0px -20% 0px 0px" : "0px 0px -15% 0px",
+      focusRoot: track,
+    });
 
     return () => {
-      track.removeEventListener("focusin", onFocusReveal);
+      stopReveal();
       io?.disconnect();
-      reveal.disconnect();
-      clearTimeout(enterTimer);
-      if (enter) removeEventListener("curtain:done", enter);
       cancelAnimationFrame(raf);
       removeEventListener("scroll", onScroll);
       removeEventListener("resize", onScroll);
