@@ -184,8 +184,7 @@ Proyectos pasa a estar justo después del hero (I15). Experiencia y Educación s
 | # | Panel | `id` | Ancho en horizontal |
 |---|---|---|---|
 | 1 | Hero | `sobre-mi` | `100cqi` (una pantalla) |
-| 2 | Proyectos: entrada con las cifras | `proyectos` | `--w-intro: clamp(22rem, 30cqi, 30rem)` (con 26rem, "PROYECTOS" no entraba) |
-| 3 | Un panel por proyecto, en el orden de `PROJECTS` | `proyecto-<id>` | `--w-card-lg: clamp(30rem, 40cqi, 42rem)` para las apps en producción con plataforma móvil; `--w-card: clamp(22rem, 28cqi, 28rem)` para el resto |
+| 2 | Proyectos: el índice con su vista previa (7.3) | `proyectos`; cada fila, `proyecto-<id>` | `--w-projects: 100cqi` |
 | 4 | Trayectoria (experiencia y educación), vista previa en etapas (7.4) | `experiencia`; la etapa de UNICEN lleva `educacion` | `--w-timeline: calc(40rem + var(--n-stage) * 3.9 * var(--fs-stage))`: sale del tamaño de los años y de la cantidad de etapas (con cinco, unos 3270px a 1440×900) |
 | 5 | Habilidades, vista previa en un muro de palabras (7.7) | `habilidades` | `--w-skills: 100cqi` (una pantalla) |
 | 6 | Transición al cierre: decorativa, `aria-hidden` (agregada el 2026-09-14) | | `--w-bleed: 65cqi` (70cqi desde 1600px, como douglus) |
@@ -201,13 +200,12 @@ El documento se scrollea en vertical, como cualquier página. Una sección alta 
 
 ```html
 <main id="contenido">
-  <div class="h-scroll" style="--n-card: 6; --n-card-lg: 2">   <!-- alto = recorrido horizontal + 1 pantalla -->
+  <div class="h-scroll" style="--n-stage: 5">   <!-- alto = recorrido horizontal + 1 pantalla -->
     <div class="h-sticky">                                     <!-- sticky, 100dvh, overflow: clip -->
       <div class="h-track">                                    <!-- fila de paneles; se mueve con translate -->
         <section id="sobre-mi" class="panel panel--screen hero">…</section>
         <section id="proyectos" class="panel panel--intro intro">…</section>
-        <article id="proyecto-travelpic" class="panel panel--card-lg card card--lg">…</article>
-        <article id="proyecto-vault" class="panel panel--card card">…</article>
+        <section id="proyectos" class="panel panel--projects">…</section>
         …
         <section id="experiencia" class="panel panel--timeline trajectory">…</section>
         <section id="habilidades" class="panel panel--skills">…</section>
@@ -223,7 +221,7 @@ El documento se scrollea en vertical, como cualquier página. Una sección alta 
 main, .h-sticky { container-type: inline-size; }  /* cqi = ancho sin la barra de scroll de Windows */
 
 /* En .h-scroll y no en :root: un var() dentro de una custom property se resuelve
-   en el elemento donde se declara, y --n-card / --n-card-lg recién existen acá. En
+   en el elemento donde se declara, y --n-stage recién existe acá. En
    :root quedaba inválida y el alto caía a auto (se vio en el mockup). Los `cqi` sí
    se resuelven donde se usa la variable (en .h-scroll, contra main; en el keyframe,
    contra .h-sticky), y los dos miden lo mismo. */
@@ -231,8 +229,7 @@ main, .h-sticky { container-type: inline-size; }  /* cqi = ancho sin la barra de
    la transición al cierre: sus animaciones atadas al scroll las usan para saber en qué
    tramo del recorrido se mueven (7.4, 7.7 y 7.5). */
 .h-scroll {
-  --x-timeline: calc(100cqi + var(--w-intro)
-                   + var(--n-card-lg) * var(--w-card-lg) + var(--n-card) * var(--w-card));
+  --x-timeline: calc(100cqi + var(--w-projects));
   --x-skills: calc(var(--x-timeline) + var(--w-timeline));
   --x-bleed: calc(var(--x-skills) + var(--w-skills));
   --track-w: calc(var(--x-bleed) + var(--w-bleed) + 100cqi);
@@ -246,7 +243,7 @@ main, .h-sticky { container-type: inline-size; }  /* cqi = ancho sin la barra de
   html.js .h-sticky { position: sticky; top: 0; height: 100dvh; overflow: clip; }
   html.js .h-track  { display: flex; width: max-content; height: 100%; }
   html.js .panel    { flex: none; height: 100%; }
-  html.js .panel--intro { inline-size: var(--w-intro); }   /* y así cada panel--*, con su token */
+  html.js .panel--projects { inline-size: var(--w-projects); }   /* y así cada panel--*, con su token */
 
   /* Solo si el navegador soporta la línea de tiempo. Sin este @supports, la
      animación correría por tiempo con duración 0 y saltaría al final. */
@@ -263,7 +260,7 @@ main, .h-sticky { container-type: inline-size; }  /* cqi = ancho sin la barra de
 ```
 
 Detalles que importan:
-- **El ancho de la pista sale del CSS, no de medir.** Cada panel declara su ancho con un token, y el servidor escribe cuántos proyectos de cada tamaño hay (`--n-card`, `--n-card-lg`, calculados de `PROJECTS`). Así el alto de la sección es exacto desde el primer pintado, sin JS y sin salto. Regla de diseño que sale de esto: **ningún panel tiene un ancho que dependa de su contenido**; el contenido se acomoda (y se prueba) dentro del ancho y el alto declarados.
+- **El ancho de la pista sale del CSS, no de medir.** Cada panel declara su ancho con un token, y el servidor escribe cuántas etapas tiene Trayectoria (`--n-stage`, de `STAGES`; hasta el 2026-09-23 también cuántos proyectos de cada tamaño había, cuando cada uno era un panel). Así el alto de la sección es exacto desde el primer pintado, sin JS y sin salto. Regla de diseño que sale de esto: **ningún panel tiene un ancho que dependa de su contenido**; el contenido se acomoda (y se prueba) dentro del ancho y el alto declarados.
 - **Unidades de contenedor (`cqi`), no `vw`**, para que en Windows la barra de scroll no deje un sobrante.
 - **`overflow: clip` en el `sticky`, no `hidden`.** `hidden` crea un contenedor de scroll, y entonces el navegador lo scrollearía de costado al enfocar o al saltar a un ancla, desarmando la pista. Es el único recorte que esconde contenido, y es intencional: está donde nace el desborde (criterio 1). Los otros `overflow: clip` son máscaras de un solo elemento, que no esconden texto: el relleno de los botones (`.btn`), la placa de proyecto (`.card__plate`, que nunca corta el nombre, 7.3), el marco de la foto (`.drag__frame`), las líneas del nombre del hero y del preloader, "Menú" / "Cerrar" (`.swap`) y el apellido del nav (`.brand__last`). `html` y `body` no llevan `overflow`.
 - **Se anima `translate`**, la propiedad independiente, así no compite con otros `transform` (I6).
@@ -344,7 +341,7 @@ Si `CSS.supports("animation-timeline: view()")` da falso y el modo horizontal es
 **Franja inferior (solo en horizontal):** fija, `--strip-h`, con tres zonas, como el pie de douglus. Igual que el nav: sin fondo, en blanco con `difference` (la barra de progreso de douglus también lo usa).
 - Izquierda: "© 2026 Fermin Lasarte".
 - Centro: riel de 10rem × 1px en `--line` con el relleno en `--accent` (`scale` en X, con la línea de tiempo `--pan`), y a su lado el nombre de la sección actual (`aria-hidden`: la información útil ya está en `aria-current`).
-- Centro: la barra de progreso, el nombre de la sección visible y, **dentro de Proyectos, el contador ("03 / 06")**, que es lo que orienta una vez que el índice de la entrada ya pasó (2026-09-22, 7.3). El texto del contador lo arma el servidor en cada panel de proyecto (`data-count`) y `TrackController` solo lo copia cuando esa sección cruza el centro de la ventana; fuera de Proyectos queda vacío. Es visual: para los lectores de pantalla ya está el `aria-current` del nav.
+- Centro: la barra de progreso y el nombre de la sección visible. (Hasta el 2026-09-23, dentro de Proyectos había un contador "03 / 06"; se fue con las tarjetas, 7.3.)
 - Derecha: al principio iba "Descargar CV"; Fermin lo sacó el 2026-09-15 (el CV sigue en el hero, I15). En su lugar va "Hecho a mano en Buenos Aires" / "Handmade in Buenos Aires" (`strip.credit`, "Hecho a mano en {city}", con la ciudad de `PERSON.city`; R-M29) con la ola del "Design & code by" de douglus (`components/WaveText.jsx`): cuando la página lleva 5 s quieta (sin mover el mouse, scrollear, tocar una tecla ni mover el foco), cada letra avanza 80px hacia la pantalla con perspectiva de 180px (casi el doble de grande), gira 35° y vuelve, 50ms después de la anterior. Pasa dos veces como máximo; la próxima vez que se use la página, la cuenta vuelve a empezar (2026-09-15, R-M5 de la re-auditoría: antes se repitía sin fin, y con el teclado no se cortaba nunca). Solo corre en horizontal, que es donde se ve la franja. Es visual: el texto entero está en un `sr-only`.
 
 **Móvil:** botón `<button aria-expanded aria-controls="menu">` con el texto "Menú" / "Cerrar", que rueda de uno al otro (7.6).
@@ -369,45 +366,25 @@ Copia del párrafo (`hero.lead`, aprobada en D2). El texto largo de antes (`hero
 - ES: "**iOS & Cross-Platform Mobile Engineer.** Hago apps móviles de punta a punta: arquitectura, backend y publicación en App Store y Google Play."
 - EN: "**iOS & Cross-Platform Mobile Engineer.** I build mobile apps end to end: architecture, backend, and release on the App Store and Google Play."
 
-### 7.3 Entrada de Proyectos y tarjeta de proyecto
+### 7.3 Proyectos: índice con vista previa
 
-Rehecho el 2026-09-22, a pedido de Fermin: la sección se sentía más estática que las demás. El diagnóstico fue que **todas las otras secciones tienen movimiento atado al scroll y Proyectos no tenía ninguno** (la línea de Trayectoria se dibuja, el muro de Habilidades se llena, el degradado del cierre crece; Proyectos solo tenía la entrada genérica de panel, que pasa una vez y después queda quieto), y que seis paneles con la misma estructura y dos anchos se leían como una hilera de estacas, sin forma de saber en cuál se estaba. Se le mostraron a Fermin cuatro modelos (índice y expediente, teléfono vivo, tira desfasada, una pantalla por proyecto) y eligió la mezcla de los tres primeros.
+**Rehecho el 2026-09-23, a pedido de Fermin, que eligió la opción "B" entre tres bocetos** (A: la captura grande sin caja, al lado del texto; B: un índice con vista previa; C: una galería de dos o tres pantallas por proyecto). Motivos: en las tarjetas, el teléfono sobre la caja de color medía unos 300px y no se apreciaba, y la sección se trababa.
 
-**Entrada** (`#proyectos`): `<h2>` "Proyectos" en Display, el **índice** y las cifras de `STATS` como una `<dl>` (número en el estilo de Cifras, sección 3, y la etiqueta en Meta; salen de los datos, R-I7).
+**Por qué se trababa** (medido en Chrome, recorriendo la sección): cada tarjeta era un panel de la pista y se movía con `--cross`, una propiedad registrada animada con el scroll. Animar una propiedad propia obliga al navegador a recalcular los estilos de todo lo que la lee en cada cuadro: 348ms de recálculo en el recorrido, contra 95ms sin ese efecto; las imágenes casi no pesaban (326ms sin ellas). **Lección: nada que se mueva con el scroll a través de una propiedad propia.** Con el índice, el recálculo por cuadro bajó de 1,24ms a 0,33ms.
 
-**Índice:** las seis filas numeradas (`01` a `06`), cada una un enlace a su panel. Se llenan una detrás de otra mientras el panel cruza la pantalla, con la misma técnica del muro de Habilidades: el nombre pasa del gris de las líneas al color del texto y la línea del acento crece de izquierda a derecha. Es una sola animación por fila, que mueve `--fill` (una propiedad registrada con `@property`) y el color; la línea es un `::after` que lee `--fill` heredado, así no hacen falta dos animaciones por fila. El índice vive en el panel de entrada y deja de verse apenas se lo pasa: **la orientación mientras se recorre la sección la da el contador de la franja, no el índice** (7.1).
+**Qué es** (`components/ProjectIndex.jsx`, el mismo en la home y en `/proyectos`):
+- **La lista:** los seis proyectos numerados (`01` a `06`), cada uno un enlace a su página (7.12), con la cortina. El nombre va en Display, en grande; al lado, de quién es y cuándo (el `origin` y los años de Trayectoria si el proyecto es una etapa; si no, su estado).
+- **La vista previa:** a la derecha, la pantalla del proyecto que está bajo el mouse o tiene el foco del teclado, grande y **sin caja de color**: el teléfono (las capturas de `media.type: "shot"`), la ventana de macOS (`"window"`, con la versión del tema) o, sin captura, el nombre en Display y `--accent`. Abajo, la solución del proyecto en una línea. `components/WorksHover.jsx` solo cambia `.is-on` en la fila y en su vista previa; se queda en la última al salir, así la columna nunca queda vacía.
+- **El activo:** su nombre pasa del gris al color del texto y se corre un paso, el número toma el acento y aparece una flecha. La vista previa entra con un fundido y un 3% de escala (`--dur-ui`; la escala, `--dur-reveal` con `--ease-expo`). Sin movimiento con reduce motion.
+- **Dónde:** con `(min-width: 64rem) and (hover: hover)` y JS, dos columnas (1,35fr para la lista, 1fr para la vista previa). Sin JS, en celular o en tablet, no hay quién cambie la vista previa: cada fila lleva su miniatura (el principio de la pantalla del teléfono, 3:4, o la ventana entera) y la vista previa no existe (tampoco se descargan sus imágenes).
+- **En la home:** un solo panel de la pista, del ancho de la pantalla (`--w-projects: 100cqi`), con el título y las cifras de `STATS` arriba de la lista. El tamaño de los nombres sale del alto de la pantalla (`clamp(1.75rem, 4.4vmin, 3.25rem)`), así las seis filas entran también en 1024×680. En `/proyectos` la vista previa queda pegada arriba mientras se recorre la lista.
+- Las imágenes del índice llevan `block-size: auto`: sin eso toman el alto de su atributo (2000px de una captura) y se estiran.
 
-**Tarjeta:** un panel por proyecto, generado de `PROJECTS` (M11). De arriba a abajo:
+**Lo que se fue con las tarjetas:** la caja de color con el teléfono, la paralaje y la deriva (`--cross`), el índice que se llenaba con el scroll (`--fill`), la tira desfasada, el contador "03 / 06" de la franja y `ProjectCard.jsx`. La placa con la caja de color sigue solo en la página de cada proyecto (7.13), donde es una banda ancha y el teléfono se aprecia.
 
-> **Hubo un número grande (`01`…`06`) sobre la esquina de la placa y se sacó el 2026-09-22, el mismo día, a pedido de Fermin.** Vale la pena dejar escrito por qué falló su primera versión, porque la lección sirve para toda la pista: iba en blanco con `mix-blend-mode: difference`, como el nav y la franja, para leerse sobre cualquier color sin saber qué había debajo. Pero el número y la placa derivan a distinta velocidad, así que al final de cada cruce el número asomaba unos 14px fuera del borde izquierdo de la placa, y ahí la mezcla invertía esa parte contra el papel mientras el resto seguía contra la placa: se partía en dos colores y parecía aparecer y desaparecer, sobre todo en TravelPic (placa negra). **`mix-blend-mode` deja de ser una solución cuando lo que hay debajo cambia mientras la cosa se mueve.** El nav y la franja sí lo pueden usar porque son fijos. La numeración sigue estando donde orienta: el índice de la entrada y el contador de la franja.
+**Historia:** las tarjetas (2026-09-22) tuvieron un número grande en `mix-blend-mode: difference` sobre la placa, que se sacó el mismo día: con la paralaje, el número y la placa se movían a distinta velocidad y la parte que quedaba sobre el papel se invertía. `mix-blend-mode` deja de funcionar cuando lo que hay abajo se mueve.
 
-1. **Placa** (el alto que sobra): tres tipos, en `media.type`.
-   - `logo` (TravelPic, DeporTurnos): el logo sobre su color de marca.
-   - `type`: placa tipográfica en `--accent-soft`, con el nombre del proyecto en Display y `--accent`. El nombre nunca se corta (2026-09-15, R-I1): su tamaño sale del ancho de la ventana (`clamp(2rem, 4.6vw, 4.5rem)`), con un tope del 18% del ancho útil de la placa, que es un contenedor (`18cqi`).
-   - `shot` (I12, escrito y probado el 2026-09-22, todavía sin usar): la captura vertical dentro de un marco de teléfono, con `--radius-device`, que se desplaza sola mientras el panel cruza. Cuánto se desplaza sale de las medidas de la imagen (`ProjectPlate.jsx` calcula `--shot-travel`: lo que le sobra de alto después de llenar el marco), así que **una captura de una sola pantalla queda quieta y encuadrada, y una captura larga de scroll recorre**. Para encenderlo alcanza con cambiarle el `media` a un proyecto; lo único que falta sumar con la captura es su descripción, porque hoy las placas son decorativas (`alt=""`).
-   - No hay terminales falsos, degradados ni código decorativo: la skill los prohíbe y hoy eran relleno.
-   - La placa es un enlace a la página del proyecto, con `tabindex="-1"` y `aria-hidden`, para no duplicar el enlace en el orden de foco, y con `data-curtain` para que el salto vaya con la cortina como el del botón.
-2. **Meta:** estado en texto ("En producción" / "En desarrollo") y plataformas en texto ("iOS y Android"). Solo texto: la tarjeta no lleva iconos de plataforma (los de `lib/icons.js` van en los botones de enlace).
-3. **Título** (`<h3>`) con el título traducido, en el estilo de título de proyecto.
-4. **Problema** (si hay) y **solución:** dos párrafos de hasta 25 palabras cada uno. Sin etiquetas "Problema" y "Solución técnica": el orden ya lo dice.
-5. **Tecnologías:** en una línea de texto Meta, separadas por comas.
-6. **Enlaces:** el relleno es **"Ver el proyecto"**, que lleva a `/proyectos/<id>` (7.12); al lado, con borde, un botón por destino de afuera ("App Store", "Google Play", "Código", "Visitar"). Cambia la decisión de I15, que tenía la tienda como acción principal: la decidió Fermin el 2026-09-22, al sumar las páginas de proyecto. "Código" y "Visitar" se repiten entre tarjetas, así que su nombre accesible suma el proyecto en un `sr-only` (R-M10), y "Ver el proyecto" también.
-
-**Movimiento de la sección.** Todo sale de `--cross`: cuánto lleva cruzada la pantalla el panel, de 0 (su borde izquierdo entra por la derecha) a 1 (su borde derecho sale por la izquierda). Es una propiedad registrada con `@property` (inicial 0,5, el medio) que mueve **una sola animación** atada a la línea de tiempo `--pan`, con el tramo exacto de cada panel: `--x-card`, que escribe el servidor sumando los anchos de las tarjetas que tiene delante (`components/Projects.jsx`), y `--w-self`, el ancho del propio panel. De `--cross` salen las cuatro cosas que se mueven, cada una una línea de CSS:
-- **paralaje de dos capas:** la placa se adelanta 3cqi y el texto se queda atrás 1,5cqi;
-- **deriva de la tarjeta:** 2cqi en vertical, en sentidos contrarios según la fila (`--sway`);
-- **desplazamiento de la captura** dentro del marco, si la placa es `shot`.
-
-Que sea una sola variable es lo que hace barato el respaldo de Firefox (6.4): `paint()` en `TrackController.jsx` escribe `--cross` con la misma cuenta y el CSS no cambia. Sin JS, con reduce motion o en vertical se queda en 0,5 y nada se desplaza.
-
-**Tira desfasada.** En horizontal la tarjeta mide el 92% del panel y las pares se apoyan abajo, así la fila deja de leerse pareja. El 8% que se recorta sale del alto de la placa, que es lo que se estira: no se puede bajar mucho más, porque con las tarjetas chicas y el texto largo la placa queda en nada (con 88% la de Bookit bajaba a 122px).
-
-**Hover.** La tarjeta entera responde: el título toma el acento, el logo se acerca un 4% y el nombre de la placa tipográfica sube medio paso. Solo con `(hover: hover) and (pointer: fine)`, y lo que se mueve, solo sin reduce motion.
-
-- **Tamaños:** `card--lg` para las apps móviles en producción; el resto, `card`.
-- **Sin cortes entre paneles** (pedido de Fermin, 2026-09-14): los paneles no llevan bordes que los separen, ni en horizontal ni en vertical, y el pie tampoco. Los separa el aire (el margen lateral de cada panel), así el recorrido se lee como una sola tira. Las líneas que son parte del contenido (la de cada fila del índice, el eje de años, el título de cada grupo de habilidades) se quedan.
-- **En vertical:** las mismas tarjetas, en una grilla de una o dos columnas, con la placa en 4:3 en las chicas, 16:9 en las grandes (`card--lg`) y 3:4 en las de captura. En horizontal la placa no tiene proporción fija. El índice se llena ahí con el `view()` de cada fila, como el muro.
-- **Estructura:** la tarjeta se parte en `.card__media` (la placa) y `.card__body` (el resto) porque son las dos capas que se mueven a distinta velocidad. La paralaje va en esos envoltorios y las entradas de panel, en los elementos de adentro: si estuvieran en el mismo elemento, la animación de entrada pisaría el `translate` de la paralaje mientras dura.
+- **Sin cortes entre paneles** (pedido de Fermin, 2026-09-14): los paneles no llevan bordes que los separen, ni en horizontal ni en vertical, y el pie tampoco. Los separa el aire (el margen lateral de cada panel).
 
 ### 7.4 Trayectoria
 
@@ -564,7 +541,7 @@ Pedido por Fermin el 2026-09-22, al escribir la de DeporTurnos: que la página, 
 - **Varias capturas (`media.gallery`, TravelPic):** en la página van en abanico: la principal adelante y las otras dos detrás, una a cada lado, al 86% y corridas un 80% de su ancho. Las tres ocupan la misma celda y se abren con `transform`, así el `translate` queda para la paralaje, que va según la profundidad de cada una (`--k`: 1 la de adelante, 0,5 y 0,75 las de atrás). Un borde del color de la placa las separa donde se pisan. En una placa angosta, el alto sale del ancho (80cqi) para que las de los costados no se corten. La tarjeta de la home muestra solo la principal.
 - **Apps de escritorio (`media.type: "window"`, Vault):** la captura va en una ventana de macOS, con su barra y los tres botones de colores (la única seña que se entiende sin explicar). Todo se mide desde el ancho de la ventana (`--win-w`, contra la placa como contenedor de tamaño), así es la misma en la tarjeta y en la página. Con `imageDark`, cada captura tiene su versión oscura y se muestra la del tema del sitio; la otra queda con `display: none`, que no se lee ni, siendo lazy, se descarga. Con galería, las ventanas van **en cascada**, como en un escritorio: la principal adelante y abajo a la derecha, las otras detrás, cada una más arriba, más a la izquierda y un 6% más chica, con la misma paralaje por profundidad que el abanico. La banda es 4:3 en celular, 2:1 en tablet y 5:2 desde escritorio.
 - **La placa:** con una captura, la banda es cuadrada en celular, 2:1 en tablet y 5:2 desde escritorio (en 5:2, el teléfono medía 120px en un celular). Mientras cruza la ventana, el teléfono (o el logo) sube un 12% más rápido que la página: la paralaje de las tarjetas de la home. La línea de tiempo es la de la placa (`view-timeline: --plate`) y no la del propio teléfono, porque el que se mueve cambiaría su propia vista.
-- **La historia:** los bloques son capítulos numerados (01 Contexto, 02 Qué construí...), con el título a la izquierda y pegado arriba desde escritorio, como los años de `/trayectoria`. Una línea los une por la izquierda, con un punto del acento por capítulo, y **se dibuja mientras se lee**: desde que la historia llega al 60% de la ventana hasta que su final pasa por el mismo lugar. Es la línea con puntos de Trayectoria en la home.
+- **La historia:** los bloques son capítulos numerados (01 Contexto, 02 Qué construí...), con el número y el título a la izquierda, **a la altura de la primera línea de su texto** (`align-items: first baseline`; en Resultado, de las cifras), y en las mismas columnas que "Tecnologías". Hasta el 2026-09-23 el título quedaba pegado arriba mientras se leía, a otra altura que el texto, y el padding de la línea corría las columnas 48px; Fermin eligió esta alineación entre dos bocetos (la otra centraba el título con su párrafo). "Tecnologías" cierra la historia con una línea y más aire. Una línea los une por la izquierda, con un punto del acento por capítulo, y **se dibuja mientras se lee**: desde que la historia llega al 60% de la ventana hasta que su final pasa por el mismo lugar. Es la línea con puntos de Trayectoria en la home.
 - **Cifras:** si el proyecto tiene `stats` (DeporTurnos: 11 complejos, 4300+ usuarios, 1300+ reservas), van en grande arriba del texto de Resultado, con el mismo estilo que las cifras de la entrada de Proyectos y el formato de cada idioma (4300 en español, que no separa los miles de cuatro cifras; 4,300 en inglés).
 - **El pie:** el siguiente proyecto en grande (Display, 15vw como tope), que es a donde sigue la lectura, y el anterior chico. El nombre del siguiente **se llena desde el contorno** mientras entra, con la animación del muro de Habilidades (`wall-fill`); al pasar el mouse se pone del acento, y al tocarlo pasa la cortina.
 - **El título** de la página de un proyecto usa 15vw como tope y no 19vw: "DEPORTURNOS" mide 5,74 veces su tamaño de letra y se salía 7px por la derecha en celular (ya pasaba antes de 7.13).
@@ -608,9 +585,7 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
 | Ola de la franja | 5 s sin mover el mouse, scrollear, tocar una tecla ni mover el foco (dos veces como máximo, hasta que se vuelva a usar la página) | `transform: perspective(180px) translateZ() rotateY()` de cada letra | 400ms por letra, 50ms entre letras | No existe (la franja es solo del modo horizontal) |
 | Línea de Trayectoria | Scroll | `scale` X del `::before` de `.stages` | Lineal, atada al scroll: del 60% de la ventana al borde derecho del panel (en Firefox, `--rail` desde TrackController) | No existe (vertical) |
 | Muro de Habilidades | Scroll | `color` y `-webkit-text-stroke-color` de cada palabra, del contorno gris a su estado final | Lineal, atada al scroll: en horizontal, del 70% de la ventana a panel entero, 2,3cqi entre palabra y palabra; en vertical, `view()` de cada palabra (`cover 15%` a `cover 40%`) | Estado final, quieto |
-| Índice de Proyectos | Scroll | `color` y `--fill` de cada fila (la línea del acento es un `::after` que lo hereda) | Lineal, atada al scroll: en horizontal, desde que el panel llega al 75% de la ventana hasta el 60%, 3cqi entre fila y fila; en vertical, `view()` de cada fila (`cover 15%` a `cover 40%`) | Lleno, quieto |
-| Paralaje de una tarjeta | Scroll | `translate` X de la placa (3cqi) y del texto (1,5cqi), los dos desde `--cross` | Lineal, atada al scroll: todo el cruce del panel, de su borde izquierdo entrando por la derecha a su borde derecho saliendo por la izquierda (en Firefox, `--cross` desde TrackController) | Sin desplazar (`--cross` queda en 0,5) |
-| Deriva de una tarjeta | Scroll | `translate` Y de la tarjeta, 2cqi, en sentidos contrarios según la fila | Igual que la paralaje | Sin desplazar |
+| Vista previa del índice de Proyectos (7.3) | Mouse o foco sobre una fila | `opacity` y `scale` de la vista previa; `color` y `translate` X del nombre; `opacity` y `translate` X de la flecha | `--dur-ui` con `--ease-out`; la escala, `--dur-reveal` con `--ease-expo` | Solo el cambio de color y opacidad |
 | Placa de una página de proyecto (7.13) | Scroll | `translate` Y del teléfono o del logo, de 6% a −6% | Lineal, `view()` de la placa, todo el cruce (`cover`) | Quieta |
 | Línea de la historia (7.13) | Scroll | `scale` Y del `::before` de `.story` | Lineal, `view()` de la historia: `cover 40vh` a `cover calc(100% − 60vh)` | Entera |
 | Siguiente proyecto (7.13) | Scroll | `color` y `-webkit-text-stroke-color`, del contorno gris al lleno (`wall-fill`) | Lineal, `view()` del nombre, `cover 10%` a `cover 45%` | Lleno |
@@ -670,7 +645,7 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
    - Foto, capturas, logos e iconos de Devicon con `next/image`; iconos de interfaz SVG inline (`lib/icons.js`).
    - Archivo con `next/font`, servida desde el propio dominio. No hay ninguna hoja de estilos externa.
 6. **Proyectos.**
-   - Todo sale de `PROJECTS`: el orden, el tamaño de panel, `--n-card`/`--n-card-lg`, el estado, las plataformas, el color de placa y los enlaces directos (tiendas, repo o demo).
+   - Todo sale de `PROJECTS`: el orden, el estado, las plataformas, las capturas, el color de placa y los enlaces directos (tiendas, repo o demo).
    - La placa enlaza al destino principal.
    - Las capturas son reales: hoy `travelpic.webp` y `deporturnos.webp` son los logos, no pantallas de las apps (ver sección 10).
 7. **Accesibilidad.**
