@@ -26,14 +26,17 @@ export function screensOf(project, t) {
 //    sola, la del capítulo que se está leyendo (components/ScreenSync.jsx cambia
 //    .is-on). Los puntos de abajo dicen cuál de cuántas; son decorativos.
 //  - Sin JS: todas, una debajo de otra, al lado del texto.
-//  - En celular y tablet: antes de los capítulos; varios teléfonos en abanico y varias
-//    ventanas en cascada.
+//  - En celular y tablet: antes de los capítulos. Dos o tres teléfonos van en abanico y
+//    dos o tres ventanas en cascada; de más de tres, una fila que se desliza de costado
+//    (se enfoca con Tab y se mueve con las flechas, y lleva su nombre).
 // Las capturas muestran la app y llevan su descripción, que leen los lectores de
 // pantalla. Con `imageDark`, cada ventana tiene su versión oscura, y el CSS muestra la
 // del tema del sitio (styles/projects.css).
-export default function ProjectScreens({ project, screens }) {
+export default function ProjectScreens({ project, screens, t, name }) {
   const { type } = project.media;
   const sizes = SIZES[type];
+  const n = screens.length;
+  const layout = n > 3 ? "many" : n > 1 ? (type === "shot" ? "fan" : "cascade") : "one";
 
   const image = (shot, file, alt, cls) => (
     // eslint-disable-next-line @next/next/no-img-element -- los atributos salen de getImageProps (R-M15)
@@ -66,8 +69,13 @@ export default function ProjectScreens({ project, screens }) {
     );
 
   return (
-    <div className={`screens screens--${type}`} data-screens data-reveal>
-      <div className="screens__stack">
+    <div className={`screens screens--${type} screens--${layout}`} data-screens data-reveal>
+      <div
+        className="screens__stack"
+        {...(layout === "many"
+          ? { tabIndex: 0, role: "region", "aria-label": t("projects.screens").replace("{name}", name) }
+          : null)}
+      >
         {screens.map((s, i) => (
           <div key={s.shot.image} className={`screens__item${i === 0 ? " is-on" : ""}`}>
             {frame(s)}

@@ -402,54 +402,77 @@ html.dark-mode .skill-row img[data-dark-invert] {
   display: none;
 }
 
-/* En celular y tablet, antes de los capítulos. Varios teléfonos van en abanico: el
+/* En celular y tablet, antes de los capítulos. Dos o tres teléfonos van en abanico: el
    principal adelante y los otros detrás, uno a cada lado, más chicos y un poco
    girados. El abanico mide 2,1 veces el ancho de un teléfono, así que el alto sale del
    ancho de la columna para que los de los costados no se corten ni toquen el borde.
-   De más de tres se ven los tres primeros. Varias ventanas van en cascada, como en un
-   escritorio: la principal adelante y abajo a la derecha, las otras detrás, más
-   arriba, más a la izquierda y más chicas; el grupo se corre al revés, así queda
-   centrado. */
+   Dos o tres ventanas van en cascada, como en un escritorio: la principal adelante y
+   abajo a la derecha, las otras detrás, más arriba, más a la izquierda y más chicas;
+   el grupo se corre al revés, así queda centrado. De más de tres, una fila que se
+   desliza de costado, de borde a borde de la pantalla; la siguiente asoma, que es lo
+   que dice que hay más. */
 @media (width < 64rem) {
-  .screens--shot:has(.screens__item + .screens__item) {
+  .screens--fan {
     --phone-h: min(26rem, 92cqi);
   }
 
-  .screens--shot .screens__item:first-child {
+  .screens--fan .screens__item:first-child {
     z-index: 1;
   }
 
-  .screens--shot .screens__item:nth-child(2) {
+  .screens--fan .screens__item:nth-child(2) {
     transform: translateX(-62%) rotate(-6deg) scale(0.86);
   }
 
-  .screens--shot .screens__item:nth-child(3) {
+  .screens--fan .screens__item:nth-child(3) {
     transform: translateX(62%) rotate(6deg) scale(0.86);
   }
 
-  .screens--shot .screens__item:nth-child(n + 4) {
-    visibility: hidden;
-  }
-
-  .screens--window:has(.screens__item + .screens__item) .screens__stack {
+  .screens--cascade .screens__stack {
     transform: translate(8%, 10%);
   }
 
-  .screens--window:has(.screens__item + .screens__item) .screens__window {
+  .screens--cascade .screens__window {
     --win-w: 79cqi;
   }
 
-  .screens--window .screens__item:first-child {
+  .screens--cascade .screens__item:first-child {
     z-index: 2;
   }
 
-  .screens--window .screens__item:nth-child(2) {
+  .screens--cascade .screens__item:nth-child(2) {
     z-index: 1;
     transform: translate(-8%, -10%) scale(0.94);
   }
 
-  .screens--window .screens__item:nth-child(3) {
+  .screens--cascade .screens__item:nth-child(3) {
     transform: translate(-16%, -20%) scale(0.88);
+  }
+
+  .screens--many {
+    --phone-h: min(26rem, 62svh);
+    justify-items: stretch;
+  }
+
+  .screens--many .screens__stack {
+    display: flex;
+    gap: var(--space-4);
+    margin-inline: calc(var(--pad-x) * -1);
+    padding-inline: var(--pad-x);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--pad-x);
+    scrollbar-width: none;
+  }
+
+  .screens--many .screens__item {
+    flex: none;
+    scroll-snap-align: start;
+  }
+
+  .screens--many.screens--window .screens__window {
+    --win-w: 85cqi;
   }
 }
 

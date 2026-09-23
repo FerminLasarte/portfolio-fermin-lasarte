@@ -75,7 +75,7 @@ export default function ProjectPage({ project, t, lang }) {
           Tecnologías, con los enlaces de afuera. Sin capturas, los capítulos van solos,
           al ras del borde de la página. */}
       <div className={`story${screens.length ? " story--screens" : ""}`} data-story>
-        {screens.length > 0 && <ProjectScreens project={project} screens={screens} />}
+        {screens.length > 0 && <ProjectScreens project={project} screens={screens} t={t} name={projectName} />}
 
         <div className="story__text">
           {blocks.length > 0 && (
