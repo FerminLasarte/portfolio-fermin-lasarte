@@ -16,8 +16,10 @@ export default function WorksHover() {
     const links = [...root.querySelectorAll(".works__link")];
     const shots = [...root.querySelectorAll(".works__shot")];
 
+    // La fila entera cuenta, con sus enlaces de afuera: el foco en uno de ellos (con
+    // Shift+Tab se llega desde la fila de abajo) activa su fila.
     const show = (e) => {
-      const link = e.target.closest?.(".works__link");
+      const link = e.target.closest?.(".works__row")?.querySelector(".works__link");
       if (!link || link.classList.contains("is-on")) return;
       const i = links.indexOf(link);
       links.forEach((l, k) => l.classList.toggle("is-on", k === i));

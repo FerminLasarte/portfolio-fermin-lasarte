@@ -56,8 +56,8 @@
   }
 
   /* La historia de cada proyecto (styles/page.css): la línea y sus puntos. */
-  .story::before,
-  .story__label::before {
+  .story__chapters::before,
+  .story__n::before {
     forced-color-adjust: none;
     background: CanvasText;
   }

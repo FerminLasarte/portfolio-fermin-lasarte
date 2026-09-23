@@ -227,6 +227,13 @@ ol {
   --btn-fill-ink: var(--paper);
 }
 
+/* La píldora chica: los enlaces de afuera en cada fila del índice de Proyectos
+   (styles/projects.css). Conserva el alto mínimo de un blanco táctil. */
+.btn--sm {
+  padding: 0.5rem 1rem;
+  font-size: var(--fs-0);
+}
+
 .btn:active {
   scale: 0.97;
 }

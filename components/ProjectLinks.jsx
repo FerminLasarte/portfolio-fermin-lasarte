@@ -22,28 +22,31 @@ function Named({ template, label, name, icon }) {
     <>
       {before && <span className="sr-only">{fill(before)}</span>}
       <Icon icon={icon} />
-      {label}
+      <span className="btn__text">{label}</span>
       {after && <span className="sr-only">{fill(after)}</span>}
     </>
   );
 }
 
-// Los enlaces de afuera de un proyecto (tienda, repo, demo), iguales en la tarjeta de
-// la home y en la página del proyecto. `primary` rellena el primero: en la página, que
-// no tiene otro botón principal; en la tarjeta no, porque ahí el relleno es "Ver el
-// proyecto" (docs/DISENO.md, 7.3).
-export default function ProjectLinks({ links, t, name, primary = false }) {
+// Los enlaces de afuera de un proyecto (tienda, repo, demo), iguales en el índice de
+// Proyectos y en la página del proyecto. `primary` rellena el primero: en la página, que
+// no tiene otro botón principal; en el índice no, porque ahí la fila entera lleva a la
+// página del proyecto. `small`: las píldoras chicas de cada fila del índice
+// (docs/DISENO.md, 7.3). El texto visible va en .btn__text, que el índice esconde (y
+// deja para los lectores de pantalla) cuando la fila es angosta y solo entra el icono.
+export default function ProjectLinks({ links, t, name, primary = false, small = false }) {
   return links.map((link, i) => {
     const { icon, label, named } = LINKS[link.type];
+    const cls = ["btn", primary && i === 0 && "btn--primary", small && "btn--sm"].filter(Boolean).join(" ");
     return (
-      <a key={link.url} className={`btn${primary && i === 0 ? " btn--primary" : ""}`} href={link.url} {...EXTERNAL}>
+      <a key={link.url} className={cls} href={link.url} {...EXTERNAL}>
         <span className="btn__label">
           {named ? (
             <Named template={t(named)} label={label(t)} name={name} icon={icon} />
           ) : (
             <>
               <Icon icon={icon} />
-              {label(t)}
+              <span className="btn__text">{label(t)}</span>
             </>
           )}
           <span className="sr-only"> {t("link.newTab")}</span>
