@@ -122,9 +122,6 @@
   --w-intro: clamp(22rem, 30cqi, 30rem);
   --w-card-lg: clamp(30rem, 40cqi, 42rem);
   --w-card: clamp(22rem, 28cqi, 28rem);
-  /* Trayectoria: la columna del título y tres etapas; cada etapa mide 3,9 veces el
-     tamaño de sus años, así "2021–25" siempre entra. */
-  --w-timeline: calc(40rem + 3 * 3.9 * var(--fs-stage));
   --w-skills: 100cqi;
   --w-bleed: 65cqi; /* 70cqi desde 100rem, como douglus */
 }

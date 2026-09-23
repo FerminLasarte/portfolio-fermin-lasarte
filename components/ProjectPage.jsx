@@ -56,8 +56,14 @@ export default function ProjectPage({ project, t, lang }) {
         <ProjectMeta project={project} t={t}>
           {stage && (
             <span>
-              <time dateTime={String(stage.start)}>{stage.start}</time>–
-              <time dateTime={String(stage.end)}>{stage.end}</time>
+              <time dateTime={String(stage.start)}>{stage.start}</time>
+              {stage.end != null ? (
+                <>
+                  –<time dateTime={String(stage.end)}>{stage.end}</time>
+                </>
+              ) : (
+                ` · ${t("exp.ongoing")}`
+              )}
             </span>
           )}
         </ProjectMeta>

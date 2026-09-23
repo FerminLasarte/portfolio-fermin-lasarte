@@ -186,7 +186,7 @@ Proyectos pasa a estar justo después del hero (I15). Experiencia y Educación s
 | 1 | Hero | `sobre-mi` | `100cqi` (una pantalla) |
 | 2 | Proyectos: entrada con las cifras | `proyectos` | `--w-intro: clamp(22rem, 30cqi, 30rem)` (con 26rem, "PROYECTOS" no entraba) |
 | 3 | Un panel por proyecto, en el orden de `PROJECTS` | `proyecto-<id>` | `--w-card-lg: clamp(30rem, 40cqi, 42rem)` para las apps en producción con plataforma móvil; `--w-card: clamp(22rem, 28cqi, 28rem)` para el resto |
-| 4 | Trayectoria (experiencia y educación), vista previa en etapas (7.4) | `experiencia`; la etapa de UNICEN lleva `educacion` | `--w-timeline: calc(40rem + 3 * 3.9 * var(--fs-stage))`: sale del tamaño de los años (unos 2160px a 1440×900) |
+| 4 | Trayectoria (experiencia y educación), vista previa en etapas (7.4) | `experiencia`; la etapa de UNICEN lleva `educacion` | `--w-timeline: calc(40rem + var(--n-stage) * 3.9 * var(--fs-stage))`: sale del tamaño de los años y de la cantidad de etapas (con cinco, unos 3270px a 1440×900) |
 | 5 | Habilidades, vista previa en un muro de palabras (7.7) | `habilidades` | `--w-skills: 100cqi` (una pantalla) |
 | 6 | Transición al cierre: decorativa, `aria-hidden` (agregada el 2026-09-14) | | `--w-bleed: 65cqi` (70cqi desde 1600px, como douglus) |
 | 7 | Contacto | `contacto` | `100cqi` |
@@ -413,7 +413,7 @@ Que sea una sola variable es lo que hace barato el respaldo de Firefox (6.4): `p
 
 Rediseñada el 2026-09-15: Fermin eligió la propuesta "A · Etapas" del lienzo de propuestas. La anterior (un párrafo largo, un eje de años con barras y cuatro fichas) repetía las mismas fechas tres veces y no se entendía. En la home es una **vista previa**; el detalle completo va en su propia página (7.12).
 
-**Horizontal** (`--w-timeline: calc(40rem + 3 * 3.9 * var(--fs-stage))`, unos 2160px a 1440×900: el ancho sale del tamaño de los años, así el rango siempre entra):
+**Horizontal** (`--w-timeline: calc(40rem + var(--n-stage) * 3.9 * var(--fs-stage))`, unos 3270px a 1440×900 con cinco etapas: el ancho sale del tamaño de los años, así el rango siempre entra, y de la cantidad de etapas, que `Track` recibe de `STAGES` como `--n-stage`; desde el 2026-09-23 no hay un 3 escrito a mano). Lo que sigue en curso tiene `end: null`: los años grandes muestran "2026–", con el guion abierto, y el texto "2026 · en curso":
 - A la izquierda (25rem): `<h2>` "Trayectoria" en Display, una frase corta (`exp.lead`) y, abajo, los idiomas como nota (no tienen años).
 - A la derecha, una columna por etapa, en orden: UNICEN (2020–26), DeporTurnos (2021–25) y TravelPic (2024–25). Las tres comparten filas (`subgrid`):
   - arriba, el rango de años enorme (`--fs-stage: clamp(4rem, 15vmin, 11rem)`): el inicio lleno y el fin ("–25") en contorno. La educación lleva también el inicio en contorno y la etapa más nueva va en `--accent`. Es visual (`aria-hidden`): las fechas están en texto con `<time>`;

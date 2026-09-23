@@ -1,5 +1,5 @@
 import { getT, homeUrl } from "@/lib/i18n";
-import { LD_ID, PROJECTS, SITE_TITLE, isFeatured } from "@/lib/site";
+import { LD_ID, PROJECTS, SITE_TITLE, STAGES, isFeatured } from "@/lib/site";
 import JsonLd from "@/components/JsonLd";
 import Preloader from "@/components/Preloader";
 import Track from "@/components/Track";
@@ -32,7 +32,7 @@ export default async function Home({ params }) {
     <>
       <JsonLd data={profile} />
       <Preloader words={t("preloader.words")} />
-      <Track cards={PROJECTS.length - cardsLg} cardsLg={cardsLg}>
+      <Track cards={PROJECTS.length - cardsLg} cardsLg={cardsLg} stages={STAGES.length}>
         <Hero t={t} lang={lang} />
         <Projects t={t} lang={lang} />
         <Trajectory t={t} lang={lang} />

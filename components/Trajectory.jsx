@@ -1,6 +1,6 @@
 import { EDUCATION_NOTES, STAGES } from "@/lib/site";
 import { pagePath } from "@/lib/i18n";
-import { twoDigits } from "@/lib/text";
+import { isOngoing, twoDigits } from "@/lib/text";
 
 // Trayectoria (docs/DISENO.md, 7.4): vista previa en etapas, como el "Process" de
 // douglus. Una columna por etapa, en orden, con el rango de años enorme, una línea que
@@ -51,18 +51,22 @@ export default function Trajectory({ t, lang }) {
           >
             <p className="years stage__years" aria-hidden="true">
               <span>{s.start}</span>
-              <span className="years__end">–{twoDigits(s.end)}</span>
+              <span className="years__end">–{s.end != null && twoDigits(s.end)}</span>
             </p>
             <span className="stage__dot" aria-hidden="true" />
             <div className="stage__body">
               <p className="meta">
-                {t(`exp.kind.${s.kind}`)} · <time dateTime={String(s.start)}>{s.start}</time>–
-                <time dateTime={String(s.end)}>{s.end}</time>
+                {t(`exp.kind.${s.kind}`)} · <time dateTime={String(s.start)}>{s.start}</time>
+                {s.end != null && (
+                  <>
+                    –<time dateTime={String(s.end)}>{s.end}</time>
+                  </>
+                )}
               </p>
               <h3 className="stage__title">{s.title}</h3>
               <p className="stage__place">
                 {s.place}
-                {s.end >= now && !s.done && ` · ${t("exp.ongoing")}`}
+                {isOngoing(s, now) && ` · ${t("exp.ongoing")}`}
               </p>
               <p className="stage__line">{s.line}</p>
               {s.tags && <p className="meta">{s.tags.join(", ")}</p>}

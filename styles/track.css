@@ -28,6 +28,11 @@ main,
   --x-timeline: calc(
     var(--x-cards) + var(--n-card-lg) * var(--w-card-lg) + var(--n-card) * var(--w-card)
   );
+  /* Trayectoria: la columna del título y una columna por etapa (--n-stage, de
+     components/Track.jsx); cada etapa mide 3,9 veces el tamaño de sus años, así
+     "2021–25" siempre entra. Va acá y no en :root, al lado de la cantidad, porque un
+     var() se resuelve donde se declara la propiedad. */
+  --w-timeline: calc(40rem + var(--n-stage) * 3.9 * var(--fs-stage));
   --x-skills: calc(var(--x-timeline) + var(--w-timeline));
   --x-bleed: calc(var(--x-skills) + var(--w-skills));
   --track-w: calc(var(--x-bleed) + var(--w-bleed) + 100cqi);

@@ -1,6 +1,6 @@
 import { EDUCATION_NOTES, PROJECTS, STAGES } from "@/lib/site";
 import { homePath, projectPath } from "@/lib/i18n";
-import { twoDigits } from "@/lib/text";
+import { isOngoing, twoDigits } from "@/lib/text";
 
 // Página de Trayectoria (docs/DISENO.md, 7.12): el detalle de la vista previa de la
 // home, en vertical y con el texto completo. Un capítulo por etapa, de la más nueva a
@@ -37,13 +37,17 @@ export default function ExperiencePage({ t, lang }) {
           <li key={c.id} id={c.id} className={`chapter chapter--${c.kind}`}>
             <p className="years chapter__years" aria-hidden="true">
               <span>{c.start}</span>
-              <span className="years__end">–{twoDigits(c.end)}</span>
+              <span className="years__end">–{c.end != null && twoDigits(c.end)}</span>
             </p>
             <div className="chapter__body">
               <p className="meta">
-                {t(`exp.kind.${c.kind}`)} · <time dateTime={String(c.start)}>{c.start}</time>–
-                <time dateTime={String(c.end)}>{c.end}</time>
-                {c.end >= now && !c.done && ` · ${t("exp.ongoing")}`}
+                {t(`exp.kind.${c.kind}`)} · <time dateTime={String(c.start)}>{c.start}</time>
+                {c.end != null && (
+                  <>
+                    –<time dateTime={String(c.end)}>{c.end}</time>
+                  </>
+                )}
+                {isOngoing(c, now) && ` · ${t("exp.ongoing")}`}
               </p>
               <h2 className="chapter__title poster">{c.title}</h2>
               <p className="chapter__place">{c.place}</p>

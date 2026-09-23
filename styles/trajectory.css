@@ -106,10 +106,11 @@
     margin-top: auto;
   }
 
-  /* Las tres etapas comparten las filas (subgrid): los años abajo de todo en la
-     primera, la línea con los puntos en la segunda y el texto en la tercera. */
+  /* Las etapas comparten las filas (subgrid): los años abajo de todo en la primera,
+     la línea con los puntos en la segunda y el texto en la tercera. Una columna por
+     etapa (--n-stage, components/Track.jsx). */
   html.js .stages {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(var(--n-stage), minmax(0, 1fr));
     grid-template-rows: minmax(0, 1fr) 1.5rem auto;
     gap: 0 var(--space-7);
   }
