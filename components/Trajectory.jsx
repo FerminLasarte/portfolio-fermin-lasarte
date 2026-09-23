@@ -62,7 +62,7 @@ export default function Trajectory({ t, lang }) {
               <h3 className="stage__title">{s.title}</h3>
               <p className="stage__place">
                 {s.place}
-                {s.end >= now && ` · ${t("exp.ongoing")}`}
+                {s.end >= now && !s.done && ` · ${t("exp.ongoing")}`}
               </p>
               <p className="stage__line">{s.line}</p>
               {s.tags && <p className="meta">{s.tags.join(", ")}</p>}

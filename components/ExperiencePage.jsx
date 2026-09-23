@@ -43,7 +43,7 @@ export default function ExperiencePage({ t, lang }) {
               <p className="meta">
                 {t(`exp.kind.${c.kind}`)} · <time dateTime={String(c.start)}>{c.start}</time>–
                 <time dateTime={String(c.end)}>{c.end}</time>
-                {c.end >= now && ` · ${t("exp.ongoing")}`}
+                {c.end >= now && !c.done && ` · ${t("exp.ongoing")}`}
               </p>
               <h2 className="chapter__title poster">{c.title}</h2>
               <p className="chapter__place">{c.place}</p>
