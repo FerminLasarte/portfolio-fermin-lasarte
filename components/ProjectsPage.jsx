@@ -1,7 +1,7 @@
 import ProjectIndex from "@/components/ProjectIndex";
 import { homePath } from "@/lib/i18n";
 
-// Página de Proyectos (/proyectos, docs/DISENO.md, 7.12): la lista completa en
+// Página de Trabajos (/trabajos, docs/DISENO.md, 7.12): la lista completa en
 // vertical, que es también la madre de las páginas de cada proyecto (de ahí salen las
 // migas de pan "Inicio › Proyectos › TravelPic"). Es el mismo índice de la home
 // (components/ProjectIndex.jsx): una sola definición de cómo se resume un proyecto, en
@@ -25,7 +25,7 @@ export default function ProjectsPage({ t, lang }) {
           lado del cliente; cuando no puede, cae en una navegación completa que se come
           el "#seccion" (probado el 2026-09-21). */}
       <p className="page__back">
-        <a className="btn" href={`${home}#proyectos`} data-curtain={t("curtain.home")}>
+        <a className="btn" href={`${home}#trabajos`} data-curtain={t("curtain.home")}>
           <span className="btn__label">{t("page.back")}</span>
         </a>
       </p>

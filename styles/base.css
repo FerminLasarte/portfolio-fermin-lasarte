@@ -134,7 +134,7 @@ ol {
   font-size: var(--fs-section);
 }
 
-/* Años grandes de Trayectoria, en la home y en su página ("2021–25"): el fin va en
+/* Años grandes de Trayectoria, en la home y en su página ("2021 – 25", components/Years.jsx): el fin va en
    contorno y, en educación, también el inicio. La etapa más reciente de la home cambia
    --stroke al acento (styles/trajectory.css). */
 .years {

@@ -15,7 +15,7 @@ import { LD_ID, PERSON, PROJECTS } from "@/lib/site";
 import ProjectPage from "@/components/ProjectPage";
 import JsonLd from "@/components/JsonLd";
 
-// Página de cada proyecto: /proyectos/<id> y /en/projects/<id> (docs/DISENO.md, 7.12).
+// Página de cada proyecto: /trabajos/<id> y /en/work/<id> (docs/DISENO.md, 7.12).
 // El slug es el `id` del proyecto y es el mismo en los dos idiomas, así el botón de
 // idioma se queda en el proyecto (components/Nav.jsx).
 export const dynamicParams = false;

@@ -1,17 +1,23 @@
 /*
- * Preloader (docs/DISENO.md, 7.11), el de douglus: sobre noche, cuatro palabras
- * gigantes que suben de a una dentro de una máscara (la última en acento), después el
- * nombre letra por letra, una línea que se dibuja y el cargo; al final todo sube y el
- * velo se desvanece.
+ * Preloader (docs/DISENO.md, 7.11): sobre noche se dibuja el contorno de un teléfono,
+ * pasan tres pantallas en formas simples (una lista, un gráfico, un calendario) con
+ * "Hago apps" debajo, la pantalla se vuelve del color de la página y el teléfono se
+ * agranda hasta taparlo todo: se entra en la pantalla, que es el sitio.
  *
  * Es todo CSS: termina solo aunque el JS falle. Solo existe bajo html.pl, que pone el
  * script del tema (lib/theme.js) antes del primer pintado en la primera visita de la
  * sesión y sin reduce motion. Sin JS no hay html.pl, así que no hay preloader.
  *
- * Tiempos (ms): palabras cada 900 desde 150; la última entra en 2850 y queda hasta
- * 3530; el nombre desde 3550; la línea en 3850; el cargo en 4000; salida en 4600; el
- * velo se va de 4800 a 5350. El nombre del hero entra al final (styles/motion.css).
+ * Tiempos (ms): el contorno de 50 a 650; las pantallas cada 260 desde 650; la pantalla
+ * se pinta en 1430; el zoom, de --pl-zoom (1450) a 1970; el velo se va en --pl-out
+ * (1950), en 150ms. Los dos los lee también styles/motion.css (el nombre del hero entra
+ * cuando se va el velo), y lib/theme.js deja de escuchar el salteo en 1450.
  */
+
+:root {
+  --pl-zoom: 1450ms;
+  --pl-out: 1950ms;
+}
 
 .preloader {
   display: none;
@@ -23,177 +29,104 @@ html.pl .preloader {
   z-index: var(--z-preloader);
   display: grid;
   place-items: center;
-  padding-inline: var(--space-4);
   background: var(--night);
   color: var(--on-night);
-  animation: pl-exit 550ms var(--ease-in-out) 4800ms both;
+  animation: pl-exit 150ms ease var(--pl-out) both;
 }
 
-.pl-stage,
-.pl-id {
-  grid-area: 1 / 1;
+/* ---------- El teléfono ---------- */
+
+/* El zoom lo agranda 24 veces desde el centro de la pantalla: alcanza para tapar hasta
+   una pantalla ultra ancha con el teléfono en su tamaño más chico. */
+.pl-phone {
+  block-size: min(42vh, 24rem);
+  aspect-ratio: 1 / 2;
+  overflow: visible;
+  animation: pl-zoom 520ms var(--ease-in) var(--pl-zoom) both;
 }
 
-/* ---------- Palabras ---------- */
-
-.pl-stage {
-  display: grid;
-  animation: pl-fade 350ms ease-in 3530ms forwards;
+/* El contorno se dibuja: pathLength="100" en el SVG, así el trazo mide 100. */
+.pl-body {
+  fill: none;
+  stroke: var(--on-night);
+  stroke-width: 2;
+  stroke-dasharray: 100;
+  animation: pl-draw 600ms var(--ease-in-out) 50ms both;
 }
 
-.pl-mask {
-  grid-area: 1 / 1;
-  justify-self: center;
-  overflow: clip;
-  padding: 0.06em 0.08em;
-  font-size: clamp(3.5rem, 18vw, 16rem);
+.pl-notch {
+  fill: var(--on-night);
+  animation: pl-show 150ms ease 550ms both;
 }
 
-.pl-word {
-  display: block;
-  font-weight: 800;
-  font-stretch: var(--wdth-display);
-  line-height: 0.9;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  animation: pl-word 860ms both;
-  animation-delay: calc(150ms + var(--i) * 900ms);
+/* Cada pantalla se ve 260ms, una después de la otra. Solo rellena hacia adelante: antes
+   de su turno queda en su opacidad normal, 0. */
+.pl-screen {
+  opacity: 0;
+  animation: pl-flash 260ms linear forwards;
+  animation-delay: calc(650ms + var(--i) * 260ms);
 }
 
-/* La última no sale: entra un poco más lenta, creciendo, y queda en acento. */
-.pl-word--last {
-  color: var(--night-accent);
-  animation: pl-last 480ms var(--ease-expo) both;
-  animation-delay: calc(150ms + var(--i) * 900ms);
+.pl-fill {
+  fill: var(--on-night);
 }
 
-/* Entra en 380ms, queda 220ms y sale hacia arriba en 260ms. */
-@keyframes pl-word {
-  0% {
-    translate: 0 105%;
-    animation-timing-function: var(--ease-out);
-  }
-
-  44%,
-  70% {
-    translate: 0 0;
-  }
-
-  70% {
-    animation-timing-function: var(--ease-in);
-  }
-
-  100% {
-    translate: 0 -105%;
-  }
+.pl-muted {
+  fill: var(--on-night-muted);
 }
 
-@keyframes pl-last {
-  from {
-    translate: 0 105%;
-    scale: 0.88;
-  }
+.pl-accent {
+  fill: var(--night-accent);
 }
 
-/* ---------- Nombre, línea y cargo ---------- */
-
-.pl-id {
-  display: grid;
-  justify-items: center;
-  animation: pl-grow 700ms ease-in 4600ms forwards;
+/* La pantalla toma el color de la página: con el zoom, es lo que queda a la vista. */
+.pl-paper {
+  fill: var(--paper);
+  animation: pl-show 120ms ease 1430ms both;
 }
 
-.pl-name {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  column-gap: 0.6em;
-  font-size: clamp(1.75rem, 7vw, 7rem);
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-}
-
-/* El tracking deja un espacio después de la última letra: se compensa para centrar. */
-.pl-name > span {
-  display: flex;
-  margin-inline-end: -0.2em;
-}
-
-.pl-ch-mask {
-  overflow: clip;
-  padding-bottom: 0.06em;
-}
-
-/* Dos animaciones: la entrada (con relleno hacia atrás, para esperar oculta) y la
-   salida, que solo rellena hacia adelante para no tapar a la primera. */
-.pl-ch {
-  display: inline-block;
-  animation:
-    pl-rise 550ms var(--ease-expo) both,
-    pl-leave 400ms var(--ease-in) forwards;
-  animation-delay: calc(3550ms + var(--i) * 30ms), calc(4600ms + (var(--n) - 1 - var(--i)) * 30ms);
-}
-
-.pl-rule {
-  justify-self: stretch;
-  block-size: 1px;
-  margin-block: clamp(0.75rem, 2vh, 1.25rem);
-  background: var(--night-line-strong);
-  transform-origin: left center;
-  animation:
-    pl-draw 500ms var(--ease-in-out) 3850ms both,
-    pl-fade 250ms ease-in 4600ms forwards;
-}
-
-.pl-sub {
-  overflow: clip;
-  padding-bottom: 0.04em;
-}
-
-.pl-sub span {
-  display: inline-block;
+.pl-label {
+  position: absolute;
+  inset-inline: 0;
+  bottom: var(--space-8);
   color: var(--on-night-muted);
   font-size: var(--fs-0);
   letter-spacing: 0.26em;
+  text-align: center;
   text-transform: uppercase;
   animation:
-    pl-rise 450ms var(--ease-out) 4000ms both,
-    pl-fade 250ms ease-in 4600ms forwards;
-}
-
-@keyframes pl-rise {
-  from {
-    translate: 0 110%;
-    opacity: 0;
-  }
-}
-
-@keyframes pl-leave {
-  to {
-    translate: 0 -110%;
-    opacity: 0;
-  }
+    pl-show 200ms ease 650ms both,
+    pl-hide 150ms ease 1400ms forwards;
 }
 
 @keyframes pl-draw {
   from {
-    scale: 0 1;
+    stroke-dashoffset: 100;
+  }
+}
+
+@keyframes pl-show {
+  from {
     opacity: 0;
   }
 }
 
-@keyframes pl-fade {
+@keyframes pl-hide {
   to {
     opacity: 0;
   }
 }
 
-@keyframes pl-grow {
+@keyframes pl-flash {
+  0%,
+  99% {
+    opacity: 1;
+  }
+}
+
+@keyframes pl-zoom {
   to {
-    scale: 1.04;
+    scale: 24;
   }
 }
 

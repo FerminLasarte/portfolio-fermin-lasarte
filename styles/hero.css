@@ -1,33 +1,97 @@
 /*
- * Hero (docs/DISENO.md, 7.2): disponibilidad, el nombre enorme abajo a la
- * izquierda, un párrafo con dos botones y la foto arrastrable a la derecha.
+ * Hero (docs/DISENO.md, 7.2): cuatro datos arriba, el nombre enorme abajo a la
+ * izquierda, un párrafo con dos botones, la tarjeta del último trabajo y la foto
+ * arrastrable a la derecha.
  */
 
 .hero {
   display: grid;
   gap: var(--space-5);
   grid-template-areas:
-    "avail"
+    "facts"
     "name"
     "copy"
+    "latest"
     "photo";
   padding-top: var(--space-6);
 }
 
-.hero__avail {
-  grid-area: avail;
+/* ---------- Los datos de arriba ---------- */
+
+.hero__facts {
+  grid-area: facts;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4) var(--space-5);
+  margin: 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--line);
+}
+
+.hero__fact dt {
   display: flex;
   align-items: center;
   gap: var(--space-2);
+  margin-bottom: var(--space-1);
 }
 
-/* El único punto de estado de la página: la disponibilidad es real. */
-.hero__avail::before {
+.hero__fact dd {
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+/* La hora y su huso no se separan en dos líneas (components/LocalTime.jsx). */
+.local-time {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Los dos estados del hero que son reales, con un punto de --accent: la
+   disponibilidad y el último trabajo en producción. */
+.hero__fact--avail dt::before,
+.hero__latest .is-live::before {
   content: "";
+  display: inline-block;
   inline-size: 0.5rem;
   block-size: 0.5rem;
   border-radius: var(--radius-round);
   background: var(--accent);
+}
+
+.hero__latest .is-live::before {
+  margin-inline-end: var(--space-2);
+}
+
+/* ---------- El último trabajo ---------- */
+
+.hero__latest {
+  grid-area: latest;
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: var(--space-5);
+  align-items: end;
+  max-inline-size: 26rem;
+}
+
+.hero__latest .is-live {
+  color: var(--ink);
+}
+
+.hero__latest-name {
+  margin-block: var(--space-2);
+  font-size: var(--fs-4);
+}
+
+.hero__latest-line {
+  margin-bottom: var(--space-3);
+  color: var(--ink-muted);
+  font-size: var(--fs-0);
+  line-height: 1.45;
+}
+
+.hero__latest .strike {
+  font-weight: 600;
 }
 
 .hero__copy {
@@ -153,9 +217,10 @@
   .hero {
     grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
     grid-template-areas:
-      "avail photo"
+      "facts photo"
       "name photo"
-      "copy photo";
+      "copy photo"
+      "latest photo";
     align-content: start;
     column-gap: var(--pad-x);
   }
@@ -173,15 +238,26 @@
     grid-template-columns: repeat(12, minmax(0, 1fr));
     grid-template-rows: auto 1fr auto;
     grid-template-areas:
-      "avail avail avail avail avail avail avail avail avail photo photo photo"
-      "copy  copy  copy  copy  copy  .     .     .     .     photo photo photo"
-      "name  name  name  name  name  name  name  name  name  photo photo photo";
+      "facts facts facts facts facts  facts  facts  facts  facts  photo photo photo"
+      "copy  copy  copy  copy  copy   latest latest latest latest photo photo photo"
+      "name  name  name  name  name   name   name   name   name   photo photo photo";
     column-gap: var(--space-5);
     align-content: stretch;
   }
 
   html.js .hero__copy {
     align-self: center;
+  }
+
+  /* Los cuatro datos en una fila, y la tarjeta en el hueco entre el párrafo y la foto. */
+  html.js .hero__facts {
+    grid-template-columns: 1.1fr 1fr 1.25fr 1fr;
+  }
+
+  html.js .hero__latest {
+    align-self: center;
+    justify-self: end;
+    inline-size: 100%;
   }
 
   /* El % de alto de un ítem de grilla se mide contra su área (las tres filas). */

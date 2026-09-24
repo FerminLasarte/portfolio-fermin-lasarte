@@ -29,7 +29,7 @@
 
 | Se toma | No se toma, y por qué |
 |---|---|
-| Recorrido horizontal en PC, vertical en móvil | **Preloader** ("BUILD THINGS THAT MATTER"): al principio no se tomó, porque tapa el contenido y puede retrasar el LCP. Lo sumé el 2026-09-14 y ahora está, con palabras propias (7.11). |
+| Recorrido horizontal en PC, vertical en móvil | **Preloader** ("BUILD THINGS THAT MATTER"): al principio no se tomó, porque tapa el contenido y puede retrasar el LCP. Lo sumé el 2026-09-14, con palabras propias, y el 2026-09-24 lo cambié por uno propio (el teléfono, 7.11). |
 | Nav de tres zonas: marca a la izquierda, secciones al centro, redes a la derecha | **Números de sección ("01/", "02/")**: no son navegación y la ubicación ya la da la barra de progreso. |
 | Tachado al pasar el mouse por los enlaces del nav | **Mancha de fluido en WebGL detrás del cursor:** es un canvas a pantalla completa que corre siempre; queda para después (D10). |
 | Barra fina de progreso abajo, al centro, con franja inferior fija | **Stickers** (el disco y la carita) y el **efecto de celdas en canvas** sobre las imágenes: opcionales para después. |
@@ -353,15 +353,20 @@ Si `CSS.supports("animation-timeline: view()")` da falso y el modo horizontal es
 
 ### 7.2 Hero
 
-Un panel del ancho de la ventana, en una grilla de 12 columnas.
-- **Arriba a la izquierda:** disponibilidad ("Disponible para nuevos desafíos"), en `--fs-0` y `--ink-muted`, con un punto de `--accent`. Es el único punto de estado de la página, y es real.
+Un panel del ancho de la ventana, en una grilla de 12 columnas. El 2026-09-24 le sumé los datos de arriba y la tarjeta del último trabajo (las opciones A y B de los bocetos; la C, una franja de tecnologías, no la tomé): estaba muy vacío al lado del resto de la página.
+- **Arriba (columnas 1–9):** cuatro datos en columnas, sobre una línea, con el rótulo en `--fs-0` y `--ink-muted` y el valor en 600 (en móvil y tablet, de a dos):
+  - *Disponibilidad:* "Disponible para nuevos desafíos", con un punto de `--accent`;
+  - *Base:* la ciudad y la hora en vivo, con su huso ("Buenos Aires · 13:42 (GMT-3)"; `components/LocalTime.jsx`, que cambia al empezar cada minuto y sin JS no aparece);
+  - *Ahora:* "Construyendo Bookit y chatbot-ai", con enlace a cada uno: las etapas de Trayectoria sin fin (`CURRENT_WORK` en `lib/site.js`);
+  - *Enfoque:* "iOS · Flutter · Backend" (`FOCUS`).
+- **Al medio, a la derecha (columnas 6–9):** la tarjeta del último trabajo en producción con capturas de teléfono (`LATEST_WORK`, hoy Bookit): la captura en un teléfono, sin caja de color; "Último trabajo · En producción", con un punto de `--accent`; el nombre en Display; su línea de Trayectoria y "Ver el trabajo". Los únicos puntos de estado de la página son esos dos, y son reales.
 - **Al medio, a la izquierda (columnas 1–5):** un párrafo de hasta 20 palabras, con el cargo en negrita al principio (está en inglés en los dos idiomas, así que en la página en español lleva `lang="en"`; R-M13 de la re-auditoría), y dos botones:
-  - "Ver proyectos": principal, `--accent`, ancla a `#proyectos`;
+  - "Ver trabajos": principal, `--accent`, ancla a `#trabajos`;
   - "Descargar CV": secundario, borde `--line`, PDF directo del idioma actual.
 - **Abajo a la izquierda (columnas 1–9):** `<h1>` con el nombre completo (M16) en Display, en dos líneas: FERMIN / LASARTE.
 - **Derecha (columnas 10–12), abajo, con el 62% de la altura útil:** la foto (antes iba en las columnas 8–12 a toda la altura, 550×740px a 1440×900, y el 2026-09-14 la achiqué; ahora mide unos 320×460). En tablet va a la derecha con un máximo de 18rem y en móvil, debajo, con un máximo de 20rem. Lleva los atributos de `next/image` (con `getImageProps`, desde `lib/image.js`; R-M15), `loading="eager"`, `fetchPriority="high"` y una precarga en el `<head>` (`priority` está deprecado en Next 16), con `object-fit: cover`, sin esquinas y **sin animación de entrada** (es el LCP, C5). Se puede arrastrar con el mouse (7.9).
 - Se van los badges flotantes de tecnologías, las cifras (pasan a la entrada de Proyectos) y el botón "Contactame" (repetía la intención del enlace "Contacto" del nav).
-- **Móvil:** disponibilidad, nombre, párrafo y botones entran en la primera pantalla a 375×667 (M16); la foto va debajo, en 4:5.
+- **Móvil:** los datos, el nombre, el párrafo y los botones entran en la primera pantalla a 375×667 (M16; los botones terminan a los 629px); después, la tarjeta del último trabajo y la foto, en 4:5.
 
 Copia del párrafo (`hero.lead`, aprobada en D2). El texto largo de antes (`hero.description`, de 45 palabras) pasó a llamarse `exp.intro` y abre la página de Trayectoria (7.12):
 - ES: "**iOS & Cross-Platform Mobile Engineer.** Hago apps móviles de punta a punta: arquitectura, backend y publicación en App Store y Google Play."
@@ -512,14 +517,14 @@ Lo sumé el 2026-09-14. Hasta entonces el diseño decía que el scroll no se sua
 
 ### 7.11 Preloader
 
-Lo sumé el 2026-09-14. Al principio no lo tomé, porque tapa el contenido unos segundos. Es el de douglus ("BUILD THINGS THAT MATTER"), con palabras propias.
-- **Qué muestra:** sobre `--night`, cuatro palabras gigantes que suben de a una dentro de una máscara: "HAGO SOFTWARE QUE INNOVA" / "BUILDING SOFTWARE THAT INNOVATES" (`preloader.words`). La última entra creciendo (de 0,88 a 1) y queda en `--night-accent`. Después aparecen "FERMIN LASARTE" letra por letra, una línea que se dibuja y "iOS & Mobile Engineer · 2026". Al final las letras suben, empezando por la última, el bloque crece a 1,04 y el velo se desvanece.
-- **Tiempos:** cada palabra entra en 380ms, queda 220ms y sale en 260ms (una cada 900ms); el nombre tarda 550ms, con 30ms entre letras; el velo se va entre los 4,8 y los 5,35 s, y ahí entra el nombre del hero. douglus tarda algo más (unos 6 s).
-- **Solo CSS:** la secuencia son `@keyframes` con retrasos (`styles/preloader.css`), así que termina sola aunque el JS falle. Al final queda con `visibility: hidden` y deja de recibir clics. Como red de seguridad (por ejemplo, si el navegador no corre las animaciones), el script del tema saca `html.pl` a los 8 s.
+Lo sumé el 2026-09-14, copiado del de douglus ("BUILD THINGS THAT MATTER") con palabras propias. El 2026-09-24 lo cambié por uno propio, porque se parecía demasiado: elegí la opción C ("el teléfono") entre tres bocetos (A: los años que corren de 2021 a 2026; B: el monograma FL que se dibuja).
+- **Qué muestra:** sobre `--night` se dibuja el contorno de un teléfono y pasan tres pantallas en formas simples (una lista de reservas, un gráfico de barras y un calendario, con un detalle en `--night-accent`), con "Hago apps" / "I build apps" (`preloader.label`) debajo. Después la pantalla toma el `--paper` de la página y el teléfono se agranda 24 veces desde su centro hasta taparlo todo: se entra en la pantalla, que es el sitio. Las pantallas son formas de SVG, no capturas, así que no pesa nada (`components/Preloader.jsx`).
+- **Tiempos:** el contorno de 50 a 650ms; cada pantalla se ve 260ms, desde los 650ms; la pantalla se pinta a los 1,43 s; el zoom va de `--pl-zoom` (1,45 s) a 1,97 s; el velo se va en `--pl-out` (1,95 s), en 150ms, y ahí entra el nombre del hero. En total, unos 2,1 s (el de antes, 5,3 s).
+- **Solo CSS:** la secuencia son `@keyframes` con retrasos (`styles/preloader.css`), así que termina sola aunque el JS falle. Al final queda con `visibility: hidden` y deja de recibir clics. Como red de seguridad (por ejemplo, si el navegador no corre las animaciones), el script del tema saca `html.pl` a los 5 s.
 - **Cuándo:** solo bajo `html.pl`. Esa clase la pone el script del tema antes del primer pintado, si es la primera visita de la sesión (`sessionStorage`) y no hay reduce motion. No aparece sin JS, con reduce motion, con el almacenamiento bloqueado ni en las visitas siguientes (tampoco al cambiar de idioma). La marca de la sesión se guarda recién cuando el documento tiene el preloader (la home): si la primera visita entra por una página propia o por el 404, la home lo muestra igual (2026-09-15, R-M3 de la re-auditoría).
-- **Se puede saltear** (R-M3): la primera tecla, clic o giro de la rueda le pone `html.pl-skip`, que desvanece el velo en 250ms; el nombre del hero entra enseguida, con su animación de siempre. A los 4,8 s el velo ya se está yendo solo y los listeners se sacan.
+- **Se puede saltear** (R-M3): la primera tecla, clic o giro de la rueda le pone `html.pl-skip`, que desvanece el velo en 250ms; el nombre del hero entra enseguida, con su animación de siempre. A los 1,45 s, con el zoom, el velo ya se está yendo solo y los listeners se sacan.
 - **Accesibilidad:** es `aria-hidden` y el contenido real ya está debajo. El enlace para saltar al contenido sigue siendo el primero y se ve sobre el velo (`--z-skip` por encima de `--z-preloader`).
-- **Costo:** unos 5 s de espera la primera vez. El LCP puede pasar a ser el texto del preloader (se pinta enseguida) en vez de la foto.
+- **Costo:** unos 2 s de espera la primera vez.
 
 ### 7.12 Páginas propias
 
@@ -581,7 +586,7 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
 |---|---|---|---|---|
 | Pista horizontal | Scroll | `translate` | Lineal, 1:1 | Modo vertical |
 | Scroll con la rueda | Rueda o trackpad, con puntero fino | Scroll del documento, con Lenis | `lerp: 0.1` por frame; anclas y "Volver al inicio" en 1,2 s con `1 − (1 − t)³` | Scroll nativo, sin suavizar |
-| Preloader | Primera carga de la sesión | `translate` Y y `scale` de palabras y letras, `scale` X de la línea, `opacity` del velo | Unos 5,3 s en total (7.11); con una tecla, un clic o la rueda, el velo se desvanece en 250ms | No existe |
+| Preloader | Primera carga de la sesión | `stroke-dashoffset` del contorno, `opacity` de las pantallas, `scale` del teléfono, `opacity` del velo | Unos 2,1 s en total (7.11); con una tecla, un clic o la rueda, el velo se desvanece en 250ms | No existe |
 | Nombre del nav | Hover o foco (puntero fino) | Ancho del apellido (`grid-template-columns` de 0fr a 1fr) y `translate` Y + `opacity` de cada letra | Entra en 550ms `--ease-out`, 40ms entre letras; sale en 350ms, 30ms entre letras desde la última | Nombre completo, quieto |
 | Ola de la franja | 5 s sin mover el mouse, scrollear, tocar una tecla ni mover el foco (dos veces como máximo, hasta que se vuelva a usar la página) | `transform: perspective(180px) translateZ() rotateY()` de cada letra | 400ms por letra, 50ms entre letras | No existe (la franja es solo del modo horizontal) |
 | Línea de Trayectoria | Scroll | `scale` X del `::before` de `.stages` | Lineal, atada al scroll: del 60% de la ventana al borde derecho del panel (en Firefox, `--rail` desde TrackController) | No existe (vertical) |
@@ -599,7 +604,7 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
 | Botón: salto del texto | Hover | `translate` Y y `opacity` de `.btn__label` | 350ms `--ease-out` | Sin movimiento |
 | Botón: imán | Mouse encima (las píldoras del cierre, desde 0,7× su ancho) | `translate` del botón: 30% de la distancia al centro, y 50% en las píldoras del cierre (7.6) | Retraso de 0,1 por frame | No existe |
 | Presionar botón | `:active` | `scale: 0.97` | 140ms `--ease-out` | Igual (no desplaza) |
-| Nombre del hero, letra por letra | Carga (con el preloader, cuando se va el velo, a los 5 s) | `translate` Y desde 105%, dentro de una máscara | 700ms `--ease-expo`, 28ms entre letras | Sin animación |
+| Nombre del hero, letra por letra | Carga (con el preloader, cuando se va el velo, a los 1,95 s) | `translate` Y desde 105%, dentro de una máscara | 700ms `--ease-expo`, 28ms entre letras | Sin animación |
 | Entrada de cada panel | El panel llega al 80% de la pantalla (85% del alto en vertical; `IntersectionObserver`, una vez). El panel al que se llega también entra, pero solo si se llegó con la cortina puesta: ahí la pantalla está tapada, así que esconderlo para que entre no se ve, y la sección aparece armándose (2026-09-21). Sin cortina se lo deja como está, porque esconder algo que ya se pintó sería justo el parpadeo que la cortina viene a sacar. El nombre del hero no entra por acá: tiene la suya, letra por letra. Si antes entra el foco del teclado, o si entra mientras el panel se está animando, se muestra al instante, sin entrada (`.is-instant`; 2026-09-15, R-I4 de la re-auditoría): así el foco nunca cae en algo que todavía no se ve | Cada elemento por separado, como en douglus: los títulos suben dentro de su caja (`translate` Y 100% y `clip-path` como máscara); las placas se destapan con `clip-path` desde el lado por donde entran; la línea del cierre crece (`scale` X; las barras del eje que también crecían se fueron con la Trayectoria nueva, 7.4); el resto sube 2rem con `opacity` | 1,1 s `--ease-expo`, 60ms entre uno y otro (tope de 12 pasos). Son `@keyframes` que solo rellenan hacia atrás, para no pisar las transiciones de los botones. Antes: 700ms, todo el texto junto, al verse un 15% del panel, y se sentía brusco | Sin animación |
 | Menú móvil | Botón | Panel: `clip-path` desde arriba; enlaces: `translate` Y 16px y `opacity`, 40ms entre cada uno; `@starting-style` | Abre en 420ms `--ease-out`; cierra en 200ms | Fundido de 150ms |
 | "Menú" / "Cerrar" | Botón | `translate` Y | 260ms `--ease-out` | Cambio directo |

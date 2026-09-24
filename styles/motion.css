@@ -28,7 +28,7 @@
   /* Con el preloader (html.pl, styles/preloader.css), el nombre entra cuando se va
      el velo. */
   html.pl .hero__name .ch {
-    animation-delay: calc(var(--i) * 28ms + 5000ms);
+    animation-delay: calc(var(--i) * 28ms + var(--pl-out));
   }
 
   /* Si se saltea el preloader (html.pl-skip, lib/theme.js), entra cuando se va el

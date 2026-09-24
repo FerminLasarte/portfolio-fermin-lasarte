@@ -2,7 +2,7 @@ import ProjectIndex from "@/components/ProjectIndex";
 import { STATS } from "@/lib/site";
 import { appsLabel } from "@/lib/i18n";
 
-// Proyectos en la home (docs/DISENO.md, 7.3): un solo panel de la pista, del ancho de la
+// Trabajos en la home (docs/DISENO.md, 7.3): un solo panel de la pista, del ancho de la
 // pantalla, con el título, las cifras y el índice de proyectos con su vista previa. El
 // detalle de cada uno está en su página.
 export default function Projects({ t, lang }) {
@@ -14,15 +14,15 @@ export default function Projects({ t, lang }) {
 
   return (
     <section
-      id="proyectos"
+      id="trabajos"
       className="panel panel--projects projects"
-      data-section="proyectos"
+      data-section="trabajos"
       data-label={t("nav.projects")}
-      aria-labelledby="proyectos-t"
+      aria-labelledby="trabajos-t"
     >
       <ProjectIndex t={t} lang={lang}>
         <div className="works__head">
-          <h2 id="proyectos-t" className="display display--section">
+          <h2 id="trabajos-t" className="display display--section">
             {t("projects.title")}
           </h2>
           <dl className="stats">
