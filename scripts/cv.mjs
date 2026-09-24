@@ -62,7 +62,7 @@ const CV = {
   es: {
     title: "Ingeniero de Sistemas · iOS & Cross-Platform Mobile Engineer",
     place: "Buenos Aires, Argentina",
-    h: { summary: "Perfil", exp: "Experiencia", projects: "Proyectos", skills: "Habilidades", edu: "Educación", langs: "Idiomas" },
+    h: { summary: "Perfil", exp: "Experiencia", projects: "Trabajos", skills: "Habilidades", edu: "Educación", langs: "Idiomas" },
     summary:
       "Ingeniero de Sistemas (UNICEN) especializado en desarrollo móvil (Swift, Flutter) y backend. Construyo apps de punta a punta, desde la arquitectura del sistema hasta la publicación en App Store y Google Play. Creé y vendí DeporTurnos, una plataforma de reservas deportivas, y desarrollé TravelPic por encargo.",
     exp: [
