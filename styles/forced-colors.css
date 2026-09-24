@@ -14,10 +14,12 @@
     background: Canvas;
   }
 
-  /* Lleno y contorno: el muro, su leyenda y los años (en la home y en /trayectoria). */
+  /* Lleno y contorno: el muro, su leyenda, los años (en la home y en /trayectoria) y el
+     titular del hero. */
   .wall__word,
   .years__end,
-  :is(.stage--edu, .chapter--edu) .years > :first-child {
+  :is(.stage--edu, .chapter--edu) .years > :first-child,
+  .hero__claim-outline {
     forced-color-adjust: none;
     color: transparent;
     -webkit-text-stroke-color: CanvasText;

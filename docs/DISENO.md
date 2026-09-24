@@ -118,11 +118,12 @@ Reglas:
 | Display (nombre del hero, título del contacto) | `.display` | 68 | 800 | `--fs-display` | 0,86 · −0,01em · mayúsculas |
 | Título de sección (Proyectos, Trayectoria, Habilidades), en los dos modos | `.display.display--section` | 68 | 800 | `--fs-section` | 0,86 · −0,01em · mayúsculas |
 | Título de proyecto (h3) y de capítulo | `.poster` | 68 | 800 | `--fs-4` | 0,9 en la tarjeta, 0,95 en el capítulo · mayúsculas |
+| Titular del hero | `.poster.hero__claim` | 68 | 800 | `min(clamp(2.25rem, 9.5vmin, 6rem), 12.5vw)` (8vw en tablet) | 0,88 · −0,01em · la segunda línea en contorno |
 | Años de Trayectoria | `.years` | 68 | 800 | `--fs-stage` | 0,84 · −0,01em · el fin en contorno |
 | Muro de Habilidades | `.wall` | 68 | 800 | `--fs-wall` en vertical; `min(5.6cqi, 7.8vmin)` en horizontal (7.7) | 0,92 · −0,01em · mayúsculas |
 | Cifras de la entrada de Proyectos | `.stats dd` | 75 (`--wdth-mega`) | 700 | `--fs-4` | 1 · `tabular-nums` |
 | Subtítulo (título de etapa, nota de idiomas) | | 100 | 650 | `--fs-3` | 1,15 |
-| Destacado (frase de entrada, párrafo del hero) | `.lead`, `.hero__lead` | 100 | 400 | `--fs-2` | 1,4 (1,35 en el hero) |
+| Destacado (frase de entrada) | `.lead` | 100 | 400 | `--fs-2` | 1,4 |
 | Cuerpo | | 100 | 400 | `--fs-1` | 1,55 · máximo 60ch |
 | Meta (estado, fechas, tags) | `.meta` | 100 | 500 | `--fs-0` | +0,01em · sin mayúsculas |
 
@@ -353,24 +354,19 @@ Si `CSS.supports("animation-timeline: view()")` da falso y el modo horizontal es
 
 ### 7.2 Hero
 
-Un panel del ancho de la ventana, en una grilla de 12 columnas. El 2026-09-24 le sumé los datos de arriba y la tarjeta del último trabajo (las opciones A y B de los bocetos; la C, una franja de tecnologías, no la tomé): estaba muy vacío al lado del resto de la página.
-- **Arriba (columnas 1–9):** cuatro datos en columnas, sobre una línea, con el rótulo en `--fs-0` y `--ink-muted` y el valor en 600 (en móvil y tablet, de a dos):
-  - *Disponibilidad:* "Disponible para nuevos desafíos", con un punto de `--accent`;
-  - *Base:* la ciudad y la hora en vivo, con su huso ("Buenos Aires · 13:42 (GMT-3)"; `components/LocalTime.jsx`, que cambia al empezar cada minuto y sin JS no aparece);
-  - *Ahora:* "Construyendo Bookit y chatbot-ai", con enlace a cada uno: las etapas de Trayectoria sin fin (`CURRENT_WORK` en `lib/site.js`);
-  - *Enfoque:* "iOS · Flutter · Backend" (`FOCUS`).
-- **Al medio, a la derecha (columnas 6–9):** la tarjeta del último trabajo en producción con capturas de teléfono (`LATEST_WORK`, hoy Bookit): la captura en un teléfono, sin caja de color; "Último trabajo · En producción", con un punto de `--accent`; el nombre en Display; su línea de Trayectoria y "Ver el trabajo". Los únicos puntos de estado de la página son esos dos, y son reales.
-- **Al medio, a la izquierda (columnas 1–5):** un párrafo de hasta 20 palabras, con el cargo en negrita al principio (está en inglés en los dos idiomas, así que en la página en español lleva `lang="en"`; R-M13 de la re-auditoría), y dos botones:
-  - "Ver trabajos": principal, `--accent`, ancla a `#trabajos`;
-  - "Descargar CV": secundario, borde `--line`, PDF directo del idioma actual.
+Un panel del ancho de la ventana, en una grilla de 12 columnas. El 2026-09-24 lo rehice por segunda vez en el día: los cuatro datos de arriba y la tarjeta del último trabajo que le había sumado a la mañana no pegaban con el resto de la página (eran el único bloque tipo tablero, y Bookit aparecía dos veces, con un teléfono que no se leía). De cuatro bocetos (A: los datos como filas, igual que Trabajos; B: un párrafo grande con los datos adentro; C: una línea y aire; D: un titular de afiche) elegí el D.
+- **Arriba, a lo ancho:** el titular, en Display a la escala de la tabla de la sección 3 y en dos líneas: "APPS MÓVILES, / DE PUNTA A PUNTA." ("MOBILE APPS, / END TO END."). La segunda va en contorno, como el fin de los años de Trayectoria (comparten la regla en `styles/base.css`; acá el trazo es de 0,018em). Es un `<p>`: el `<h1>` sigue siendo el nombre.
+- **Al lado del titular, con su pie alineado al del titular (hasta 24rem):**
+  - la disponibilidad con la ciudad, "Disponible · Buenos Aires", con el único punto de `--accent` de la página: es real;
+  - el párrafo (`hero.lead`): "Ingeniero de Sistemas. Diseño, programo y publico apps para iPhone y Android, con su backend." / "Systems Engineer. I design, build, and ship apps for iPhone and Android, backend included." Saqué el cargo en inglés del principio: con "Ingeniero de Sistemas" eran dos títulos seguidos (el cargo sigue en el `<title>` y en el JSON-LD);
+  - dos botones: "Ver trabajos" (principal, `--accent`, ancla a `#trabajos`) y "Descargar CV" (secundario, borde `--line`, PDF directo del idioma actual).
 - **Abajo a la izquierda (columnas 1–9):** `<h1>` con el nombre completo (M16) en Display, en dos líneas: FERMIN / LASARTE.
-- **Derecha (columnas 10–12), abajo, con el 62% de la altura útil:** la foto (antes iba en las columnas 8–12 a toda la altura, 550×740px a 1440×900, y el 2026-09-14 la achiqué; ahora mide unos 320×460). En tablet va a la derecha con un máximo de 18rem y en móvil, debajo, con un máximo de 20rem. Lleva los atributos de `next/image` (con `getImageProps`, desde `lib/image.js`; R-M15), `loading="eager"`, `fetchPriority="high"` y una precarga en el `<head>` (`priority` está deprecado en Next 16), con `object-fit: cover`, sin esquinas y **sin animación de entrada** (es el LCP, C5). Se puede arrastrar con el mouse (7.9).
-- Se van los badges flotantes de tecnologías, las cifras (pasan a la entrada de Proyectos) y el botón "Contactame" (repetía la intención del enlace "Contacto" del nav).
-- **Móvil:** los datos, el nombre, el párrafo y los botones entran en la primera pantalla a 375×667 (M16; los botones terminan a los 629px); después, la tarjeta del último trabajo y la foto, en 4:5.
+- **Derecha (columnas 10–12), abajo, con el 62% de la altura útil:** la foto (antes iba en las columnas 8–12 a toda la altura, 550×740px a 1440×900, y el 2026-09-14 la achiqué; ahora mide unos 320×460). Como está abajo, el titular y el párrafo usan el lugar que queda arriba de ella. En tablet va a la derecha con un máximo de 18rem y en móvil, debajo, con un máximo de 20rem. Lleva los atributos de `next/image` (con `getImageProps`, desde `lib/image.js`; R-M15), `loading="eager"`, `fetchPriority="high"` y una precarga en el `<head>` (`priority` está deprecado en Next 16), con `object-fit: cover`, sin esquinas y **sin animación de entrada** (es el LCP, C5). Se puede arrastrar con el mouse (7.9).
+- Cada línea del titular entra en su máscara, como los títulos; la disponibilidad, el párrafo y los botones suben con un fundido (TrackController).
+- Se van los badges flotantes de tecnologías, las cifras (pasan a la entrada de Proyectos), el botón "Contactame" (repetía la intención del enlace "Contacto" del nav) y, desde la tarde del 2026-09-24, los datos de arriba (con la hora en vivo) y la tarjeta del último trabajo.
+- **Móvil:** el titular, la disponibilidad, el párrafo, los botones y el nombre entran en la primera pantalla a 375×667 (M16); después, la foto, en 4:5. El tope de 12,5vw del titular (8vw en tablet, donde su columna es 2/3 del ancho) hace que "DE PUNTA A PUNTA." entre sin partirse.
 
-Copia del párrafo (`hero.lead`, aprobada en D2). El texto largo de antes (`hero.description`, de 45 palabras) pasó a llamarse `exp.intro` y abre la página de Trayectoria (7.12):
-- ES: "**iOS & Cross-Platform Mobile Engineer.** Hago apps móviles de punta a punta: arquitectura, backend y publicación en App Store y Google Play."
-- EN: "**iOS & Cross-Platform Mobile Engineer.** I build mobile apps end to end: architecture, backend, and release on the App Store and Google Play."
+El texto largo de antes (`hero.description`, de 45 palabras) pasó a llamarse `exp.intro` y abre la página de Trayectoria (7.12).
 
 ### 7.3 Proyectos: índice con vista previa
 
@@ -677,7 +673,7 @@ Principios (de `emil-design-eng`, con el recorrido de douglus como modelo):
 | # | Tema | Propuesta | Estado (2026-09-15) |
 |---|---|---|---|
 | D1 | Etiquetas del nav | Cuatro enlaces: Proyectos, Trayectoria, Habilidades y Contacto. "Sobre mí" pasa al nombre y "Educación" se une a Trayectoria (los `id` se mantienen) | Aprobado e implementado |
-| D2 | Párrafo del hero | El texto corto de 7.2; el largo pasa a Trayectoria | Aprobado e implementado (`hero.lead`; el largo es `exp.intro`, en `/trayectoria`) |
+| D2 | Párrafo del hero | El texto corto de 7.2; el largo pasa a Trayectoria | Aprobado e implementado (`hero.lead`, reescrito el 2026-09-24 con el titular; el largo es `exp.intro`, en `/trayectoria`) |
 | D3 | Textos de solución | Acortar cada uno a 25 palabras o menos | Aprobado e implementado |
 | D4 | Rayas largas en textos visibles | "Vault — Finanzas personales", "Bookit — …", "ClubSystem — …" y el `<title>` usan "—", que la skill prohíbe. Pasan a ":" ("Vault: finanzas personales") y el `<title>` a "Fermin Lasarte · iOS & Mobile Engineer" | Aprobado e implementado |
 | D5 | Capturas (I12) | Capturas verticales de TravelPic y DeporTurnos, idealmente también de Vault, chatbot-ai y Bookit (el juego iOS y ClubSystem salieron de la lista el 2026-09-21). Mientras no estén: placa con logo o placa tipográfica | **Abierto:** falta conseguirlas (I12). Mientras tanto, placas con logo o tipográficas |
