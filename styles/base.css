@@ -147,10 +147,13 @@ ol {
   color: var(--stroke, var(--ink));
 }
 
+/* Contorno: el fin de los años, el inicio en educación y la segunda línea del titular
+   del hero, que lo pide más grueso con --stroke-w (styles/hero.css). */
 .years__end,
-:is(.stage--edu, .chapter--edu) .years > :first-child {
+:is(.stage--edu, .chapter--edu) .years > :first-child,
+.hero__claim-outline {
   color: transparent;
-  -webkit-text-stroke: 0.01em var(--stroke, var(--ink));
+  -webkit-text-stroke: var(--stroke-w, 0.01em) var(--stroke, var(--ink));
 }
 
 /* La frase de entrada de una sección, debajo del título. Cada una pone su ancho. */

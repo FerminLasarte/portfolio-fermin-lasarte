@@ -8,10 +8,10 @@ import { setupReveal } from "@/lib/reveal";
 // Lo que entra por separado en cada panel (styles/motion.css), en el orden del HTML.
 const REVEAL = [
   ".display",
-  ".hero__fact",
+  ".hero__claim-line",
+  ".hero__avail",
   ".hero__lead",
   ".hero__ctas > .btn",
-  ".hero__latest",
   ".stats > div",
   ".works__row",
   ".works__view",
@@ -36,7 +36,7 @@ const SKIP = ".hero__name";
 // Cómo entra cada uno: los títulos suben en su máscara, las placas se destapan y las
 // líneas crecen; el resto sube con un fundido.
 const variant = (el) =>
-  el.matches(".display, .stage__years")
+  el.matches(".display, .hero__claim-line, .stage__years")
     ? ["rv--mask"]
     : el.matches(".contact__rule")
       ? ["rv--grow"]

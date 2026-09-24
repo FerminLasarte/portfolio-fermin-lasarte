@@ -1,6 +1,6 @@
 /*
- * Hero (docs/DISENO.md, 7.2): cuatro datos arriba, el nombre enorme abajo a la
- * izquierda, un párrafo con dos botones, la tarjeta del último trabajo y la foto
+ * Hero (docs/DISENO.md, 7.2): arriba, el titular de afiche con la disponibilidad, un
+ * párrafo corto y dos botones al lado; el nombre enorme abajo a la izquierda y la foto
  * arrastrable a la derecha.
  */
 
@@ -8,104 +8,55 @@
   display: grid;
   gap: var(--space-5);
   grid-template-areas:
-    "facts"
+    "intro"
     "name"
-    "copy"
-    "latest"
     "photo";
   padding-top: var(--space-6);
 }
 
-/* ---------- Los datos de arriba ---------- */
+/* ---------- El titular y el párrafo ---------- */
 
-.hero__facts {
-  grid-area: facts;
+.hero__intro {
+  grid-area: intro;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-4) var(--space-5);
-  margin: 0;
-  padding-top: var(--space-3);
-  border-top: 1px solid var(--line);
+  gap: var(--space-5);
 }
 
-.hero__fact dt {
+/* Cada línea entra sola (TrackController) y no se parte: el tope en vw la hace entrar
+   en su columna ("DE PUNTA A PUNTA." mide unas 7,3 veces el tamaño de letra). */
+.hero__claim {
+  --stroke-w: 0.018em;
+  font-size: min(clamp(2.25rem, 9.5vmin, 6rem), 12.5vw);
+  line-height: 0.88;
+  letter-spacing: -0.01em;
+}
+
+.hero__claim-line {
+  display: block;
+  white-space: nowrap;
+}
+
+/* El único punto de estado de la página: la disponibilidad es real. */
+.hero__avail {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  margin-bottom: var(--space-1);
+  margin-bottom: var(--space-2);
+  color: var(--ink);
 }
 
-.hero__fact dd {
-  margin: 0;
-  font-weight: 600;
-  line-height: 1.35;
-}
-
-/* La hora y su huso no se separan en dos líneas (components/LocalTime.jsx). */
-.local-time {
-  white-space: nowrap;
-  font-variant-numeric: tabular-nums;
-}
-
-/* Los dos estados del hero que son reales, con un punto de --accent: la
-   disponibilidad y el último trabajo en producción. */
-.hero__fact--avail dt::before,
-.hero__latest .is-live::before {
+.hero__avail::before {
   content: "";
-  display: inline-block;
   inline-size: 0.5rem;
   block-size: 0.5rem;
   border-radius: var(--radius-round);
   background: var(--accent);
 }
 
-.hero__latest .is-live::before {
-  margin-inline-end: var(--space-2);
-}
-
-/* ---------- El último trabajo ---------- */
-
-.hero__latest {
-  grid-area: latest;
-  display: grid;
-  grid-template-columns: 6.5rem minmax(0, 1fr);
-  gap: var(--space-5);
-  align-items: end;
-  max-inline-size: 26rem;
-}
-
-.hero__latest .is-live {
-  color: var(--ink);
-}
-
-.hero__latest-name {
-  margin-block: var(--space-2);
-  font-size: var(--fs-4);
-}
-
-.hero__latest-line {
-  margin-bottom: var(--space-3);
-  color: var(--ink-muted);
-  font-size: var(--fs-0);
-  line-height: 1.45;
-}
-
-.hero__latest .strike {
-  font-weight: 600;
-}
-
-.hero__copy {
-  grid-area: copy;
-}
-
 .hero__lead {
-  max-width: 28ch;
-  font-size: var(--fs-2);
-  line-height: 1.35;
-}
-
-.hero__lead strong {
-  font-weight: 650;
+  max-width: 34ch;
+  line-height: 1.45;
+  text-wrap: pretty;
 }
 
 .hero__ctas {
@@ -217,12 +168,15 @@
   .hero {
     grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
     grid-template-areas:
-      "facts photo"
-      "name photo"
-      "copy photo"
-      "latest photo";
+      "intro photo"
+      "name photo";
     align-content: start;
     column-gap: var(--pad-x);
+  }
+
+  /* La columna del titular es 2/3 del ancho. */
+  .hero__claim {
+    font-size: min(clamp(2.25rem, 9.5vmin, 6rem), 8vw);
   }
 
   .hero__photo {
@@ -234,34 +188,41 @@
 /* ---------- Horizontal: una pantalla, en 12 columnas ---------- */
 
 @media screen and (min-width: 64rem) and (min-height: 42.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  /* El titular ocupa las 12 columnas: la foto está abajo, con el 62% del alto, así que
+     arriba de ella queda lugar para el párrafo. */
   html.js .hero {
     grid-template-columns: repeat(12, minmax(0, 1fr));
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: auto 1fr;
     grid-template-areas:
-      "facts facts facts facts facts  facts  facts  facts  facts  photo photo photo"
-      "copy  copy  copy  copy  copy   latest latest latest latest photo photo photo"
-      "name  name  name  name  name   name   name   name   name   photo photo photo";
+      "intro intro intro intro intro intro intro intro intro intro intro intro"
+      "name  name  name  name  name  name  name  name  name  photo photo photo";
     column-gap: var(--space-5);
     align-content: stretch;
   }
 
+  /* El párrafo al lado del titular, con su última línea al pie del titular. */
+  html.js .hero__intro {
+    grid-template-columns: auto minmax(0, 24rem);
+    justify-content: start;
+    column-gap: var(--space-7);
+    align-items: end;
+  }
+
+  html.js .hero__claim {
+    font-size: clamp(2.25rem, 9.5vmin, 6rem);
+  }
+
   html.js .hero__copy {
-    align-self: center;
+    padding-bottom: 0.3em;
   }
 
-  /* Los cuatro datos en una fila, y la tarjeta en el hueco entre el párrafo y la foto. */
-  html.js .hero__facts {
-    grid-template-columns: 1.1fr 1fr 1.25fr 1fr;
+  html.js .hero__name {
+    align-self: end;
   }
 
-  html.js .hero__latest {
-    align-self: center;
-    justify-self: end;
-    inline-size: 100%;
-  }
-
-  /* El % de alto de un ítem de grilla se mide contra su área (las tres filas). */
+  /* El % de alto de un ítem de grilla se mide contra su área (las dos filas). */
   html.js .hero__photo {
+    grid-row: 1 / -1;
     align-self: end;
     justify-self: stretch;
     max-inline-size: none;
