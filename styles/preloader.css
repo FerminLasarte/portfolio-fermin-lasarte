@@ -8,15 +8,22 @@
  * script del tema (lib/theme.js) antes del primer pintado en la primera visita de la
  * sesión y sin reduce motion. Sin JS no hay html.pl, así que no hay preloader.
  *
- * Tiempos (ms): el contorno de 50 a 650; las pantallas cada 260 desde 650; la pantalla
- * se pinta en 1430; el zoom, de --pl-zoom (1450) a 1970; el velo se va en --pl-out
- * (1950), en 150ms. Los dos los lee también styles/motion.css (el nombre del hero entra
- * cuando se va el velo), y lib/theme.js deja de escuchar el salteo en 1450.
+ * Tiempos (ms): el contorno de 100 a 900; las pantallas desde --pl-screens (950), una
+ * cada 750, con un fundido cruzado de 100 entre una y otra. Cada una se arma en 500
+ * (sus piezas entran escalonadas) y queda completa y quieta unos 250 antes de irse. La
+ * pantalla se pinta en --pl-paper (3150, cuando la última ya se armó y se vio); el
+ * zoom, de --pl-zoom (3400) a 4050; el velo se va en --pl-out (3950), en 250ms: unos
+ * 4,2 s en total. --pl-zoom y --pl-out los leen también styles/motion.css (el nombre
+ * del hero entra cuando se va el velo) y lib/theme.js (deja de escuchar el salteo en
+ * --pl-zoom).
  */
 
 :root {
-  --pl-zoom: 1450ms;
-  --pl-out: 1950ms;
+  --pl-screens: 950ms;
+  --pl-screen: 750ms; /* cada cuánto cambia la pantalla */
+  --pl-paper: 3150ms;
+  --pl-zoom: 3400ms;
+  --pl-out: 3950ms;
 }
 
 .preloader {
@@ -31,18 +38,19 @@ html.pl .preloader {
   place-items: center;
   background: var(--night);
   color: var(--on-night);
-  animation: pl-exit 150ms ease var(--pl-out) both;
+  animation: pl-exit 250ms ease var(--pl-out) both;
 }
 
 /* ---------- El teléfono ---------- */
 
 /* El zoom lo agranda 24 veces desde el centro de la pantalla: alcanza para tapar hasta
-   una pantalla ultra ancha con el teléfono en su tamaño más chico. */
+   una pantalla ultra ancha con el teléfono en su tamaño más chico. Arranca y termina
+   despacio, así se lo ve entrar en la pantalla. */
 .pl-phone {
   block-size: min(42vh, 24rem);
   aspect-ratio: 1 / 2;
   overflow: visible;
-  animation: pl-zoom 520ms var(--ease-in) var(--pl-zoom) both;
+  animation: pl-zoom 650ms cubic-bezier(0.65, 0, 0.35, 1) var(--pl-zoom) both;
 }
 
 /* El contorno se dibuja: pathLength="100" en el SVG, así el trazo mide 100. */
@@ -51,20 +59,29 @@ html.pl .preloader {
   stroke: var(--on-night);
   stroke-width: 2;
   stroke-dasharray: 100;
-  animation: pl-draw 600ms var(--ease-in-out) 50ms both;
+  animation: pl-draw 800ms var(--ease-in-out) 100ms both;
 }
 
 .pl-notch {
   fill: var(--on-night);
-  animation: pl-show 150ms ease 550ms both;
+  animation: pl-show 200ms ease 800ms both;
 }
 
-/* Cada pantalla se ve 260ms, una después de la otra. Solo rellena hacia adelante: antes
-   de su turno queda en su opacidad normal, 0. */
+/* Cada pantalla entra y sale con un fundido de 130ms (dura 850ms, así se cruza 100ms
+   con la siguiente), y sus piezas suben de a una: --n piezas repartidas en 200ms, de
+   300ms cada una, así está armada a los 500ms (--i, --n y --k, desde
+   components/Preloader.jsx). Solo rellena hacia adelante: antes de su turno queda en
+   su opacidad normal, 0, y después de él vuelve a 0. */
 .pl-screen {
+  --at: calc(var(--pl-screens) + var(--i) * var(--pl-screen));
   opacity: 0;
-  animation: pl-flash 260ms linear forwards;
-  animation-delay: calc(650ms + var(--i) * 260ms);
+  animation: pl-screen 850ms ease var(--at) forwards;
+}
+
+.pl-screen rect {
+  transform-box: fill-box;
+  animation: pl-piece 300ms var(--ease-out) both;
+  animation-delay: calc(var(--at) + var(--k) * 200ms / var(--n));
 }
 
 .pl-fill {
@@ -82,7 +99,7 @@ html.pl .preloader {
 /* La pantalla toma el color de la página: con el zoom, es lo que queda a la vista. */
 .pl-paper {
   fill: var(--paper);
-  animation: pl-show 120ms ease 1430ms both;
+  animation: pl-show 250ms ease var(--pl-paper) both;
 }
 
 .pl-label {
@@ -95,8 +112,8 @@ html.pl .preloader {
   text-align: center;
   text-transform: uppercase;
   animation:
-    pl-show 200ms ease 650ms both,
-    pl-hide 150ms ease 1400ms forwards;
+    pl-show 300ms ease var(--pl-screens) both,
+    pl-hide 250ms ease var(--pl-paper) forwards;
 }
 
 @keyframes pl-draw {
@@ -117,10 +134,17 @@ html.pl .preloader {
   }
 }
 
-@keyframes pl-flash {
-  0%,
-  99% {
+@keyframes pl-screen {
+  15%,
+  85% {
     opacity: 1;
+  }
+}
+
+@keyframes pl-piece {
+  from {
+    opacity: 0;
+    translate: 0 6px;
   }
 }
 
