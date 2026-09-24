@@ -419,6 +419,17 @@
     top: auto;
     block-size: 100%;
   }
+
+  /* El título arriba, a la misma altura que el de las otras secciones: la columna no
+     se centra con la vista previa, y las cifras, que son más altas que el título, se
+     alinean arriba con él en vez de empujarlo hacia abajo. */
+  html.js .panel--projects .works__side {
+    align-self: start;
+  }
+
+  html.js .panel--projects .works__head {
+    align-items: start;
+  }
 }
 
 /* ---------- La ventana de macOS ----------
