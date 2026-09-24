@@ -1,6 +1,6 @@
 import ProjectLinks from "@/components/ProjectLinks";
 import WorksHover from "@/components/WorksHover";
-import { getImageProps } from "@/lib/image";
+import ProjectPicture from "@/components/ProjectPicture";
 import { projectAnchor, projectPath } from "@/lib/i18n";
 import { EXPERIENCE, PROJECTS } from "@/lib/site";
 import { padded, yearRange } from "@/lib/text";
@@ -14,36 +14,14 @@ const SIZES = {
   thumb: "4rem",
 };
 
-// La imagen de un proyecto en un tamaño: la clara y, si hay, la oscura, que se muestra
-// con el tema oscuro del sitio (styles/projects.css). Decorativas: el nombre ya está en
-// el enlace, y la descripción de cada captura en la página del proyecto.
-function Picture({ media, sizes }) {
-  const img = (src, cls) => (
-    // eslint-disable-next-line @next/next/no-img-element -- los atributos salen de getImageProps (R-M15)
-    <img
-      {...getImageProps({ src, width: media.width, height: media.height, sizes, alt: "" }).props}
-      alt=""
-      className={cls}
-    />
-  );
-  return media.imageDark ? (
-    <>
-      {img(media.image, "plate__img--light")}
-      {img(media.imageDark, "plate__img--dark")}
-    </>
-  ) : (
-    img(media.image)
-  );
-}
-
 // La vista previa de un proyecto, sin caja de color: el teléfono, la ventana o, si no
 // hay captura, el nombre en grande.
 function Preview({ project, name }) {
   const { media } = project;
   if (media.type === "shot") {
     return (
-      <span className="works__phone">
-        <Picture media={media} sizes={SIZES.shot} />
+      <span className="phone works__phone">
+        <ProjectPicture media={media} sizes={SIZES.shot} />
       </span>
     );
   }
@@ -55,7 +33,7 @@ function Preview({ project, name }) {
           <span />
           <span />
         </span>
-        <Picture media={media} sizes={SIZES.window} />
+        <ProjectPicture media={media} sizes={SIZES.window} />
       </span>
     );
   }
@@ -107,7 +85,7 @@ export default function ProjectIndex({ t, lang, children }) {
                 <span className="works__meta meta">{meta}</span>
                 {project.media.type !== "type" && (
                   <span className={`works__thumb works__thumb--${project.media.type}`} aria-hidden="true">
-                    <Picture media={project.media} sizes={SIZES.thumb} />
+                    <ProjectPicture media={project.media} sizes={SIZES.thumb} />
                   </span>
                 )}
                 <span className="works__arrow" aria-hidden="true">

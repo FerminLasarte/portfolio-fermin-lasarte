@@ -8,9 +8,10 @@ import { setupReveal } from "@/lib/reveal";
 // Lo que entra por separado en cada panel (styles/motion.css), en el orden del HTML.
 const REVEAL = [
   ".display",
-  ".hero__avail",
+  ".hero__fact",
   ".hero__lead",
   ".hero__ctas > .btn",
+  ".hero__latest",
   ".stats > div",
   ".works__row",
   ".works__view",

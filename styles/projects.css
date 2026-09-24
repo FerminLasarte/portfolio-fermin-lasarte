@@ -366,20 +366,26 @@
   }
 }
 
-/* Lo que se ve en la vista previa: el teléfono, la ventana o el nombre. */
-.works__phone {
+/* Un teléfono: la captura con las esquinas y el borde de la pantalla, sin caja de
+   color. Lo usan la vista previa del índice y la tarjeta del último trabajo en el hero
+   (styles/hero.css); cada uno le pone su tamaño. */
+.phone {
   display: block;
-  block-size: 100%;
-  max-block-size: 40rem;
   aspect-ratio: 9 / 19.5;
   overflow: clip;
   border-radius: 12% / 5.5%;
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 16%, transparent);
 }
 
-.works__phone img {
+.phone img {
   inline-size: 100%;
   block-size: auto;
+}
+
+/* Lo que se ve en la vista previa: el teléfono, la ventana o el nombre. */
+.works__phone {
+  block-size: 100%;
+  max-block-size: 40rem;
 }
 
 .works__window {

@@ -1,17 +1,53 @@
 import { preload } from "react-dom";
 import { getImageProps } from "@/lib/image";
 import DraggablePhoto from "@/components/DraggablePhoto";
-import { CV, PERSON, ROLE } from "@/lib/site";
+import LocalTime from "@/components/LocalTime";
+import ProjectPicture from "@/components/ProjectPicture";
+import { projectPath } from "@/lib/i18n";
+import { CURRENT_WORK, CV, FOCUS, LATEST_WORK, PERSON, ROLE } from "@/lib/site";
 import { wordStarts } from "@/lib/text";
 
-// Hero (docs/DISENO.md, 7.2). En horizontal es un panel de una pantalla. El nombre va
-// en el <h1> como texto real; las letras sueltas son solo visuales, para la entrada
-// letra por letra (styles/motion.css). La foto es el LCP: sin animación de entrada.
+// Un enlace a la página de un trabajo, con la cortina (docs/DISENO.md, 8).
+function WorkLink({ project, name, lang, children }) {
+  return (
+    <a className="strike" href={projectPath(lang, project.id)} data-curtain={name}>
+      {children ?? name}
+    </a>
+  );
+}
+
+// Hero (docs/DISENO.md, 7.2). En horizontal es un panel de una pantalla. Arriba, cuatro
+// datos (disponibilidad, base con la hora, lo que está en curso y el enfoque); al medio,
+// el párrafo con los botones y la tarjeta del último trabajo; abajo, el nombre. El
+// nombre va en el <h1> como texto real; las letras sueltas son solo visuales, para la
+// entrada letra por letra (styles/motion.css). La foto es el LCP: sin animación de
+// entrada.
 export default function Hero({ t, lang }) {
   const cv = CV.find((c) => c.lang === lang) ?? CV[0];
   const words = PERSON.name.split(" ");
   // Índice de la primera letra de cada palabra, para el retraso de la entrada.
   const starts = wordStarts(words);
+  const nameOf = (project) => t(`projects.${project.id}.name`, project.name);
+
+  // "Construyendo Bookit y chatbot-ai": cada trabajo en curso lleva a su página.
+  const current = CURRENT_WORK.flatMap((project, i) => [
+    i === 0 ? "" : i === CURRENT_WORK.length - 1 ? ` ${t("projects.and")} ` : ", ",
+    <WorkLink key={project.id} project={project} name={nameOf(project)} lang={lang} />,
+  ]);
+  const facts = [
+    { key: "avail", value: t("hero.availability") },
+    {
+      key: "base",
+      value: (
+        <>
+          {PERSON.city}
+          <LocalTime lang={lang} timeZone={PERSON.timeZone} />
+        </>
+      ),
+    },
+    CURRENT_WORK.length > 0 && { key: "now", value: <>{t("hero.now")} {current}</> },
+    { key: "focus", value: FOCUS.join(" · ") },
+  ].filter(Boolean);
 
   // La foto con getImageProps (lib/image.js) y un <img> común (R-M15): los mismos
   // atributos que <Image>, armados en el servidor, sin el componente de cliente de
@@ -36,7 +72,14 @@ export default function Hero({ t, lang }) {
       data-label={t("nav.about")}
       aria-labelledby="hero-name"
     >
-      <p className="hero__avail meta">{t("hero.availability")}</p>
+      <dl className="hero__facts">
+        {facts.map((fact) => (
+          <div key={fact.key} className={`hero__fact hero__fact--${fact.key}`}>
+            <dt className="meta">{t(`hero.fact.${fact.key}`)}</dt>
+            <dd>{fact.value}</dd>
+          </div>
+        ))}
+      </dl>
 
       <div className="hero__copy">
         {/* El cargo está en inglés en los dos idiomas: en la página en español lleva
@@ -53,6 +96,25 @@ export default function Hero({ t, lang }) {
           </a>
         </div>
       </div>
+
+      {LATEST_WORK && (
+        <div className="hero__latest">
+          <span className="phone hero__phone" aria-hidden="true">
+            <ProjectPicture media={LATEST_WORK.media} sizes="7rem" />
+          </span>
+          <div className="hero__latest-text">
+            <p className="meta">
+              {t("hero.latest")} · <span className="is-live">{t("projects.live")}</span>
+            </p>
+            <p className="hero__latest-name poster">{nameOf(LATEST_WORK)}</p>
+            <p className="hero__latest-line">{t(`exp.${LATEST_WORK.id}.short`)}</p>
+            <WorkLink project={LATEST_WORK} name={nameOf(LATEST_WORK)} lang={lang}>
+              {t("page.seeProject")}
+              <span className="sr-only"> {nameOf(LATEST_WORK)}</span>
+            </WorkLink>
+          </div>
+        </div>
+      )}
 
       <h1 className="hero__name display" id="hero-name">
         <span className="sr-only">{PERSON.name}</span>
