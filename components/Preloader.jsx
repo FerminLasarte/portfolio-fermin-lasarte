@@ -40,9 +40,18 @@ export default function Preloader({ label }) {
         <rect className="pl-body" x="5" y="5" width="120" height="250" rx="22" pathLength="100" />
         <rect className="pl-notch" x="47" y="14" width="36" height="9" rx="4.5" />
         {SCREENS.map((shapes, i) => (
-          <g key={i} className="pl-screen" style={{ "--i": i }}>
+          <g key={i} className="pl-screen" style={{ "--i": i, "--n": shapes.length }}>
             {shapes.map((s, k) => (
-              <rect key={k} className={`pl-${s.tone}`} x={s.x} y={s.y} width={s.w} height={s.h} rx={s.r} />
+              <rect
+                key={k}
+                className={`pl-${s.tone}`}
+                x={s.x}
+                y={s.y}
+                width={s.w}
+                height={s.h}
+                rx={s.r}
+                style={{ "--k": k }}
+              />
             ))}
           </g>
         ))}
