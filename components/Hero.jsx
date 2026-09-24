@@ -45,7 +45,7 @@ export default function Hero({ t, lang }) {
           <strong lang={lang === "en" ? undefined : "en"}>{ROLE}.</strong> {t("hero.lead")}
         </p>
         <div className="hero__ctas">
-          <a className="btn btn--primary" href="#proyectos">
+          <a className="btn btn--primary" href="#trabajos">
             <span className="btn__label">{t("hero.projectsBtn")}</span>
           </a>
           <a className="btn" href={cv.href} download={cv.download}>

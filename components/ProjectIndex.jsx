@@ -1,7 +1,7 @@
 import ProjectLinks from "@/components/ProjectLinks";
 import WorksHover from "@/components/WorksHover";
 import { getImageProps } from "@/lib/image";
-import { projectPath } from "@/lib/i18n";
+import { projectAnchor, projectPath } from "@/lib/i18n";
 import { EXPERIENCE, PROJECTS } from "@/lib/site";
 import { padded, yearRange } from "@/lib/text";
 
@@ -64,7 +64,7 @@ function Preview({ project, name }) {
 
 // Índice de proyectos (docs/DISENO.md, 7.3): la lista de nombres en grande y, al lado, la
 // pantalla del que está bajo el mouse o con foco. Lo usan la home (un solo panel de la
-// pista, components/Projects.jsx) y /proyectos (components/ProjectsPage.jsx). Cada fila
+// pista, components/Projects.jsx) y /trabajos (components/ProjectsPage.jsx). Cada fila
 // es un enlace a la página del proyecto, con la cortina.
 //  - Con puntero fino, desde 64rem y con JS: dos columnas, y la vista previa cambia con
 //    WorksHover. Sin JS, en celular o en tablet no hay vista previa: cada fila lleva su
@@ -96,7 +96,7 @@ export default function ProjectIndex({ t, lang, children }) {
         {children}
         <ol className="works__list">
           {rows.map(({ project, i, name, meta }) => (
-            <li key={project.id} id={`proyecto-${project.id}`} className="works__row">
+            <li key={project.id} id={projectAnchor(project.id)} className="works__row">
               <a
                 className={`works__link${i === 0 ? " is-on" : ""}`}
                 href={projectPath(lang, project.id)}

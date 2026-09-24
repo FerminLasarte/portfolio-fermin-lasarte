@@ -5,7 +5,7 @@ import ProjectLinks from "@/components/ProjectLinks";
 import PageReveal from "@/components/PageReveal";
 import { YearRange } from "@/components/Years";
 import { EXPERIENCE, PROJECTS } from "@/lib/site";
-import { homePath, pagePath, projectPath } from "@/lib/i18n";
+import { homePath, pagePath, projectAnchor, projectPath } from "@/lib/i18n";
 import { padded } from "@/lib/text";
 
 // Los bloques largos, en orden. Cada uno se muestra solo si el proyecto tiene ese
@@ -14,7 +14,7 @@ import { padded } from "@/lib/text";
 // llenando sin tocar código.
 const SECTIONS = ["context", "build", "decisions", "result"];
 
-// Página de un proyecto (/proyectos/<id>, docs/DISENO.md, 7.12): el detalle de su fila
+// Página de un proyecto (/trabajos/<id>, docs/DISENO.md, 7.12): el detalle de su fila
 // del índice, en vertical y con el texto completo. La meta y los enlaces son los mismos
 // componentes que usa el índice, así que no hay dos versiones de lo mismo. Se recorre
 // como la home (7.13): las pantallas de la app acompañan la lectura y cambian con cada
@@ -135,7 +135,7 @@ export default function ProjectPage({ project, t, lang }) {
       {/* Ancla nativa, no next/link (ver components/ProjectsPage.jsx). Vuelve a la
           tarjeta de este proyecto, no al principio de la sección. */}
       <p className="page__back">
-        <a className="btn" href={`${homePath(lang)}#proyecto-${id}`} data-curtain={t("curtain.home")}>
+        <a className="btn" href={`${homePath(lang)}#${projectAnchor(id)}`} data-curtain={t("curtain.home")}>
           <span className="btn__label">{t("page.back")}</span>
         </a>
       </p>

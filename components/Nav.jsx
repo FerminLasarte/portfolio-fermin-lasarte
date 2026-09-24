@@ -11,8 +11,8 @@ const MOBILE = "(max-width: 47.99rem)";
 // Nav (docs/DISENO.md, 7.1). Recibe los textos ya traducidos desde Document, así el
 // diccionario no viaja al navegador.
 //  - brand: { href, label }. El nombre, que lleva al hero.
-//  - links: [{ id, href, label }]. Anclas nativas a la home del idioma ("/#proyectos",
-//    "/en#proyectos"); la sección actual (aria-current) la marca TrackController.
+//  - links: [{ id, href, label }]. Anclas nativas a la home del idioma ("/#trabajos",
+//    "/en#trabajos"); la sección actual (aria-current) la marca TrackController.
 //  - switchTo: el otro idioma, { lang, href, name, pages }. `pages` lleva cada página
 //    propia de este idioma a la del otro ("trayectoria" → "/en/experience").
 //  - labels: { sections, menu, close, theme, newTab }.
@@ -31,15 +31,15 @@ export default function Nav({ brand, links, switchTo, labels, social }) {
   const showLast = () => setBrandState("in");
   const hideLast = () => setBrandState("out");
 
-  // El cambio de idioma vuelve al panel visible (/en#proyecto-vault; R-M8): el que
+  // El cambio de idioma vuelve al panel visible (/en#trabajo-vault; R-M8): el que
   // cruza la línea que usa TrackController para la sección actual (el centro de la
   // ventana en horizontal; el 40% del alto en vertical). Si no hay ninguno (la
   // transición al cierre no tiene id), la sección actual.
   // En una página propia, el idioma lleva a la misma página en el otro idioma
   // (useSelectedLayoutSegments da los segmentos debajo del layout de [lang], iguales en
   // el servidor y en el navegador); en la home, a la otra home.
-  // Los segmentos debajo del layout de [lang]: ["proyectos"] en la lista y
-  // ["proyectos", "travelpic"] en la página de un proyecto. El slug es el mismo en los
+  // Los segmentos debajo del layout de [lang]: ["trabajos"] en la lista y
+  // ["trabajos", "travelpic"] en la página de un trabajo. El slug es el mismo en los
   // dos idiomas (lib/pages.mjs), así que se lo pega tal cual y el idioma no saca del
   // proyecto en el que se estaba.
   const [segment, slug] = useSelectedLayoutSegments();

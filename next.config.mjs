@@ -1,4 +1,4 @@
-import { PAGES } from "./lib/pages.mjs";
+import { MOVED, PAGES } from "./lib/pages.mjs";
 
 // Cabeceras de seguridad de todas las respuestas (R-M22 de la re-auditoría); HSTS lo
 // pone Vercel. La CSP es mínima a propósito: no deja que otro sitio meta la página en
@@ -26,9 +26,23 @@ const cacheHeaders = [
 
 // Rutas en español de las páginas propias (/trayectoria): se sirven sin prefijo, igual
 // que la home. Cada una se lista dos veces, ella y lo que cuelgue de ella, porque
-// Proyectos tiene una página por proyecto (/proyectos/travelpic). Las que no tienen
+// Trabajos tiene una página por trabajo (/trabajos/travelpic). Las que no tienen
 // hijas no pierden nada: esa ruta no existe y termina en el 404 igual.
 const esRoutes = Object.values(PAGES).flatMap((page) => [page.es, `${page.es}/:slug`]);
+
+// Las rutas viejas (MOVED en lib/pages.mjs), en los dos idiomas, a la actual: la
+// página y cada hija (/proyectos/vault → /trabajos/vault). El español va sin prefijo.
+const prefix = (lang) => (lang === "es" ? "" : `/${lang}`);
+const movedRoutes = MOVED.flatMap(({ id, ...old }) =>
+  Object.entries(old).flatMap(([lang, slug]) => {
+    const from = `${prefix(lang)}/${slug}`;
+    const to = `${prefix(lang)}/${PAGES[id][lang]}`;
+    return [
+      { source: from, destination: to, permanent: true },
+      { source: `${from}/:slug`, destination: `${to}/:slug`, permanent: true },
+    ];
+  }),
+);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -52,6 +66,7 @@ const nextConfig = {
     return [
       { source: "/es", destination: "/", permanent: true },
       ...esRoutes.map((route) => ({ source: `/es/${route}`, destination: `/${route}`, permanent: true })),
+      ...movedRoutes,
     ];
   },
 };

@@ -10,7 +10,7 @@ El diseño es una "tira de pantallas": en escritorio, las secciones pasan de cos
 - CSS plano, repartido en `styles/` (tokens, base y una hoja por componente) y reunido en `app/globals.css`. La pista horizontal es CSS: `position: sticky` y una animación atada al scroll, con un respaldo en JS para los navegadores sin `animation-timeline`.
 - [Lenis](https://github.com/darkroomengineering/lenis) para el scroll suave con la rueda, solo con mouse y sin reduce motion.
 - Archivo, variable y recortada a lo que usa el sitio, con `next/font/local`.
-- i18n por ruta: `/` en español y `/en` en inglés, las páginas propias (`/proyectos` y `/en/projects`, `/trayectoria` y `/en/experience`, `/habilidades` y `/en/skills`) y una página por proyecto (`/proyectos/<id>`, con el mismo slug en los dos idiomas). Todo se prerenderiza, con el diccionario en el servidor (`lib/i18n.js`).
+- i18n por ruta: `/` en español y `/en` en inglés, las páginas propias (`/trabajos` y `/en/work`, `/trayectoria` y `/en/experience`, `/habilidades` y `/en/skills`) y una página por trabajo (`/trabajos/<id>`, con el mismo slug en los dos idiomas). Todo se prerenderiza, con el diccionario en el servidor (`lib/i18n.js`).
 - Tema claro y oscuro sin parpadeo al cargar: sigue al sistema hasta que se usa el botón, y desde ahí manda lo elegido.
 
 ## Desarrollo
