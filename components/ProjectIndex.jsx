@@ -3,7 +3,7 @@ import WorksHover from "@/components/WorksHover";
 import { getImageProps } from "@/lib/image";
 import { projectPath } from "@/lib/i18n";
 import { EXPERIENCE, PROJECTS } from "@/lib/site";
-import { padded } from "@/lib/text";
+import { padded, yearRange } from "@/lib/text";
 
 // Anchos de las imágenes. La vista previa de un teléfono mide unos 17rem de ancho; la de
 // una ventana, casi la mitad de la pantalla. La miniatura de cada fila (celular y sin
@@ -83,7 +83,7 @@ export default function ProjectIndex({ t, lang, children }) {
     const stage = EXPERIENCE.find((e) => e.id === project.id);
     const when = stage
       ? stage.end != null
-        ? `${stage.start}–${stage.end}`
+        ? yearRange(stage.start, stage.end)
         : `${stage.start} · ${t("exp.ongoing")}`
       : project.status && t(`projects.${project.status}`);
     const meta = [project.origin && t(`projects.origin.${project.origin}`), when].filter(Boolean).join(" · ");

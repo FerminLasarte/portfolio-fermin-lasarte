@@ -3,6 +3,7 @@ import ScreenSync from "@/components/ScreenSync";
 import ProjectMeta from "@/components/ProjectMeta";
 import ProjectLinks from "@/components/ProjectLinks";
 import PageReveal from "@/components/PageReveal";
+import { YearRange } from "@/components/Years";
 import { EXPERIENCE, PROJECTS } from "@/lib/site";
 import { homePath, pagePath, projectPath } from "@/lib/i18n";
 import { padded } from "@/lib/text";
@@ -57,14 +58,8 @@ export default function ProjectPage({ project, t, lang }) {
         <ProjectMeta project={project} t={t}>
           {stage && (
             <span>
-              <time dateTime={String(stage.start)}>{stage.start}</time>
-              {stage.end != null ? (
-                <>
-                  –<time dateTime={String(stage.end)}>{stage.end}</time>
-                </>
-              ) : (
-                ` · ${t("exp.ongoing")}`
-              )}
+              <YearRange start={stage.start} end={stage.end} />
+              {stage.end == null && ` · ${t("exp.ongoing")}`}
             </span>
           )}
         </ProjectMeta>
