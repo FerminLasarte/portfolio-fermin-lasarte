@@ -60,11 +60,11 @@ const LINKS = {
 
 const CV = {
   es: {
-    title: "Ingeniero de Sistemas · iOS & Cross-Platform Mobile Engineer",
+    title: "Estudiante avanzado de Ingeniería de Sistemas (egreso dic. 2026) · iOS & Cross-Platform Mobile Engineer",
     place: "Buenos Aires, Argentina",
     h: { summary: "Perfil", exp: "Experiencia", projects: "Trabajos", skills: "Habilidades", edu: "Educación", langs: "Idiomas" },
     summary:
-      "Ingeniero de Sistemas (UNICEN) especializado en desarrollo móvil (Swift, Flutter) y backend. Construyo apps de punta a punta, desde la arquitectura del sistema hasta la publicación en App Store y Google Play. Creé y vendí DeporTurnos, una plataforma de reservas deportivas, y desarrollé TravelPic por encargo.",
+      "Estudiante avanzado de Ingeniería de Sistemas en la UNICEN (egreso dic. 2026), especializado en desarrollo móvil (Swift, Flutter) y backend. Construyo apps de punta a punta, desde la arquitectura del sistema hasta la publicación en App Store y Google Play. Creé y vendí DeporTurnos, una plataforma de reservas deportivas, y desarrollé TravelPic por encargo.",
     exp: [
       {
         role: "Desarrollador móvil freelance",
@@ -99,7 +99,7 @@ const CV = {
       {
         name: "Chatbot con IA para pymes",
         link: "chatbot",
-        note: "Por encargo, soporte a mi cargo",
+        note: "Por encargo de Argencore Solutions, soporte a mi cargo",
         tags: "Python, FastAPI, Claude, pgvector, Next.js",
         desc: "Cada cliente tiene su prompt y su base de conocimiento: RAG sobre PostgreSQL y pgvector, con Claude como LLM, en WhatsApp y en un widget web.",
       },
@@ -127,7 +127,7 @@ const CV = {
       ["Herramientas", "Git, GitHub, Xcode, TestFlight, Figma, Tauri, Scrum"],
     ],
     edu: {
-      title: "Ingeniero de Sistemas",
+      title: "Ingeniería de Sistemas (estudiante avanzado, egreso dic. 2026)",
       org: "Universidad Nacional del Centro de la Provincia de Buenos Aires (UNICEN)",
       years: "2020 – 2026",
     },
@@ -138,11 +138,11 @@ const CV = {
     ],
   },
   en: {
-    title: "Systems Engineer · iOS & Cross-Platform Mobile Engineer",
+    title: "Advanced Systems Engineering student (graduating Dec. 2026) · iOS & Cross-Platform Mobile Engineer",
     place: "Buenos Aires, Argentina",
     h: { summary: "Summary", exp: "Experience", projects: "Projects", skills: "Skills", edu: "Education", langs: "Languages" },
     summary:
-      "Systems Engineer (UNICEN) specializing in mobile development (Swift, Flutter) and backend. I build apps end to end, from system architecture to release on the App Store and Google Play. I founded and sold DeporTurnos, a sports booking platform, and built TravelPic for a client.",
+      "Advanced Systems Engineering student at UNICEN (graduating Dec. 2026), specializing in mobile development (Swift, Flutter) and backend. I build apps end to end, from system architecture to release on the App Store and Google Play. I founded and sold DeporTurnos, a sports booking platform, and built TravelPic for a client.",
     exp: [
       {
         role: "Freelance Mobile Developer",
@@ -177,7 +177,7 @@ const CV = {
       {
         name: "AI chatbot for small businesses",
         link: "chatbot",
-        note: "Client work, I handle support",
+        note: "Client work for Argencore Solutions, I handle support",
         tags: "Python, FastAPI, Claude, pgvector, Next.js",
         desc: "Each client gets its own prompt and knowledge base: RAG over PostgreSQL and pgvector, with Claude as the LLM, on WhatsApp and a web widget.",
       },
@@ -205,7 +205,7 @@ const CV = {
       ["Tools", "Git, GitHub, Xcode, TestFlight, Figma, Tauri, Scrum"],
     ],
     edu: {
-      title: "Systems Engineer",
+      title: "Systems Engineering (advanced student, graduating Dec. 2026)",
       org: "National University of the Center of the Province of Buenos Aires (UNICEN)",
       years: "2020 – 2026",
     },
