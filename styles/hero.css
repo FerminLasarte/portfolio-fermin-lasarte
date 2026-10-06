@@ -208,7 +208,10 @@
     align-items: end;
   }
 
+  /* El titular, en la esquina de arriba como el título de las otras secciones: si el
+     párrafo es más alto, no lo empuja hacia abajo. */
   html.js .hero__claim {
+    align-self: start;
     font-size: clamp(2.25rem, 9.5vmin, 6rem);
   }
 
