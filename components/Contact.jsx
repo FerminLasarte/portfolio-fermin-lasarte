@@ -31,6 +31,7 @@ export default function Contact({ t }) {
         id="contacto"
         className="panel panel--screen contact"
         data-section="contacto"
+        data-edge="night"
         data-label={t("nav.contact")}
         aria-labelledby="contacto-t"
       >

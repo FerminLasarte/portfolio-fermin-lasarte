@@ -115,3 +115,54 @@ html.has-cursor :is(a[href], button),
 html.has-cursor :is(a[href], button) * {
   cursor: pointer !important;
 }
+
+/* ---------- La luz (7.8) ---------- */
+
+/* Detrás del contenido (z-index -1 en el contexto raíz: arriba del fondo de la página,
+   abajo de todo lo demás), así se ilumina el fondo y no el texto. Los paneles no tienen
+   fondo propio, salvo el cierre, que la tapa. La luz es un círculo de 56rem con un
+   degradado radial que se mueve con translate (Cursor.jsx): sin repintar, en su propia
+   capa. En claro es un blanco tibio sobre el papel; en oscuro, el acento de la noche. */
+/* Solo existe con mouse: en táctil no hay cursor que seguir, y su círculo, más ancho que
+   un teléfono, le agrandaba el ancho de la página. */
+.glow {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .glow {
+    display: block;
+  }
+}
+
+.glow {
+  --glow: rgb(255 252 247 / 0.85);
+  --glow-size: 56rem;
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-below);
+  overflow: clip;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 900ms var(--ease-out);
+}
+
+html.dark-mode .glow {
+  --glow: rgb(255 154 98 / 0.13);
+}
+
+.glow.is-on {
+  opacity: 1;
+}
+
+.glow__light {
+  position: absolute;
+  top: 0;
+  left: 0;
+  inline-size: var(--glow-size);
+  block-size: var(--glow-size);
+  margin: calc(var(--glow-size) / -2) 0 0 calc(var(--glow-size) / -2);
+  border-radius: var(--radius-round);
+  background: radial-gradient(closest-side, var(--glow), transparent);
+  will-change: translate;
+}

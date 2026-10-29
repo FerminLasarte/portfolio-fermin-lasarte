@@ -30,7 +30,7 @@ export default async function Home({ params }) {
   return (
     <>
       <JsonLd data={profile} />
-      <Preloader label={t("preloader.label")} />
+      <Preloader words={t("preloader.words").split("|")} />
       <Track stages={STAGES.length}>
         <Hero t={t} lang={lang} />
         <Projects t={t} lang={lang} />

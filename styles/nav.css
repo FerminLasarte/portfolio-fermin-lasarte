@@ -267,6 +267,33 @@ html.dark-mode .theme-toggle .icon-sun {
   }
 }
 
+/* La barra de Safari 26 (macOS e iOS) es de vidrio y, cuando un elemento fijo toca el
+   borde de arriba, extiende hacia ella lo que ese elemento pinta. En horizontal ese
+   elemento es el nav, que es transparente: Safari estiraba hacia la barra lo que pasaba
+   debajo (las letras del hero, la foto) y se veían manchas al scrollear. Esta línea
+   fija y opaca, sobre el nav, es lo primero que encuentra en el borde: la barra queda
+   lisa, del color de la página. Sobre el cierre pasa a --night (data-edge, de
+   TrackController), así no queda una raya clara arriba del panel oscuro. */
+.edge {
+  display: none;
+}
+
+@media screen and (min-width: 64rem) and (min-height: 42.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html.js:has(.h-scroll) .edge {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: calc(var(--z-nav) + 1);
+    display: block;
+    block-size: 1px;
+    background: var(--paper);
+    pointer-events: none;
+  }
+
+  html.js[data-edge="night"] .edge {
+    background: var(--night);
+  }
+}
+
 /* ---------- Menú móvil ---------- */
 
 .menu {

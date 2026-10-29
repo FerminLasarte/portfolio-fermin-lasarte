@@ -33,6 +33,9 @@ export default function Document({ lang, head, children }) {
         <a className="skip" href="#contenido">
           {t("nav.skip")}
         </a>
+        {/* El borde de arriba en horizontal (styles/nav.css): una línea opaca del color
+            de la página, para que Safari 26 pinte su barra de un color fijo. */}
+        <div className="edge" aria-hidden="true" />
         <Nav
           brand={{ href: `${homePath(lang)}#sobre-mi`, label: PERSON.name, home: t("curtain.home") }}
           links={NAV_SECTIONS.map((s) => ({ id: s.id, href: `${homePath(lang)}#${s.id}`, label: t(s.key) }))}

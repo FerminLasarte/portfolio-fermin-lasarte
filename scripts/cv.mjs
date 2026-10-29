@@ -51,8 +51,7 @@ const LINKS = {
   github: SOCIAL.github,
   email: `mailto:${PERSON.email}`,
   travelpic: projectLink("travelpic", "demo"),
-  // La web de DeporTurnos, que PROJECTS no tiene (ahí van las tiendas).
-  deporturnos: "https://deporturnos.com/",
+  deporturnos: projectLink("deporturnos", "demo"),
   vault: projectLink("vault", "demo"),
   chatbot: projectLink("chatbot", "repo"),
   compiler: projectLink("compiler", "repo"),
@@ -64,7 +63,7 @@ const CV = {
     place: "Buenos Aires, Argentina",
     h: { summary: "Perfil", exp: "Experiencia", projects: "Trabajos", skills: "Habilidades", edu: "Educación", langs: "Idiomas" },
     summary:
-      "Estudiante avanzado de Ingeniería de Sistemas en la UNICEN (egreso dic. 2026), especializado en desarrollo móvil (Swift, Flutter) y backend. Construyo apps de punta a punta, desde la arquitectura del sistema hasta la publicación en App Store y Google Play. Creé y vendí DeporTurnos, una plataforma de reservas deportivas, y desarrollé TravelPic por encargo.",
+      "Estudiante avanzado de Ingeniería de Sistemas en la UNICEN (egreso dic. 2026), especializado en desarrollo móvil (Swift, Flutter) y backend. Construyo apps de punta a punta, desde la arquitectura del sistema hasta la publicación en App Store y Google Play. Creé DeporTurnos, una plataforma de reservas deportivas que hicimos con mi socio y después le vendí, y desarrollé TravelPic por encargo.",
     exp: [
       {
         role: "Desarrollador móvil freelance",
@@ -84,14 +83,14 @@ const CV = {
         role: "Creador y desarrollador móvil",
         org: "DeporTurnos",
         link: "deporturnos",
-        note: "Proyecto propio, vendido",
+        note: "Propio, con un socio; vendido",
         where: "Argentina",
         years: "2021 – 2025",
         bullets: [
-          "Creé en Flutter una plataforma para que los complejos deportivos gestionen sus reservas en tiempo real.",
-          "Diseñé el backend serverless en Firebase: Firestore para los datos en tiempo real y Cloud Messaging para las notificaciones push.",
-          "Integré pagos con Mercado Pago y desarrollé desde cero un chat nativo en tiempo real entre jugadores y complejos.",
-          "Publiqué la app en App Store y Google Play: llegó a 11 complejos, más de 4300 usuarios y más de 1300 reservas, y después vendí el producto.",
+          "Con mi socio construimos en Flutter una plataforma para que los complejos deportivos gestionen sus reservas en tiempo real.",
+          "Diseñamos el backend serverless en Firebase: Firestore para los datos en tiempo real y Cloud Messaging para las notificaciones push.",
+          "Integramos pagos con Mercado Pago y desarrollamos desde cero un chat nativo en tiempo real entre jugadores y complejos.",
+          "Publicamos la app en App Store y Google Play: llegó a 11 complejos, más de 4300 usuarios y más de 1300 reservas, y después le vendí el producto a mi socio.",
         ],
       },
     ],
@@ -142,7 +141,7 @@ const CV = {
     place: "Buenos Aires, Argentina",
     h: { summary: "Summary", exp: "Experience", projects: "Projects", skills: "Skills", edu: "Education", langs: "Languages" },
     summary:
-      "Advanced Systems Engineering student at UNICEN (graduating Dec. 2026), specializing in mobile development (Swift, Flutter) and backend. I build apps end to end, from system architecture to release on the App Store and Google Play. I founded and sold DeporTurnos, a sports booking platform, and built TravelPic for a client.",
+      "Advanced Systems Engineering student at UNICEN (graduating Dec. 2026), specializing in mobile development (Swift, Flutter) and backend. I build apps end to end, from system architecture to release on the App Store and Google Play. I founded DeporTurnos, a sports booking platform I built with my partner and later sold to him, and I built TravelPic for a client.",
     exp: [
       {
         role: "Freelance Mobile Developer",
@@ -162,14 +161,14 @@ const CV = {
         role: "Founder and Mobile Developer",
         org: "DeporTurnos",
         link: "deporturnos",
-        note: "Own project, sold",
+        note: "Own project, with a partner; sold",
         where: "Argentina",
         years: "2021 – 2025",
         bullets: [
-          "Built a Flutter platform that lets sports complexes manage their bookings in real time.",
-          "Designed the serverless backend on Firebase: Firestore for real-time data and Cloud Messaging for push notifications.",
+          "With my partner, built a Flutter platform that lets sports complexes manage their bookings in real time.",
+          "Designed the serverless backend on Firebase together: Firestore for real-time data and Cloud Messaging for push notifications.",
           "Integrated Mercado Pago payments and built a native real-time chat between players and venues from scratch.",
-          "Released the app on the App Store and Google Play, where it reached 11 venues, 4,300+ users and 1,300+ bookings, and later sold the product.",
+          "Released the app on the App Store and Google Play, where it reached 11 venues, 4,300+ users and 1,300+ bookings, and later sold the product to my partner.",
         ],
       },
     ],

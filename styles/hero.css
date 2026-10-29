@@ -1,76 +1,34 @@
 /*
- * Hero (docs/DISENO.md, 7.2): arriba, el titular de afiche con la disponibilidad, un
- * párrafo corto y dos botones al lado; el nombre enorme abajo a la izquierda y la foto
- * arrastrable a la derecha.
+ * Hero (docs/DISENO.md, 7.2): un escritorio. De fondo, el nombre enorme en contorno;
+ * encima, cosas para mover con el mouse (components/Draggable.jsx): una terminal con la
+ * presentación, la foto en su ventana y un papel con la disponibilidad. A la derecha, los
+ * iconos de Trabajos, el CV y el mail. En horizontal todo flota sobre el panel y queda
+ * lugar para arrastrar; en vertical se apila.
  */
 
 .hero {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-5);
   grid-template-areas:
-    "intro"
     "name"
-    "photo";
+    "term"
+    "photo"
+    "note"
+    "icons";
   padding-top: var(--space-6);
 }
 
-/* ---------- El titular y el párrafo ---------- */
+/* ---------- El nombre de fondo ---------- */
 
-.hero__intro {
-  grid-area: intro;
-  display: grid;
-  gap: var(--space-5);
-}
-
-/* Cada línea entra sola (TrackController) y no se parte: el tope en vw la hace entrar
-   en su columna ("DE PUNTA A PUNTA." mide unas 7,3 veces el tamaño de letra). */
-.hero__claim {
-  --stroke-w: 0.018em;
-  font-size: min(clamp(2.25rem, 9.5vmin, 6rem), 12.5vw);
-  line-height: 0.88;
-  letter-spacing: -0.01em;
-}
-
-.hero__claim-line {
-  display: block;
-  white-space: nowrap;
-}
-
-/* El único punto de estado de la página: la disponibilidad es real. */
-.hero__avail {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  margin-bottom: var(--space-2);
-  color: var(--ink);
-}
-
-.hero__avail::before {
-  content: "";
-  inline-size: 0.5rem;
-  block-size: 0.5rem;
-  border-radius: var(--radius-round);
-  background: var(--accent);
-}
-
-.hero__lead {
-  max-width: 34ch;
-  line-height: 1.45;
-  text-wrap: pretty;
-}
-
-.hero__ctas {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-  margin-top: var(--space-5);
-}
-
-/* 14vw: en tablet el nombre va en una columna de ~57% del ancho y "LASARTE" tiene que
-   entrar en una sola línea. */
+/* En contorno tenue, como un fondo de pantalla (el contorno es la regla de los años de
+   Trayectoria, styles/base.css). En vertical va arriba, como título; en horizontal,
+   centrado detrás de todo. */
 .hero__name {
+  --stroke: color-mix(in srgb, var(--ink) 70%, transparent);
+  --stroke-w: 0.02em;
   grid-area: name;
-  font-size: min(var(--fs-display), 14vw);
+  font-size: min(var(--fs-display), 19vw);
 }
 
 /* Cada línea es una máscara: las letras entran desde abajo (styles/motion.css). Las
@@ -86,14 +44,118 @@
   display: inline-block;
 }
 
-/* La foto acompaña al nombre, no compite con él: en móvil hasta 20rem de ancho, en
-   tablet hasta 18rem y en horizontal tres columnas y ~60% del alto, abajo. */
-.hero__photo {
-  grid-area: photo;
+/* ---------- Las ventanas ---------- */
+
+/* La barra es la de la ventana de macOS de los proyectos (styles/projects.css), que se
+   mide por --win-w: con 44rem queda de ~1,5rem de alto. El título va al medio. */
+.hero__win {
+  --win-w: 44rem;
+  overflow: clip;
+  border-radius: 0.75rem;
+  background: var(--surface);
+  box-shadow: 0 1.25rem 3rem rgb(0 0 0 / 0.28);
+}
+
+.hero__bar {
   position: relative;
-  inline-size: 100%;
+}
+
+.hero__bar small {
+  position: absolute;
+  inset-inline: 0;
+  color: var(--ink-muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* La terminal es noche en los dos temas, como el cierre. En oscuro, la noche casi no se
+   separa del papel: un borde fino la recorta. */
+.hero__term {
+  background: var(--night);
+  color: var(--on-night);
+}
+
+html.dark-mode .hero__win {
+  box-shadow:
+    0 0 0 1px var(--night-line-strong),
+    0 1.25rem 3rem rgb(0 0 0 / 0.5);
+}
+
+.hero__term .hero__bar {
+  background: var(--night-raised);
+}
+
+.hero__term .hero__bar small {
+  color: var(--on-night-muted);
+}
+
+.hero__term-body {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-4) var(--space-5) var(--space-5);
+  color: var(--on-night-muted);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.hero__cmd {
+  color: var(--on-night);
+}
+
+.hero__prompt {
+  color: var(--night-accent);
+}
+
+.hero__cmd:last-child {
+  margin-top: var(--space-2);
+}
+
+/* El nombre real, en la letra del sitio. */
+.hero__title {
+  margin-block: var(--space-1) var(--space-2);
+  color: var(--on-night);
+  font-family: var(--font);
+  font-size: clamp(2.25rem, 1.5rem + 2.5vw, 3.25rem);
+  line-height: 0.9;
+}
+
+/* El cursor de la terminal parpadea solo si se puede animar. */
+.hero__caret {
+  display: inline-block;
+  inline-size: 0.55em;
+  block-size: 1.1em;
+  vertical-align: -0.2em;
+  background: var(--on-night);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero__caret {
+    animation: caret 1.1s steps(1) infinite;
+  }
+}
+
+@keyframes caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+.hero__obj--term {
+  grid-area: term;
+  max-inline-size: 34rem;
+}
+
+/* La foto acompaña, no compite: en móvil hasta 20rem de ancho. */
+.hero__obj--photo {
+  grid-area: photo;
   max-inline-size: 20rem;
-  min-block-size: 0;
+}
+
+.hero__photo {
+  aspect-ratio: 4 / 5;
+  overflow: clip;
 }
 
 .hero__photo img {
@@ -103,19 +165,126 @@
   object-position: 50% 30%;
 }
 
-/* ---------- Foto arrastrable (7.9) ---------- */
+/* ---------- El papel ---------- */
 
-/* En vertical el marco se mide por el ancho de su columna (4:5); en horizontal toma
-   el alto de la pantalla (abajo). Si tomara el alto en tablet, el 4:5 le daría un
-   ancho mayor que la columna. */
+.hero__obj--note {
+  grid-area: note;
+  justify-self: start;
+}
+
+.hero__note {
+  inline-size: 15rem;
+  padding: var(--space-4) var(--space-5) var(--space-5);
+  rotate: -4deg;
+  background: var(--note);
+  color: var(--on-note);
+  font-weight: 600;
+  line-height: 1.3;
+  box-shadow: 0 1rem 2rem rgb(0 0 0 / 0.22);
+}
+
+.hero__note small {
+  display: block;
+  margin-top: var(--space-2);
+  font-size: var(--fs-0);
+  font-weight: 500;
+  opacity: 0.75;
+}
+
+/* ---------- Los iconos ---------- */
+
+.hero__icons {
+  grid-area: icons;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 7rem));
+  gap: var(--space-3);
+  padding: 0;
+  list-style: none;
+}
+
+.hero__icon {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+}
+
+.hero__icon svg {
+  inline-size: 3.75rem;
+  block-size: 3.75rem;
+  transition: translate var(--dur-hover) var(--ease-out);
+}
+
+/* El nombre, como en el Finder: se resalta al pasar o al enfocar. */
+.hero__icon-label {
+  padding: 0.1rem 0.45rem;
+  border-radius: 0.3rem;
+  overflow-wrap: break-word;
+  transition:
+    background-color var(--dur-hover) var(--ease-out),
+    color var(--dur-hover) var(--ease-out);
+}
+
+.hero__icon:focus-visible .hero__icon-label {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hero__icon:hover .hero__icon-label {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  .hero__icon:hover svg {
+    translate: 0 -3px;
+  }
+}
+
+.icon-accent {
+  fill: var(--accent);
+}
+
+.icon-accent-light {
+  fill: color-mix(in srgb, var(--accent) 78%, var(--paper));
+}
+
+.icon-paper {
+  fill: var(--surface);
+  stroke: var(--line);
+}
+
+.icon-fold {
+  fill: none;
+  stroke: var(--line);
+}
+
+.icon-flap {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+}
+
+.icon-tag {
+  fill: var(--on-accent);
+  font: 700 8px var(--font);
+}
+
+/* ---------- Lo que se arrastra (7.9) ---------- */
+
 .drag {
   position: relative;
 }
 
+.drag.is-top {
+  z-index: var(--z-lift);
+}
+
 .drag__frame {
   inline-size: 100%;
-  aspect-ratio: 4 / 5;
-  overflow: clip;
   transition: scale var(--dur-ui) var(--ease-out);
 }
 
@@ -129,10 +298,7 @@
   transition: scale var(--dur-ui) var(--ease-out);
 }
 
-.drag.is-down {
-  z-index: var(--z-lift);
-}
-
+/* La foto: el marco se achica y la imagen se agranda, como en douglus. */
 .drag.is-down .drag__frame {
   scale: 0.8;
 }
@@ -141,18 +307,27 @@
   scale: 1.5;
 }
 
+/* La terminal y el papel se levantan un poco. */
+.drag--lift.is-down .drag__frame {
+  scale: 1.03;
+}
+
+/* La estela: copias de la foto, sin la barra (que mide ~1,5rem). */
 .drag__trail {
   position: absolute;
-  inset: 0;
+  inset: 1.5rem 0 0;
+  inline-size: 100%;
+  block-size: calc(100% - 1.5rem);
+  object-fit: cover;
+  object-position: 50% 30%;
   opacity: 0;
   scale: 0.8;
   pointer-events: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  /* Solo con JS, que es lo que la mueve (R-M7). Sin touch-action: el arrastre es solo
-     con mouse (DraggablePhoto), y en un portátil táctil tocar la foto sigue
-     scrolleando. */
+  /* Solo con JS, que es lo que lo mueve (R-M7). Sin touch-action: el arrastre es solo
+     con mouse (Draggable), y en un portátil táctil tocarlo sigue scrolleando. */
   html.js .drag {
     cursor: grab;
   }
@@ -166,78 +341,77 @@
 
 @media (min-width: 48rem) {
   .hero {
-    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
     grid-template-areas:
-      "intro photo"
-      "name photo";
-    align-content: start;
+      "name  name"
+      "term  photo"
+      "note  photo"
+      "icons icons";
+    align-items: start;
     column-gap: var(--pad-x);
   }
 
-  /* La columna del titular es 2/3 del ancho. */
-  .hero__claim {
-    font-size: min(clamp(2.25rem, 9.5vmin, 6rem), 8vw);
-  }
-
-  .hero__photo {
+  .hero__obj--photo {
     justify-self: end;
+    inline-size: 100%;
     max-inline-size: 18rem;
   }
 }
 
-/* ---------- Horizontal: una pantalla, en 12 columnas ---------- */
+/* ---------- Horizontal: el escritorio de una pantalla ---------- */
 
 @media screen and (min-width: 64rem) and (min-height: 42.5rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  /* El titular ocupa las 12 columnas: la foto está abajo, con el 62% del alto, así que
-     arriba de ella queda lugar para el párrafo. */
+  /* Cada cosa en su lugar, sobre el panel, con aire entre ellas para arrastrar. El
+     panel ya deja libres el nav y la franja (styles/track.css). */
   html.js .hero {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    grid-template-rows: auto 1fr;
-    grid-template-areas:
-      "intro intro intro intro intro intro intro intro intro intro intro intro"
-      "name  name  name  name  name  name  name  name  name  photo photo photo";
-    column-gap: var(--space-5);
-    align-content: stretch;
-  }
-
-  /* El párrafo al lado del titular, con su última línea al pie del titular. */
-  html.js .hero__intro {
-    grid-template-columns: auto minmax(0, 24rem);
-    justify-content: start;
-    column-gap: var(--space-7);
-    align-items: end;
-  }
-
-  /* El titular, en la esquina de arriba como el título de las otras secciones: si el
-     párrafo es más alto, no lo empuja hacia abajo. */
-  html.js .hero__claim {
-    align-self: start;
-    font-size: clamp(2.25rem, 9.5vmin, 6rem);
-  }
-
-  html.js .hero__copy {
-    padding-bottom: 0.3em;
+    position: relative;
+    display: block;
   }
 
   html.js .hero__name {
-    align-self: end;
+    --stroke: color-mix(in srgb, var(--ink) 40%, transparent);
+    --stroke-w: 0.014em;
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    font-size: min(17cqi, 30vh);
+    text-align: center;
+    pointer-events: none;
   }
 
-  /* El % de alto de un ítem de grilla se mide contra su área (las dos filas). */
-  html.js .hero__photo {
-    grid-row: 1 / -1;
-    align-self: end;
-    justify-self: stretch;
+  html.js .hero__obj {
+    position: absolute;
     max-inline-size: none;
-    block-size: 62%;
   }
 
-  html.js .drag,
-  html.js .drag__frame {
-    block-size: 100%;
+  html.js .hero__obj--term {
+    top: calc(var(--nav-h) + var(--space-6));
+    left: var(--pad-x);
+    inline-size: clamp(24rem, 31cqi, 33rem);
   }
 
-  html.js .drag__frame {
-    aspect-ratio: auto;
+  /* El ancho tope en vh: la ventana (4:5 más la barra) entra en el alto. */
+  html.js .hero__obj--photo {
+    top: 24vh;
+    left: 46cqi;
+    inline-size: clamp(12rem, min(18cqi, 44vh), 22rem);
+  }
+
+  html.js .hero__obj--note {
+    bottom: calc(var(--strip-h) + var(--space-7));
+    left: 15cqi;
+  }
+
+  html.js .hero__icons {
+    position: absolute;
+    top: calc(var(--nav-h) + var(--space-5));
+    right: var(--pad-x);
+    grid-template-columns: 8rem;
+    gap: var(--space-5);
+  }
+
+  html.js .hero__icon {
+    font-size: 0.8125rem;
   }
 }

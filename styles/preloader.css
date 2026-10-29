@@ -1,14 +1,17 @@
 /*
- * Preloader (docs/DISENO.md, 7.11): sobre noche se dibuja el contorno de un teléfono,
- * pasan tres pantallas en formas simples (una lista, un gráfico, un calendario) con
- * "Hago apps" debajo, la pantalla se vuelve del color de la página y el teléfono se
- * agranda hasta taparlo todo: se entra en la pantalla, que es el sitio.
+ * Preloader (docs/DISENO.md, 7.11): sobre noche, con una luz tibia detrás, se dibujan
+ * el contorno de una notebook y el de un teléfono delante. Pasan tres pantallas a la
+ * vez en los dos (código y una lista de reservas; una terminal y un gráfico; la
+ * arquitectura de un sistema y un calendario), cada una con su palabra debajo: apps,
+ * backend, sistemas. Al final el teléfono se va, la pantalla de la notebook se vuelve
+ * del color de la página y la notebook se agranda hasta taparlo todo: se entra en la
+ * pantalla, que es el sitio.
  *
  * Es todo CSS: termina solo aunque el JS falle. Solo existe bajo html.pl, que pone el
  * script del tema (lib/theme.js) antes del primer pintado en la primera visita de la
  * sesión y sin reduce motion. Sin JS no hay html.pl, así que no hay preloader.
  *
- * Tiempos (ms): el contorno de 100 a 900; las pantallas desde --pl-screens (950), una
+ * Tiempos (ms): los contornos de 100 a 1000; las pantallas desde --pl-screens (950), una
  * cada 750, con un fundido cruzado de 100 entre una y otra. Cada una se arma en 500
  * (sus piezas entran escalonadas) y queda completa y quieta unos 250 antes de irse. La
  * pantalla se pinta en --pl-paper (3150, cuando la última ya se armó y se vio); el
@@ -36,52 +39,104 @@ html.pl .preloader {
   z-index: var(--z-preloader);
   display: grid;
   place-items: center;
+  overflow: clip;
   background: var(--night);
   color: var(--on-night);
   animation: pl-exit 250ms ease var(--pl-out) both;
 }
 
-/* ---------- El teléfono ---------- */
-
-/* El zoom lo agranda 24 veces desde el centro de la pantalla: alcanza para tapar hasta
-   una pantalla ultra ancha con el teléfono en su tamaño más chico. Arranca y termina
-   despacio, así se lo ve entrar en la pantalla. */
-.pl-phone {
-  block-size: min(42vh, 24rem);
-  aspect-ratio: 1 / 2;
-  overflow: visible;
-  animation: pl-zoom 650ms cubic-bezier(0.65, 0, 0.35, 1) var(--pl-zoom) both;
+/* La luz de atrás: la misma idea que la del cursor (styles/cursor.css), quieta y en el
+   centro. Entra con los contornos y se apaga antes del zoom. */
+html.pl .preloader::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(closest-side, rgb(255 154 98 / 0.16), transparent) 50% 45% / min(90vw, 70rem)
+    min(90vw, 70rem) no-repeat;
+  animation:
+    pl-show 1200ms var(--ease-out) 100ms both,
+    pl-hide 300ms ease var(--pl-paper) forwards;
 }
 
-/* El contorno se dibuja: pathLength="100" en el SVG, así el trazo mide 100. */
+.pl-stage {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: var(--space-6);
+}
+
+/* ---------- Los aparatos ---------- */
+
+/* El zoom agranda todo desde el centro de la pantalla de la notebook (170, 112,5 en el
+   viewBox de 420×270): 10 veces alcanza para tapar hasta una pantalla ultra ancha con
+   la notebook en su tamaño más grande. Antes, al dibujarse, se acerca un poco. Arranca
+   y termina despacio, así se la ve entrar en la pantalla. */
+.pl-devices {
+  inline-size: min(80vw, 46rem, 120vh);
+  aspect-ratio: 420 / 270;
+  overflow: visible;
+  transform-origin: 40.476% 41.667%;
+  animation:
+    pl-approach 3000ms var(--ease-out) both,
+    pl-zoom 650ms cubic-bezier(0.65, 0, 0.35, 1) var(--pl-zoom) forwards;
+}
+
+/* Los contornos se dibujan: pathLength="100" en el SVG, así el trazo mide 100. El del
+   teléfono arranca un poco después. */
 .pl-body {
   fill: none;
   stroke: var(--on-night);
-  stroke-width: 2;
+  stroke-width: 1.6;
   stroke-dasharray: 100;
-  animation: pl-draw 800ms var(--ease-in-out) 100ms both;
+  animation: pl-draw 900ms var(--ease-in-out) 100ms both;
+}
+
+.pl-base {
+  animation-delay: 250ms;
+}
+
+.pl-body--solid {
+  fill: var(--night);
+  stroke-width: 2.5;
+  animation-delay: 350ms;
 }
 
 .pl-notch {
   fill: var(--on-night);
-  animation: pl-show 200ms ease 800ms both;
+  animation: pl-show 200ms ease 850ms both;
+}
+
+/* El teléfono sale hacia la derecha cuando la pantalla toma el color de la página. */
+.pl-phone {
+  animation: pl-phone-out 400ms var(--ease-in) var(--pl-paper) forwards;
 }
 
 /* Cada pantalla entra y sale con un fundido de 130ms (dura 850ms, así se cruza 100ms
    con la siguiente), y sus piezas suben de a una: --n piezas repartidas en 200ms, de
    300ms cada una, así está armada a los 500ms (--i, --n y --k, desde
-   components/Preloader.jsx). Solo rellena hacia adelante: antes de su turno queda en
-   su opacidad normal, 0, y después de él vuelve a 0. */
+   components/Preloader.jsx). Las dos pantallas de un mismo turno (notebook y teléfono)
+   van juntas. Solo rellena hacia adelante: antes de su turno queda en su opacidad
+   normal, 0, y después de él vuelve a 0. */
 .pl-screen {
   --at: calc(var(--pl-screens) + var(--i) * var(--pl-screen));
   opacity: 0;
   animation: pl-screen 850ms ease var(--at) forwards;
 }
 
-.pl-screen rect {
+.pl-screen > * {
   transform-box: fill-box;
   animation: pl-piece 300ms var(--ease-out) both;
   animation-delay: calc(var(--at) + var(--k) * 200ms / var(--n));
+}
+
+/* Las líneas de la arquitectura se dibujan en vez de subir. */
+.pl-screen > .pl-wire {
+  fill: none;
+  stroke: var(--on-night-muted);
+  stroke-width: 1.5;
+  stroke-dasharray: 1;
+  animation: pl-draw-wire 400ms var(--ease-in-out) both;
+  animation-delay: calc(var(--at) + 100ms + var(--k) * 50ms);
 }
 
 .pl-fill {
@@ -92,8 +147,18 @@ html.pl .preloader {
   fill: var(--on-night-muted);
 }
 
+.pl-faint {
+  fill: var(--night-raised);
+  stroke: var(--night-line-strong);
+  stroke-width: 0.6;
+}
+
 .pl-accent {
   fill: var(--night-accent);
+}
+
+.pl-night {
+  fill: var(--night);
 }
 
 /* La pantalla toma el color de la página: con el zoom, es lo que queda a la vista. */
@@ -102,23 +167,43 @@ html.pl .preloader {
   animation: pl-show 250ms ease var(--pl-paper) both;
 }
 
-.pl-label {
-  position: absolute;
-  inset-inline: 0;
-  bottom: var(--space-8);
-  color: var(--on-night-muted);
-  font-size: var(--fs-0);
-  letter-spacing: 0.26em;
-  text-align: center;
+/* ---------- Las palabras ---------- */
+
+/* Una por pantalla, en el mismo turno: suben en su máscara, quedan y siguen hacia
+   arriba cuando llega la próxima. Las tres ocupan la misma celda. */
+.pl-words {
+  display: grid;
+  overflow: clip;
+  font-size: clamp(2.5rem, 9vmin, 6rem);
+  font-weight: 800;
+  font-stretch: var(--wdth-display);
+  line-height: 1;
   text-transform: uppercase;
-  animation:
-    pl-show 300ms ease var(--pl-screens) both,
-    pl-hide 250ms ease var(--pl-paper) forwards;
+  animation: pl-hide 250ms ease var(--pl-paper) forwards;
+}
+
+.pl-word {
+  grid-area: 1 / 1;
+  justify-self: center;
+  padding-bottom: 0.06em;
+  translate: 0 110%;
+  animation: pl-word 850ms var(--ease-out) calc(var(--pl-screens) + var(--i) * var(--pl-screen)) forwards;
+}
+
+/* La última es la que queda: no sale por arriba, se va con el resto. */
+.pl-word:last-child {
+  animation-name: pl-word-last;
 }
 
 @keyframes pl-draw {
   from {
     stroke-dashoffset: 100;
+  }
+}
+
+@keyframes pl-draw-wire {
+  from {
+    stroke-dashoffset: 1;
   }
 }
 
@@ -141,6 +226,18 @@ html.pl .preloader {
   }
 }
 
+/* La última pantalla no se apaga: queda hasta que la tapa el papel. */
+.pl-screen--last {
+  animation-name: pl-screen-last;
+}
+
+@keyframes pl-screen-last {
+  15%,
+  to {
+    opacity: 1;
+  }
+}
+
 @keyframes pl-piece {
   from {
     opacity: 0;
@@ -148,9 +245,48 @@ html.pl .preloader {
   }
 }
 
+@keyframes pl-word {
+  0% {
+    translate: 0 110%;
+  }
+
+  25%,
+  80% {
+    translate: 0 0;
+  }
+
+  to {
+    translate: 0 -110%;
+  }
+}
+
+@keyframes pl-word-last {
+  0% {
+    translate: 0 110%;
+  }
+
+  25%,
+  to {
+    translate: 0 0;
+  }
+}
+
+@keyframes pl-approach {
+  from {
+    scale: 0.9;
+  }
+}
+
+@keyframes pl-phone-out {
+  to {
+    opacity: 0;
+    translate: 40px 0;
+  }
+}
+
 @keyframes pl-zoom {
   to {
-    scale: 24;
+    scale: 10;
   }
 }
 

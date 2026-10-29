@@ -10,13 +10,15 @@ const BAND = 0.25; // pasado el borde, cuánto se mueve por cada px que se tira
 const PULL = 0.18; // fuerza con la que vuelve adentro del hero
 const TRAIL_FADE = 400; // ms que tarda en desvanecerse cada copia de la estela
 
-// Foto arrastrable del hero (docs/DISENO.md, 7.9), como la de douglus: al presionar, el
-// marco se achica y la imagen se agranda; al moverla deja una estela de copias; al
-// soltarla sigue con inercia, rebota contra los bordes del hero y queda donde frena.
-// Vuelve a su lugar solo si el foco del teclado entra al hero (para no tapar un botón
-// enfocado) o si cambia el tamaño de la ventana. Solo con mouse: en táctil, arrastrar
-// es scrollear. `label` es el texto que muestra el cursor propio sobre la foto.
-export default function DraggablePhoto({ label, children }) {
+// Lo que se arrastra en el escritorio del hero (docs/DISENO.md, 7.9), como la foto de
+// douglus: al soltarlo sigue con inercia, rebota contra los bordes del hero y queda donde
+// frena; el último que se tocó queda arriba de los otros. La foto (`trail`) además se
+// achica al presionarla, agranda la imagen y deja una estela de copias; las ventanas y
+// el papel (`lift`) se levantan un poco. Todo vuelve a su lugar solo si el foco del
+// teclado entra al hero (para no tapar un enlace enfocado) o si cambia el tamaño de la
+// ventana. Solo con mouse: en táctil, arrastrar es scrollear. `label` es el texto que
+// muestra el cursor propio encima.
+export default function Draggable({ label, trail: withTrail = false, children }) {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -28,7 +30,7 @@ export default function DraggablePhoto({ label, children }) {
     // La curva de la estela sale del token (R-M32): la Web Animations API no lee var().
     const easeOut = getComputedStyle(drag).getPropertyValue("--ease-out").trim();
 
-    const trails = Array.from({ length: TRAILS }, () => {
+    const trails = Array.from({ length: withTrail ? TRAILS : 0 }, () => {
       const trail = document.createElement("img");
       trail.src = img.currentSrc || img.src;
       trail.alt = "";
@@ -71,6 +73,7 @@ export default function DraggablePhoto({ label, children }) {
     };
 
     const trail = () => {
+      if (!trails.length) return;
       const t = trails[next++ % trails.length];
       t.style.translate = `${x}px ${y}px`;
       t.animate([{ opacity: 1 }, { opacity: 1, offset: 0.25 }, { opacity: 0 }], {
@@ -115,6 +118,9 @@ export default function DraggablePhoto({ label, children }) {
       cancelAnimationFrame(glide);
       drag.style.transition = "";
       drag.setPointerCapture(e.pointerId);
+      // Arriba de los otros: el que se tocó último queda adelante.
+      hero.querySelectorAll(".drag.is-top").forEach((d) => d.classList.remove("is-top"));
+      drag.classList.add("is-top");
       down = true;
       drag.classList.add("is-down");
       bounds = limits();
@@ -186,10 +192,10 @@ export default function DraggablePhoto({ label, children }) {
       removeEventListener("resize", onResize);
       trails.forEach((t) => t.remove());
     };
-  }, []);
+  }, [withTrail]);
 
   return (
-    <div ref={ref} className="drag" data-cursor="drag" data-cursor-label={label}>
+    <div ref={ref} className={withTrail ? "drag" : "drag drag--lift"} data-cursor="drag" data-cursor-label={label}>
       <div className="drag__frame">{children}</div>
     </div>
   );

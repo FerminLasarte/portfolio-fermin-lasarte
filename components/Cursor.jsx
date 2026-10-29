@@ -15,12 +15,19 @@ const CALM = `${REDUCED_MOTION}, (forced-colors: active)`;
 //  - El cursor del sistema se oculta (html.has-cursor) recién cuando el propio ya está
 //    en la posición del mouse: nunca hay un momento sin cursor ni un punto en (0, 0).
 //  - Un solo listener con delegación; se mueve con translate; el requestAnimationFrame
-//    se detiene cuando el círculo alcanzó al mouse.
+//    se detiene cuando el círculo y la luz alcanzaron al mouse.
+// La luz (styles/cursor.css), como la página de la pantalla PROLED de Apple: un brillo
+// suave detrás del contenido que sigue al mouse más despacio (0,08 por frame), así el
+// fondo se ilumina por donde pasa. Va en el mismo loop que el cursor: mismas
+// condiciones y un solo requestAnimationFrame.
 export default function Cursor() {
   const ref = useRef(null);
+  const glowRef = useRef(null);
 
   useEffect(() => {
     const cursor = ref.current;
+    const glow = glowRef.current;
+    const light = glow.firstElementChild;
     const circle = cursor.querySelector(".cursor__circle");
     const dot = cursor.querySelector(".cursor__dot");
     const text = cursor.querySelector(".cursor__text");
@@ -34,6 +41,8 @@ export default function Cursor() {
     let cy = 0;
     let dx = 0;
     let dy = 0;
+    let gx = 0;
+    let gy = 0;
     let raf = 0;
     let live = false;
 
@@ -41,19 +50,23 @@ export default function Cursor() {
     const paint = () => {
       dot.style.translate = `${dx}px ${dy}px`;
       circle.style.translate = `${cx}px ${cy}px`;
+      light.style.translate = `${gx}px ${gy}px`;
     };
     const frame = () => {
       dx += (mx - dx) * 0.35;
       dy += (my - dy) * 0.35;
       cx += (mx - cx) * 0.2;
       cy += (my - cy) * 0.2;
+      gx += (mx - gx) * 0.08;
+      gy += (my - gy) * 0.08;
       paint();
-      raf = Math.abs(mx - cx) + Math.abs(my - cy) > 0.2 ? requestAnimationFrame(frame) : 0;
+      raf = Math.abs(mx - gx) + Math.abs(my - gy) > 0.2 ? requestAnimationFrame(frame) : 0;
     };
     const stop = () => {
       live = false;
       html.classList.remove("has-cursor");
       cursor.classList.remove("is-on");
+      glow.classList.remove("is-on");
     };
 
     const onMove = (e) => {
@@ -62,12 +75,13 @@ export default function Cursor() {
       my = e.clientY;
       if (!live) {
         live = true;
-        cx = dx = mx;
-        cy = dy = my;
+        cx = dx = gx = mx;
+        cy = dy = gy = my;
         paint();
         html.classList.add("has-cursor");
       }
       cursor.classList.add("is-on");
+      glow.classList.add("is-on");
       if (!raf) raf = requestAnimationFrame(frame);
     };
     const onOver = (e) => {
@@ -79,7 +93,10 @@ export default function Cursor() {
     };
     const onDown = () => cursor.classList.add("is-down");
     const onUp = () => cursor.classList.remove("is-down");
-    const onLeave = () => cursor.classList.remove("is-on");
+    const onLeave = () => {
+      cursor.classList.remove("is-on");
+      glow.classList.remove("is-on");
+    };
     const onChange = () => {
       if (!wanted()) stop();
     };
@@ -106,12 +123,17 @@ export default function Cursor() {
   }, []);
 
   return (
-    <div ref={ref} className="cursor" aria-hidden="true">
-      <div className="cursor__circle">
-        <span className="cursor__shape" />
-        <span className="cursor__text" />
+    <>
+      <div ref={glowRef} className="glow" aria-hidden="true">
+        <div className="glow__light" />
       </div>
-      <div className="cursor__dot" />
-    </div>
+      <div ref={ref} className="cursor" aria-hidden="true">
+        <div className="cursor__circle">
+          <span className="cursor__shape" />
+          <span className="cursor__text" />
+        </div>
+        <div className="cursor__dot" />
+      </div>
+    </>
   );
 }

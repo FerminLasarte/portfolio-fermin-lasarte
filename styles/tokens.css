@@ -47,6 +47,12 @@
   --wash-3: #a93c0b;
   --wash-4: #5a1d06;
 
+  /* El papel con la disponibilidad del hero (DISENO.md, 7.2): un amarillo de nota
+     adhesiva, con su tinta oscura, igual en los dos temas salvo un poco más apagado en
+     oscuro. */
+  --note: #f6d77a;
+  --on-note: #2b2108;
+
   /* Nav y franja en horizontal (DISENO.md, 7.1): blanco con mix-blend-mode: difference,
      que da el color inverso de lo que pasa debajo. */
   --blend-ink: #fff;
@@ -56,6 +62,8 @@
   /* Tipografía: Archivo variable (ejes wght y wdth), recortada y cargada con
      next/font/local (lib/fonts.js). --font-archivo ya incluye "Archivo Fallback". */
   --font: var(--font-archivo), "Helvetica Neue", Arial, system-ui, sans-serif;
+  /* La terminal del hero: la monoespaciada del sistema, sin descargar otra fuente. */
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
   --wdth-display: 68%;
   --wdth-mega: 75%;
   --fs-0: 0.8125rem;
@@ -139,6 +147,7 @@
     --on-accent: #14100d;
     --wash-1: #4a2412;
     --wash-2: #9a3a10;
+    --note: #e3c262;
     color-scheme: dark;
   }
 }

@@ -8,10 +8,9 @@ import { setupReveal } from "@/lib/reveal";
 // Lo que entra por separado en cada panel (styles/motion.css), en el orden del HTML.
 const REVEAL = [
   ".display",
-  ".hero__claim-line",
-  ".hero__avail",
-  ".hero__lead",
-  ".hero__ctas > .btn",
+  ".hero__obj--term",
+  ".hero__obj--note",
+  ".hero__icons > li",
   ".stats > div",
   ".works__row",
   ".works__view",
@@ -36,7 +35,7 @@ const SKIP = ".hero__name";
 // Cómo entra cada uno: los títulos suben en su máscara, las placas se destapan y las
 // líneas crecen; el resto sube con un fundido.
 const variant = (el) =>
-  el.matches(".display, .hero__claim-line, .stage__years")
+  el.matches(".display, .stage__years")
     ? ["rv--mask"]
     : el.matches(".contact__rule")
       ? ["rv--grow"]
@@ -140,6 +139,9 @@ export default function TrackController() {
               else a.removeAttribute("aria-current");
             }
             if (label && name) label.textContent = name;
+            // El borde de arriba sigue al panel oscuro del cierre (styles/nav.css).
+            if (entry.target.dataset.edge) document.documentElement.dataset.edge = entry.target.dataset.edge;
+            else delete document.documentElement.dataset.edge;
           }
         },
         { rootMargin: mq.matches ? "0px -50% 0px -50%" : "-40% 0px -59% 0px" },

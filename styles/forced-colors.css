@@ -15,11 +15,11 @@
   }
 
   /* Lleno y contorno: el muro, su leyenda, los años (en la home y en /trayectoria) y el
-     titular del hero. */
+     nombre de fondo del hero. */
   .wall__word,
   .years__end,
   :is(.stage--edu, .chapter--edu) .years > :first-child,
-  .hero__claim-outline {
+  .hero__name {
     forced-color-adjust: none;
     color: transparent;
     -webkit-text-stroke-color: CanvasText;
