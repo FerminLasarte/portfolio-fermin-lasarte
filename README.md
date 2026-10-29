@@ -1,6 +1,6 @@
 # Portfolio — Fermin Lasarte
 
-Portfolio personal de Fermin Lasarte (iOS & Cross-Platform Mobile Engineer), construido con **Next.js (App Router)** en JavaScript.
+Portfolio personal de Fermin Lasarte (Mobile & Backend Engineer), construido con **Next.js (App Router)** en JavaScript.
 
 El diseño es una "tira de pantallas": en escritorio, las secciones pasan de costado en una pista horizontal que mueve el scroll; en móvil, con reduce motion o sin JS, la página es vertical. El diseño completo está en [`docs/DISENO.md`](docs/DISENO.md).
 

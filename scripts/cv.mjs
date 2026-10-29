@@ -59,7 +59,7 @@ const LINKS = {
 
 const CV = {
   es: {
-    title: "Estudiante avanzado de Ingeniería de Sistemas (egreso dic. 2026) · iOS & Cross-Platform Mobile Engineer",
+    title: "Estudiante avanzado de Ingeniería de Sistemas (egreso dic. 2026) · Mobile & Backend Engineer",
     place: "Buenos Aires, Argentina",
     h: { summary: "Perfil", exp: "Experiencia", projects: "Trabajos", skills: "Habilidades", edu: "Educación", langs: "Idiomas" },
     summary:
@@ -140,7 +140,7 @@ const CV = {
     ],
   },
   en: {
-    title: "Advanced Systems Engineering student (graduating Dec. 2026) · iOS & Cross-Platform Mobile Engineer",
+    title: "Advanced Systems Engineering student (graduating Dec. 2026) · Mobile & Backend Engineer",
     place: "Buenos Aires, Argentina",
     h: { summary: "Summary", exp: "Experience", projects: "Projects", skills: "Skills", edu: "Education", langs: "Languages" },
     summary:
