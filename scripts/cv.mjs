@@ -63,19 +63,19 @@ const CV = {
     place: "Buenos Aires, Argentina",
     h: { summary: "Perfil", exp: "Experiencia", projects: "Trabajos", skills: "Habilidades", edu: "Educación", langs: "Idiomas" },
     summary:
-      "Estudiante avanzado de Ingeniería de Sistemas en la UNICEN (egreso dic. 2026), especializado en desarrollo móvil (Swift, Flutter) y backend. Construyo apps de punta a punta, desde la arquitectura del sistema hasta la publicación en App Store y Google Play. Creé DeporTurnos, una plataforma de reservas deportivas que hicimos con mi socio y después le vendí, y desarrollé TravelPic por encargo.",
+      "Estudiante avanzado de Ingeniería de Sistemas en la UNICEN (egreso dic. 2026) y Analista Programador Universitario, especializado en desarrollo móvil (Swift, Flutter) y backend. Construyo apps de punta a punta, desde la arquitectura del sistema hasta la publicación en App Store y Google Play. Creé DeporTurnos, una plataforma de reservas deportivas que hicimos con mi socio y después le vendí, y con un socio desarrollé TravelPic por encargo.",
     exp: [
       {
         role: "Desarrollador móvil freelance",
         org: "TravelPic",
         link: "travelpic",
-        note: "Por encargo",
+        note: "Por encargo, con un socio",
         where: "Argentina",
         years: "2024 – 2025",
         bullets: [
-          "Diseñé la arquitectura y desarrollé en Flutter (BLoC) una plataforma estilo “Uber para fotógrafos”: los usuarios contratan fotógrafos cercanos con una búsqueda por radio.",
-          "Integré pagos con Stripe y mapas en tiempo real con rutas (Google Maps), sobre un backend serverless en Firebase.",
-          "Optimicé el rendimiento y llevé la app hasta su publicación en App Store y Google Play.",
+          "Con mi socio diseñamos la arquitectura y desarrollamos en Flutter (BLoC) una plataforma estilo “Uber para fotógrafos”: los usuarios contratan fotógrafos cercanos con una búsqueda por radio.",
+          "Integramos pagos con Stripe y mapas en tiempo real con rutas (Google Maps), sobre un backend serverless en Firebase.",
+          "Optimizamos el rendimiento y llevamos la app hasta su publicación en App Store y Google Play.",
           "Terminado el desarrollo, sigo a cargo del soporte.",
         ],
       },
@@ -98,7 +98,7 @@ const CV = {
       {
         name: "Chatbot con IA para pymes",
         link: "chatbot",
-        note: "Por encargo de Argencore Solutions, soporte a mi cargo",
+        note: "Proyecto propio",
         tags: "Python, FastAPI, Claude, pgvector, Next.js",
         desc: "Cada cliente tiene su prompt y su base de conocimiento: RAG sobre PostgreSQL y pgvector, con Claude como LLM, en WhatsApp y en un widget web.",
       },
@@ -125,11 +125,14 @@ const CV = {
       ["IA", "Claude API, RAG, Rasa, Machine Learning"],
       ["Herramientas", "Git, GitHub, Xcode, TestFlight, Figma, Tauri, Scrum"],
     ],
-    edu: {
-      title: "Ingeniería de Sistemas (estudiante avanzado, egreso dic. 2026)",
-      org: "Universidad Nacional del Centro de la Provincia de Buenos Aires (UNICEN)",
-      years: "2020 – 2026",
-    },
+    edu: [
+      {
+        title: "Ingeniería de Sistemas (estudiante avanzado, egreso dic. 2026)",
+        org: "Universidad Nacional del Centro de la Provincia de Buenos Aires (UNICEN)",
+        years: "2020 – 2026",
+      },
+      { title: "Analista Programador Universitario", org: "UNICEN", years: "2020 – 2026" },
+    ],
     langs: [
       ["Español", "nativo"],
       ["Inglés", "B2 (intermedio-avanzado)"],
@@ -141,17 +144,17 @@ const CV = {
     place: "Buenos Aires, Argentina",
     h: { summary: "Summary", exp: "Experience", projects: "Projects", skills: "Skills", edu: "Education", langs: "Languages" },
     summary:
-      "Advanced Systems Engineering student at UNICEN (graduating Dec. 2026), specializing in mobile development (Swift, Flutter) and backend. I build apps end to end, from system architecture to release on the App Store and Google Play. I founded DeporTurnos, a sports booking platform I built with my partner and later sold to him, and I built TravelPic for a client.",
+      "Advanced Systems Engineering student at UNICEN (graduating Dec. 2026) and University Programmer Analyst, specializing in mobile development (Swift, Flutter) and backend. I build apps end to end, from system architecture to release on the App Store and Google Play. I founded DeporTurnos, a sports booking platform I built with my partner and later sold to him, and, with a partner, TravelPic for a client.",
     exp: [
       {
         role: "Freelance Mobile Developer",
         org: "TravelPic",
         link: "travelpic",
-        note: "Client work",
+        note: "Client work, with a partner",
         where: "Argentina",
         years: "2024 – 2025",
         bullets: [
-          "Designed the architecture and built an “Uber for photographers” platform in Flutter (BLoC), letting users hire nearby photographers through a radius-based search.",
+          "With my partner, designed the architecture and built an “Uber for photographers” platform in Flutter (BLoC), letting users hire nearby photographers through a radius-based search.",
           "Integrated Stripe payments and real-time maps with directions (Google Maps) on a serverless Firebase backend.",
           "Optimized performance and took the app through release on the App Store and Google Play.",
           "Development is complete; I still handle its support.",
@@ -176,7 +179,7 @@ const CV = {
       {
         name: "AI chatbot for small businesses",
         link: "chatbot",
-        note: "Client work for Argencore Solutions, I handle support",
+        note: "Own project",
         tags: "Python, FastAPI, Claude, pgvector, Next.js",
         desc: "Each client gets its own prompt and knowledge base: RAG over PostgreSQL and pgvector, with Claude as the LLM, on WhatsApp and a web widget.",
       },
@@ -203,11 +206,14 @@ const CV = {
       ["AI", "Claude API, RAG, Rasa, Machine Learning"],
       ["Tools", "Git, GitHub, Xcode, TestFlight, Figma, Tauri, Scrum"],
     ],
-    edu: {
-      title: "Systems Engineering (advanced student, graduating Dec. 2026)",
-      org: "National University of the Center of the Province of Buenos Aires (UNICEN)",
-      years: "2020 – 2026",
-    },
+    edu: [
+      {
+        title: "Systems Engineering (advanced student, graduating Dec. 2026)",
+        org: "National University of the Center of the Province of Buenos Aires (UNICEN)",
+        years: "2020 – 2026",
+      },
+      { title: "University Programmer Analyst", org: "UNICEN", years: "2020 – 2026" },
+    ],
     langs: [
       ["Spanish", "native"],
       ["English", "B2 (upper intermediate)"],
@@ -293,7 +299,12 @@ ${c.projects
 </section>
 
 <section><h2>${c.h.edu}</h2>
-<div class="row"><p><span class="role">${esc(c.edu.title)}</span> <span class="note">· ${esc(c.edu.org)}</span></p><p class="when">${c.edu.years}</p></div>
+${c.edu
+  .map(
+    (e) =>
+      `<div class="row"><p><span class="role">${esc(e.title)}</span> <span class="note">· ${esc(e.org)}</span></p><p class="when">${e.years}</p></div>`,
+  )
+  .join("\n")}
 </section>
 
 <section><h2>${c.h.langs}</h2>
